@@ -2,16 +2,16 @@ package xyz.pokecord.bot.core.structures.discord
 
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.Job as CoroutineJob
+import kotlinx.coroutines.Job
 
-abstract class Job : CoroutineScope {
+abstract class Task : CoroutineScope {
   override val coroutineContext: CoroutineContext
     get() = job + Dispatchers.Default
 
   abstract val interval: Long
   abstract val name: String
 
-  private val job = CoroutineJob()
+  private val job = Job()
 
   lateinit var module: Module
 
@@ -29,5 +29,5 @@ abstract class Job : CoroutineScope {
     }
   }
 
-  abstract suspend fun execute(): Unit
+  abstract suspend fun execute()
 }

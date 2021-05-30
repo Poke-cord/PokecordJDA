@@ -5,7 +5,6 @@ import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.Module
 import xyz.pokecord.bot.modules.general.commands.*
 import xyz.pokecord.bot.modules.general.events.ReadyEvent
-import xyz.pokecord.bot.modules.general.jobs.PingLoggerJob
 
 class GeneralModule(bot: Bot) : Module(
   bot,
@@ -24,9 +23,6 @@ class GeneralModule(bot: Bot) : Module(
   ),
   arrayOf(
     ReadyEvent()
-  ),
-  arrayOf(
-    PingLoggerJob()
   )
 ), EventListener {
   override val name = "General"

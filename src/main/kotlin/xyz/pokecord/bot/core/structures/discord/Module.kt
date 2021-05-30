@@ -19,7 +19,7 @@ abstract class Module(
   val bot: Bot,
   val commands: Array<Command> = arrayOf(),
   val events: Array<Event> = arrayOf(),
-  private val jobs: Array<Job> = arrayOf(),
+  private val tasks: Array<Task> = arrayOf(),
   val intents: Array<GatewayIntent> = GatewayIntent.getIntents(GatewayIntent.DEFAULT).toTypedArray()
 ) : EventListener {
   abstract val name: String
@@ -27,7 +27,7 @@ abstract class Module(
   val commandMap = linkedMapOf<String, Command>()
   open var enabled = true
   private val eventMap = hashMapOf<String, Event>()
-  private val jobMap = hashMapOf<String, Job>()
+  private val taskMap = hashMapOf<String, Task>()
 
   fun load() {
     for (command in commands) {
@@ -76,17 +76,17 @@ abstract class Module(
       this.eventMap[event.name] = event
       event.onLoad()
     }
-    for (job in jobs) {
-      job.module = this
-      jobMap[job.name] = job
+    for (task in tasks) {
+      task.module = this
+      taskMap[task.name] = task
     }
   }
 
   override fun onEvent(event: GenericEvent) {
     if (!enabled) return
     if (event is ReadyEvent) {
-      for (job in jobs) {
-        if (job.enabled) job.start()
+      for (task in tasks) {
+        if (task.enabled) task.start()
       }
     }
     for (ev in events) {
