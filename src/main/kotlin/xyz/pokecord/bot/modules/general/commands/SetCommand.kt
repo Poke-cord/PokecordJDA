@@ -1,0 +1,137 @@
+package xyz.pokecord.bot.modules.general.commands
+
+import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.TextChannel
+import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
+import xyz.pokecord.bot.core.structures.discord.Command
+import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.ParentCommand
+import kotlin.random.Random
+
+class SetCommand : ParentCommand() {
+  override val name = "Set"
+
+  @ChildCommand
+  class SetPrefixCommand : Command() {
+    override val name = "Prefix"
+
+    override var requiredUserPermissions = arrayOf(Permission.ADMINISTRATOR)
+
+    @Executor
+    suspend fun execute(
+      context: MessageReceivedContext,
+      @Argument prefix: String?
+    ) {
+      if (context.member == null) {
+        context.reply(
+          context.translate("misc.texts.serverOnlyCommand")
+        ).queue()
+        return
+      }
+
+      if (prefix == null) {
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate("modules.general.commands.set.prefix.current", "prefix" to context.getPrefix()),
+            ""
+          ).build()
+        ).queue()
+        return
+      }
+
+      if (prefix.length > 10) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.general.commands.set.prefix.tooLarge")
+          ).build()
+        ).queue()
+        return
+      }
+
+      module.bot.database.guildRepository.setPrefix(context.getGuildData()!!, prefix)
+      context.reply(
+        context.translate("modules.general.commands.set.prefix.updated", "prefix" to prefix)
+      ).queue()
+    }
+  }
+
+  @ChildCommand
+  class SetPrivateCommand : Command() {
+    override val name = "Private"
+
+    @Executor
+    suspend fun execute(context: MessageReceivedContext) {
+      val userData = context.getUserData()
+      module.bot.database.userRepository.togglePrivate(userData)
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(if (userData.progressPrivate) "modules.general.commands.set.private.enabled" else "modules.general.commands.set.private.disabled"),
+          context.translate("modules.general.commands.set.private.title")
+        ).build()
+      ).queue()
+    }
+  }
+
+  @ChildCommand
+  class SetSpawnChannelCommand : Command() {
+    override val name = "Spawn"
+
+    @Executor
+    suspend fun execute(
+      context: MessageReceivedContext,
+      @Argument textChannel: TextChannel?
+    ) {
+      if (context.member == null) {
+        context.reply(
+          context.translate("misc.texts.serverOnlyCommand")
+        ).queue()
+        return
+      }
+      if (!context.member!!.hasPermission(Permission.ADMINISTRATOR)) {
+        // TODO: say you're not admin PROPERLY
+        context.reply("you're not admin").queue()
+        return
+      }
+      if (textChannel == null) {
+        val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild.id)
+
+        context.reply(
+          context.embedTemplates.normal(
+            if (spawnChannels.isEmpty()) context.translate("modules.general.commands.set.spawn.noChannelsSet")
+            else spawnChannels.joinToString(
+              "\n"
+            ) { "<#${it.id}>" },
+            context.translate("modules.general.commands.set.spawn.list.title")
+          ).build()
+        ).queue()
+        return
+      }
+      val existingSpawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(textChannel.id)
+      if (existingSpawnChannel != null) {
+        module.bot.database.spawnChannelRepository.removeSpawnChannel(existingSpawnChannel)
+      } else {
+        module.bot.database.spawnChannelRepository.setSpawnChannel(
+          SpawnChannel(
+            textChannel.id,
+            textChannel.guild.id,
+            Random.nextInt(5, 41),
+            0,
+            0
+          )
+        )
+      }
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.general.commands.set.spawn.description", mapOf(
+              "channelName" to textChannel.name,
+              "channelMention" to textChannel.asMention,
+              "channelId" to textChannel.id
+            )
+          ),
+          context.translate(if (existingSpawnChannel == null) "modules.general.commands.set.spawn.title.added" else "modules.general.commands.set.spawn.title.removed")
+        ).build()
+      ).queue()
+    }
+  }
+}

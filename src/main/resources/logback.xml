@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %boldGreen(%-15.-15logger{0}) %highlight(%-6level) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="Sentry" class="io.sentry.logback.SentryAppender"/>
+
+    <root level="info">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="Sentry"/>
+    </root>
+</configuration>

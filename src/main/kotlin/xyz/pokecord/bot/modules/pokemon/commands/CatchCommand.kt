@@ -1,0 +1,94 @@
+package xyz.pokecord.bot.modules.pokemon.commands
+
+import xyz.pokecord.bot.core.structures.discord.Command
+import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+
+class CatchCommand : Command() {
+  override val name = "Catch"
+
+  override var aliases = arrayOf("c")
+  override var rateLimit = 5000L
+  override var rateLimitType = RateLimitType.Args
+
+  override fun getRateLimitCacheKey(context: MessageReceivedContext, args: List<String>): String {
+    val arg = args.joinToString(" ")
+    val pokemon = Pokemon.getByName(arg)
+    return (if (rateLimitType == RateLimitType.Command) "${context.author.id}.${module.name}.${name}" else "${context.author.id}.${module.name}.${name}.${
+      pokemon?.name ?: arg
+    }").toLowerCase()
+  }
+
+  @Executor
+  suspend fun execute(
+    context: MessageReceivedContext,
+    @Argument(consumeRest = true, name = "Pokémon Name") pokemonName: String?,
+  ) {
+    if (!context.hasStarted(true)) return
+
+    val spawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(context.channel.id)
+    if (spawnChannel == null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate(
+            "misc.errors.notASpawnChannel"
+          )
+        ).build()
+      ).queue()
+      return
+    }
+
+    if (spawnChannel.spawned == 0) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate(
+            "misc.errors.nothingSpawned"
+          )
+        ).build()
+      ).queue()
+      return
+    }
+
+    if (pokemonName == null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.catch.errors.noNameProvided")
+        ).build()
+      ).queue()
+      return
+    }
+
+    val pokemon = Pokemon.getByName(pokemonName)
+    if (pokemon != null && spawnChannel.spawned == pokemon.id) {
+      val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id) {
+        module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)
+      }
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.pokemon.commands.catch.embed.description",
+            mapOf(
+              "user" to context.author.asMention,
+              "level" to "${ownedPokemon.level}",
+              "pokemon" to ownedPokemon.displayName,
+              "ivPercentage" to ownedPokemon.ivPercentage
+            )
+          ),
+          context.translate(
+            "modules.pokemon.commands.catch.embed.title"
+          )
+        )
+          .setColor(pokemon.species.color.colorCode)
+          .setFooter(context.translate("modules.pokemon.commands.catch.embed.footer"))
+          .build()
+      ).queue()
+    } else {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.catch.errors.incorrectNameProvided")
+        ).build()
+      ).queue()
+      return
+    }
+  }
+}

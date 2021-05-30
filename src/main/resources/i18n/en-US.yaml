@@ -1,0 +1,588 @@
+misc:
+  command_descriptions:
+    developer:
+      eval: Evaluates some JavaScript/Kotlin code.
+    general:
+      faq: 'Have a question? I might have just the right answer for you :wink:'
+      invite: Invite our bot to your own server.
+      help: "Pretty sure this is what you're looking at right now :sweat_smile:"
+      ping: 'Ping, pong! :ping_pong: :eyes::eyes::eyes:'
+    pokemon:
+      info: In a hurry? Get nitty gritty statistics on the go.
+      pick: Lonely? Pick a starter Pokémon to join you.
+    profile:
+      start: The beginners guide to life. Just kidding. Guide to your Pokémon adventure.
+  checks:
+    hasStarted:
+      embed:
+        description: Make sure to use `{{prefix}}start` in order to start
+          using Pokémon commands!
+        title: A User Must Start
+  confirmation:
+    timeoutText: React within {{timeout}} seconds to confirm or cancel your action.
+  embeds:
+    error:
+      footer: Not sure what to do? Try joining our support server.
+      title: Something went wrong...
+    evolved:
+      description: |-
+        **Name**: {{pokemon}}
+        **Evolved Into**: {{evolvedPokemon}}
+        **Level**: {{level}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has Evolved
+    levelUp:
+      description: |-
+        **Name**: {{pokemon}}
+        **Level**: {{level}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has Leveled Up
+    progressPrivate:
+      description: '{{user}} has set their progress to be hidden from other
+                players.'
+      title: A User Enabled Private Progress
+    rules:
+      description: |-
+        Hey {{user}}!
+        Please read and agree to our [Terms Of Service]({{tosUrl}}) to continue.
+  errors:
+    embeds:
+      commandExecutionFailed:
+        description: Failed to execute the {{command}} command. Please report this issue [to us](https://discord.gg/poke) if it keeps happening.
+        title: Command Execution Failed
+    invalidAmount: '**Suggestion**: Try entering a valid amount!'
+    notASpawnChannel: '**Suggestion**: Try using the command in a spawn channel
+            or set this channel as a spawn channel!'
+    nothingSpawned: '**Suggestion**: Try waiting for a Pokémon to spawn!'
+    pokemonNotFound: '**Suggestion**: Try searching your collection for something
+            you have!'
+    userHasNotStarted: '{{user}} has not started playing yet. Ask them to try `{{prefix}}start` first!'
+  presence:
+    maintenance:
+      activity: Maintenance Break | {{version}}
+      status: DO_NOT_DISTURB
+      type: DEFAULT
+    regular:
+      activity: '{{prefix}}help | {{version}} | pokecord.xyz'
+      status: ONLINE
+      type: DEFAULT
+  texts:
+    accuracy: Accuracy
+    ailmentChance: Ailment Chance
+    altNames: Alternative Names
+    argument_names: Argument Names
+    baseStats: Base Stats
+    command: Command
+    command_aliases: Aliases
+    commands: Commands
+    criticalRate: Critical Rate
+    damageClass: Damage Class
+    evolution: Evolution
+    female: Female
+    firstStage: First Stage
+    gender: Gender
+    genderRate: Gender Rate
+    genderless: Genderless
+    generation: Generation
+    genus: Genus
+    habitat: Habitat
+    height: Height
+    heldItem: Held Item
+    ivSpread: IV Spread
+    lastStage: Last Stage
+    male: Male
+    moveInfo: Move Info
+    moveLearned: |-
+      **{{pokemon}}** learned **{{move}}**! | **Name**: {{pokemon}}
+      **Move**: {{move}}
+
+      Congratulations {{user}}!
+    name: Name
+    nature: Nature
+    nextEvolution: Next Evolution(s)
+    noEvolution: No Evolution
+    originalTrainerID: Original Trainer ID
+    physical: Physical
+    power: Power
+    pp: PP
+    prevEvolution: Prev Evolution
+    priority: Priority
+    serverOnlyCommand: '**Suggestion**: Try using this command in a server!'
+    special: Special
+    starterPokemon: Starter Pokémon
+    status: Status
+    suggestedMoves: Suggested Moves
+    totalIv: Total IV
+    trainerID: Trainer ID
+    type: Type
+    types: Types
+    unknown: Unknown
+    usage: Usage
+    weight: Weight
+    xp: XP
+modules:
+  general:
+    commands:
+      invite:
+        embed:
+          author:
+            text: An Invite has been Requested
+          description: |-
+            [Invite Pokecord Here]({{inviteLink}})
+
+            Thank you for choosing {{botUsername}}!
+      ping:
+        embed:
+          description: |-
+            **API Ping**: {{apiPing}}
+            **Ping**: {{ping}}
+          title: Pong!
+      set:
+        private:
+          title: Progress Privacy
+          enabled: Your progress is now hidden from other players!
+          disabled: Your progress is now shown to other players!
+        prefix:
+          current: The current prefix is {{prefix}}.
+          tooLarge: Prefix can't be longer than 10 characters.
+          updated: Prefix updated to {{prefix}}.
+        spawn:
+          description: |-
+            **Channel Name**: {{channelName}}
+            **Channel Mention**: {{channelMention}}
+            **Channel ID**: {{channelId}}
+          list:
+            title: Spawn Channel Details
+          noChannelsSet: No spawn channels set.
+          title:
+            added: A Spawn Channel was Added
+            removed: A Spawn Channel was Removed
+      vote:
+        embed:
+          description: |-
+            **Voting Link**: [Vote for Pokecord]({{voteLink}})
+            **Vote Streak**: {{voteStreak}}
+            **Unclaimed Votes**: {{unclaimedVotes}}
+            **Season End**: {{currentSeasonEndTime}}
+
+            Use `{{prefix}}rewards vote` to claim your rewards before the season ends!
+          footer: Want more rewards? Check in every 12 hours to vote!
+          title: Pokecord City Voting | Season {{season}}
+  pokemon:
+    commands:
+      catch:
+        embed:
+          description: |-
+            **Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Congratulations {{user}}!
+          footer: The Pokémon has been added to your collection.
+          title: A Pokémon has been Caught
+        errors:
+          incorrectNameProvided: '**Suggestion**: Try specifying a valid
+                        Pokémon name!'
+          noNameProvided: '**Suggestion**: Try specifying a valid Pokémon
+                        name!'
+      favorite:
+        added: A Favorite has been Added
+        embed:
+          description: |-
+            **Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Your favorites have been updated.
+        removed: A Favorite has been Removed
+      gift:
+        embeds:
+          cancelled:
+            description: Gifting cancelled by user.
+            title: Gifting Cancelled
+          confirmation:
+            credits: |-
+              **Sender**: {{sender}}
+              **Receiver**: {{receiver}}
+
+              **Credit Amount**: {{amount}}
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            pokemon: |-
+              **Sender**: {{sender}}
+              **Receiver**: {{receiver}}
+
+              **Name**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: A Gift is Pending
+          giftReceived:
+            credits: |-
+              {{sender}} has gifted you credits!
+
+              **Amount**: {{amount}}
+            pokemon: |-
+              {{sender}} has gifted you a Pokémon!
+
+              **Name**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+            title: You have Received A Gift
+          giftSent:
+            credits: |-
+              **Receiver**: {{receiver}}
+
+              **Credit Amount**: {{amount}}
+
+              Your gift has been sent.
+            pokemon: |-
+              **Receiver**: {{receiver}}
+
+              **Name**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+
+              Your gift has been sent.
+            title: A Gift has been Sent
+        errors:
+          botReceiver: '**Suggestion**: Try gifting a user, not a bot!'
+          selectedPokemon: '**Suggestion**: Try selecting a different
+                        Pokémon before gifting!'
+          favoritePokemon: '**Suggestion**: Try removing this Pokémon
+                        from your favorites before gifting!'
+          mentionUser: '**Suggestion**: Try specifying a user you would
+                        like to gift to!'
+          notEnoughCredits: '**Suggestion**: Try gifting an amount of credits
+                        you have!'
+          selfReceiver: '**Suggestion**: Try gifting another user!'
+      hint:
+        confirmation:
+          embed:
+            description: |-
+              Please confirm you want to purchase a Pokémon hint.
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: A Hint has been Requested
+        dm:
+          embed:
+            title: Pokémon Hint
+        embed:
+          description: The hint has been sent to your DMs.
+          title: A Hint has been Generated
+        errors:
+          cancelled:
+            description: Your Pokémon hint request was cancelled.
+            title: A Hint has been Cancelled
+          dmFailed: '**Suggestion**: Try allowing Pokecord to DM you!'
+      info:
+        embed:
+          footer: 'Showing #{{index}} | Caught Date'
+          title: '{{speciesId}} | Level {{level}} {{pokemon}}'
+      moveset:
+        embed:
+          footer: Credits to Dominater & SilverAQ for the movesets.
+        errors:
+          noMoveset: No moveset available for the specified Pokémon yet. Please check back later!
+          noPokemonFound: No Pokémon found with the specified name.
+          noPokemonName: No Pokémon name specified.
+      nickname:
+        embed:
+          description: |-
+            **Pokémon Name**: {{pokemon}}
+            **Nickname**: {{nickname}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Your Pokémon's nickname has been updated!
+        errors:
+          pokemonName: '**Suggestion**: Try excluding any Pokémon names
+                        in the nickname!'
+          shinyStar: '**Suggestion**: Try excluding a :star: from the nickname!'
+          tooLong: '**Suggestion**: Try entering a nickname under 64 characters!'
+        reset: A Nickname has been Reset
+        updated: A Nickname has been Updated
+      pick:
+        embed:
+          description: You chose {{pokemon}} as your starter Pokémon!
+        noNameProvided: '**Suggestion**: Try specifying a starter Pokémon
+                    name!'
+        pickingTwice: '**Suggestion**: Try catching Pokémon instead of picking
+                    more!'
+        starterNotFound: '**Suggestion**: Try using `{{prefix}}start` to se
+                    the list of starter Pokémon!'
+      pokedex:
+        embed:
+          title: '{{speciesId}} | {{pokemon}} | Pokédex Info'
+        footers:
+          caught: This Pokémon is registered to your Pokédex!
+          uncaught: This Pokémon has not been registered to your Pokédex!
+        noPokemonName: '**Suggestion**: Try specifying a valid Pokémon name
+                    or number!'
+        pokemonNotFound: '**Suggestion**: Try specifying a valid Pokémon name
+                    or number!'
+      pokemon:
+        errors:
+          noResults: No pokémon found with the specified filters.
+        embeds:
+          title: "{{user}}'s Pokémon"
+      release:
+        embeds:
+          confirmation:
+            embed:
+              description: |-
+                **Name**: {{pokemon}}
+                **Level**: {{level}}
+                **IV Percent**: {{ivPercentage}}
+
+                React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+              title: A Pokémon Release is Pending
+          released:
+            description: |-
+              **Name**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+            title: A Pokémon has been Released
+          cancelled:
+            description: Releasing cancelled by user.
+            title: Releasing Cancelled
+        errors:
+          selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
+                        before releasing it!'
+          favoritePokemon: '**Suggestion**: Try removing this Pokémon from
+                        your favorites before releasing it!'
+      select:
+        alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
+                    have selected currently!'
+        embed:
+          description: |-
+            **Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Your selected Pokémon has been updated!
+          title: A Pokémon has been Selected
+      start:
+        description: |-
+          Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
+
+          **Get Started**: Use `{{prefix}}pick <Pokémon Name>` to choose a Pokémon.
+          **Example**: `{{prefix}}pick torchic`
+        startingTwice: '**Suggestion** Try catching a Pokémon instead of starting
+                    twice!'
+        welcomeToPokeWorld: Welcome to the World of Pokecord!
+    events:
+      spawner:
+        embeds:
+          spawn:
+            description: Use `{{prefix}}catch <Pokémon Name>` to catch
+              it!
+            footer: The next Pokémon will replace this one.
+            title: A Wild Pokémon has Appeared
+  profile:
+    commands:
+      bag:
+        description: |-
+          **Gems**: {{gems}}
+          **Credits**: {{credits}}
+
+          All items you own will be available here.
+        errors:
+          noItems: '**Suggestion**: Try purchasing a few items before you
+                        view them here!'
+        title: '{{user}}''s Bag'
+      balance:
+        description: |-
+          **Gems**: {{gems}}
+          **Credits**: {{credits}}
+        title: '{{user}}''s Balance'
+      item:
+        errors:
+          invalidTarget: '**Suggestion**: Try using another item or giving
+                        the specified item!'
+          itemNotFound: '**Suggestion**: Try using a valid item!'
+          itemNotOwned:
+            description: '**Suggestion**: Try purchasing the item you
+                            want to use or use one you have!'
+            title: An Item is Missing
+          noItemName: '**Suggestion**: Try specifying an item name!'
+          notAvailable: '**Suggestion**: Try using an item that''s available
+                        or wait for updates!'d
+        give:
+          embed:
+            description: |-
+              **Item Name**: {{item}}
+
+              Your {{pokemon}} is now holding a {{item}}!
+            title: An Item has been Given
+          errors:
+            alreadyHolding: '**Suggestion**: Try taking the current item
+                            before giving it another!'
+            redeem: '**Suggestion**: Try giving another item to your Pokémon!'
+        take:
+          embed:
+            description: |-
+              **Item Name**: {{item}}
+
+              Your {{pokemon}} is now holding nothing!
+            title: An Item has been Taken
+          errors:
+            holdingUnknownItem: '**Suggestion**: Try joining our [support
+                            server](https://discord.gg/poke) to resolve this issue!'
+            notHolding: '**Suggestion**: Try giving an item to your Pokémon
+                            before taking anything!'
+      rewards:
+        embed:
+          description: The rewards you have claimed are listed below.
+          fields:
+            catchRewards:
+              name: '**Catch Rewards**: {{amount}}'
+              value: '**Credits**: {{credits}}'
+            voteRewards:
+              name: '**Vote Rewards**: {{amount}}'
+              value: |-
+                **Credits**: {{credits}}
+                **Gems**: {{gems}}
+                **Pokémon XP**: {{xp}}
+          title: '{{amount}} Rewards were Claimed'
+        embeds:
+          available:
+            description: |-
+              All rewards you have earned will be available here.
+
+              **Voting Rewards**: {{unclaimedVoteRewards}}
+              **Catch Rewards**: {{unclaimedCatchRewards}}
+
+              Use `{{prefix}}rewards <type of reward>` or `{{prefix}}rewards all` to claim rewards!
+            title: '{{totalRewards}} Reward(s) Available'
+        errors:
+          noPokemonRewards: '**Suggestion**: Try catching more Pokémon to
+                        earn catch rewards!'
+          noRewards: '**Suggestion**: Try earning a few rewards before checking
+                        in!'
+          noVoteRewards: '**Suggestion**: Try voting for Pokecord to earn
+                        vote rewards!'
+  economy:
+    commands:
+      buy:
+        errors:
+          itemNotFound: '**Suggestion**: Try using a valid item!'
+          noItemName: '**Suggestion**: Try specifying an item name!'
+          invalidAmount: '**Suggestion**: Try specifying an amount between 1 and 1024!'
+          notEnoughCredits: "You don't have enough credits to buy this item."
+          notEnoughGems: "You don't have enough gems to buy this item."
+          notEnoughTokens: "You don't have enough tokens to buy this item."
+        embed:
+          description: You have bought {{amount}} of {{item}}!
+          title: Item Purchase Successful!
+      shop:
+        embed:
+          description: |
+            **Gems**: {{gems}}
+            **Credits**: {{credits}}
+
+            All the items are listed below, flip the page to see more items.
+        errors:
+          noItemsAvailable: No items available!
+        texts:
+          pokecordShop: Pokecord Shop
+          cantBePurchased: "Can't be purchased"
+          creditsCost: |
+            {{cost}} Credits
+          gemsCost: |
+            {{cost}} Gems
+          tokensCost: |
+            {{cost}} Tokens
+          cost: |
+            **Cost: `{{cost}}`**
+
+      store:
+        embed:
+          confirmation:
+            cancelOldOrder: You already have an order open, would you like to cancel it?
+          orderCreated:
+            title: Order Created
+            description: Your order information has been sent in your DMs.
+          description: Click the emoji corresponding to which category you would like to open.
+          title: Pokecord Store
+        errors:
+          cancelOldOrder:
+            noAction: You didn't choose anything, ignoring store request.
+          failedToCancelOrder: There was an error creating the order, please contact the administrators.
+          dmsClosed: Please open your DM's and restart the process above in order to continue.
+        dm:
+          embed:
+            title: Order
+            description: |
+              Your order for **{{item}}** has been created.
+              **[Click here]({{link}})** in order to pay for the item(s) you ordered.
+store:
+  packages:
+    gems:
+      name: Gems
+      description: Purchase gems in order to buy exclusive items on the in-game item shop.
+      embed:
+        title: Purchase Gems
+        description: Click the emoji corresponding to the amount of gems you would like to purchase.
+      items:
+        100_gems: 100 Gems
+        525_gems: 525 Gems
+        1100_gems: 1100 Gems
+        1680_gems: 1680 Gems
+        3000_gems: 3000 Gems
+        6750_gems: 6750 Gems
+    roles:
+      name: Roles
+      description: Purchase an upgraded trainer and receive perks such as shop discounts and xp boosts.
+      embed:
+        title: Purchase Roles
+        description: Click the emoji corresponding to the role you would like to purchase.
+      items:
+        apprentice_trainer: Apprentice Trainer
+        intermediate_trainer: Intermediate Trainer
+        experienced_trainer: Experienced Trainer
+        master_trainer: Master Trainer
+        legendary_trainer: Legendary Trainer
+        mythical_trainer: Mythical Trainer
+items:
+  evolution:
+    embed:
+      description: |-
+        **Name**: {{pokemon}}
+        **Evolved Into**: {{evolvedPokemon}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has been Evolve
+  machine:
+    embed:
+      title: A Machine has been Used
+    errors:
+      invalidSlotSpecified: '**Suggestion**: Try specifying a valid
+                    move slot number!'
+      noSlotSpecified: '**Suggestion**: Try specifying a move slot number!'
+      unknownMachine: An Unknown Machine has been Used
+  shinyBoost:
+    embed:
+      title: Shiny Chance Boosted!
+      description: Your shiny chance has been increased!
+  redeem:
+    errors:
+      disallowedPokemon: '**Suggestion**: Try redeeming a Pokémon you
+                    can get with your redeem!'
+      noPokemonName: '**Suggestion**: Try specifying a Pokémon name
+                    to redeem!'
+    embed:
+      description: |-
+        **Name**: {{pokemon}}
+        **Level**: {{level}}
+        **IV Percent**: {{ivPercentage}}
+
+        Congratulations {{user}}!
+      title: A {{redeem}} has been Used
+  unusable:
+    description: '**Suggestion**: Try using `{{prefix}}give` or use another
+                      item!'
+    title: An Item is Unusable

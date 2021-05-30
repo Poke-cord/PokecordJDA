@@ -1,0 +1,23 @@
+name: Docker
+
+on: [push]
+
+jobs:
+  test-and-build:
+    name: Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure git
+        run: |
+          git config --global user.email "pokecord@pokecord.xyz"
+          git config --global user.name "Pokecord"
+      - name: Docker login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username zihadmahiuddin --password-stdin
+      - name: Docker build
+        run: docker build -t docker.pkg.github.com/poke-cord/pokecord/pokecordjda:latest .
+        working-directory: ./
+      - name: Docker push tag latest
+        run: docker push docker.pkg.github.com/poke-cord/pokecordjda/pokecordjda:latest
+        working-directory: ./
+        if: github.ref == 'refs/heads/master'

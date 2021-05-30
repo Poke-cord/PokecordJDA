@@ -1,0 +1,35 @@
+package xyz.pokecord.bot.modules.pokemon
+
+import net.dv8tion.jda.api.hooks.EventListener
+import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.Module
+import xyz.pokecord.bot.modules.pokemon.commands.*
+import xyz.pokecord.bot.modules.pokemon.events.SpawnerEvent
+import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent
+
+class PokemonModule(bot: Bot) : Module(
+  bot,
+  arrayOf(
+    CatchCommand(),
+    PickCommand(),
+    PokemonCommand(),
+    InfoCommand(),
+    FavoriteCommand(),
+    HintCommand(),
+    NicknameCommand(),
+    SelectCommand(),
+    ReleaseCommand(),
+    GiftCommand(),
+    GiftCommand.GiftCreditCommand(),
+    GiftCommand.GiftPokemonCommand(),
+    MovesetCommand(),
+    MoveCommand(),
+    PokedexCommand()
+  ),
+  arrayOf(
+    SpawnerEvent(),
+    XPGainEvent()
+  )
+), EventListener {
+  override val name = "Pokémon"
+}
