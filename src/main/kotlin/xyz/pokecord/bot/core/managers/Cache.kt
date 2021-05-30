@@ -1,11 +1,10 @@
 package xyz.pokecord.bot.core.managers
 
 import org.redisson.Redisson
-import org.redisson.api.RMapCacheAsync
-import org.redisson.api.RSetMultimapCache
-import org.redisson.api.RedissonClient
+import org.redisson.api.*
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
+import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -17,10 +16,12 @@ class Cache {
 
   private val commandRateLimitMap: RMapCacheAsync<String, Long>
   private val hasRunningCommandSet: RMapCacheAsync<String, Long>
+  private val maintenanceStatus: RBucketAsync<Boolean>
 
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
   val lastCountedMessageMap: RMapCacheAsync<String, Long>
+  val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
 
@@ -49,9 +50,12 @@ class Cache {
 
     commandRateLimitMap = redissonClient.getMapCache("commandRateLimit")
     hasRunningCommandSet = redissonClient.getMapCache("hasRunningCommand")
+    maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
+
     guildMap = redissonClient.getMapCache("guild")
     guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
     lastCountedMessageMap = redissonClient.getMapCache("lastCountedMessage")
+    shardStatusMap = redissonClient.getMapCache("shardStatus")
     spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
     userMap = redissonClient.getMapCache("user")
   }
@@ -83,5 +87,13 @@ class Cache {
 
   suspend fun removeRateLimit(key: String): Long? {
     return commandRateLimitMap.removeAsync(key).awaitSuspending()
+  }
+
+  suspend fun getMaintenanceStatus(): Boolean {
+    return maintenanceStatus.async.awaitSuspending()
+  }
+
+  suspend fun setMaintenanceStatus(maintenance: Boolean) {
+    maintenanceStatus.setAsync(maintenance).awaitSuspending()
   }
 }

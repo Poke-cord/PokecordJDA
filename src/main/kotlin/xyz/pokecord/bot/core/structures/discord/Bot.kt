@@ -34,6 +34,11 @@ class Bot constructor(private val token: String) {
   private var started = false
   var maintenance = devEnv
 
+  fun toggleMaintenance() {
+    maintenance = !maintenance
+    updatePresence()
+  }
+
   fun start(shardCount: Int? = null, shardId: Int? = null) {
     this.version = this.javaClass.`package`.implementationVersion ?: "DEV"
     val intents = mutableListOf(
