@@ -13,11 +13,9 @@ jobs:
           git config --global user.email "pokecord@pokecord.xyz"
           git config --global user.name "Pokecord"
       - name: Docker login
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username zihadmahiuddin --password-stdin
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
       - name: Docker build
-        run: docker build -t docker.pkg.github.com/poke-cord/pokecord/pokecordjda:latest .
-        working-directory: ./
+        run: docker build . -t ghcr.io/poke-cord/pokecordjda:latest --cache-from ghcr.io/poke-cord/pokecordjda:latest
       - name: Docker push tag latest
-        run: docker push docker.pkg.github.com/poke-cord/pokecordjda/pokecordjda:latest
-        working-directory: ./
+        run: docker push ghcr.io/poke-cord/pokecordjda:latest
         if: github.ref == 'refs/heads/main'
