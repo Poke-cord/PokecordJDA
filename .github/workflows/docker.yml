@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure git
         run: |
           git config --global user.email "pokecord@pokecord.xyz"
