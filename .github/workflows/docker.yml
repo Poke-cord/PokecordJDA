@@ -20,4 +20,4 @@ jobs:
       - name: Docker push tag latest
         run: docker push docker.pkg.github.com/poke-cord/pokecordjda/pokecordjda:latest
         working-directory: ./
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
