@@ -102,7 +102,7 @@ class I18n {
   }
 
   enum class Language(val identifier: String, val pokeApiLanguageId: Int? = null) {
-    JA_JP("ja-JP", 1),
+//    JA_JP("ja-JP", 1),
     EN_US("en-US", 9)
   }
 }

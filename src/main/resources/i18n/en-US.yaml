@@ -410,7 +410,7 @@ modules:
             title: An Item is Missing
           noItemName: '**Suggestion**: Try specifying an item name!'
           notAvailable: '**Suggestion**: Try using an item that''s available
-                        or wait for updates!'d
+                        or wait for updates!'
         give:
           embed:
             description: |-
