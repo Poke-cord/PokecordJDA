@@ -1,10 +1,12 @@
 package xyz.pokecord.bot.core.managers
 
 import org.redisson.Redisson
-import org.redisson.api.*
+import org.redisson.api.RBucketAsync
+import org.redisson.api.RMapCacheAsync
+import org.redisson.api.RSetMultimapCache
+import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
-import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -16,7 +18,7 @@ class Cache {
 
   private val commandRateLimitMap: RMapCacheAsync<String, Long>
   private val hasRunningCommandSet: RMapCacheAsync<String, Long>
-  private val maintenanceStatus: RBucketAsync<Boolean>
+  private val maintenanceStatus: RBucketAsync<Boolean?>
 
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
@@ -89,7 +91,7 @@ class Cache {
     return commandRateLimitMap.removeAsync(key).awaitSuspending()
   }
 
-  suspend fun getMaintenanceStatus(): Boolean {
+  suspend fun getMaintenanceStatus(): Boolean? {
     return maintenanceStatus.async.awaitSuspending()
   }
 

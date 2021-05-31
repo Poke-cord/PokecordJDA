@@ -30,8 +30,10 @@ class RedisSyncTask : Task() {
 
     // Maintenance Status
     val maintenanceStatus = module.bot.cache.getMaintenanceStatus()
-    if (maintenanceStatus != module.bot.maintenance) {
-      module.bot.toggleMaintenance()
+    maintenanceStatus?.let {
+      if (it != module.bot.maintenance) {
+        module.bot.toggleMaintenance()
+      }
     }
   }
 }
