@@ -17,10 +17,17 @@ class SpawnerEvent : Event() {
 
   private val envFlag = System.getenv("SPAWNS") != null
 
-  private fun getNextSpawn() {
-    // TODO: spawn rarity
-    Random.nextInt(1, 808)
-    Pokemon.legendaries
+  private fun getNextSpawn(): Int {
+    var pokemonId = Random.nextInt(1, 808)
+    when {
+      Pokemon.legendaries.contains(pokemonId) -> {
+        if (Random.nextDouble() * 100 > 6.36) pokemonId = Random.nextInt(1, 808)
+      }
+      Pokemon.mythicals.contains(pokemonId) -> {
+        if (Random.nextDouble() * 100 > 2.34) pokemonId = Random.nextInt(1, 808)
+      }
+    }
+    return pokemonId
   }
 
   @Handler
@@ -58,7 +65,7 @@ class SpawnerEvent : Event() {
         try {
           randomSpawnChannel.sentMessages = 0
           randomSpawnChannel.requiredMessages = Random.nextInt(5, 41)
-          randomSpawnChannel.spawned = Random.nextInt(1, 808)
+          randomSpawnChannel.spawned = getNextSpawn()
 
           module.bot.database.spawnChannelRepository.updateDetails(
             randomSpawnChannel
