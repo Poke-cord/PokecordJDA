@@ -98,7 +98,7 @@ object I18n {
     var string = locales[lang.identifier]?.get(lowerCaseKey)
     if (string == null && lang != defaultLanguage) string =
       locales[defaultLanguage.identifier]?.get(lowerCaseKey)
-    if (string == null) return lowerCaseKey
+    if (string == null) return default ?: lowerCaseKey
     for (dataKey in data.keys) {
       string = string?.replace("{{$dataKey}}", data[dataKey] ?: "")
     }
