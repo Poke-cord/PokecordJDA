@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.utils
 
 object Config {
+  const val version = "2.0.0"
   const val voteSeasonStartTimestamp = 1609459200000
 
   val officialServerOnlyMode = System.getenv("OFFICIAL_SERVER_ONLY") != null

@@ -49,7 +49,7 @@ import org.yaml.snakeyaml.Yaml
 //  }
 //}
 
-class I18n {
+object I18n {
   private val defaultLanguage = Language.EN_US
 
   private val locales: MutableMap<String, MutableMap<String, String>> = mutableMapOf()
@@ -86,23 +86,32 @@ class I18n {
     }
   }
 
-  fun translate(language: Language, key: String, vararg data: Pair<String, String>) =
+  fun translate(language: Language?, key: String, vararg data: Pair<String, String>) =
     translate(language, key, mapOf(*data))
 
-  fun translate(language: Language, key: String, data: Map<String, String>): String {
+  fun translate(language: Language?, key: String, default: String, vararg data: Pair<String, String>) =
+    translate(language, key, mapOf(*data), default)
+
+  fun translate(language: Language?, key: String, data: Map<String, String>, default: String? = null): String {
     val lowerCaseKey = key.toLowerCase()
-    var string = locales[language.identifier]?.get(lowerCaseKey)
-    if (string == null && language != defaultLanguage) string =
+    val lang = language ?: Language.default
+    var string = locales[lang.identifier]?.get(lowerCaseKey)
+    if (string == null && lang != defaultLanguage) string =
       locales[defaultLanguage.identifier]?.get(lowerCaseKey)
     if (string == null) return lowerCaseKey
     for (dataKey in data.keys) {
       string = string?.replace("{{$dataKey}}", data[dataKey] ?: "")
     }
-    return string ?: lowerCaseKey
+    return string ?: default ?: lowerCaseKey
   }
 
   enum class Language(val identifier: String, val pokeApiLanguageId: Int? = null) {
-//    JA_JP("ja-JP", 1),
-    EN_US("en-US", 9)
+    //    JA_JP("ja-JP", 1),
+    EN_US("en-US", 9);
+
+    companion object {
+      val default
+        get() = EN_US
+    }
   }
 }

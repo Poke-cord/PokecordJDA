@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.Database
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.extensions.removeAccents
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
@@ -24,7 +25,6 @@ class Bot constructor(private val token: String) {
   private lateinit var version: String
 
   private val devEnv = System.getenv("DEV").equals("true", true)
-  private val i18N: I18n = I18n()
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -40,7 +40,7 @@ class Bot constructor(private val token: String) {
   }
 
   fun start(shardCount: Int? = null, shardId: Int? = null) {
-    this.version = this.javaClass.`package`.implementationVersion ?: "DEV"
+    this.version = if (devEnv) "DEV" else Config.version
     val intents = mutableListOf(
       GatewayIntent.DIRECT_MESSAGES,
       GatewayIntent.DIRECT_MESSAGE_REACTIONS,
@@ -85,7 +85,7 @@ class Bot constructor(private val token: String) {
     val key =
       if (command.parentCommand != null) "${command.module.name}.${command.parentCommand!!.name}.${command.name}"
       else "${command.module.name}.${command.name}"
-    return context.translate("misc.command_descriptions.${key.removeAccents()}")
+    return context.translate("misc.command_descriptions.${key.removeAccents()}", "")
   }
 
   suspend fun getHelpEmbed(context: MessageReceivedContext, module: Module, prefix: String = "p!"): EmbedBuilder {
@@ -154,22 +154,6 @@ class Bot constructor(private val token: String) {
     return commands.mapNotNull { getHelpEmbed(context, it) }
   }
 
-  fun translate(
-    language: I18n.Language? = null,
-    key: String,
-    vararg data: Pair<String, String>
-  ): String {
-    return i18N.translate(language ?: I18n.Language.EN_US, key, *data)
-  }
-
-  fun translate(
-    language: I18n.Language? = null,
-    key: String,
-    data: Map<String, String>
-  ): String {
-    return i18N.translate(language ?: I18n.Language.EN_US, key, data)
-  }
-
   fun updatePresence() {
     val activityTextData = mapOf(
       "prefix" to (commandHandler.prefix),
@@ -183,10 +167,10 @@ class Bot constructor(private val token: String) {
     val urlTranslationKey = if (maintenance) "misc.presence.maintenance.url" else "misc.presence.regular.url"
 
     val activity =
-      translate(null, activityTranslationKey, activityTextData)
-    val status = translate(null, statusTranslationKey)
-    val type = translate(null, typeTranslationKey)
-    val url = translate(null, urlTranslationKey)
+      I18n.translate(null, activityTranslationKey, activityTextData)
+    val status = I18n.translate(null, statusTranslationKey)
+    val type = I18n.translate(null, typeTranslationKey)
+    val url = I18n.translate(null, urlTranslationKey)
 
     try {
       jda.presence.setStatus(OnlineStatus.valueOf(status))

@@ -96,15 +96,19 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
   }
 
   suspend fun translate(key: String, vararg data: Pair<String, String>): String {
-    return bot.translate(getLanguage(), key, *data)
+    return I18n.translate(getLanguage(), key, *data)
   }
 
-  suspend fun translate(key: String, data: Map<String, String>): String {
-    return bot.translate(getLanguage(), key, data)
+  suspend fun translate(key: String, default: String, vararg data: Pair<String, String>): String {
+    return I18n.translate(getLanguage(), key, default, *data)
+  }
+
+  suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
+    return I18n.translate(getLanguage(), key, data, default)
   }
 
   suspend fun resolvePokemon(jdaUser: JDAUser, userData: User, pokemonResolvable: PokemonResolvable?): OwnedPokemon? {
-    if (pokemonResolvable == null || pokemonResolvable.data == null) {
+    if (pokemonResolvable?.data == null) {
       val selectedPokemonId = userData.selected ?: return null
       return bot.database.pokemonRepository.getPokemonById(selectedPokemonId)
     }
@@ -117,9 +121,9 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
     return null
   }
 
-  fun addBreadcrumb(breadcrumb: Breadcrumb, hint: Any? = null) {
-    sentryBreadcrumbs += Pair(breadcrumb, hint)
-  }
+//  fun addBreadcrumb(breadcrumb: Breadcrumb, hint: Any? = null) {
+//    sentryBreadcrumbs += Pair(breadcrumb, hint)
+//  }
 
   suspend fun handleException(
     exception: Throwable,
