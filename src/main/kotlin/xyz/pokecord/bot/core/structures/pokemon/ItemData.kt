@@ -90,7 +90,16 @@ data class ItemData(
 
       // Shiny Boost
       items.add(
-        ShinyBoostItem.itemData
+        ItemData(
+          ShinyBoostItem.id,
+          "shiny-boost",
+          "Shiny Boost",
+          ShinyBoostItem.categoryId,
+          999999999,
+          0,
+          0,
+          usesTokens = true
+        )
       )
     }
   }
