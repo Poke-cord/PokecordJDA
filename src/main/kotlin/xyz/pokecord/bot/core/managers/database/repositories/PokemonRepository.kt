@@ -4,6 +4,7 @@ import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.reactivestreams.client.ClientSession
+import kotlinx.serialization.json.*
 import org.bson.BsonDocument
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
@@ -17,7 +18,6 @@ import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Type
 import xyz.pokecord.bot.utils.CountResult
-import xyz.pokecord.bot.utils.jsonObject
 
 class PokemonRepository(
   database: Database,
@@ -451,23 +451,23 @@ class PokemonRepository(
         if (regex != null || searchQuery != null) {
           aggregation.add(
             BsonDocument.parse(
-              jsonObject(0) {
-                json("\$match") {
-                  array("\$or") {
-                    json {
-                      json("nickname") {
-                        string("\$regex", (regex ?: searchQuery!!).toString())
-                        string(
+              buildJsonObject {
+                putJsonObject("\$match") {
+                  putJsonArray("\$or") {
+                    addJsonObject {
+                      putJsonObject("nickname") {
+                        put("\$regex", (regex ?: searchQuery!!).toString())
+                        put(
                           "\$options",
                           if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
                         )
                       }
                     }
-                    json {
-                      json("id") {
-                        array("\$in") {
+                    addJsonObject {
+                      putJsonObject("id") {
+                        putJsonArray("\$in") {
                           searchIds.forEach {
-                            number(it)
+                            add(it)
                           }
                         }
                       }
