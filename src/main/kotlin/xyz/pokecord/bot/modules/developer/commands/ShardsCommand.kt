@@ -7,16 +7,13 @@ import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import xyz.pokecord.bot.utils.extensions.humanizeMs
 import kotlin.math.ceil
 
 class ShardsCommand : DeveloperCommand() {
   override val name = "Shards"
 
-  private val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
+//  private val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
 
   @Executor
   suspend fun execute(
@@ -32,9 +29,10 @@ class ShardsCommand : DeveloperCommand() {
         items.joinToString("\n") { statusJson ->
           val status = Json.decodeFromString<ShardStatus>(statusJson)
           "${status.id}/${status.count} - ${status.gatewayPing}ms - ${status.hostname} - ${
-            Instant.ofEpochMilli(
-              status.updatedAt
-            ).atZone(ZoneId.systemDefault()).toLocalTime().format(timeFormatter)
+            (System.currentTimeMillis() - status.updatedAt).humanizeMs()
+//            Instant.ofEpochMilli(
+//              status.updatedAt
+//            ).atZone(ZoneId.systemDefault()).toLocalTime().format(timeFormatter)
           }"
         },
         "Shard Status"
