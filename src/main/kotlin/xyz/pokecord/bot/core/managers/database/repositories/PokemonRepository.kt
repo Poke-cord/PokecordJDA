@@ -29,6 +29,7 @@ class PokemonRepository(
   override suspend fun createIndexes() {
     collection.createIndex(Indexes.ascending("ownerId"))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("ownerId")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
   }
 
   suspend fun getPokemonById(id: Id<OwnedPokemon>): OwnedPokemon? {
@@ -375,11 +376,7 @@ class PokemonRepository(
 
     init {
       val rarities: MutableList<String> =
-        (if (rarity != null) {
-          rarity.toLowerCase().split(Regex(",( )?")).toMutableList()
-        } else {
-          mutableListOf()
-        })
+        (rarity?.toLowerCase()?.split(Regex(",( )?"))?.toMutableList() ?: mutableListOf())
 
       for (rarity in rarities) {
         when {

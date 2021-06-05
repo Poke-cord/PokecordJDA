@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.profile.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.VoteUtils
 import kotlin.random.Random
@@ -16,7 +16,7 @@ class RewardsCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "vote/catch/all", optional = true) action: String?
   ) {
     if (!context.hasStarted(true)) return
@@ -137,7 +137,7 @@ class RewardsCommand : Command() {
   }
 
   private suspend fun giveCatchRewards(
-    context: MessageReceivedContext
+    context: ICommandContext
   ): Int {
     val userData = context.getUserData()
     var claimed = 0
@@ -159,7 +159,7 @@ class RewardsCommand : Command() {
   }
 
   private suspend fun giveVoteRewards(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     season: Int = VoteUtils.getCurrentSeason()
   ): VoteRewardResult {
     val voteRewards = module.bot.database.rewardRepository.getVoteRewards(context.author.id)

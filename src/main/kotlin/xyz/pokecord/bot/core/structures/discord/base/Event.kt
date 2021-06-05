@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.core.structures.discord
+package xyz.pokecord.bot.core.structures.discord.base
 
 abstract class Event {
   @Target(AnnotationTarget.FUNCTION)

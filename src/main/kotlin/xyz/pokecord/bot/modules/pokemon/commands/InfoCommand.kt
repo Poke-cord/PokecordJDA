@@ -1,8 +1,9 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
 import net.dv8tion.jda.api.entities.User
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.utils.PokemonResolvable
@@ -16,7 +17,7 @@ class InfoCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "pokemon", optional = true) pokemonResolvable: PokemonResolvable?,
     @Argument(optional = true) user: User?,
   ) {
@@ -29,6 +30,10 @@ class InfoCommand : Command() {
     if (userData.progressPrivate && !checkingSelf) {
       context.reply(context.embedTemplates.progressPrivate(targetUser).build()).queue()
       return
+    }
+
+    if (context is SlashCommandContext) {
+      context.deferReply().queue()
     }
 
     val pokemon = context.resolvePokemon(targetUser, userData, pokemonResolvable)

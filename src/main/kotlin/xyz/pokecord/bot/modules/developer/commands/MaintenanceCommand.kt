@@ -1,6 +1,6 @@
 package xyz.pokecord.bot.modules.developer.commands
 
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
 class MaintenanceCommand : DeveloperCommand() {
@@ -8,7 +8,7 @@ class MaintenanceCommand : DeveloperCommand() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) maintenance: Boolean?
   ) {
     if (maintenance != null) {

@@ -1,8 +1,9 @@
 package xyz.pokecord.bot.modules.profile.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
-import xyz.pokecord.bot.core.structures.discord.ParentCommand
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
@@ -12,7 +13,7 @@ class ItemCommand : ParentCommand() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "item", consumeRest = true) itemName: String?
   ) {
     if (!context.hasStarted(true)) return
@@ -94,7 +95,7 @@ class ItemCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(
-      context: MessageReceivedContext,
+      context: MessageCommandContext,
       @Argument(name = "item", consumeRest = true) itemName: String?
     ) {
       if (!context.hasStarted(true)) return
@@ -195,7 +196,7 @@ class ItemCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(
-      context: MessageReceivedContext
+      context: MessageCommandContext
     ) {
       if (!context.hasStarted(true)) return
 

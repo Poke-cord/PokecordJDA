@@ -2,8 +2,9 @@ package xyz.pokecord.bot.core.structures.discord
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.User
+import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 
-class EmbedTemplates(val context: MessageReceivedContext) {
+class EmbedTemplates(val context: BaseCommandContext) {
   enum class Color(val code: Int) {
     GREEN(0x2ecc71),
     RED(0xf04747),

@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.PokemonResolvable
 
 class FavoriteCommand : Command() {
@@ -11,7 +11,7 @@ class FavoriteCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "pokemon", optional = true) pokemonResolvable: PokemonResolvable?
   ) {
     if (!context.hasStarted(true)) return

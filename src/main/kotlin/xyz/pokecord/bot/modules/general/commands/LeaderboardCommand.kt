@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.general.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 
 class LeaderboardCommand : Command() {
   override val name = "Leaderboard"
@@ -10,7 +10,7 @@ class LeaderboardCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(aliases = ["c"], prefixed = true, optional = true) credits: Boolean?
   ) {
     if (credits == true) {

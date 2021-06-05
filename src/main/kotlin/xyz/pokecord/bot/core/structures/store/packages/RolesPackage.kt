@@ -1,6 +1,6 @@
 package xyz.pokecord.bot.core.structures.store.packages
 
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 
 object RolesPackage : Package() {
   override val id = "roles"
@@ -43,7 +43,7 @@ object RolesPackage : Package() {
     )
   )
 
-  override suspend fun giveReward(context: MessageReceivedContext, item: Item) {
+  override suspend fun giveReward(context: BaseCommandContext, item: Item) {
     if (item !is RoleItem) return
     val userData = context.getUserData()
     if (userData.donationTier < item.donationTier) {

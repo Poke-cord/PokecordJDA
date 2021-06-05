@@ -7,9 +7,12 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import net.dv8tion.jda.api.interactions.InteractionHook
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 
-class Confirmation(private val context: MessageReceivedContext, val timeout: Long = 30_000) {
+class Confirmation(private val context: ICommandContext, val timeout: Long = 30_000) {
   private enum class Emojis(val emoji: String) {
     CHECK("✅"),
     CROSS("❎");
@@ -27,7 +30,13 @@ class Confirmation(private val context: MessageReceivedContext, val timeout: Lon
     val footer = embedBuilder.build().footer?.text
     if (footer != null) embedBuilder.setFooter(footer.replace("{{timeout}}", (timeout / 1000).toString()))
 
-    message = context.reply(embedBuilder.build()).await()
+    // TODO: make sure it works for slash commands
+    val result = context.reply(embedBuilder.build()).await()
+    message = when (context) {
+      is MessageCommandContext -> result as Message
+      is SlashCommandContext -> (result as InteractionHook).retrieveOriginal().await()
+      else -> throw IllegalStateException("Unknown command context type ${context::class.java.name}")
+    }
     Emojis.values().map { message!!.addReaction(it.emoji).queue() }
     val endTime = System.currentTimeMillis() + timeout
     val event = context.jda.await<GenericEvent> {

@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.MoveData
 import xyz.pokecord.bot.core.structures.pokemon.Moveset
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
@@ -12,7 +12,7 @@ class MovesetCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "pokemon") pokemonName: String?
   ) {
     if (pokemonName == null) {

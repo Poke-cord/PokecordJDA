@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.general.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.VoteUtils
 import kotlin.math.min
 
@@ -10,7 +10,7 @@ class VoteCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext
+    context: ICommandContext
   ) {
     val season = VoteUtils.getCurrentSeason()
 

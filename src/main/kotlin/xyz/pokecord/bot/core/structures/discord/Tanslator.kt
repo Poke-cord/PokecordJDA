@@ -1,12 +1,13 @@
 package xyz.pokecord.bot.core.structures.discord
 
+import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.pokemon.*
 import java.text.NumberFormat
 import java.util.*
 
-class Translator(val context: MessageReceivedContext) {
+class Translator(val context: BaseCommandContext) {
   suspend fun numberFormat(number: Number): String {
     val language = context.getLanguage()
     val locale = Locale.forLanguageTag(language.identifier) ?: Locale.forLanguageTag(I18n.Language.EN_US.identifier)

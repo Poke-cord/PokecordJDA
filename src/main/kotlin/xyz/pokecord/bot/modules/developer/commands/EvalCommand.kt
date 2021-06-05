@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.modules.developer.commands
 
-import net.dv8tion.jda.api.entities.ChannelType
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import javax.script.Compilable
 import javax.script.ScriptContext
@@ -15,7 +14,7 @@ class EvalCommand : DeveloperCommand() {
 
   @Executor
   fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(consumeRest = true, name = "code") input: String?
   ) {
     val groupValues = input?.let { codeRegex.matchEntire(it)?.groupValues }
@@ -59,8 +58,7 @@ class EvalCommand : DeveloperCommand() {
     }
     scriptEngine.put("context", context)
     scriptEngine.put("jda", context.jda)
-    scriptEngine.put("message", context.message)
-    scriptEngine.put("guild", if (context.isFromType(ChannelType.TEXT)) context.guild else null)
+    scriptEngine.put("guild", context.guild)
     scriptEngine.put("channel", context.channel)
     scriptEngine.put("bot", module.bot)
     scriptEngine.put("module", module)

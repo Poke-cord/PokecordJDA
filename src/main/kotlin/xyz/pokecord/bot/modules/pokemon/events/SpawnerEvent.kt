@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
-import xyz.pokecord.bot.core.structures.discord.Event
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.base.Event
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import kotlin.random.Random
@@ -31,16 +31,16 @@ class SpawnerEvent : Event() {
   }
 
   @Handler
-  suspend fun onMessage(context: MessageReceivedContext) {
+  suspend fun onMessage(context: MessageCommandContext) {
     try {
       if (!context.shouldProcess()) return
       if (!envFlag || context.bot.maintenance) return
-      if (context.channelType != ChannelType.TEXT || context.author.isBot) return
+      if (context.event.channelType != ChannelType.TEXT || context.author.isBot) return
       val prefix = context.getPrefix()
-      if (context.message.contentRaw.startsWith(prefix)) return
-      val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild.id)
+      if (context.event.message.contentRaw.startsWith(prefix)) return
+      val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
       val randomSpawnChannel = spawnChannels.randomOrNull() ?: return
-      val randomSpawnChannelEntity = context.guild.getTextChannelById(randomSpawnChannel.id) ?: return
+      val randomSpawnChannelEntity = context.guild!!.getTextChannelById(randomSpawnChannel.id) ?: return
       if (!randomSpawnChannelEntity.guild.selfMember.hasPermission(
           randomSpawnChannelEntity,
           Permission.MESSAGE_WRITE,

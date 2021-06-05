@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
-import xyz.pokecord.bot.core.structures.discord.Event
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.base.Event
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import kotlin.math.min
 
@@ -11,13 +11,13 @@ class XPGainEvent : Event() {
   private val envFlag = System.getenv("XP_GAIN") != null
 
   @Handler
-  suspend fun onMessage(context: MessageReceivedContext) {
+  suspend fun onMessage(context: MessageCommandContext) {
     if (!context.shouldProcess()) return
     if (!envFlag || context.bot.maintenance) return
     if (context.author.isBot) return
-    if (context.message.contentRaw.length <= 2) return
+    if (context.event.message.contentRaw.length <= 2) return
     val prefix = context.getPrefix()
-    if (context.message.contentRaw.startsWith(prefix)) return
+    if (context.event.message.contentRaw.startsWith(prefix)) return
 
     val userData = context.getUserData()
     if (userData.selected == null) return
@@ -30,7 +30,7 @@ class XPGainEvent : Event() {
     val selectedPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     if (selectedPokemon == null || selectedPokemon.level >= 100) return
 
-    var xp = min(context.message.contentRaw.replace("[ \\n]".toRegex(), "").length * 10, 1000)
+    var xp = min(context.event.message.contentRaw.replace("[ \\n]".toRegex(), "").length * 10, 1000)
     val percentage = when (userData.donationTier) {
       6 -> 20
       5 -> 15

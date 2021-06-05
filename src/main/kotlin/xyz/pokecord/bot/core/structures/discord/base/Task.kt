@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.core.structures.discord
+package xyz.pokecord.bot.core.structures.discord.base
 
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext

@@ -6,7 +6,7 @@ version = "2.0.0"
 val graalJsVersion = "21.0.0.2"
 val jdaKtxVersion = "985db81"
 val jdaUtilitiesVersion = "3.0.5"
-val jdaVersion = "4.2.0_231"
+val jdaVersion = "4.2.1_269"
 val kmongoVersion = "4.2.4"
 val kotlinCoroutinesVersion = "1.4.3"
 val kotlinxSerializationJsonVersion = "1.1.0"
@@ -28,6 +28,7 @@ repositories {
   mavenCentral()
   jcenter()
   maven("https://jitpack.io/")
+  maven("https://m2.dv8tion.net/releases")
 }
 
 dependencies {
@@ -39,7 +40,10 @@ dependencies {
 
   implementation("com.github.minndevelopment:jda-ktx:${jdaKtxVersion}")
 
-  implementation("net.dv8tion:JDA:$jdaVersion")
+  implementation("net.dv8tion:JDA:$jdaVersion") {
+//  implementation("com.github.dv8fromtheworld:jda:development") { // JitPack
+    exclude(module = "opus-java")
+  }
 
   implementation("net.sf.trove4j:trove4j:$trove4jVersion")
 

@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.general.commands
 
 import net.dv8tion.jda.api.entities.*
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 
 class ParseEntitiesCommand : Command() {
   override val name = "Parse-Entities"
@@ -12,7 +12,7 @@ class ParseEntitiesCommand : Command() {
 
   @Executor
   fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) user: User?,
     @Argument(optional = true) member: Member?,
     @Argument(optional = true) role: Role?,

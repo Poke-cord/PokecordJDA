@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.general.commands
 
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
@@ -11,7 +11,7 @@ class FAQCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true, consumeRest = true) keyword: String?
   ) {
     val faqCount = module.bot.database.faqRepository.getFaqCount(keyword).toInt()

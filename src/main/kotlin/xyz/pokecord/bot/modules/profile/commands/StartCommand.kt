@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.profile.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Species
 
@@ -20,7 +20,7 @@ class StartCommand : Command() {
   }
 
   @Executor
-  suspend fun execute(context: MessageReceivedContext) {
+  suspend fun execute(context: ICommandContext) {
     if (context.hasStarted()) {
       context.reply(
         context.embedTemplates.error(context.translate("modules.pokemon.commands.start.startingTwice")).build()

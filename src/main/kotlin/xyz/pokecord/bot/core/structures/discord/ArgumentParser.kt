@@ -2,12 +2,13 @@ package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.*
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.isBoolean
 import kotlin.reflect.KType
 
 class ArgumentParser(
-  private val context: MessageReceivedContext,
+  private val context: ICommandContext,
   private var args: MutableList<String>
 ) {
   private val channelMentionRegex = Regex("^<#?(?<id>\\d+)>$")
@@ -100,10 +101,8 @@ class ArgumentParser(
   }
 
   fun getInteger(): Int? {
-    val arg = nextArg()
     val int =
-      if (arg == null) null
-      else arg.toIntOrNull()
+      nextArg()?.toIntOrNull()
     optionalArgCleanup(int)
     return int
   }
@@ -132,8 +131,8 @@ class ArgumentParser(
       if (arg == null) null
       else {
         val id = getIdFromMention(channelMentionRegex, arg.trim())
-        if (id != null) context.guild.getTextChannelById(id)
-        else context.guild.getTextChannelsByName(arg.trim(), true).firstOrNull()
+        if (id != null) context.guild?.getTextChannelById(id)
+        else context.guild?.getTextChannelsByName(arg.trim(), true)?.firstOrNull()
       }
     optionalArgCleanup(textChannel)
     return textChannel
@@ -145,8 +144,8 @@ class ArgumentParser(
       if (arg == null) null
       else {
         val id = getIdFromMention(null, arg.trim())
-        if (id != null) context.guild.getVoiceChannelById(id)
-        else context.guild.getVoiceChannelsByName(arg.trim(), true).firstOrNull()
+        if (id != null) context.guild?.getVoiceChannelById(id)
+        else context.guild?.getVoiceChannelsByName(arg.trim(), true)?.firstOrNull()
       }
     optionalArgCleanup(voiceChannel)
     return voiceChannel
@@ -161,9 +160,9 @@ class ArgumentParser(
         else {
           val id = getIdFromMention(userAndMemberMentionRegex, arg.trim())
           if (id != null) {
-            context.guild.retrieveMemberById(id).await()
+            context.guild!!.retrieveMemberById(id).await()
           } else {
-            context.guild.getMemberByTag(arg.trim())
+            context.guild!!.getMemberByTag(arg.trim())
           }
         }
       }
@@ -180,9 +179,9 @@ class ArgumentParser(
         else {
           val id = getIdFromMention(roleMentionRegex, arg.trim())
           if (id != null) {
-            context.guild.getRoleById(id)
+            context.guild!!.getRoleById(id)
           } else {
-            context.guild.getRolesByName(arg.trim(), true).firstOrNull()
+            context.guild!!.getRolesByName(arg.trim(), true).firstOrNull()
           }
         }
       }

@@ -3,9 +3,13 @@ package xyz.pokecord.bot.modules.economy.commands
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.GuildChannel
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.interactions.InteractionHook
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Order
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
@@ -20,7 +24,7 @@ class StoreCommand : Command() {
   private val payPal by lazy { PayPal(module.bot.database) }
 
   @Executor
-  suspend fun execute(context: MessageReceivedContext) {
+  suspend fun execute(context: ICommandContext) {
     val orderData = module.bot.database.orderRepository.getUnpaidOrder(context.author.id)
     if (orderData != null) {
       val confirmation = Confirmation(context, 60_000)
@@ -61,12 +65,17 @@ class StoreCommand : Command() {
       "$emoji **${context.translate("store.packages.${it.id}.name")}** ~ ${context.translate("store.packages.${it.id}.description")}"
     }.joinToString("\n")
 
-    val message = context.reply(
+    val result = context.reply(
       context.embedTemplates.normal(
         context.translate("modules.economy.commands.store.embed.description") + "\n\n" + packagesText,
         context.translate("modules.economy.commands.store.embed.title")
       ).build()
     ).await()
+    val message = when (context) {
+      is MessageCommandContext -> result as Message
+      is SlashCommandContext -> (result as InteractionHook).retrieveOriginal().await()
+      else -> throw IllegalStateException("Unknown command context type ${context::class.java.name}")
+    }
 
     packagesEmojis.forEach {
       message.addReaction(it).queue()
@@ -76,7 +85,7 @@ class StoreCommand : Command() {
       it.reactionEmote.isEmoji && packagesEmojis.contains(it.reactionEmote.emoji)
     }
 
-    val canClearReactions = context.channel is GuildChannel && context.guild.selfMember.hasPermission(
+    val canClearReactions = context.channel is GuildChannel && context.guild!!.selfMember.hasPermission(
       context.channel as GuildChannel,
       Permission.MESSAGE_MANAGE
     )

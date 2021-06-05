@@ -2,10 +2,10 @@ package xyz.pokecord.bot.modules.general.commands
 
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.TextChannel
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
-import xyz.pokecord.bot.core.structures.discord.ParentCommand
+import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import kotlin.random.Random
 
 class SetCommand : ParentCommand() {
@@ -19,10 +19,10 @@ class SetCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(
-      context: MessageReceivedContext,
+      context: ICommandContext,
       @Argument prefix: String?
     ) {
-      if (context.member == null) {
+      if (!context.isFromGuild) {
         context.reply(
           context.translate("misc.texts.serverOnlyCommand")
         ).queue()
@@ -60,7 +60,7 @@ class SetCommand : ParentCommand() {
     override val name = "Private"
 
     @Executor
-    suspend fun execute(context: MessageReceivedContext) {
+    suspend fun execute(context: ICommandContext) {
       val userData = context.getUserData()
       module.bot.database.userRepository.togglePrivate(userData)
       context.reply(
@@ -78,22 +78,22 @@ class SetCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(
-      context: MessageReceivedContext,
+      context: ICommandContext,
       @Argument textChannel: TextChannel?
     ) {
-      if (context.member == null) {
+      if (!context.isFromGuild) {
         context.reply(
           context.translate("misc.texts.serverOnlyCommand")
         ).queue()
         return
       }
-      if (!context.member!!.hasPermission(Permission.ADMINISTRATOR)) {
+      if (!context.guild!!.getMember(context.author)!!.hasPermission(Permission.ADMINISTRATOR)) {
         // TODO: say you're not admin PROPERLY
         context.reply("you're not admin").queue()
         return
       }
       if (textChannel == null) {
-        val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild.id)
+        val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
 
         context.reply(
           context.embedTemplates.normal(

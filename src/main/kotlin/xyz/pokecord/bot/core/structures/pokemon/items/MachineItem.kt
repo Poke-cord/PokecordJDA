@@ -1,6 +1,6 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Machine
 import xyz.pokecord.bot.core.structures.pokemon.MoveData
 import xyz.pokecord.bot.core.structures.pokemon.MoveMethod
@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.structures.pokemon.MoveMethod
 class MachineItem(
   id: Int
 ) : Item(id) {
-  override suspend fun use(context: MessageReceivedContext, args: List<String>): UsageResult {
+  override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val machine = Machine.getByItemId(id)
       ?: return UsageResult(
         false,

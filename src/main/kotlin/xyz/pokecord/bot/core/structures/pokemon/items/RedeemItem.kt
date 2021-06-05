@@ -1,6 +1,6 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.PokemonStats
 import kotlin.math.floor
@@ -15,7 +15,7 @@ class RedeemItem(
   private val maxIvPercentage: Int = 100
 ) : Item(id) {
 
-  override suspend fun use(context: MessageReceivedContext, args: List<String>): UsageResult {
+  override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val pokemonName = args.joinToString(" ")
     if (pokemonName.isEmpty()) {
       return UsageResult(

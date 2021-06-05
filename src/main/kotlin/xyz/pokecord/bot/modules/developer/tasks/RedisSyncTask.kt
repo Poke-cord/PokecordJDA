@@ -2,7 +2,7 @@ package xyz.pokecord.bot.modules.developer.tasks
 
 import kotlinx.serialization.encodeToString
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
-import xyz.pokecord.bot.core.structures.discord.Task
+import xyz.pokecord.bot.core.structures.discord.base.Task
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 

@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
 import dev.minn.jda.ktx.await
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.Confirmation
 
@@ -11,7 +11,7 @@ class HintCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext
+    context: ICommandContext
   ) {
     if (!context.hasStarted(true)) return
 
@@ -52,7 +52,7 @@ class HintCommand : Command() {
             context.translate("misc.confirmation.timeoutText", "timeout" to confirmation.timeout.toString())
           )
       )
-    if (result != true) {
+    if (!result) {
       context.reply(
         context.embedTemplates.normal(
           context.translate("modules.pokemon.commands.hint.errors.cancelled.description"),

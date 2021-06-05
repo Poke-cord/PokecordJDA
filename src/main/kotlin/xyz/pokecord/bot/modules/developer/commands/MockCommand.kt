@@ -6,8 +6,11 @@ import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.InteractionHook
 import net.dv8tion.jda.internal.entities.ReceivedMessage
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
 class MockCommand : DeveloperCommand() {
@@ -15,22 +18,31 @@ class MockCommand : DeveloperCommand() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "target user") targetUser: User?,
     @Argument(name = "command", consumeRest = true) command: String?
   ) {
     if (targetUser == null || command == null) return
-    if (context.isFromGuild && context.guild.selfMember.hasPermission(
+    if (context.isFromGuild && context.guild!!.selfMember.hasPermission(
         context.channel as GuildChannel,
         Permission.MESSAGE_MANAGE
       )
     ) {
-      context.message.delete()
+      when (context) {
+        is MessageCommandContext -> context.event.message.delete()
+        is SlashCommandContext -> context.event.hook.deleteOriginal()
+        else -> throw IllegalStateException("Unknown command context type ${context::class.java.name}")
+      }.queue()
     }
 
-    val sentMessage =
-      context.channel.sendMessage("Executing `$command` on behalf of `${targetUser.asTag}`").await()
-    val targetMember = context.guild.retrieveMember(targetUser).await() ?: null
+    val result =
+      context.reply("Executing `$command` on behalf of `${targetUser.asTag}`").await()
+    val sentMessage = when (context) {
+      is MessageCommandContext -> result as Message
+      is SlashCommandContext -> (result as InteractionHook).retrieveOriginal().await()
+      else -> throw IllegalStateException("Unknown command context type ${context::class.java.name}")
+    }
+    val targetMember = context.guild?.retrieveMember(targetUser)?.await()
     val fakeMessage = ReceivedMessage(
       sentMessage.idLong,
       context.channel,
@@ -51,9 +63,11 @@ class MockCommand : DeveloperCommand() {
       listOf(),
       listOf(),
       listOf(),
+      listOf(),
+      listOf(),
       Message.MessageFlag.toBitField(sentMessage.flags)
     )
-    val fakeEvent = MessageReceivedEvent(module.bot.jda, context.responseNumber, fakeMessage)
+    val fakeEvent = MessageReceivedEvent(module.bot.jda, context.event.responseNumber, fakeMessage)
     module.bot.jda.eventManager.handle(fakeEvent)
   }
 }

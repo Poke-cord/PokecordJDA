@@ -1,15 +1,15 @@
 package xyz.pokecord.bot.modules.developer.commands
 
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
 class ShowCommand : DeveloperCommand() {
   override val name = "Show"
 
   @Executor
-  suspend fun execute(context: MessageReceivedContext) {
+  suspend fun execute(context: ICommandContext) {
     if (!context.isFromGuild) return
-    val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild.id)
+    val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
 
     context.reply(
       context.embedTemplates.normal(

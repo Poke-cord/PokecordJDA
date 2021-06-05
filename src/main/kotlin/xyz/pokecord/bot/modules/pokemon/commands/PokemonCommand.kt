@@ -2,10 +2,10 @@ package xyz.pokecord.bot.modules.pokemon.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.User
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
-import xyz.pokecord.bot.core.structures.discord.Command
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
@@ -15,16 +15,24 @@ class PokemonCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(aliases = ["sh"], prefixed = true, optional = true) shiny: Boolean?,
     @Argument(aliases = ["fav", "favs", "f"], prefixed = true, optional = true) favorites: Boolean?,
-    @Argument(aliases = ["o", "sort"], prefixed = true, optional = true) order: String?,
+    @Argument(
+      aliases = ["o", "sort"],
+      prefixed = true,
+      optional = true,
+    ) order: String?,
     @Argument(aliases = ["n"], prefixed = true, optional = true) nature: String?,
-    @Argument(aliases = ["r"], prefixed = true, optional = true) rarity: String?,
+    @Argument(
+      aliases = ["r"],
+      prefixed = true,
+      optional = true
+    ) rarity: String?,
     @Argument(aliases = ["t"], prefixed = true, optional = true) type: String?,
     @Argument(aliases = ["re"], prefixed = true, optional = true) regex: Regex?,
-    @Argument(optional = true) page: Int?,
     @Argument(optional = true) user: User?,
+    @Argument(optional = true) page: Int?,
     @Argument(
       aliases = ["s"],
       name = "search",

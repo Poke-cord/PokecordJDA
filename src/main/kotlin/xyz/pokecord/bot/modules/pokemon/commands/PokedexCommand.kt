@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 
@@ -12,7 +12,7 @@ class PokedexCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(prefixed = true, aliases = ["sh"]) shiny: Boolean?,
     @Argument(name = "pokemon", consumeRest = true) pokemonNameOrId: String?
   ) {

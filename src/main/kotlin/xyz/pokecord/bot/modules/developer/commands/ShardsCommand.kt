@@ -1,7 +1,8 @@
 package xyz.pokecord.bot.modules.developer.commands
 
 import kotlinx.serialization.decodeFromString
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
@@ -17,7 +18,7 @@ class ShardsCommand : DeveloperCommand() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) page: Int?
   ) {
     val paginatorIndex = (page ?: 1) - 1

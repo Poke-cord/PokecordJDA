@@ -1,19 +1,44 @@
 package xyz.pokecord.bot.modules.general.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
 
 class HelpCommand : Command() {
   override val name = "Help"
 
+  private suspend fun getCommands(
+    context: ICommandContext,
+    page: Int?,
+    commandOrModuleName: String,
+    commandName: String?
+  ) {
+    val commands = this.module.bot.modules.mapNotNull {
+      it.value.commandMap["${commandOrModuleName.toLowerCase()}.${commandName?.toLowerCase()}"]
+        ?: it.value.commandMap[commandOrModuleName.toLowerCase()]
+    }
+    if (commands.isNotEmpty()) {
+      val helpEmbeds = this.module.bot.getHelpEmbeds(context, commands)
+      if (helpEmbeds.isNotEmpty()) {
+        val paginator = EmbedPaginator(context, helpEmbeds.size, {
+          helpEmbeds[it]
+        }, if (page == null) 0 else page - 1)
+        paginator.start()
+        return
+      }
+    }
+    context.reply(
+      context.embedTemplates.error("No command(s) found or you don't have access to the command(s).").build()
+    ).queue()
+  }
+
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) page: Int?,
-    @Argument(name = "command/module", optional = true) commandOrModuleName: String?,
+    @Argument(name = "module", optional = true) commandOrModuleName: String?,
     @Argument(name = "command", optional = true) commandName: String?,
-    @Argument(name = "sub command", optional = true) subCommandName: String?,
+    @Argument(name = "subcommand", optional = true) subCommandName: String?,
   ) {
     val prefix = context.getPrefix()
     if (commandOrModuleName != null) {
@@ -52,30 +77,19 @@ class HelpCommand : Command() {
           context.reply(module.bot.getHelpEmbed(context, module, prefix).build()).queue()
         }
       } else {
-        val commands = this.module.bot.modules.mapNotNull {
-          it.value.commandMap["${commandOrModuleName.toLowerCase()}.${commandName?.toLowerCase()}"]
-            ?: it.value.commandMap[commandOrModuleName.toLowerCase()]
-        }
-        if (commands.isNotEmpty()) {
-          val helpEmbeds = this.module.bot.getHelpEmbeds(context, commands)
-          if (helpEmbeds.isNotEmpty()) {
-            val paginator = EmbedPaginator(context, helpEmbeds.size, {
-              helpEmbeds[it]
-            }, if (page == null) 0 else page - 1)
-            paginator.start()
-            return
-          }
-        }
-        context.reply(
-          context.embedTemplates.error("No command(s) found or you don't have access to the command(s).").build()
-        ).queue()
+        getCommands(context, page, commandOrModuleName, commandName)
+        return
       }
     } else {
-      val helpEmbeds = module.bot.getHelpEmbeds(context, prefix)
-      val paginator = EmbedPaginator(context, helpEmbeds.size, {
-        helpEmbeds[it]
-      }, if (page == null) 0 else page - 1)
-      paginator.start()
+      if (commandName != null) {
+        getCommands(context, page, commandName, subCommandName)
+      } else {
+        val helpEmbeds = module.bot.getHelpEmbeds(context, prefix)
+        val paginator = EmbedPaginator(context, helpEmbeds.size, {
+          helpEmbeds[it]
+        }, if (page == null) 0 else page - 1)
+        paginator.start()
+      }
     }
   }
 }

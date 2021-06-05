@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
 class CatchCommand : Command() {
@@ -11,7 +11,7 @@ class CatchCommand : Command() {
   override var rateLimit = 5000L
   override var rateLimitType = RateLimitType.Args
 
-  override fun getRateLimitCacheKey(context: MessageReceivedContext, args: List<String>): String {
+  override fun getRateLimitCacheKey(context: ICommandContext, args: List<String>): String {
     val arg = args.joinToString(" ")
     val pokemon = Pokemon.getByName(arg)
     return (if (rateLimitType == RateLimitType.Command) "${context.author.id}.${module.name}.${name}" else "${context.author.id}.${module.name}.${name}.${
@@ -21,8 +21,8 @@ class CatchCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
-    @Argument(consumeRest = true, name = "Pokémon Name") pokemonName: String?,
+    context: ICommandContext,
+    @Argument(consumeRest = true, name = "pokemon") pokemonName: String?,
   ) {
     if (!context.hasStarted(true)) return
 

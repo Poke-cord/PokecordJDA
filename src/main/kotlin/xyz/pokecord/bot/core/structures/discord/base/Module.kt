@@ -1,12 +1,12 @@
-package xyz.pokecord.bot.core.structures.discord
+package xyz.pokecord.bot.core.structures.discord.base
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.requests.GatewayIntent
+import xyz.pokecord.bot.core.structures.discord.Bot
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.findAnnotation
@@ -95,23 +95,28 @@ abstract class Module(
         ev.javaClass.kotlin.memberFunctions.filter { it.annotations.any { annotation -> annotation is Event.Handler } }
       for (handlerFunction in handlerFunctions) {
         val firstParam = handlerFunction.parameters.find { it.kind != KParameter.Kind.INSTANCE } ?: return
-        val eventToHandle =
-          if (firstParam.type.javaType == event::class.java) event
-          else if (firstParam.type.javaType == MessageReceivedContext::class.java && event is MessageReceivedEvent) MessageReceivedContext(
-            bot,
-            event.jda,
-            event.responseNumber,
-            event.message
-          ) else null
-        if (eventToHandle != null) {
-          if (handlerFunction.isSuspend) {
-            GlobalScope.launch {
-              handlerFunction.callSuspend(ev, eventToHandle)
+        // TODO: make sure it functions properly
+//        val eventToHandle = event
+//          if (firstParam.type.javaType == event::class.java) event
+//          else if (firstParam.type.javaType == MessageCommandContext::class.java && event is MessageReceivedEvent) MessageCommandContext(
+//            bot,
+//            event
+//          ) else null
+//        if (eventToHandle != null) {
+        if (firstParam.type.javaType == event::class.java) {
+          try {
+            if (handlerFunction.isSuspend) {
+              GlobalScope.launch {
+                handlerFunction.callSuspend(ev, event)
+              }
+            } else {
+              handlerFunction.call(ev, event)
             }
-          } else {
-            handlerFunction.call(ev, eventToHandle)
+          } catch (e: Throwable) {
+            e.printStackTrace()
           }
         }
+//        }
       }
     }
   }

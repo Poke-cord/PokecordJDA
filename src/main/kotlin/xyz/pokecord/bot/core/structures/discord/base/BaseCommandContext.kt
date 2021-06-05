@@ -1,48 +1,52 @@
-package xyz.pokecord.bot.core.structures.discord
+package xyz.pokecord.bot.core.structures.discord.base
 
 import io.sentry.Breadcrumb
 import io.sentry.Sentry
-import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Guild
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
+import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonResolvable
 import java.lang.reflect.InvocationTargetException
 import net.dv8tion.jda.api.entities.User as JDAUser
 
-class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, message: Message) :
-  MessageReceivedEvent(api, responseNumber, message) {
-  private var language: I18n.Language? = null
-  private var prefix: String? = null
+abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
+  protected var language: I18n.Language? = null
+  protected var prefix: String? = null
   private var guildData: Guild? = null
-  var userData: User? = null
+  protected var userData: User? = null
 
-  private val sentryBreadcrumbs = mutableListOf<Pair<Breadcrumb, Any?>>()
-  val embedTemplates = EmbedTemplates(this)
-  val translator = Translator(this)
+  override val sentryBreadcrumbs = mutableListOf<Pair<Breadcrumb, Any?>>()
+  override val embedTemplates by lazy { EmbedTemplates(this) }
+  override val translator by lazy { Translator(this) }
 
-  fun reply(content: Message, mentionRepliedUser: Boolean = false) =
-    message.reply(content).mentionRepliedUser(mentionRepliedUser)
-
-  fun reply(content: CharSequence, mentionRepliedUser: Boolean = false) =
-    message.reply(content).mentionRepliedUser(mentionRepliedUser)
-
-  fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean = false) =
-    message.reply(embed).mentionRepliedUser(mentionRepliedUser)
-
-  fun shouldProcess(): Boolean {
+  override fun shouldProcess(): Boolean {
     return Config.devs.contains(author.id) || (if (Config.officialServerOnlyMode) isFromGuild && Config.officialServers.contains(
-      guild.id
+      guild!!.id
     ) else true)
   }
 
-  suspend fun getUserData(): User {
+  override suspend fun translate(key: String, vararg data: Pair<String, String>): String {
+    return I18n.translate(getLanguage(), key, *data)
+  }
+
+  override suspend fun translate(key: String, default: String, vararg data: Pair<String, String>): String {
+    return I18n.translate(getLanguage(), key, default, *data)
+  }
+
+  override suspend fun translate(key: String, data: Map<String, String>, default: String?): String {
+    return I18n.translate(getLanguage(), key, data, default)
+  }
+
+  override suspend fun getUserData(): User {
     if (userData == null) {
       userData = bot.database.userRepository.getUser(author)
       userData!!.tag = author.asTag
@@ -50,15 +54,15 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
     return userData!!
   }
 
-  suspend fun getGuildData(): Guild? {
+  override suspend fun getGuildData(): Guild? {
     if (!isFromGuild) return null
     if (guildData == null) {
-      guildData = bot.database.guildRepository.getGuild(guild)
+      guildData = bot.database.guildRepository.getGuild(guild!!)
     }
     return guildData
   }
 
-  suspend fun getLanguage(): I18n.Language {
+  override suspend fun getLanguage(): I18n.Language {
     if (language == null) {
       val user = getUserData()
       if (user.language != null) {
@@ -74,7 +78,7 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
     return language!!
   }
 
-  suspend fun getPrefix(): String {
+  override suspend fun getPrefix(): String {
     if (prefix == null) {
       prefix = if (isFromGuild) {
         val guild = getGuildData()!!
@@ -84,30 +88,22 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
     return prefix!!
   }
 
-  suspend fun hasStarted(sendMessage: Boolean = false): Boolean {
+  override suspend fun hasStarted(sendMessage: Boolean): Boolean {
     val userData = getUserData()
     if (userData.selected == null) {
       if (sendMessage) {
-        message.reply(embedTemplates.start().build()).queue()
+        reply(embedTemplates.start().build()).queue()
       }
       return false
     }
     return true
   }
 
-  suspend fun translate(key: String, vararg data: Pair<String, String>): String {
-    return I18n.translate(getLanguage(), key, *data)
-  }
-
-  suspend fun translate(key: String, default: String, vararg data: Pair<String, String>): String {
-    return I18n.translate(getLanguage(), key, default, *data)
-  }
-
-  suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
-    return I18n.translate(getLanguage(), key, data, default)
-  }
-
-  suspend fun resolvePokemon(jdaUser: JDAUser, userData: User, pokemonResolvable: PokemonResolvable?): OwnedPokemon? {
+  override suspend fun resolvePokemon(
+    jdaUser: JDAUser,
+    userData: User,
+    pokemonResolvable: PokemonResolvable?
+  ): OwnedPokemon? {
     if (pokemonResolvable?.data == null) {
       val selectedPokemonId = userData.selected ?: return null
       return bot.database.pokemonRepository.getPokemonById(selectedPokemonId)
@@ -125,11 +121,12 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
 //    sentryBreadcrumbs += Pair(breadcrumb, hint)
 //  }
 
-  suspend fun handleException(
+  override suspend fun handleException(
     exception: Throwable,
     module: Module,
-    command: Command? = null,
-    event: Event? = null
+    command: Command?,
+    event: Event?,
+    extras: Map<String, String>
   ) {
     var errorEmbed: MessageEmbed? = null
     if (command != null) {
@@ -148,7 +145,6 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
         id = author.id
         username = author.asTag
       }
-      scope.setExtra("messageContent", message.contentRaw)
       scope.setExtra("module", module.name)
       command?.let { command ->
         scope.setExtra("command", command.name)
@@ -159,11 +155,12 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
       event?.let { event ->
         scope.setExtra("event", event.name)
       }
-      scope.setExtra("messageId", message.id)
-      scope.setExtra("channelId", channel.id)
-      if (isFromGuild) {
-        scope.setExtra("guildId", guild.id)
-        scope.setExtra("guildName", guild.name)
+      extras.forEach {
+        scope.setExtra(it.key, it.value)
+      }
+      if (this.isFromGuild) {
+        scope.setExtra("guildId", guild!!.id)
+        scope.setExtra("guildName", guild!!.name)
         scope.setExtra("channelName", channel.name)
       }
       scope.setExtra("shardInfo", jda.shardInfo.shardString)
@@ -190,6 +187,6 @@ class MessageReceivedContext(val bot: Bot, api: JDA, responseNumber: Long, messa
   }
 
   companion object {
-    private val logger = LoggerFactory.getLogger(MessageReceivedContext::class.java)
+    protected val logger: Logger = LoggerFactory.getLogger(ICommandContext::class.java)
   }
 }

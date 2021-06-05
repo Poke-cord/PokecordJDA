@@ -2,7 +2,7 @@ package xyz.pokecord.bot.modules.pokemon
 
 import net.dv8tion.jda.api.hooks.EventListener
 import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.core.structures.discord.Module
+import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.pokemon.commands.*
 import xyz.pokecord.bot.modules.pokemon.events.SpawnerEvent
 import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent

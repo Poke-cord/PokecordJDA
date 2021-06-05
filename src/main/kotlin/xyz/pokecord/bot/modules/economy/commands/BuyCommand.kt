@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.economy.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import kotlin.math.roundToInt
 
@@ -11,7 +11,7 @@ class BuyCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) amount: Int?,
     @Argument(consumeRest = true) itemName: String?,
   ) {

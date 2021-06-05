@@ -1,10 +1,10 @@
 package xyz.pokecord.bot.modules.profile.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
-import xyz.pokecord.bot.core.structures.discord.Command
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
-import xyz.pokecord.bot.core.structures.discord.ParentCommand
+import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.EmbedPaginator
 
@@ -21,7 +21,7 @@ class ProfileCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(
-      context: MessageReceivedContext
+      context: ICommandContext
     ) {
       if (!context.hasStarted(true)) return
 

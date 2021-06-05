@@ -1,7 +1,9 @@
-package xyz.pokecord.bot.core.structures.discord
+package xyz.pokecord.bot.core.structures.discord.base
 
 import net.dv8tion.jda.api.Permission
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.utils.extensions.isBoolean
+import xyz.pokecord.bot.utils.extensions.removeAccents
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberFunctions
 
@@ -15,9 +17,10 @@ abstract class Command {
   annotation class Argument(
     val consumeRest: Boolean = false,
     val name: String = "",
+    val description: String = "\u200E",
     val aliases: Array<String> = [],
     val optional: Boolean = false,
-    val prefixed: Boolean = false
+    val prefixed: Boolean = false,
   )
 
   @Target(AnnotationTarget.CLASS)
@@ -42,6 +45,13 @@ abstract class Command {
   open var requiredClientPermissions: Array<Permission> =
     arrayOf(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
   open var requiredUserPermissions: Array<Permission> = arrayOf(Permission.MESSAGE_READ)
+
+  open val descriptionI18nKey by lazy {
+    val key =
+      if (parentCommand != null) "${module.name}.${parentCommand!!.name}.${name}"
+      else "${module.name}.${name}"
+    "misc.command_descriptions.${key.removeAccents()}"
+  }
 
   open val usage: String by lazy {
     this::class.memberFunctions.forEach { function ->
@@ -72,11 +82,11 @@ abstract class Command {
     return@lazy ""
   }
 
-  open fun canRun(context: MessageReceivedContext): Boolean {
+  open fun canRun(context: ICommandContext): Boolean {
     return true
   }
 
-  open fun getRateLimitCacheKey(context: MessageReceivedContext, args: List<String>): String {
+  open fun getRateLimitCacheKey(context: ICommandContext, args: List<String>): String {
     return (if (rateLimitType == RateLimitType.Command) "${context.author.id}.${module.name}.${name}" else "${context.author.id}.${module.name}.${name}.${
       args.joinToString(" ")
     }").toLowerCase()

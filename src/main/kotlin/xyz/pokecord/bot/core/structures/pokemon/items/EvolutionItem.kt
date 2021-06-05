@@ -1,12 +1,12 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
 
 class EvolutionItem(
   id: Int
 ) : Item(id) {
-  override suspend fun use(context: MessageReceivedContext, args: List<String>): UsageResult {
+  override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val userData = context.getUserData()
     val selectedPokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
 

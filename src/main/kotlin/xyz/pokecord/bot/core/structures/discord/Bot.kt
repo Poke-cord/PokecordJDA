@@ -9,11 +9,14 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.Database
+import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.core.structures.discord.base.Module
+import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
-import xyz.pokecord.bot.utils.extensions.removeAccents
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
@@ -24,7 +27,7 @@ class Bot constructor(private val token: String) {
 
   private lateinit var version: String
 
-  private val devEnv = System.getenv("DEV").equals("true", true)
+  val devEnv = System.getenv("DEV").equals("true", true)
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -71,7 +74,7 @@ class Bot constructor(private val token: String) {
   }
 
   private suspend fun getModuleHelpEmbedLine(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     prefix: String,
     command: Command
   ): String {
@@ -81,14 +84,11 @@ class Bot constructor(private val token: String) {
     return "**${prefix}${name}**${if (command.usage.isEmpty()) "" else " `${command.usage}` "}${if (commandDescription.isEmpty()) "" else " - $commandDescription "}"
   }
 
-  private suspend fun getCommandDescription(context: MessageReceivedContext, command: Command): String {
-    val key =
-      if (command.parentCommand != null) "${command.module.name}.${command.parentCommand!!.name}.${command.name}"
-      else "${command.module.name}.${command.name}"
-    return context.translate("misc.command_descriptions.${key.removeAccents()}", "")
+  private suspend fun getCommandDescription(context: ICommandContext, command: Command): String {
+    return context.translate(command.descriptionI18nKey, "")
   }
 
-  suspend fun getHelpEmbed(context: MessageReceivedContext, module: Module, prefix: String = "p!"): EmbedBuilder {
+  suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder {
     val commandEntries: ArrayList<String> = arrayListOf()
     for (command in module.commands) {
       if (!command.canRun(context)) continue
@@ -109,7 +109,7 @@ class Bot constructor(private val token: String) {
     )
   }
 
-  suspend fun getHelpEmbed(context: MessageReceivedContext, command: Command): EmbedBuilder? {
+  suspend fun getHelpEmbed(context: ICommandContext, command: Command): EmbedBuilder? {
     if (!command.enabled || command.excludeFromHelp || !command.canRun(context)) return null
     val descriptionLines = arrayListOf<String>()
     val commandDescription = getCommandDescription(context, command)
@@ -146,11 +146,11 @@ class Bot constructor(private val token: String) {
     )
   }
 
-  suspend fun getHelpEmbeds(context: MessageReceivedContext, prefix: String = "p!"): List<EmbedBuilder> {
+  suspend fun getHelpEmbeds(context: ICommandContext, prefix: String = "p!"): List<EmbedBuilder> {
     return modules.map { getHelpEmbed(context, it.value, prefix) }
   }
 
-  suspend fun getHelpEmbeds(context: MessageReceivedContext, commands: List<Command>): List<EmbedBuilder> {
+  suspend fun getHelpEmbeds(context: ICommandContext, commands: List<Command>): List<EmbedBuilder> {
     return commands.mapNotNull { getHelpEmbed(context, it) }
   }
 

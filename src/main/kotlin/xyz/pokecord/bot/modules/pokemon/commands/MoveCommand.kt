@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.MoveData
 
 class MoveCommand : Command() {
@@ -9,17 +9,13 @@ class MoveCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(name = "move", consumeRest = true) moveName: String?
   ) {
     if (moveName == null) {
       return
     }
-    val move = MoveData.getByName(moveName)
-
-    if (move == null) {
-      return
-    }
+    val move = MoveData.getByName(moveName) ?: return
 
     context.reply(
       context.embedTemplates.normal(

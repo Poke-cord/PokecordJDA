@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
 class PickCommand : Command() {
@@ -11,8 +11,8 @@ class PickCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
-    @Argument(name = "Pokémon Name") pokemonName: String?
+    context: ICommandContext,
+    @Argument(name = "pokemon") pokemonName: String?
   ) {
     if (context.hasStarted()) {
       context.reply(

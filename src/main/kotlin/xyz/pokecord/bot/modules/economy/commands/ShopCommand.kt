@@ -1,8 +1,8 @@
 package xyz.pokecord.bot.modules.economy.commands
 
 import net.dv8tion.jda.api.entities.MessageEmbed
-import xyz.pokecord.bot.core.structures.discord.Command
-import xyz.pokecord.bot.core.structures.discord.MessageReceivedContext
+import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import xyz.pokecord.bot.utils.EmbedPaginator
@@ -13,7 +13,7 @@ class ShopCommand : Command() {
 
   @Executor
   suspend fun execute(
-    context: MessageReceivedContext,
+    context: ICommandContext,
     @Argument(optional = true) page: Int?,
     @Argument(optional = true, consumeRest = true) search: String?
   ) {
