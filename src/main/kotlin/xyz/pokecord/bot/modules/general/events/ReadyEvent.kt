@@ -46,18 +46,19 @@ class ReadyEvent : Event() {
       }
     }.flatten()
 
-    if (module.bot.devEnv) {
-      module.bot.jda.getGuildById(Config.testingServer)?.let {
+    if (System.getenv("REGISTER_SLASH_COMMANDS") != null) {
+      if (module.bot.devEnv) {
+        module.bot.jda.getGuildById(Config.testingServer)?.let {
+          commandsData.forEach { commandData ->
+            it.upsertCommand(commandData).await()
+          }
+        }
+      } else {
         commandsData.forEach { commandData ->
-          it.upsertCommand(commandData).await()
+          module.bot.jda.upsertCommand(commandData)
         }
       }
-    } else {
-      commandsData.forEach { commandData ->
-        module.bot.jda.upsertCommand(commandData)
-      }
     }
-
   }
 
   @Handler
