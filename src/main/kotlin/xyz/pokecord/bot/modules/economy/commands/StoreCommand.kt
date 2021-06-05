@@ -35,14 +35,14 @@ class StoreCommand : Command() {
       )
       when {
         confirmation.timedOut -> {
-          confirmation.message!!.editMessage(
+          confirmation.sentMessage!!.editMessage(
             context.embedTemplates.error(
               context.translate("modules.economy.commands.store.errors.cancelOldOrder.noAction")
             ).build()
           )
         }
         confirmed -> {
-          confirmation.message!!.editMessage(
+          confirmation.sentMessage!!.editMessage(
             context.embedTemplates.error(
               context.translate("modules.economy.commands.store.errors.cancelOldOrder.noAction")
             ).build()

@@ -124,7 +124,7 @@ class GiftCommand : ParentCommand() {
         } catch (_: Exception) {
         }
 
-        confirmation.message!!.editMessage(
+        confirmation.sentMessage!!.editMessage(
           context.embedTemplates.normal(
             context.translate(
               "modules.pokemon.commands.gift.embeds.giftSent.credits",
@@ -138,7 +138,7 @@ class GiftCommand : ParentCommand() {
           ).build()
         ).queue()
       } else {
-        confirmation.message!!.editMessage(
+        confirmation.sentMessage!!.editMessage(
           context.embedTemplates.normal(
             context.translate("modules.pokemon.commands.gift.embeds.cancelled.description"),
             context.translate("modules.pokemon.commands.gift.embeds.cancelled.title")
@@ -286,7 +286,7 @@ class GiftCommand : ParentCommand() {
             } catch (_: Exception) {
             }
 
-            confirmation.message!!.editMessage(
+            confirmation.sentMessage!!.editMessage(
               context.embedTemplates.normal(
                 context.translate(
                   "modules.pokemon.commands.gift.embeds.giftSent.pokemon",
@@ -302,7 +302,7 @@ class GiftCommand : ParentCommand() {
               ).build()
             ).queue()
           } else {
-            confirmation.message!!.editMessage(
+            confirmation.sentMessage!!.editMessage(
               context.embedTemplates.normal(
                 context.translate("modules.pokemon.commands.gift.embeds.cancelled.description"),
                 context.translate("modules.pokemon.commands.gift.embeds.cancelled.title")
