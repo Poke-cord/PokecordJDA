@@ -63,7 +63,7 @@ class Database(cache: Cache) {
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
       SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)
-    userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap)
+    userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap, cache.leaderboardMap)
 
     GlobalScope.launch { createIndexes() }
   }

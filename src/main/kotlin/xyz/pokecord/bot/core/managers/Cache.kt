@@ -23,6 +23,7 @@ class Cache {
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
   val lastCountedMessageMap: RMapCacheAsync<String, Long>
+  val leaderboardMap: RMapCacheAsync<String, String>
   val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
@@ -52,6 +53,7 @@ class Cache {
 
     commandRateLimitMap = redissonClient.getMapCache("commandRateLimit")
     hasRunningCommandSet = redissonClient.getMapCache("hasRunningCommand")
+    leaderboardMap = redissonClient.getMapCache("leaderboard")
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
 
     guildMap = redissonClient.getMapCache("guild")

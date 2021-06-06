@@ -30,6 +30,7 @@ class UserRepository(
   private val collection: CoroutineCollection<User>,
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>,
   private val cacheMap: RMapCacheAsync<String, String>,
+  private val leaderboardCacheMap: RMapCacheAsync<String, String>,
 ) : Repository(database) {
   override suspend fun createIndexes() {
     collection.createIndex(Indexes.ascending("id"), IndexOptions().unique(true))
@@ -266,18 +267,34 @@ class UserRepository(
   }
 
   suspend fun getCreditLeaderboard(limit: Int = 10): List<User> {
-    return collection.find(EMPTY_BSON).sort(descending(User::credits)).limit(limit).toList()
+    val cachedString = leaderboardCacheMap.getAsync("credit").awaitSuspending()
+    return if (cachedString != null) {
+      Json.decodeFromString(cachedString)
+    } else {
+      val leaderboard = collection.find(EMPTY_BSON).sort(descending(User::credits)).limit(limit).toList()
+      leaderboardCacheMap.putAsync("credit", Json.encodeToString(leaderboard))
+      leaderboard
+    }
   }
 
   suspend fun getPokemonCountLeaderboard(limit: Int = 10): List<PokemonCountLeaderboardResult> {
-    return collection.aggregate<PokemonCountLeaderboardResult>(
-      listOf(
-        pokemonCountLeaderboardGroupStage,
-        pokemonCountLeaderboardProjectStage,
-        pokemonCountLeaderboardSortStage,
-        limit(limit)
+    val cachedString = leaderboardCacheMap.getAsync("pokemon").awaitSuspending()
+    return if (cachedString != null) {
+      Json.decodeFromString(cachedString)
+    } else {
+      val leaderboard = collection.aggregate<PokemonCountLeaderboardResult>(
+        listOf(
+          pokemonCountLeaderboardGroupStage,
+          pokemonCountLeaderboardProjectStage,
+          pokemonCountLeaderboardSortStage,
+          limit(limit)
+        )
       )
-    ).toList()
+        .allowDiskUse(true)
+        .toList()
+      leaderboardCacheMap.putAsync("pokemon", Json.encodeToString(leaderboard))
+      leaderboard
+    }
   }
 
   suspend fun setAgreedToTerms(userData: User, agreed: Boolean = true) {
