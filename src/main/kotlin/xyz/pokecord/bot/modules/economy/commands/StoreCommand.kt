@@ -171,7 +171,7 @@ class StoreCommand : Command() {
               )
             )
           ).build()
-        ).queue()
+        ).await()
       } catch (t: Throwable) {
         context.reply(
           context.embedTemplates.error(

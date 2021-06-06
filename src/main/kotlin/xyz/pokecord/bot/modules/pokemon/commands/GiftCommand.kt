@@ -120,7 +120,7 @@ class GiftCommand : ParentCommand() {
               ),
               context.translate("modules.pokemon.commands.gift.embeds.giftReceived.title")
             ).build()
-          ).queue()
+          ).await()
         } catch (_: Exception) {
         }
 
@@ -282,7 +282,7 @@ class GiftCommand : ParentCommand() {
                   ),
                   context.translate("modules.pokemon.commands.gift.embeds.giftReceived.title")
                 ).build()
-              ).queue()
+              ).await()
             } catch (_: Exception) {
             }
 

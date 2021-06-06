@@ -72,7 +72,7 @@ class HintCommand : Command() {
             "```${name.take(1)} ${"_ ".repeat(name.length - 1)}```",
             context.translate("modules.pokemon.commands.hint.dm.embed.title")
           ).build()
-        ).queue()
+        ).await()
         module.bot.database.userRepository.incCredits(context.getUserData(), -10)
         context.reply(
           context.embedTemplates.normal(
