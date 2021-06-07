@@ -66,7 +66,7 @@ object Migration {
       if (bsonDocument.isNumber("gender")) bsonDocument.getNumber("gender").intValue() else -99999
     if (gender == -99999) {
       val genderRate = Pokemon.getById(id)?.species?.genderRate
-      if (genderRate == null) throw Exception("Failed to determine gender rate for pokemon ${objectId.toHexString()}")
+        ?: throw Exception("Failed to determine gender rate for pokemon ${objectId.toHexString()}")
       gender = if (genderRate == -1) -1
       else {
         if (Random.nextFloat() < (genderRate * 12.5) / 100) 0 else 1
@@ -246,9 +246,9 @@ object Migration {
           docs.clear()
           logger.info("Total $totalInserted documents inserted")
         }
-      } catch (e: Exception) {
+      } catch (e: Throwable) {
         e.printStackTrace()
-        logger.info(it.toBsonDocument().toJson())
+        logger.error(it.toBsonDocument().toJson())
       }
     }
 
@@ -347,8 +347,9 @@ object Migration {
           if (it.isArray("releasedShinies")) it.getArray("releasedShinies").toArray()
             .mapNotNull { item -> if (item is BsonInt32) item.value else null } else listOf()
 
+        val credits = if (it.isNumber("credits")) it.getNumber("credits").intValue() else 1000
+
         val donationTier = if (it.isInt32("donationTier")) it.getInt32("donationTier").value else 0
-        val credits = if (it.isInt32("credits")) it.getInt32("credits").value else 1000
         val gems = if (it.isInt32("gems")) it.getInt32("gems").value else 0
 
         val selected = if (it.isObjectId("selected")) it.getObjectId("selected").value else null
@@ -418,7 +419,7 @@ object Migration {
 
   @JvmStatic
   fun main(args: Array<String>) {
-    val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main_backup")
+    val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main")
 
     val client = MongoClients.create(connectionString)
     val oldDatabase = client.getDatabase(connectionString.database ?: "main")
@@ -439,7 +440,7 @@ object Migration {
     runBlocking {
       File("started").writeText("1")
       val indexMap = convertPokemonStructure(oldPokemonCollection, newPokemonCollection)
-//      addIndices(newDatabase, newPokemonCollection)
+      addIndices(newDatabase, newPokemonCollection)
       File("indexMap.json").writeText(Json.encodeToString(indexMap))
       convertFaqs(oldFaqsCollection, newFaqsCollection)
       File("faqs_done").writeText("1")
