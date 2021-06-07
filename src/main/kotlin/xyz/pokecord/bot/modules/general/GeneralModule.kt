@@ -13,7 +13,6 @@ class GeneralModule(bot: Bot) : Module(
     PingCommand(),
     InviteCommand(),
     FAQCommand(),
-    ParseEntitiesCommand(),
     LeaderboardCommand(),
     VoteCommand(),
     SetCommand(),

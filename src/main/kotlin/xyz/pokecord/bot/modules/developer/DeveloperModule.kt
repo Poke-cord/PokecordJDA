@@ -11,6 +11,7 @@ class DeveloperModule(bot: Bot) : Module(
   arrayOf(
     EvalCommand(),
     ShowCommand(),
+    ParseEntitiesCommand(),
     MockCommand(),
     MaintenanceCommand(),
     ShardsCommand()
