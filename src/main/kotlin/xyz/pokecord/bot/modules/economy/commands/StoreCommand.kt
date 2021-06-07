@@ -20,6 +20,7 @@ class StoreCommand : Command() {
   override val name = "Store"
 
   override var aliases = arrayOf("donate", "donation")
+  override var enabled = false
 
   private val payPal by lazy { PayPal(module.bot.database) }
 
