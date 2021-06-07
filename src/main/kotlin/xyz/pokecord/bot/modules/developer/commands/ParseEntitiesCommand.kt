@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.general.commands
+package xyz.pokecord.bot.modules.developer.commands
 
 import net.dv8tion.jda.api.entities.*
 import xyz.pokecord.bot.api.ICommandContext
