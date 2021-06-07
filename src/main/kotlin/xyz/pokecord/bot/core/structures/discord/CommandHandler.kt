@@ -360,8 +360,7 @@ class CommandHandler(val bot: Bot) : ListenerAdapter() {
       // TODO: Let the user know they can't run the command?
 
       val args =
-        if (splitMessage.size == 1) mutableListOf() else splitMessage.slice(IntRange(1, splitMessage.size - 1))
-          .toMutableList()
+        if (splitMessage.size == 1) mutableListOf() else splitMessage
 
       val cacheKey = command.getRateLimitCacheKey(context, args)
 
