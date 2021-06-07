@@ -284,11 +284,12 @@ class CommandHandler(val bot: Bot) : ListenerAdapter() {
     if (!context.shouldProcess()) return
     if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
-    var content = event.message.contentRaw
     GlobalScope.launch {
       val effectivePrefix = context.getPrefix()
-      content = (if (!content.startsWith(effectivePrefix)) return@launch else content.substring(effectivePrefix.length))
-      var splitMessage = content.split("\\s|\\n".toRegex()).toTypedArray()
+      var splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
+      val prefix = splitMessage.removeFirst().trim()
+      if (!prefix.equals(effectivePrefix, true)) return@launch
+
       val commandString = splitMessage[0]
 
       var command: Command? = null
@@ -302,7 +303,7 @@ class CommandHandler(val bot: Bot) : ListenerAdapter() {
           val childCommand = command.module.commandMap["${command.name.toLowerCase()}.${splitMessage[1].toLowerCase()}"]
           if (childCommand != null) {
             command = childCommand
-            splitMessage = splitMessage.toMutableList().also { it.removeAt(1) }.toTypedArray()
+            splitMessage = splitMessage.also { it.removeAt(1) }
           }
         }
       }
