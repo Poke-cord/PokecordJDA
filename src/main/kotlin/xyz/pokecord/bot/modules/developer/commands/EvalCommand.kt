@@ -18,19 +18,19 @@ class EvalCommand : DeveloperCommand() {
     @Argument(consumeRest = true, name = "code") input: String?
   ) {
     val groupValues = input?.let { codeRegex.matchEntire(it)?.groupValues }
-    val extension = groupValues?.get(1)
+    val extension = groupValues?.get(1) ?: "js"
     val code = groupValues?.get(2)
 
-    if (extension == null) {
-      context.reply(
-        """
-        ```
-        No extension was provided
-        ```
-      """.trimIndent()
-      ).queue()
-      return
-    }
+//    if (extension == null) {
+//      context.reply(
+//        """
+//        ```
+//        No extension was provided
+//        ```
+//      """.trimIndent()
+//      ).queue()
+//      return
+//    }
 
     if (code == null) {
       context.reply(
