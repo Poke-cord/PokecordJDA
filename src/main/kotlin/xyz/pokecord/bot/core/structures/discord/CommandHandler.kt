@@ -287,10 +287,12 @@ class CommandHandler(val bot: Bot) : ListenerAdapter() {
     GlobalScope.launch {
       val effectivePrefix = context.getPrefix()
       var splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
-      val prefix = splitMessage.removeFirst().trim()
-      if (!prefix.equals(effectivePrefix, true)) return@launch
+      var commandString = splitMessage.removeFirst()
+      if (!commandString.startsWith(effectivePrefix, true)) return@launch
 
-      val commandString = splitMessage[0]
+      commandString = commandString.drop(effectivePrefix.length).trim().ifEmpty {
+        splitMessage.removeFirstOrNull() ?: return@launch
+      }
 
       var command: Command? = null
       for (module in bot.modules.values) {
