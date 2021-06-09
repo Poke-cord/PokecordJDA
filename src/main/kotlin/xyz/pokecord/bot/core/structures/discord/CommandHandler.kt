@@ -211,7 +211,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
     if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
     val effectivePrefix = context.getPrefix()
-    var splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
+    val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
     var commandString = splitMessage.removeFirst()
     if (!commandString.startsWith(effectivePrefix, true)) return
 
@@ -226,11 +226,12 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
     }
 
     if (command != null && command.enabled) {
-      if (splitMessage.size >= 2) {
-        val childCommand = command.module.commandMap["${command.name.toLowerCase()}.${splitMessage[1].toLowerCase()}"]
+      if (splitMessage.size >= 1) {
+        val childCommand =
+          command.module.commandMap["${command.name.toLowerCase()}.${splitMessage.first().toLowerCase()}"]
         if (childCommand != null) {
           command = childCommand
-          splitMessage = splitMessage.also { it.removeAt(1) }
+          splitMessage.removeAt(0)
         }
       }
     }
