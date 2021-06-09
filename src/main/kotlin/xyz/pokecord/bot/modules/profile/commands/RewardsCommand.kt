@@ -46,7 +46,8 @@ class RewardsCommand : Command() {
             "modules.profile.commands.rewards.embeds.available.description",
             mapOf(
               "unclaimedVoteRewards" to unclaimedVoteRewards.toString(),
-              "unclaimedCatchRewards" to unclaimedCatchRewards.toString()
+              "unclaimedCatchRewards" to unclaimedCatchRewards.toString(),
+              "prefix" to context.getPrefix()
             )
           ),
           context.translate(
