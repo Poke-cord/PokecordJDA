@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.general.commands
 
+import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.TextChannel
 import xyz.pokecord.bot.api.ICommandContext
@@ -87,7 +88,7 @@ class SetCommand : ParentCommand() {
         ).queue()
         return
       }
-      if (!context.guild!!.getMember(context.author)!!.hasPermission(Permission.ADMINISTRATOR)) {
+      if (context.guild?.retrieveMember(context.author)?.await()?.hasPermission(Permission.ADMINISTRATOR) != true) {
         // TODO: say you're not admin PROPERLY
         context.reply("you're not admin").queue()
         return
