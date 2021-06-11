@@ -117,7 +117,7 @@ data class Pokemon(
         exitProcess(0)
       }
       val json = stream.readAllBytes().decodeToString()
-      items = Json.decodeFromString(json)
+      items = Json.decodeFromString<List<Pokemon>>(json).filter { it.id <= 807 }
       legendaries = items.filter { it.species.isLegendary }.map { it.id }
       mythicals = items.filter { it.species.isMythical }.map { it.id }
       val typesStream = Pokemon::class.java.getResourceAsStream("/data/pokemon_types.json")
