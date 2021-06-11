@@ -41,7 +41,7 @@ interface ICommandContext {
   suspend fun getUserData(): User
   suspend fun handleException(
     exception: Throwable,
-    module: Module,
+    module: Module? = null,
     command: Command? = null,
     event: Event? = null,
     extras: Map<String, String> = mapOf()

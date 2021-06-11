@@ -123,7 +123,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
 
   override suspend fun handleException(
     exception: Throwable,
-    module: Module,
+    module: Module?,
     command: Command?,
     event: Event?,
     extras: Map<String, String>
@@ -145,7 +145,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
         id = author.id
         username = author.asTag
       }
-      scope.setExtra("module", module.name)
+      module?.let { scope.setExtra("module", it.name) }
       command?.let { command ->
         scope.setExtra("command", command.name)
         command.parentCommand?.let { parentCommand ->
@@ -175,7 +175,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           "Error occurred while handling the ${event.name} event"
         }
         else -> {
-          "Error occurred while doing something unknown within the ${module.name} module"
+          "Error occurred while doing something unknown"
         }
       }
       logger.error(

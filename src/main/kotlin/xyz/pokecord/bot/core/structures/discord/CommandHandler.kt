@@ -1,8 +1,6 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
-import dev.minn.jda.ktx.await
-import dev.minn.jda.ktx.awaitMessage
 import kotlinx.coroutines.*
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -45,22 +43,23 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   private suspend fun onSlashCommand(event: SlashCommandEvent) {
     val context = SlashCommandContext(bot, event)
-    if (context.author.isBot) return
-    if (!context.shouldProcess()) return
-    if (bot.maintenance && !Config.devs.contains(context.author.id)) return
+    try {
+      if (context.author.isBot) return
+      if (!context.shouldProcess()) return
+      if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
-    var command: Command? = null
-    for (module in bot.modules.values) {
-      command = module.commandMap[event.name.toLowerCase()]
-      if (command != null) break
-    }
+      var command: Command? = null
+      for (module in bot.modules.values) {
+        command = module.commandMap[event.name.toLowerCase()]
+        if (command != null) break
+      }
 
-    if (command == null) return
+      if (command == null) return
 
-    // TODO: subcommands
+      // TODO: subcommands
 
-    val userData = context.getUserData()
-    if (userData.blacklisted) return
+      val userData = context.getUserData()
+      if (userData.blacklisted) return
 //    if (!userData.agreedToTerms) {
 //      context.reply(
 //        context.embedTemplates.normal(
@@ -81,47 +80,47 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 //      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
 //    }
 
-    val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
-    if (hasRunningCommand) {
-      context.reply(
-        context.embedTemplates.error(
-          "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
-          "Failed to execute command"
-        ).build()
-      ).queue()
-      return
-    }
-
-    if (event.isFromGuild) {
-      if (!event.guild!!.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
+      val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
+      if (hasRunningCommand) {
+        context.reply(
+          context.embedTemplates.error(
+            "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
+            "Failed to execute command"
+          ).build()
+        ).queue()
         return
-      } else if (event.member != null) {
-        if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
+      }
+
+      if (event.isFromGuild) {
+        if (!event.guild!!.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
           return
+        } else if (event.member != null) {
+          if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
+            return
+          }
+        }
+        // TODO: Let the user know that the bot is or they are missing required permissions
+      }
+
+      if (!command.canRun(context)) return
+      // TODO: Let the user know they can't run the command?
+
+      val cacheKey = command.getRateLimitCacheKey(context, listOf()) // TODO: args
+
+      val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
+      if (rateLimitEndsAt != null) {
+        if (rateLimitEndsAt > System.currentTimeMillis()) {
+          // TODO: handle rate limit hit
+          logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
+        } else {
+          bot.cache.removeRateLimit(cacheKey)
         }
       }
-      // TODO: Let the user know that the bot is or they are missing required permissions
-    }
 
-    if (!command.canRun(context)) return
-    // TODO: Let the user know they can't run the command?
+      val executorFunction =
+        command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
+          ?: return
 
-    val cacheKey = command.getRateLimitCacheKey(context, listOf()) // TODO: args
-
-    val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
-    if (rateLimitEndsAt != null) {
-      if (rateLimitEndsAt > System.currentTimeMillis()) {
-        // TODO: handle rate limit hit
-        logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
-      } else {
-        bot.cache.removeRateLimit(cacheKey)
-      }
-    }
-
-    val executorFunction =
-      command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
-
-    if (executorFunction != null) {
       val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
       val parsedParameters = arrayListOf<Any?>()
 
@@ -186,7 +185,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           } else {
             executorFunction.call(command, *parsedParameters.toTypedArray()) // TODO: args
           }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
           context.handleException(e, command.module, command)
         }
         bot.cache.setRunningCommand(context.author.id, false)
@@ -200,46 +199,49 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       if (userData.tag !== context.author.asTag) {
         bot.database.userRepository.updateTag(userData, context.author.asTag)
       }
+    } catch (e: Throwable) {
+      context.handleException(e)
     }
   }
 
   @Suppress("UNUSED")
   suspend fun onMessageReceived(event: MessageReceivedEvent) {
     val context = MessageCommandContext(bot, event)
-    if (context.author.isBot) return
-    if (!context.shouldProcess()) return
-    if (bot.maintenance && !Config.devs.contains(context.author.id)) return
+    try {
+      if (context.author.isBot) return
+      if (!context.shouldProcess()) return
+      if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
-    val effectivePrefix = context.getPrefix()
-    val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
-    var commandString = splitMessage.removeFirst()
-    if (!commandString.startsWith(effectivePrefix, true)) return
+      val effectivePrefix = context.getPrefix()
+      val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
+      var commandString = splitMessage.removeFirst()
+      if (!commandString.startsWith(effectivePrefix, true)) return
 
-    commandString = commandString.drop(effectivePrefix.length).trim().ifEmpty {
-      splitMessage.removeFirstOrNull() ?: return
-    }
+      commandString = commandString.drop(effectivePrefix.length).trim().ifEmpty {
+        splitMessage.removeFirstOrNull() ?: return
+      }
 
-    var command: Command? = null
-    for (module in bot.modules.values) {
-      command = module.commandMap[commandString.toLowerCase()]
-      if (command != null) break
-    }
+      var command: Command? = null
+      for (module in bot.modules.values) {
+        command = module.commandMap[commandString.toLowerCase()]
+        if (command != null) break
+      }
 
-    if (command != null && command.enabled) {
-      if (splitMessage.size >= 1) {
-        val childCommand =
-          command.module.commandMap["${command.name.toLowerCase()}.${splitMessage.first().toLowerCase()}"]
-        if (childCommand != null) {
-          command = childCommand
-          splitMessage.removeAt(0)
+      if (command != null && command.enabled) {
+        if (splitMessage.size >= 1) {
+          val childCommand =
+            command.module.commandMap["${command.name.toLowerCase()}.${splitMessage.first().toLowerCase()}"]
+          if (childCommand != null) {
+            command = childCommand
+            splitMessage.removeAt(0)
+          }
         }
       }
-    }
 
-    if (command == null || !command.enabled) return
+      if (command == null || !command.enabled) return
 
-    val userData = context.getUserData()
-    if (userData.blacklisted) return
+      val userData = context.getUserData()
+      if (userData.blacklisted) return
 //    if (!userData.agreedToTerms) {
 //      context.reply(
 //        context.embedTemplates.normal(
@@ -260,177 +262,179 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 //      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
 //    }
 
-    val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
-    if (hasRunningCommand) {
-      context.reply(
-        context.embedTemplates.error(
-          "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
-          "Failed to execute command"
-        ).build()
-      ).queue()
-      return
-    }
-
-    if (event.isFromGuild) {
-      if (!event.guild.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
+      val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
+      if (hasRunningCommand) {
+        context.reply(
+          context.embedTemplates.error(
+            "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
+            "Failed to execute command"
+          ).build()
+        ).queue()
         return
-      } else if (event.member != null) {
-        if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
+      }
+
+      if (event.isFromGuild) {
+        if (!event.guild.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
           return
+        } else if (event.member != null) {
+          if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
+            return
+          }
+        }
+        // TODO: Let the user know that the bot is or they are missing required permissions
+      }
+
+      if (!command.canRun(context)) return
+      // TODO: Let the user know they can't run the command?
+
+      val cacheKey = command.getRateLimitCacheKey(context, splitMessage)
+
+      val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
+      if (rateLimitEndsAt != null) {
+        if (rateLimitEndsAt > System.currentTimeMillis()) {
+          // TODO: handle rate limit hit
+          logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
+        } else {
+          bot.cache.removeRateLimit(cacheKey)
         }
       }
-      // TODO: Let the user know that the bot is or they are missing required permissions
-    }
 
-    if (!command.canRun(context)) return
-    // TODO: Let the user know they can't run the command?
+      val executorFunction =
+        command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
 
-    val args = splitMessage
+      if (executorFunction != null) {
+        val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
+        val parsedParameters = arrayListOf<Any?>()
+        val argumentParser =
+          ArgumentParser(context, splitMessage)
 
-    val cacheKey = command.getRateLimitCacheKey(context, args)
-
-    val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
-    if (rateLimitEndsAt != null) {
-      if (rateLimitEndsAt > System.currentTimeMillis()) {
-        // TODO: handle rate limit hit
-        logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
-      } else {
-        bot.cache.removeRateLimit(cacheKey)
-      }
-    }
-
-    val executorFunction =
-      command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
-
-    if (executorFunction != null) {
-      val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
-      val parsedParameters = arrayListOf<Any?>()
-      val argumentParser =
-        ArgumentParser(context, args)
-
-      for (param in parameters) {
-        val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
-        if (commandArgumentAnnotation != null) {
-          if (args.isEmpty()) {
-            parsedParameters.add(null)
+        for (param in parameters) {
+          val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
+          if (commandArgumentAnnotation != null) {
+            if (splitMessage.isEmpty()) {
+              parsedParameters.add(null)
+            } else {
+              val consumeRest = commandArgumentAnnotation.consumeRest
+              val isPrefixed = commandArgumentAnnotation.prefixed
+              val optional = commandArgumentAnnotation.optional
+              val argName =
+                commandArgumentAnnotation.name.ifEmpty { param.name!! }
+              val argAliases = commandArgumentAnnotation.aliases
+              argumentParser.provideArgumentInfo(
+                consumeRest,
+                isPrefixed,
+                optional,
+                param.type,
+                argName,
+                argAliases
+              )
+              when {
+                param.type.isInteger -> {
+                  parsedParameters.add(argumentParser.getInteger())
+                }
+                param.type.isBoolean -> {
+                  parsedParameters.add(
+                    argumentParser.getBoolean()
+                  )
+                }
+                param.type.isString -> {
+                  parsedParameters.add(argumentParser.getString())
+                }
+                param.type.isRegex -> {
+                  parsedParameters.add(argumentParser.getRegex())
+                }
+                param.type.isUser -> {
+                  parsedParameters.add(argumentParser.getUser())
+                }
+                param.type.isMember -> {
+                  parsedParameters.add(argumentParser.getMember())
+                }
+                param.type.isRole -> {
+                  parsedParameters.add(argumentParser.getRole())
+                }
+                param.type.isTextChannel -> {
+                  parsedParameters.add(argumentParser.getTextChannel())
+                }
+                param.type.isVoiceChannel -> {
+                  parsedParameters.add(argumentParser.getVoiceChannel())
+                }
+                param.type.isPokemonResolvable -> {
+                  parsedParameters.add(argumentParser.getPokemonResolvable())
+                }
+                else -> {
+                  throw UnsupportedCommandArgumentException(param.name.toString())
+                }
+              }
+            }
           } else {
-            val consumeRest = commandArgumentAnnotation.consumeRest
-            val isPrefixed = commandArgumentAnnotation.prefixed
-            val optional = commandArgumentAnnotation.optional
-            val argName =
-              commandArgumentAnnotation.name.ifEmpty { param.name!! }
-            val argAliases = commandArgumentAnnotation.aliases
-            argumentParser.provideArgumentInfo(
-              consumeRest,
-              isPrefixed,
-              optional,
-              param.type,
-              argName,
-              argAliases
-            )
             when {
-              param.type.isInteger -> {
-                parsedParameters.add(argumentParser.getInteger())
+              param.type.isMessageCommandContext -> {
+                parsedParameters.add(context)
               }
-              param.type.isBoolean -> {
-                parsedParameters.add(
-                  argumentParser.getBoolean()
-                )
+              param.type.isCommandContext -> {
+                parsedParameters.add(context as ICommandContext)
               }
-              param.type.isString -> {
-                parsedParameters.add(argumentParser.getString())
+              param.type.isBaseCommandContext -> {
+                parsedParameters.add(context as BaseCommandContext)
               }
-              param.type.isRegex -> {
-                parsedParameters.add(argumentParser.getRegex())
-              }
-              param.type.isUser -> {
-                parsedParameters.add(argumentParser.getUser())
-              }
-              param.type.isMember -> {
-                parsedParameters.add(argumentParser.getMember())
-              }
-              param.type.isRole -> {
-                parsedParameters.add(argumentParser.getRole())
-              }
-              param.type.isTextChannel -> {
-                parsedParameters.add(argumentParser.getTextChannel())
-              }
-              param.type.isVoiceChannel -> {
-                parsedParameters.add(argumentParser.getVoiceChannel())
-              }
-              param.type.isPokemonResolvable -> {
-                parsedParameters.add(argumentParser.getPokemonResolvable())
+              param.type.isMessageReceivedEvent -> {
+                parsedParameters.add(event)
               }
               else -> {
-                throw UnsupportedCommandArgumentException(param.name.toString())
+                throw UnsupportedParameterException(param.name.toString())
               }
             }
           }
-        } else {
-          when {
-            param.type.isMessageCommandContext -> {
-              parsedParameters.add(context)
-            }
-            param.type.isCommandContext -> {
-              parsedParameters.add(context as ICommandContext)
-            }
-            param.type.isBaseCommandContext -> {
-              parsedParameters.add(context as BaseCommandContext)
-            }
-            param.type.isMessageReceivedEvent -> {
-              parsedParameters.add(event)
-            }
-            else -> {
-              throw UnsupportedParameterException(param.name.toString())
-            }
-          }
         }
-      }
-      val commandJob = GlobalScope.launch(Dispatchers.Default) {
-        bot.cache.setRunningCommand(
-          context.author.id,
-          true
-        )
-        try {
-          if (executorFunction.isSuspend) {
-            executorFunction.callSuspend(command, *parsedParameters.toTypedArray())
-          } else {
-            executorFunction.call(command, *parsedParameters.toTypedArray())
-          }
-        } catch (e: Exception) {
-          context.handleException(e, command.module, command)
-        }
-        bot.cache.setRunningCommand(context.author.id, false)
-      }
 
-      GlobalScope.launch(Dispatchers.Default + CoroutineName("StartTyping")) {
-        delay(1000)
-        while (!commandJob.isCompleted) {
-          event.channel.sendTyping().queue()
-          delay(5000)
+        val commandJob = GlobalScope.launch(Dispatchers.Default) {
+          bot.cache.setRunningCommand(
+            context.author.id,
+            true
+          )
+          try {
+            if (executorFunction.isSuspend) {
+              executorFunction.callSuspend(command, *parsedParameters.toTypedArray())
+            } else {
+              executorFunction.call(command, *parsedParameters.toTypedArray())
+            }
+          } catch (e: Throwable) {
+            context.handleException(e, command.module, command)
+          }
+          bot.cache.setRunningCommand(context.author.id, false)
         }
-      }
 
-      GlobalScope.launch(Dispatchers.Default + CoroutineName("TimeoutHandler")) {
-        val startedAt = System.currentTimeMillis()
-        while (!commandJob.isCompleted) {
+        GlobalScope.launch(Dispatchers.Default + CoroutineName("StartTyping")) {
           delay(1000)
-          if (System.currentTimeMillis() - startedAt >= 60_000) {
-            commandJob.cancelAndJoin()
-            context.reply(context.translate("misc.texts.commandTimedOut")).queue()
-            break
+          while (!commandJob.isCompleted) {
+            event.channel.sendTyping().queue()
+            delay(5000)
           }
         }
-      }
 
-      bot.cache.setRateLimit(
-        cacheKey,
-        System.currentTimeMillis() + command.rateLimit,
-        command.rateLimit, TimeUnit.MILLISECONDS
-      )
-      if (userData.tag !== context.author.asTag) {
-        bot.database.userRepository.updateTag(userData, context.author.asTag)
+        GlobalScope.launch(Dispatchers.Default + CoroutineName("TimeoutHandler")) {
+          val startedAt = System.currentTimeMillis()
+          while (!commandJob.isCompleted) {
+            delay(1000)
+            if (System.currentTimeMillis() - startedAt >= 60_000) {
+              commandJob.cancelAndJoin()
+              context.reply(context.translate("misc.texts.commandTimedOut")).queue()
+              break
+            }
+          }
+        }
+
+        bot.cache.setRateLimit(
+          cacheKey,
+          System.currentTimeMillis() + command.rateLimit,
+          command.rateLimit, TimeUnit.MILLISECONDS
+        )
+        if (userData.tag !== context.author.asTag) {
+          bot.database.userRepository.updateTag(userData, context.author.asTag)
+        }
       }
+    } catch (e: Throwable) {
+      context.handleException(e)
     }
   }
 

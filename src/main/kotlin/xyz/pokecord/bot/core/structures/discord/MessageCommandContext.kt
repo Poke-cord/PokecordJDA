@@ -40,7 +40,7 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
 
   override suspend fun handleException(
     exception: Throwable,
-    module: Module,
+    module: Module?,
     command: Command?,
     event: Event?,
     extras: Map<String, String>

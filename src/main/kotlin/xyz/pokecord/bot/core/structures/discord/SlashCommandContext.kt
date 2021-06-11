@@ -57,7 +57,7 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
 
   override suspend fun handleException(
     exception: Throwable,
-    module: Module,
+    module: Module?,
     command: Command?,
     event: Event?,
     extras: Map<String, String>
