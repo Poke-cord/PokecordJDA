@@ -74,7 +74,6 @@ class PokemonCommand : Command() {
     val pageCount = ceil((count.toDouble() / 15)).toInt()
     val paginator = EmbedPaginator(context, pageCount, { pageIndex ->
       if (pageIndex >= pageCount) {
-        this.stop()
         return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.pokemon.commands.pokemon.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
