@@ -4,9 +4,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.findAnnotation
@@ -103,8 +106,8 @@ abstract class Module(
 //            event
 //          ) else null
 //        if (eventToHandle != null) {
-        if (firstParam.type.javaType == event::class.java) {
-          try {
+        try {
+          if (firstParam.type.javaType == event::class.java) {
             if (handlerFunction.isSuspend) {
               GlobalScope.launch {
                 handlerFunction.callSuspend(ev, event)
@@ -112,9 +115,18 @@ abstract class Module(
             } else {
               handlerFunction.call(ev, event)
             }
-          } catch (e: Throwable) {
-            e.printStackTrace()
+          } else if (firstParam.type.isMessageCommandContext && event::class.java == MessageReceivedEvent::class.java) {
+          val context = MessageCommandContext(bot, event as MessageReceivedEvent)
+            if (handlerFunction.isSuspend) {
+              GlobalScope.launch {
+                handlerFunction.callSuspend(ev, context)
+              }
+            } else {
+              handlerFunction.call(ev, context)
+            }
           }
+        } catch (e: Throwable) {
+          e.printStackTrace()
         }
 //        }
       }
