@@ -208,6 +208,8 @@ class UserRepository(
       clientSession.commitTransactionAndAwait()
       sender.credits -= amount
       receiver.credits += amount
+      setCacheUser(sender)
+      setCacheUser(receiver)
     }
   }
 
