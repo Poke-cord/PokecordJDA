@@ -55,7 +55,7 @@ class ReadyEvent : Event() {
         }
       } else {
         commandsData.forEach { commandData ->
-          module.bot.jda.upsertCommand(commandData)
+          module.bot.jda.upsertCommand(commandData).await()
         }
       }
     }
