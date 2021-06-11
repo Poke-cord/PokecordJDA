@@ -42,7 +42,13 @@ class MockCommand : DeveloperCommand() {
       is SlashCommandContext -> (result as InteractionHook).retrieveOriginal().await()
       else -> throw IllegalStateException("Unknown command context type ${context::class.java.name}")
     }
-    val targetMember = context.guild?.retrieveMember(targetUser)?.await()
+
+    val targetMember = try {
+      context.guild?.retrieveMember(targetUser)?.await()
+    } catch (e: Throwable) {
+      null
+    }
+
     val fakeMessage = ReceivedMessage(
       sentMessage.idLong,
       context.channel,
