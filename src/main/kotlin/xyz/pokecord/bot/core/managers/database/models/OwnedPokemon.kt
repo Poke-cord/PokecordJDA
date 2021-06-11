@@ -91,7 +91,7 @@ data class OwnedPokemon(
             10
       ).roundToInt()
     } else {
-      (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) * 5).roundToInt()
+      (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) + 5).roundToInt()
     }
     val multiplier = when {
       nature.increasedStatId == stat.id -> 1.1
