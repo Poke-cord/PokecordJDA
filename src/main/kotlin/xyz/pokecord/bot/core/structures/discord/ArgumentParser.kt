@@ -65,7 +65,7 @@ class ArgumentParser(
         if (argIndex >= 0) {
           val arg = if (paramType.isBoolean) "true" else args.getOrNull(argIndex + 1)
           if (!paramType.isBoolean) args.removeAt(argIndex)
-          if (args.isNotEmpty()) args.removeAt(argIndex)
+          if (args.size > argIndex) args.removeAt(argIndex)
           arg
         } else null
       } else nextString) ?: return null
