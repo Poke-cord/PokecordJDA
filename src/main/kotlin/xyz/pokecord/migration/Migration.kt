@@ -94,22 +94,38 @@ object Migration {
     val ownerId =
       if (bsonDocument.isString("ownerId")) bsonDocument.getString("ownerId").value else throw Exception("Non-string ownerId found for pokemon ${objectId.toHexString()}")
 
-    val attack =
-      if (bsonDocument.isNumber("ivs.attack")) bsonDocument.getNumber("ivs.attack").intValue() else Random.nextInt(32)
-    val defense =
-      if (bsonDocument.isNumber("ivs.defense")) bsonDocument.getNumber("ivs.defense").intValue() else Random.nextInt(
-        32
-      )
-    val hp =
-      if (bsonDocument.isNumber("ivs.hp")) bsonDocument.getNumber("ivs.hp").intValue() else Random.nextInt(32)
-    val specialAttack =
-      if (bsonDocument.isNumber("ivs.special-attack")) bsonDocument.getNumber("ivs.special-attack")
-        .intValue() else Random.nextInt(32)
-    val specialDefense =
-      if (bsonDocument.isNumber("ivs.special-defense")) bsonDocument.getNumber("ivs.special-defense")
-        .intValue() else Random.nextInt(32)
-    val speed =
-      if (bsonDocument.isNumber("ivs.speed")) bsonDocument.getNumber("ivs.speed").intValue() else Random.nextInt(32)
+    val ivs = if (bsonDocument.isDocument("ivs")) bsonDocument.getDocument("ivs") else null
+
+    val pokemonStats =
+      if (ivs == null) {
+        PokemonStats(
+          Random.nextInt(32),
+          Random.nextInt(32),
+          Random.nextInt(32),
+          Random.nextInt(32),
+          Random.nextInt(32),
+          Random.nextInt(32)
+        )
+      } else {
+        val attack =
+          if (ivs.isNumber("attack")) ivs.getNumber("attack").intValue() else Random.nextInt(32)
+        val defense =
+          if (ivs.isNumber("defense")) ivs.getNumber("defense").intValue() else Random.nextInt(
+            32
+          )
+        val hp =
+          if (ivs.isNumber("hp")) ivs.getNumber("hp").intValue() else Random.nextInt(32)
+        val specialAttack =
+          if (ivs.isNumber("special-attack")) ivs.getNumber("special-attack")
+            .intValue() else Random.nextInt(32)
+        val specialDefense =
+          if (ivs.isNumber("special-defense")) ivs.getNumber("special-defense")
+            .intValue() else Random.nextInt(32)
+        val speed =
+          if (ivs.isNumber("speed")) ivs.getNumber("speed").intValue() else Random.nextInt(32)
+
+        PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
+      }
 
     return OwnedPokemon(
       id,
@@ -119,7 +135,7 @@ object Migration {
       trainerId,
       level,
       nature,
-      PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed),
+      pokemonStats,
       xp,
       gender,
       heldItemId,
@@ -129,8 +145,8 @@ object Migration {
       objectId.date.time,
       sticky,
       nickname,
-      IdGenerator.defaultGenerator.create(objectId.toHexString()) as Id<OwnedPokemon>,
-      originalId?.toHexString()?.let { IdGenerator.defaultGenerator.create(it) } as Id<OwnedPokemon>?,
+      IdGenerator.defaultGenerator.create(objectId.toHexString()).cast(),
+      originalId?.toHexString()?.let { IdGenerator.defaultGenerator.create(it) }?.cast(),
     )
   }
 
@@ -440,14 +456,14 @@ object Migration {
     runBlocking {
       File("started").writeText("1")
       val indexMap = convertPokemonStructure(oldPokemonCollection, newPokemonCollection)
-      addIndices(newDatabase, newPokemonCollection)
+//      addIndices(newDatabase, newPokemonCollection)
       File("indexMap.json").writeText(Json.encodeToString(indexMap))
       convertFaqs(oldFaqsCollection, newFaqsCollection)
-      File("faqs_done").writeText("1")
+//      File("faqs_done").writeText("1")
       convertSpawnChannels(oldSpawnChannelsCollection, newSpawnChannelsCollection)
-      File("spawn_channels_done").writeText("1")
+//      File("spawn_channels_done").writeText("1")
       convertUsers(indexMap, oldUsersCollection, newUsersCollection, newInventoryCollection, newRewardsCollection)
-      File("users_done").writeText("1")
+//      File("users_done").writeText("1")
     }
 
     logger.info("All done!")
