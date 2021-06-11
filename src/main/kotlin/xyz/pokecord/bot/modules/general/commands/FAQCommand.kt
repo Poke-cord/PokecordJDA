@@ -28,19 +28,23 @@ class FAQCommand : Command() {
           faqs.joinToString("\n") { faq ->
             "${faq.id} - ${faq.keywords.joinToString(", ")}"
           },
-          "Available FAQ"
+          context.translate("misc.texts.noFaqFound")
         ) else {
-          val faq = faqs.first()
-          val translation = faq.translations.find { translation -> translation.language == language }
-            ?: faq.translations.find { translation -> translation.language == I18n.Language.EN_US }!!
-          context.embedTemplates.normal(
-            "```\n${translation.answer}\n```\nKeywords:\n```\n${
-              listOf(
-                faq.id,
-                *faq.keywords.toTypedArray()
-              ).joinToString(", ")
-            }\n```", translation.question
-          )
+          val faq = faqs.firstOrNull()
+          if (faq === null) {
+            context.embedTemplates.error(context.translate("modules.general.commands.faq.errors.noFaqFound"))
+          } else {
+            val translation = faq.translations.find { translation -> translation.language == language }
+              ?: faq.translations.find { translation -> translation.language == I18n.Language.EN_US }!!
+            context.embedTemplates.normal(
+              "```\n${translation.answer}\n```\nKeywords:\n```\n${
+                listOf(
+                  faq.id,
+                  *faq.keywords.toTypedArray()
+                ).joinToString(", ")
+              }\n```", translation.question
+            )
+          }
         }
       })
     embedPaginator.start()

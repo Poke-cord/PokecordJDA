@@ -74,6 +74,7 @@ misc:
     altNames: Alternative Names
     argument_aliases: Argument Aliases
     argument_names: Argument Names
+    availableFaqs: Available FAQs
     baseStats: Base Stats
     command: Command
     command_aliases: Aliases
@@ -126,6 +127,9 @@ misc:
 modules:
   general:
     commands:
+      faq:
+        errors:
+          noFaqFound: No FAQ found that matches the specified keyword
       invite:
         embed:
           author:
