@@ -160,7 +160,11 @@ class ArgumentParser(
         else {
           val id = getIdFromMention(userAndMemberMentionRegex, arg.trim())
           if (id != null) {
-            context.guild!!.retrieveMemberById(id).await()
+            try {
+              context.guild!!.retrieveMemberById(id).await()
+            } catch (e: Throwable) {
+              null
+            }
           } else {
             context.guild!!.getMemberByTag(arg.trim())
           }
@@ -195,8 +199,13 @@ class ArgumentParser(
       if (arg == null) null
       else {
         val id = getIdFromMention(userAndMemberMentionRegex, arg)
-        if (id != null) context.jda.retrieveUserById(id).await()
-        else {
+        if (id != null) {
+          try {
+            context.jda.retrieveUserById(id).await()
+          } catch (e: Throwable) {
+            null
+          }
+        } else {
           try {
             context.jda.getUserByTag(arg)
           } catch (e: IllegalArgumentException) {
