@@ -69,24 +69,28 @@ class UserRepository(
     userData.credits += amount.toInt()
     if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::credits, amount))
     else collection.updateOne(session, User::_id eq userData._id, inc(User::credits, amount))
+    setCacheUser(userData)
   }
 
   suspend fun incGems(userData: User, amount: Int, session: ClientSession? = null) {
     userData.gems += amount
     if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::gems, amount))
     else collection.updateOne(session, User::_id eq userData._id, inc(User::gems, amount))
+    setCacheUser(userData)
   }
 
   suspend fun incTokens(userData: User, amount: Int, session: ClientSession? = null) {
     userData.tokens += amount
     if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::tokens, amount))
     else collection.updateOne(session, User::_id eq userData._id, inc(User::tokens, amount))
+    setCacheUser(userData)
   }
 
   suspend fun incShinyRate(userData: User, amount: Int, session: ClientSession? = null) {
     userData.shinyRate += amount
     if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::shinyRate, amount))
     else collection.updateOne(session, User::_id eq userData._id, inc(User::shinyRate, amount))
+    setCacheUser(userData)
   }
 
   suspend fun givePokemon(
@@ -266,6 +270,7 @@ class UserRepository(
   suspend fun togglePrivate(userData: User) {
     userData.progressPrivate = !userData.progressPrivate
     collection.updateOne(User::_id eq userData._id, set(User::progressPrivate setTo !userData.progressPrivate))
+    setCacheUser(userData)
   }
 
   suspend fun getCreditLeaderboard(limit: Int = 10): List<User> {
@@ -302,11 +307,13 @@ class UserRepository(
   suspend fun setAgreedToTerms(userData: User, agreed: Boolean = true) {
     userData.agreedToTerms = agreed
     collection.updateOne(User::_id eq userData._id, set(User::agreedToTerms setTo userData.agreedToTerms))
+    setCacheUser(userData)
   }
 
   suspend fun setDonationTier(userData: User, donationTier: Int) {
     userData.donationTier = donationTier
     collection.updateOne(User::_id eq userData._id, set(User::donationTier setTo userData.donationTier))
+    setCacheUser(userData)
   }
 
   private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
@@ -353,8 +360,7 @@ class UserRepository(
     }.toString()
   )
 
-  private
-  val pokemonCountLeaderboardSortStage = BsonDocument.parse(
+  private val pokemonCountLeaderboardSortStage = BsonDocument.parse(
     jsonObject {
       json("$sort") {
         number("pokemonCount", -1)
