@@ -12,14 +12,15 @@ class MoveCommand : Command() {
     context: ICommandContext,
     @Argument(name = "move", consumeRest = true) moveName: String?
   ) {
-    if (moveName == null) {
-      return
-    }
-    val move = MoveData.getByName(moveName) ?: return
+    try {
+      if (moveName == null) {
+        return
+      }
+      val move = MoveData.getByName(moveName) ?: return
 
-    context.reply(
-      context.embedTemplates.normal(
-        """
+      context.reply(
+        context.embedTemplates.normal(
+          """
           **${context.translate("misc.texts.generation")}**: ${move.romanGenerationId} (${move.generationId})
           **${context.translate("misc.texts.type")}**: ${context.translator.type(move.type)}
           **${context.translate("misc.texts.power")}**: ${move.power}
@@ -30,8 +31,11 @@ class MoveCommand : Command() {
           **${context.translate("misc.texts.criticalRate")}**: ${move.meta.criticalRate}
           **${context.translate("misc.texts.damageClass")}**: ${context.translator.damageClass(move.damageClassId)}
         """.trimIndent(),
-        "#${move.id} | ${move.name} | ${context.translate("misc.texts.moveInfo")}"
-      ).build()
-    ).queue()
+          "#${move.id} | ${move.name} | ${context.translate("misc.texts.moveInfo")}"
+        ).build()
+      ).queue()
+    } catch (e: Throwable) {
+      // catch "missing meta moves" stuff
+    }
   }
 }
