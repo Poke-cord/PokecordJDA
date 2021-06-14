@@ -45,7 +45,7 @@ class UserRepository(
   }
 
   private suspend fun setCacheUser(user: User) {
-    cacheMap.putAsync(user.id, Json.encodeToString(user)).awaitSuspending()
+    cacheMap.putAsync(user.id, Json.encodeToString(user.copy())).awaitSuspending()
   }
 
   suspend fun getUser(jdaUser: JDAUser): User {
