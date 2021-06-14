@@ -37,7 +37,7 @@ class SpawnerEvent : Event() {
     try {
       if (!context.shouldProcess()) return
       if (!envFlag || context.bot.maintenance) return
-      if (context.event.channelType != ChannelType.TEXT || context.author.isBot) return
+      if (context.event.channelType != ChannelType.TEXT) return
       val prefix = context.getPrefix()
       if (context.event.message.contentRaw.startsWith(prefix)) return
       val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)

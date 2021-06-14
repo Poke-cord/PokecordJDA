@@ -1,7 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
-import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import kotlin.math.min
 
@@ -14,7 +14,6 @@ class XPGainEvent : Event() {
   suspend fun onMessage(context: MessageCommandContext) {
     if (!context.shouldProcess()) return
     if (!envFlag || context.bot.maintenance) return
-    if (context.author.isBot) return
     if (context.event.message.contentRaw.length <= 2) return
     val prefix = context.getPrefix()
     if (context.event.message.contentRaw.startsWith(prefix)) return

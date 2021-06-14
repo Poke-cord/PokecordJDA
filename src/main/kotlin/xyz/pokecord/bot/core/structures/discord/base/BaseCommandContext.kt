@@ -29,6 +29,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   override val translator by lazy { Translator(this) }
 
   override fun shouldProcess(): Boolean {
+    if (author.isBot) return false
     return Config.devs.contains(author.id) || (if (Config.officialServerOnlyMode) isFromGuild && Config.officialServers.contains(
       guild!!.id
     ) else true)

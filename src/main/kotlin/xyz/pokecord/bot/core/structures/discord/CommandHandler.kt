@@ -44,7 +44,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   private suspend fun onSlashCommand(event: SlashCommandEvent) {
     val context = SlashCommandContext(bot, event)
     try {
-      if (context.author.isBot) return
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
@@ -208,7 +207,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   suspend fun onMessageReceived(event: MessageReceivedEvent) {
     val context = MessageCommandContext(bot, event)
     try {
-      if (context.author.isBot) return
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
