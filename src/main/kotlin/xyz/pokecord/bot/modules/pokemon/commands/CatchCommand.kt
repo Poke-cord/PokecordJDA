@@ -1,8 +1,13 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.withContext
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class CatchCommand : Command() {
   override val name = "Catch"
@@ -38,57 +43,63 @@ class CatchCommand : Command() {
       return
     }
 
-    if (spawnChannel.spawned == 0) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate(
-            "misc.errors.nothingSpawned"
-          )
-        ).build()
-      ).queue()
-      return
-    }
+    withContext(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+      val lock = module.bot.cache.getSpawnChannelLock(spawnChannel.id)
+      lock.lockAsync(5, TimeUnit.SECONDS).awaitSuspending()
 
-    if (pokemonName == null) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.catch.errors.noNameProvided")
-        ).build()
-      ).queue()
-      return
-    }
-
-    val pokemon = Pokemon.getByName(pokemonName)
-    if (pokemon != null && spawnChannel.spawned == pokemon.id) {
-      val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id) {
-        module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)
-      }
-      context.reply(
-        context.embedTemplates.normal(
-          context.translate(
-            "modules.pokemon.commands.catch.embed.description",
-            mapOf(
-              "user" to context.author.asMention,
-              "level" to "${ownedPokemon.level}",
-              "pokemon" to ownedPokemon.displayName,
-              "ivPercentage" to ownedPokemon.ivPercentage
+      if (spawnChannel.spawned == 0) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate(
+              "misc.errors.nothingSpawned"
             )
-          ),
-          context.translate(
-            "modules.pokemon.commands.catch.embed.title"
+          ).build()
+        ).queue()
+        return@withContext
+      }
+
+      if (pokemonName == null) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.pokemon.commands.catch.errors.noNameProvided")
+          ).build()
+        ).queue()
+        return@withContext
+      }
+
+      val pokemon = Pokemon.getByName(pokemonName)
+      if (pokemon != null && spawnChannel.spawned == pokemon.id) {
+        val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id) {
+          module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)
+        }
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "modules.pokemon.commands.catch.embed.description",
+              mapOf(
+                "user" to context.author.asMention,
+                "level" to "${ownedPokemon.level}",
+                "pokemon" to ownedPokemon.displayName,
+                "ivPercentage" to ownedPokemon.ivPercentage
+              )
+            ),
+            context.translate(
+              "modules.pokemon.commands.catch.embed.title"
+            )
           )
-        )
-          .setColor(pokemon.species.color.colorCode)
-          .setFooter(context.translate("modules.pokemon.commands.catch.embed.footer"))
-          .build()
-      ).queue()
-    } else {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.catch.errors.incorrectNameProvided")
-        ).build()
-      ).queue()
-      return
+            .setColor(pokemon.species.color.colorCode)
+            .setFooter(context.translate("modules.pokemon.commands.catch.embed.footer"))
+            .build()
+        ).queue()
+      } else {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.pokemon.commands.catch.errors.incorrectNameProvided")
+          ).build()
+        ).queue()
+        return@withContext
+      }
+      lock.unlockAsync().awaitSuspending()
     }
   }
 }

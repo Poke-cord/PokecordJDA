@@ -1,13 +1,17 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
-import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class SpawnerEvent : Event() {
@@ -52,49 +56,55 @@ class SpawnerEvent : Event() {
       if (lastMessageAt != null && lastMessageAt + 5000 > now) return
       context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
 
-      val oldSpawnChannelData = SpawnChannel(
-        randomSpawnChannel.id,
-        randomSpawnChannel.guildId,
-        randomSpawnChannel.requiredMessages,
-        randomSpawnChannel.sentMessages,
-        randomSpawnChannel.spawned
-      )
+      withContext(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+        val lock = module.bot.cache.getSpawnChannelLock(randomSpawnChannelEntity.id)
+        lock.lockAsync(2, TimeUnit.SECONDS, 1).awaitSuspending()
 
-      randomSpawnChannel.sentMessages++
-      if (randomSpawnChannel.sentMessages >= randomSpawnChannel.requiredMessages) {
-        try {
-          randomSpawnChannel.sentMessages = 0
-          randomSpawnChannel.requiredMessages = Random.nextInt(5, 41)
-          randomSpawnChannel.spawned = getNextSpawn()
+        val oldSpawnChannelData = SpawnChannel(
+          randomSpawnChannel.id,
+          randomSpawnChannel.guildId,
+          randomSpawnChannel.requiredMessages,
+          randomSpawnChannel.sentMessages,
+          randomSpawnChannel.spawned
+        )
 
-          module.bot.database.spawnChannelRepository.updateDetails(
-            randomSpawnChannel
-          )
-          val embed = context.embedTemplates.normal(
-            context.translate(
-              "modules.pokemon.events.spawner.embeds.spawn.description",
-              "prefix" to prefix
-            ),
-            context.translate("modules.pokemon.events.spawner.embeds.spawn.title")
-          )
-            .setFooter(context.translate("modules.pokemon.events.spawner.embeds.spawn.footer"))
-            .setImage(Pokemon.getImageUrl(randomSpawnChannel.spawned))
-            .also {
-              Pokemon.getById(randomSpawnChannel.spawned)?.species?.color?.let { color ->
-                it.setColor(color.colorCode)
+        randomSpawnChannel.sentMessages++
+        if (randomSpawnChannel.sentMessages >= randomSpawnChannel.requiredMessages) {
+          try {
+            randomSpawnChannel.sentMessages = 0
+            randomSpawnChannel.requiredMessages = Random.nextInt(5, 41)
+            randomSpawnChannel.spawned = getNextSpawn()
+
+            module.bot.database.spawnChannelRepository.updateDetails(
+              randomSpawnChannel
+            )
+            val embed = context.embedTemplates.normal(
+              context.translate(
+                "modules.pokemon.events.spawner.embeds.spawn.description",
+                "prefix" to prefix
+              ),
+              context.translate("modules.pokemon.events.spawner.embeds.spawn.title")
+            )
+              .setFooter(context.translate("modules.pokemon.events.spawner.embeds.spawn.footer"))
+              .setImage(Pokemon.getImageUrl(randomSpawnChannel.spawned))
+              .also {
+                Pokemon.getById(randomSpawnChannel.spawned)?.species?.color?.let { color ->
+                  it.setColor(color.colorCode)
+                }
               }
-            }
-            .build()
-          randomSpawnChannelEntity.sendMessage(embed).queue()
-        } catch (e: Exception) {
-          logger.error("Spawn error", e)
-          // Undo the changes we made to the spawn channel since there was an error spawning
-          module.bot.database.spawnChannelRepository.updateDetails(
-            oldSpawnChannelData
-          )
+              .build()
+            randomSpawnChannelEntity.sendMessage(embed).queue()
+          } catch (e: Exception) {
+            logger.error("Spawn error", e)
+            // Undo the changes we made to the spawn channel since there was an error spawning
+            module.bot.database.spawnChannelRepository.updateDetails(
+              oldSpawnChannelData
+            )
+          }
+        } else {
+          module.bot.database.spawnChannelRepository.updateMessageCount(randomSpawnChannel)
         }
-      } else {
-        module.bot.database.spawnChannelRepository.updateMessageCount(randomSpawnChannel)
+        lock.unlockAsync(1).awaitSuspending()
       }
     } catch (e: Exception) {
       context.handleException(e, module, event = this)
