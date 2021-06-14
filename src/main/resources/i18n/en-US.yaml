@@ -130,6 +130,9 @@ modules:
       faq:
         errors:
           noFaqFound: No FAQ found that matches the specified keyword
+        list:
+          embed:
+            title: Available FAQs
       invite:
         embed:
           author:

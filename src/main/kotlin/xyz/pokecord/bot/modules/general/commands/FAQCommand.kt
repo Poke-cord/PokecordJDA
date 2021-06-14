@@ -28,7 +28,7 @@ class FAQCommand : Command() {
           faqs.joinToString("\n") { faq ->
             "${faq.id} - ${faq.keywords.joinToString(", ")}"
           },
-          context.translate("misc.texts.noFaqFound")
+          context.translate("modules.general.commands.faq.list.embed.title")
         ) else {
           val faq = faqs.firstOrNull()
           if (faq === null) {
