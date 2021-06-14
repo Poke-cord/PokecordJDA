@@ -101,7 +101,7 @@ class EmbedPaginator(
             it.messageId == sentMessage!!.id && it.user.id == context.author.id
           }
 
-          val newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
+          var newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
             NavigationOptions.First -> 0
             NavigationOptions.Prev -> if (currentPageIndex == 0) pageCount - 1 else currentPageIndex - 1
 //            NavigationOptions.Stop -> {
@@ -113,6 +113,9 @@ class EmbedPaginator(
             else -> currentPageIndex
           }
           if (currentPageIndex != newPageIndex) {
+            if (newPageIndex > pageCount) newPageIndex = 0
+            if (newPageIndex < 0) newPageIndex = pageCount - 1
+
             currentPageIndex = newPageIndex
 
             event.editMessageEmbeds(getEmbed()).await()
