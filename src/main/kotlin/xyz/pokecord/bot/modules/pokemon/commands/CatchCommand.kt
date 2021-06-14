@@ -1,12 +1,10 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class CatchCommand : Command() {
@@ -43,7 +41,7 @@ class CatchCommand : Command() {
       return
     }
 
-    withContext(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+    withContext(module.bot.spawnChannelCoroutineDispatcher) {
       val lock = module.bot.cache.getSpawnChannelLock(spawnChannel.id)
       lock.lockAsync(5, TimeUnit.SECONDS).awaitSuspending()
 
