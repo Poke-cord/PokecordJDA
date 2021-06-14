@@ -75,6 +75,7 @@ class EmbedPaginator(
             Button.secondary(it.buttonId, it.buttonText).withEmoji(Emoji.fromUnicode(it.emoji))
           }
         )).reply(getEmbed()).await()
+      context.clearActionRows()
 
       sentMessage = when (context) {
         is MessageCommandContext -> {

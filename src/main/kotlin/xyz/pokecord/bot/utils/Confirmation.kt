@@ -48,6 +48,8 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
         }
       )).reply(embedBuilder.build()).await()
 
+    context.clearActionRows()
+
     sentMessage = when (context) {
       is MessageCommandContext -> replyActionResult as Message
       is SlashCommandContext -> (replyActionResult as InteractionHook).retrieveOriginal().await()
