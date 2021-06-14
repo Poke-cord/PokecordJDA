@@ -1,7 +1,10 @@
 package xyz.pokecord.bot.core.managers
 
 import org.redisson.Redisson
-import org.redisson.api.*
+import org.redisson.api.RBucketAsync
+import org.redisson.api.RMapCacheAsync
+import org.redisson.api.RSetMultimapCache
+import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -96,9 +99,5 @@ class Cache {
 
   suspend fun setMaintenanceStatus(maintenance: Boolean) {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
-  }
-
-  fun getSpawnChannelLock(id: String): RLock {
-    return redissonClient.getLock("spawnChannel-${id}")
   }
 }

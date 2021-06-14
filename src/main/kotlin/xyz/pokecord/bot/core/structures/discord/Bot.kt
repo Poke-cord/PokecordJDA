@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.injectKTX
-import kotlinx.coroutines.asCoroutineDispatcher
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -18,7 +17,6 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
-import java.util.concurrent.Executors
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
@@ -35,8 +33,6 @@ class Bot constructor(private val token: String) {
   val database: Database = Database(cache)
   val logger: Logger = LoggerFactory.getLogger(Bot::class.java)
   val modules = linkedMapOf<String, Module>()
-
-  val spawnChannelCoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
   private var started = false
   var maintenance = devEnv

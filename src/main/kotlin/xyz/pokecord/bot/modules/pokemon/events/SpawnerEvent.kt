@@ -1,15 +1,15 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.withLock
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class SpawnerEvent : Event() {
@@ -54,10 +54,7 @@ class SpawnerEvent : Event() {
       if (lastMessageAt != null && lastMessageAt + 5000 > now) return
       context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
 
-      withContext(module.bot.spawnChannelCoroutineDispatcher) {
-        val lock = module.bot.cache.getSpawnChannelLock(randomSpawnChannelEntity.id)
-        lock.lockAsync(2, TimeUnit.SECONDS, 1).awaitSuspending()
-
+      SpawnChannelMutex[randomSpawnChannel.id].withLock {
         val oldSpawnChannelData = SpawnChannel(
           randomSpawnChannel.id,
           randomSpawnChannel.guildId,
@@ -102,7 +99,6 @@ class SpawnerEvent : Event() {
         } else {
           module.bot.database.spawnChannelRepository.updateMessageCount(randomSpawnChannel)
         }
-        lock.unlockAsync(1).awaitSuspending()
       }
     } catch (e: Exception) {
       context.handleException(e, module, event = this)

@@ -1,11 +1,10 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.withLock
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.utils.extensions.awaitSuspending
-import java.util.concurrent.TimeUnit
 
 class CatchCommand : Command() {
   override val name = "Catch"
@@ -41,10 +40,7 @@ class CatchCommand : Command() {
       return
     }
 
-    withContext(module.bot.spawnChannelCoroutineDispatcher) {
-      val lock = module.bot.cache.getSpawnChannelLock(spawnChannel.id)
-      lock.lockAsync(5, TimeUnit.SECONDS).awaitSuspending()
-
+    SpawnChannelMutex[spawnChannel.id].withLock {
       if (spawnChannel.spawned == 0) {
         context.reply(
           context.embedTemplates.error(
@@ -53,7 +49,7 @@ class CatchCommand : Command() {
             )
           ).build()
         ).queue()
-        return@withContext
+        return
       }
 
       if (pokemonName == null) {
@@ -62,7 +58,7 @@ class CatchCommand : Command() {
             context.translate("modules.pokemon.commands.catch.errors.noNameProvided")
           ).build()
         ).queue()
-        return@withContext
+        return
       }
 
       val pokemon = Pokemon.getByName(pokemonName)
@@ -95,9 +91,8 @@ class CatchCommand : Command() {
             context.translate("modules.pokemon.commands.catch.errors.incorrectNameProvided")
           ).build()
         ).queue()
-        return@withContext
+        return
       }
-      lock.unlockAsync().awaitSuspending()
     }
   }
 }
