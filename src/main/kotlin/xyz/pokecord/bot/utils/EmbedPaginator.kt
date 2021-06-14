@@ -98,27 +98,33 @@ class EmbedPaginator(
 
         val timeoutStatus = withTimeoutOrNull(difference) {
           val event = context.jda.await<ButtonClickEvent> {
-            it.messageId == sentMessage!!.id && it.user.id == context.author.id
+            it.messageId == sentMessage!!.id
           }
 
-          var newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
-            NavigationOptions.First -> 0
-            NavigationOptions.Prev -> if (currentPageIndex == 0) pageCount - 1 else currentPageIndex - 1
+          if (event.user.id != context.author.id) {
+            event.deferReply()
+          } else {
+            var newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
+              NavigationOptions.First -> 0
+              NavigationOptions.Prev -> if (currentPageIndex == 0) pageCount - 1 else currentPageIndex - 1
 //            NavigationOptions.Stop -> {
 //              stop()
 //              currentPageIndex
 //            }
-            NavigationOptions.Next -> if (currentPageIndex == pageCount - 1) 0 else currentPageIndex + 1
-            NavigationOptions.Last -> pageCount - 1
-            else -> currentPageIndex
-          }
-          if (currentPageIndex != newPageIndex) {
-            if (newPageIndex > pageCount) newPageIndex = 0
-            if (newPageIndex < 0) newPageIndex = pageCount - 1
+              NavigationOptions.Next -> if (currentPageIndex == pageCount - 1) 0 else currentPageIndex + 1
+              NavigationOptions.Last -> pageCount - 1
+              else -> currentPageIndex
+            }
+            if (currentPageIndex != newPageIndex) {
+              if (newPageIndex > pageCount) newPageIndex = 0
+              if (newPageIndex < 0) newPageIndex = pageCount - 1
 
-            currentPageIndex = newPageIndex
+              currentPageIndex = newPageIndex
 
-            event.editMessageEmbeds(getEmbed()).await()
+              event.editMessageEmbeds(getEmbed()).await()
+            } else {
+              0 // return 0 lol
+            }
           }
         }
 

@@ -67,35 +67,39 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
 
       val timeoutStatus = withTimeoutOrNull(difference) {
         val event = context.jda.await<ButtonClickEvent> {
-          it.messageId == sentMessage!!.id && it.user.id == context.author.id
+          it.messageId == sentMessage!!.id
         }
 
-        context.bot.cache.setRunningCommand(context.author.id, false)
-        sentMessage?.let {
-          if (it.isFromGuild && it.channel is TextChannel && (it.channel as TextChannel).guild.selfMember.hasPermission(
-              it.channel as TextChannel,
-              Permission.MESSAGE_MANAGE
-            )
-          ) {
-            it.clearReactions().queue()
-          } else {
-            ConfirmationOptions.values().reversed().forEach { emojiEnum ->
-              it.removeReaction(emojiEnum.emoji).queue()
+        if (event.user.id != context.author.id) {
+          event.deferReply()
+        } else {
+          context.bot.cache.setRunningCommand(context.author.id, false)
+          sentMessage?.let {
+            if (it.isFromGuild && it.channel is TextChannel && (it.channel as TextChannel).guild.selfMember.hasPermission(
+                it.channel as TextChannel,
+                Permission.MESSAGE_MANAGE
+              )
+            ) {
+              it.clearReactions().queue()
+            } else {
+              ConfirmationOptions.values().reversed().forEach { emojiEnum ->
+                it.removeReaction(emojiEnum.emoji).queue()
+              }
             }
           }
-        }
-        if (event.messageId == sentMessage!!.id && event.user.id == context.author.id) {
-          val option = ConfirmationOptions.getByButtonId(
-            event.componentId
-          )
+          if (event.messageId == sentMessage!!.id && event.user.id == context.author.id) {
+            val option = ConfirmationOptions.getByButtonId(
+              event.componentId
+            )
 
-          if (option != null) {
-            result = option == ConfirmationOptions.CHECK
-            stop()
-            null
-          } else 0
-        } else {
-          0
+            if (option != null) {
+              result = option == ConfirmationOptions.CHECK
+              stop()
+              null
+            } else 0
+          } else {
+            0
+          }
         }
       }
       if (timeoutStatus == null) {
