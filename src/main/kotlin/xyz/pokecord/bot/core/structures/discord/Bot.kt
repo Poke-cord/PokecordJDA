@@ -91,6 +91,7 @@ class Bot constructor(private val token: String) {
   suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder {
     val commandEntries: ArrayList<String> = arrayListOf()
     for (command in module.commands) {
+      if (!command.enabled) continue
       if (!command.canRun(context)) continue
       if (command::class.hasAnnotation<Command.ChildCommand>()) continue
       if (command is ParentCommand) {
