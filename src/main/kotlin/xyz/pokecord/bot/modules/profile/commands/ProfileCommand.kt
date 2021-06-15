@@ -11,8 +11,6 @@ import xyz.pokecord.bot.utils.EmbedPaginator
 class ProfileCommand : ParentCommand() {
   override val name = "Profile"
 
-  override var excludeFromHelp = true
-
   @ChildCommand
   class ProfilePokedexCommand : Command() {
     override val name = "Pokedex"
@@ -30,7 +28,9 @@ class ProfileCommand : ParentCommand() {
       val caughtSet = (userData.caughtPokemon + userData.caughtShinies).toSet().toList().sorted()
       EmbedPaginator(context, caughtSet.size / 15, { pageIndex ->
         val entries = mutableListOf<String>()
-        val pokemonList = (pageIndex * 15 until (pageIndex + 1) * 15).mapNotNull { Pokemon.getById(caughtSet[it]) }
+        val pokemonList = (pageIndex * 15 until (pageIndex + 1) * 15).mapNotNull {
+          caughtSet.getOrNull(it)?.let { id -> Pokemon.getById(id) }
+        }
         val pokemonNames = pokemonList.mapNotNull { context.translator.pokemonName(it) }
         val longestPokemonNameLength = pokemonNames.maxOf { it.length }
         for (i in pokemonList.indices) {
