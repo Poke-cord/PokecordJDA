@@ -22,6 +22,7 @@ import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.PokemonStats
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import xyz.pokecord.bot.utils.jsonObject
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import net.dv8tion.jda.api.entities.User as JDAUser
 
@@ -279,7 +280,7 @@ class UserRepository(
       Json.decodeFromString(cachedString)
     } else {
       val leaderboard = collection.find(EMPTY_BSON).sort(descending(User::credits)).limit(limit).toList()
-      leaderboardCacheMap.putAsync("credit", Json.encodeToString(leaderboard))
+      leaderboardCacheMap.putAsync("credit", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
       leaderboard
     }
   }
@@ -299,7 +300,7 @@ class UserRepository(
       )
         .allowDiskUse(true)
         .toList()
-      leaderboardCacheMap.putAsync("pokemon", Json.encodeToString(leaderboard))
+      leaderboardCacheMap.putAsync("pokemon", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
       leaderboard
     }
   }
