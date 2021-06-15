@@ -2,6 +2,7 @@ package xyz.pokecord.bot.modules.profile.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.VoteUtils
@@ -66,7 +67,7 @@ class RewardsCommand : Command() {
       val vote = voteValues.contains(lowerCaseAction)
 
       if (all || catch) {
-        val claimedCredits = giveCatchRewards(context)
+        val (claimResult, claimedCredits) = giveCatchRewards(context)
         if (!all && claimedCredits < 1) {
           context.reply(
             context.embedTemplates.error(
@@ -75,11 +76,11 @@ class RewardsCommand : Command() {
           ).queue()
           return
         }
-        rewardsClaimed += (claimedCredits / 50)
+        rewardsClaimed += claimResult.totalCount
         embed.addField(
           context.translate(
             "modules.profile.commands.rewards.embed.fields.catchRewards.name",
-            "amount" to (claimedCredits / 50).toString()
+            "amount" to claimResult.totalCount.toString()
           ),
           context.translate(
             "modules.profile.commands.rewards.embed.fields.catchRewards.value",
@@ -139,13 +140,14 @@ class RewardsCommand : Command() {
 
   private suspend fun giveCatchRewards(
     context: ICommandContext
-  ): Int {
+  ): Pair<PokemonRepository.CatchRewardClaimResult, Int> {
     val userData = context.getUserData()
     var claimed = 0
+    var claimResult: PokemonRepository.CatchRewardClaimResult
     val session = module.bot.database.startSession()
     session.use {
       it.startTransaction()
-      val claimResult = module.bot.database.pokemonRepository.claimUnclaimedPokemon(context.author.id, it)
+      claimResult = module.bot.database.pokemonRepository.claimUnclaimedPokemon(context.author.id, it)
       claimed += claimResult.mythicalCount * 100
       claimed += claimResult.legendaryCount * 85
       claimed += claimResult.ultraBeastCount * 65
@@ -156,7 +158,7 @@ class RewardsCommand : Command() {
       }
       it.commitTransactionAndAwait()
     }
-    return claimed
+    return Pair(claimResult, claimed)
   }
 
   private suspend fun giveVoteRewards(

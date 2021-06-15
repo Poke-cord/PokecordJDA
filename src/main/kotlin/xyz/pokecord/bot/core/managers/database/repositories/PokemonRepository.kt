@@ -161,7 +161,9 @@ class PokemonRepository(
     val ultraBeastCount: Int,
     val pseudoLegendaryCount: Int,
     val otherCount: Int
-  )
+  ) {
+    val totalCount get() = mythicalCount + legendaryCount + ultraBeastCount + pseudoLegendaryCount + otherCount
+  }
 
   suspend fun getPokemonList(
     ownerId: String,
