@@ -63,7 +63,7 @@ class Bot constructor(private val token: String) {
     var jdaBuilder = JDABuilder.createDefault(token)
       .injectKTX()
       .setStatus(OnlineStatus.DO_NOT_DISTURB)
-      .setActivity(Activity.playing("Loading..."))
+      .setActivity(Activity.playing("Initializing..."))
       .addEventListeners(commandHandler, *moduleArray)
       .setEnabledIntents(intents)
     if (shardCount != null && shardId != null) {
