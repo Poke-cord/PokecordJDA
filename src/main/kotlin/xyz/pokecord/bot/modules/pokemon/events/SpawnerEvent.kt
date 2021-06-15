@@ -41,20 +41,21 @@ class SpawnerEvent : Event() {
       val prefix = context.getPrefix()
       if (context.event.message.contentRaw.startsWith(prefix)) return
       val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
-      val randomSpawnChannel = spawnChannels.randomOrNull() ?: return
-      val randomSpawnChannelEntity = context.guild!!.getTextChannelById(randomSpawnChannel.id) ?: return
-      if (!randomSpawnChannelEntity.guild.selfMember.hasPermission(
-          randomSpawnChannelEntity,
-          Permission.MESSAGE_WRITE,
-          Permission.MESSAGE_EMBED_LINKS
-        )
-      ) return // TODO: maybe let them know about missing permission somehow?
-      val lastMessageAt = context.bot.cache.lastCountedMessageMap.getAsync(context.author.id).awaitSuspending()
-      val now = System.currentTimeMillis()
-      if (lastMessageAt != null && lastMessageAt + 5000 > now) return
-      context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
-
+      var randomSpawnChannel = spawnChannels.randomOrNull() ?: return
       SpawnChannelMutex[randomSpawnChannel.id].withLock {
+        randomSpawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(randomSpawnChannel.id) ?: return
+        val randomSpawnChannelEntity = context.guild!!.getTextChannelById(randomSpawnChannel.id) ?: return
+        if (!randomSpawnChannelEntity.guild.selfMember.hasPermission(
+            randomSpawnChannelEntity,
+            Permission.MESSAGE_WRITE,
+            Permission.MESSAGE_EMBED_LINKS
+          )
+        ) return // TODO: maybe let them know about missing permission somehow?
+        val lastMessageAt = context.bot.cache.lastCountedMessageMap.getAsync(context.author.id).awaitSuspending()
+        val now = System.currentTimeMillis()
+        if (lastMessageAt != null && lastMessageAt + 5000 > now) return
+        context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
+
         val oldSpawnChannelData = SpawnChannel(
           randomSpawnChannel.id,
           randomSpawnChannel.guildId,

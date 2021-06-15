@@ -28,19 +28,19 @@ class CatchCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val spawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(context.channel.id)
-    if (spawnChannel == null) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate(
-            "misc.errors.notASpawnChannel"
-          )
-        ).build()
-      ).queue()
-      return
-    }
+    SpawnChannelMutex[context.channel.id].withLock {
+      val spawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(context.channel.id)
+      if (spawnChannel == null) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate(
+              "misc.errors.notASpawnChannel"
+            )
+          ).build()
+        ).queue()
+        return
+      }
 
-    SpawnChannelMutex[spawnChannel.id].withLock {
       if (spawnChannel.spawned == 0) {
         context.reply(
           context.embedTemplates.error(
