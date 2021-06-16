@@ -114,9 +114,9 @@ class ArgumentParser(
       else {
         val parts = arg.split("/").drop(1)
         val pattern = parts.firstOrNull() ?: ""
-        val optionsString = parts.drop(1).take(1).first()
+        val optionsString = parts.drop(1).take(1).firstOrNull()
         val options = mutableSetOf<RegexOption>()
-        if (optionsString.contains("i")) {
+        if (optionsString?.contains("i") == true) {
           options.add(RegexOption.IGNORE_CASE)
         }
         pattern.toRegex(options)
