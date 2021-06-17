@@ -6,9 +6,13 @@
         </encoder>
     </appender>
 
-    <appender name="Sentry" class="io.sentry.logback.SentryAppender"/>
+    <appender name="Sentry" class="io.sentry.logback.SentryAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
 
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="Console"/>
         <appender-ref ref="Sentry"/>
     </root>
