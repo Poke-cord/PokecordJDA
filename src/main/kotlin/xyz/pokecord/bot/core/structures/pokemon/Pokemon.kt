@@ -215,13 +215,23 @@ data class Pokemon(
     }
 
     fun searchRegex(regex: Regex) = items.filter { pokemon ->
-      pokemon.species.getNames().any { speciesName ->
+      val identifierMatch =
+        regex.containsMatchIn(pokemon.identifier) ||
+            regex.containsMatchIn(pokemon.identifier.replace('-', ' ')) ||
+            regex.containsMatchIn(pokemon.identifier.replace("-", ""))
+
+      identifierMatch || pokemon.species.getNames().any { speciesName ->
         regex.containsMatchIn(speciesName.name)
       }
     }
 
     fun search(query: String) = items.filter { pokemon ->
-      pokemon.species.getNames().any { speciesName ->
+      val identifierMatch =
+        pokemon.identifier.contains(query, true) ||
+            pokemon.identifier.replace('-', ' ').contains(query, true) ||
+            pokemon.identifier.replace("-", "").contains(query, true)
+
+      identifierMatch || pokemon.species.getNames().any { speciesName ->
         speciesName.name.contains(query, true)
       }
     }
