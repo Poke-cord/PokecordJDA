@@ -499,11 +499,11 @@ modules:
           pokecordShop: Pokecord Shop
           cantBePurchased: "Can't be purchased"
           creditsCost: |
-            {{cost}} Credits
+            {{cost}} Credit(s)
           gemsCost: |
-            {{cost}} Gems
+            {{cost}} Gem(s)
           tokensCost: |
-            {{cost}} Tokens
+            {{cost}} Token(s)
           cost: |
             **Cost: `{{cost}}`**
 
@@ -572,10 +572,16 @@ items:
                     move slot number!'
       noSlotSpecified: '**Suggestion**: Try specifying a move slot number!'
       unknownMachine: An Unknown Machine has been Used
-  shinyBoost:
+  glimmeringCandy:
     embed:
-      title: Shiny Chance Boosted!
-      description: Your shiny chance has been increased!
+      title: Glimmering Candy Used!
+      description: Your shiny chance has been increased until the next shiny!
+  rareCandy:
+    embed:
+      title: Rare Candy Used!
+      description: Your **{{pokemon}}** is now at **Level {{level}}**!
+    errors:
+      alreadyMaxLevel: Your **{{pokemon}}** is already at max level!
   redeem:
     errors:
       disallowedPokemon: '**Suggestion**: Try redeeming a Pokémon you

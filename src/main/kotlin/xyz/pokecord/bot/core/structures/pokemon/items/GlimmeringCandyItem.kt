@@ -2,7 +2,7 @@ package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
 
-object ShinyBoostItem : Item(10010000) {
+object GlimmeringCandyItem : Item(10010000) {
   const val categoryId = 1001
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
@@ -11,8 +11,8 @@ object ShinyBoostItem : Item(10010000) {
     return UsageResult(
       true,
       context.embedTemplates.normal(
-        context.translate("items.shinyBoost.embed.description"),
-        context.translate("items.shinyBoost.embed.title")
+        context.translate("items.glimmeringCandy.embed.description"),
+        context.translate("items.glimmeringCandy.embed.title")
       )
     )
   }

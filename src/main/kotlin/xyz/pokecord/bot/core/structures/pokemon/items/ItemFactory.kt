@@ -21,6 +21,7 @@ object ItemFactory {
       }
     )
 
-    items[ShinyBoostItem.id] = ShinyBoostItem
+    items[GlimmeringCandyItem.id] = GlimmeringCandyItem
+    items[RareCandyItem.id] = RareCandyItem
   }
 }
