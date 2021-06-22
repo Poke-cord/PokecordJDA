@@ -54,7 +54,7 @@ object App {
         }
         if (sharderHost != null && sharderPort != null) {
           val client = SharderClient()
-          client.logger.info("Connecting...")
+          client.logger.info("Connecting to ${sharderHost}:${sharderPort}...")
           GlobalScope.launch(CoroutineName("SharderClient") + Dispatchers.IO) {
             try {
               client.connect()
