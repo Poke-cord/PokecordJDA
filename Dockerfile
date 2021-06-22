@@ -2,7 +2,7 @@ FROM gradle:6.8.1-jdk11 AS builder
 
 WORKDIR /app
 COPY . /app
-RUN gradle shadowJar
+RUN gradle --no-daemon shadowJar
 
 FROM openjdk:11-buster
 WORKDIR /app
