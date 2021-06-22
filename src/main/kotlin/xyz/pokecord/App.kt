@@ -37,7 +37,7 @@ object App {
         val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull()
         val shardId = System.getenv("SHARD_ID")?.toIntOrNull()
         val sharderHost: String? = System.getenv("SHARDER_HOST")
-        val sharderPort = System.getenv("SHARDER_HOST")?.toIntOrNull()
+        val sharderPort = System.getenv("SHARDER_PORT")?.toIntOrNull()
 
         bot = Bot(token)
         val modules = listOf(
