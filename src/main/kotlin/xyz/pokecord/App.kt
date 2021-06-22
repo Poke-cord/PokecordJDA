@@ -54,18 +54,26 @@ object App {
           val client = SharderClient()
           client.logger.info("Connecting...")
           GlobalScope.launch(CoroutineName("SharderClient") + Dispatchers.IO) {
-            client.connect()
-            logger.info("Connected to the server at ${client.address}!")
-            client.startReceiving()
-            client.login()
+            try {
+              client.connect()
+              logger.info("Connected to the server at ${client.address}!")
+              client.startReceiving()
+              client.login()
+            } catch (e: Throwable) {
+              e.printStackTrace()
+            }
           }
           GlobalScope.launch(CoroutineName("ShardInfoReceiver") + Dispatchers.Default) {
-            while (true) {
-              val packet = client.session.receivedPacketChannel.receive()
-              if (packet is ShardInfoPacket) {
-                bot.start(packet.shardCount.toInt(), packet.shardIds.first().toInt())
-                break
+            try {
+              while (true) {
+                val packet = client.session.receivedPacketChannel.receive()
+                if (packet is ShardInfoPacket) {
+                  bot.start(packet.shardCount.toInt(), packet.shardIds.first().toInt())
+                  break
+                }
               }
+            } catch (e: Throwable) {
+              e.printStackTrace()
             }
           }
         } else {
