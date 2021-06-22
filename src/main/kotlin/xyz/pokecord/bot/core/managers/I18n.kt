@@ -58,17 +58,21 @@ object I18n {
   private val yaml = Yaml()
 
   init {
-    val languageNames = Language.values().map { langEnum -> langEnum.identifier }
-    languageNames.forEach {
-      val stream = I18n::class.java.getResourceAsStream("/i18n/$it.yaml")
-      if (stream != null) {
-        val obj: Map<String, Any> = yaml.load(stream)
-        locales[it] = mutableMapOf()
-        addRecursively(obj, locales[it]!!)
-        logger.info("Loaded language '$it' with ${locales[it]!!.size} entries.")
-      } else {
-        logger.error("Failed to load language '$it' because a corresponding resource file was not found.")
+    try {
+      val languageNames = Language.values().map { langEnum -> langEnum.identifier }
+      languageNames.forEach {
+        val stream = I18n::class.java.getResourceAsStream("/i18n/$it.yaml")
+        if (stream != null) {
+          val obj: Map<String, Any> = yaml.load(stream)
+          locales[it] = mutableMapOf()
+          addRecursively(obj, locales[it]!!)
+          logger.info("Loaded language '$it' with ${locales[it]!!.size} entries.")
+        } else {
+          logger.error("Failed to load language '$it' because a corresponding resource file was not found.")
+        }
       }
+    } catch (e: Throwable) {
+      e.printStackTrace()
     }
   }
 
