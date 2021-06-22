@@ -61,6 +61,9 @@ class DynamicByteBuffer(initialCapacity: Int = 64, private var operationMode: Op
       val offset = if (operationMode == OperationMode.WRITE) 0 else byteBuffer.position()
       val length = if (operationMode == OperationMode.WRITE) byteBuffer.position() else size
       val byteArray = ByteArray(length)
+      if (operationMode == OperationMode.WRITE) {
+        byteBuffer.flip()
+      }
       byteBuffer[byteArray, offset, length]
       val returnByteBuffer = ByteBuffer.wrap(byteArray)
       return returnByteBuffer.position(size)

@@ -1,10 +1,12 @@
 package xyz.pokecord
 
+import dev.minn.jda.ktx.await
 import io.sentry.Sentry
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.dv8tion.jda.api.events.ReadyEvent
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.sharder.SharderClient
 import xyz.pokecord.bot.core.sharder.packets.server.ShardInfoPacket
@@ -69,6 +71,8 @@ object App {
                 val packet = client.session.receivedPacketChannel.receive()
                 if (packet is ShardInfoPacket) {
                   bot.start(packet.shardCount.toInt(), packet.shardIds.first().toInt())
+                  bot.jda.await<ReadyEvent>()
+                  client.reportAsReady()
                   break
                 }
               }

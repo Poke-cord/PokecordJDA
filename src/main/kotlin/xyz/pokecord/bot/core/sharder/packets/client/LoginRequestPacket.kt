@@ -6,7 +6,7 @@ class LoginRequestPacket : Packet() {
   override val id: Short = 10101
 
   var botToken: String? = null
-  var shardIds: ShortArray = shortArrayOf()
+  private var shardIds: ShortArray = shortArrayOf()
 
   override fun encode() {
     payload.putIString(botToken)

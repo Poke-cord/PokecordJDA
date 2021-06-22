@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.core.sharder
 
-import io.sentry.Sentry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -8,6 +7,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.sharder.packets.client.HandshakeRequestPacket
+import xyz.pokecord.bot.core.sharder.packets.client.ShardReadyPacket
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -99,6 +99,11 @@ class SharderClient(
     if (receiving) receiving = false
     currentChannel?.close()
     currentChannel = null
+  }
+
+  suspend fun reportAsReady() {
+    val shardReadyPacket = ShardReadyPacket()
+    session.sendPacket(shardReadyPacket)
   }
 
   suspend fun login() {

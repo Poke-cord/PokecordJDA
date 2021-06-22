@@ -1,7 +1,9 @@
 package xyz.pokecord.bot.core.sharder
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import xyz.pokecord.bot.core.sharder.packets.Packet
 import xyz.pokecord.bot.core.sharder.packets.PacketFactory
 import java.nio.ByteBuffer
@@ -32,7 +34,9 @@ class Session(val client: SharderClient) {
       )
     )
     packet.processSend()
-    sentPacketChannel.send(packet)
+    GlobalScope.launch {
+      sentPacketChannel.send(packet)
+    }
   }
 
   suspend fun handlePayload(header: DynamicByteBuffer, payload: DynamicByteBuffer) {
