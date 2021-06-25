@@ -29,6 +29,7 @@ repositories {
   jcenter()
   maven("https://jitpack.io/")
   maven("https://m2.dv8tion.net/releases")
+  maven("https://zihadmahiuddin.github.io/remotesharding-kt")
 }
 
 dependencies {
@@ -39,6 +40,8 @@ dependencies {
   implementation("io.sentry:sentry-logback:$sentryLogbackVersion")
 
   implementation("com.github.minndevelopment:jda-ktx:${jdaKtxVersion}")
+
+  implementation("dev.zihad:remotesharding:1.0.0")
 
   implementation("net.dv8tion:JDA:$jdaVersion") {
 //  implementation("com.github.dv8fromtheworld:jda:development") { // JitPack
@@ -64,6 +67,7 @@ dependencies {
   implementation("io.ktor:ktor-client-core:$ktorVersion")
   implementation("io.ktor:ktor-client-java:$ktorVersion")
   implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+  implementation("io.ktor:ktor-client-websockets:$ktorVersion")
 }
 
 tasks {
@@ -84,13 +88,13 @@ tasks {
 
   compileKotlin {
     kotlinOptions {
-      jvmTarget = "1.8"
+      jvmTarget = JavaVersion.VERSION_11.toString()
     }
   }
 
   compileTestKotlin {
     kotlinOptions {
-      jvmTarget = "1.8"
+      jvmTarget = JavaVersion.VERSION_11.toString()
     }
   }
 }

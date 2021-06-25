@@ -1,15 +1,10 @@
 package xyz.pokecord
 
-import dev.minn.jda.ktx.await
+import dev.zihad.remotesharding.api.events.MessageEvent
+import dev.zihad.remotesharding.client.Client
+import dev.zihad.remotesharding.messages.server.LoginOkMessage
 import io.sentry.Sentry
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import net.dv8tion.jda.api.events.ReadyEvent
 import org.slf4j.LoggerFactory
-import xyz.pokecord.bot.core.sharder.SharderClient
-import xyz.pokecord.bot.core.sharder.packets.server.ShardInfoPacket
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.modules.developer.DeveloperModule
 import xyz.pokecord.bot.modules.economy.EconomyModule
@@ -36,8 +31,8 @@ object App {
           logger.error("Token was not provided. Exiting...")
           exitProcess(0)
         }
-        val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull()
-        val shardId = System.getenv("SHARD_ID")?.toIntOrNull()
+        val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull() ?: throw Exception("Shard count must be provided")
+        val shardId = System.getenv("SHARD_ID")?.toIntOrNull() ?: 0
         val sharderHost: String? = System.getenv("SHARDER_HOST")
         val sharderPort = System.getenv("SHARDER_PORT")?.toIntOrNull()
 
@@ -53,31 +48,13 @@ object App {
           bot.modules[it.name.toLowerCase()] = it
         }
         if (sharderHost != null && sharderPort != null) {
-          val client = SharderClient()
-          client.logger.info("Connecting to ${sharderHost}:${sharderPort}...")
-          GlobalScope.launch(CoroutineName("SharderClient") + Dispatchers.IO) {
-            try {
-              client.connect()
-              logger.info("Connected to the server at ${client.address}!")
-              client.startReceiving()
-              client.login()
-            } catch (e: Throwable) {
-              e.printStackTrace()
-            }
-          }
-          GlobalScope.launch(CoroutineName("ShardInfoReceiver") + Dispatchers.Default) {
-            try {
-              while (true) {
-                val packet = client.session.receivedPacketChannel.receive()
-                if (packet is ShardInfoPacket) {
-                  bot.start(packet.shardCount.toInt(), packet.shardIds.first().toInt())
-                  bot.jda.await<ReadyEvent>()
-                  client.reportAsReady()
-                  break
-                }
-              }
-            } catch (e: Throwable) {
-              e.printStackTrace()
+          val client = Client(sharderHost, sharderPort, token, shardCount, shardId.toShort())
+          client.start()
+          client.session!!.on<MessageEvent.MessageReceivedEvent> {
+            if (it.message is LoginOkMessage) {
+              bot.start(shardCount, (it.message as LoginOkMessage).shardId.toInt())
+              bot.jda.awaitReady()
+              client.reportAsReady()
             }
           }
         } else {
