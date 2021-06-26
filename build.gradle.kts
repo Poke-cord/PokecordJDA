@@ -41,7 +41,7 @@ dependencies {
 
   implementation("com.github.minndevelopment:jda-ktx:${jdaKtxVersion}")
 
-  implementation("dev.zihad:remotesharding:1.0.1")
+  implementation("dev.zihad:remotesharding:1.0.2")
 
   implementation("net.dv8tion:JDA:$jdaVersion") {
 //  implementation("com.github.dv8fromtheworld:jda:development") { // JitPack
