@@ -1,10 +1,7 @@
 package xyz.pokecord.bot.core.managers
 
 import org.redisson.Redisson
-import org.redisson.api.RBucketAsync
-import org.redisson.api.RMapCacheAsync
-import org.redisson.api.RSetMultimapCache
-import org.redisson.api.RedissonClient
+import org.redisson.api.*
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -18,6 +15,7 @@ class Cache {
 
   private val commandRateLimitMap: RMapCacheAsync<String, Long>
   private val hasRunningCommandSet: RMapCacheAsync<String, Long>
+  private val identifyLock: RLock
   private val maintenanceStatus: RBucketAsync<Boolean?>
 
   val guildMap: RMapCacheAsync<String, String>
@@ -53,12 +51,13 @@ class Cache {
 
     commandRateLimitMap = redissonClient.getMapCache("commandRateLimit")
     hasRunningCommandSet = redissonClient.getMapCache("hasRunningCommand")
-    leaderboardMap = redissonClient.getMapCache("leaderboard")
+    identifyLock = redissonClient.getLock("identify")
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
 
     guildMap = redissonClient.getMapCache("guild")
     guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
     lastCountedMessageMap = redissonClient.getMapCache("lastCountedMessage")
+    leaderboardMap = redissonClient.getMapCache("leaderboard")
     shardStatusMap = redissonClient.getMapCache("shardStatus")
     spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
     userMap = redissonClient.getMapCache("user")
@@ -99,5 +98,11 @@ class Cache {
 
   suspend fun setMaintenanceStatus(maintenance: Boolean) {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
+  }
+
+  fun withIdentifyLock(block: () -> Unit) {
+    identifyLock.lock(5, TimeUnit.SECONDS)
+    block()
+    identifyLock.unlock()
   }
 }

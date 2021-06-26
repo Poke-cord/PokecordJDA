@@ -52,8 +52,10 @@ object App {
           client.start()
           client.session!!.on<MessageEvent.MessageReceivedEvent> {
             if (it.message is LoginOkMessage) {
-              bot.start(shardCount, (it.message as LoginOkMessage).shardId.toInt())
-              bot.jda.awaitReady()
+              bot.cache.withIdentifyLock {
+                bot.start(shardCount, (it.message as LoginOkMessage).shardId.toInt())
+                bot.jda.awaitReady()
+              }
               client.reportAsReady()
             }
           }
