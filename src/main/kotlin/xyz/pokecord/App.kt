@@ -31,7 +31,7 @@ object App {
           logger.error("Token was not provided. Exiting...")
           exitProcess(0)
         }
-        val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull() ?: throw Exception("Shard count must be provided")
+        val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull() ?: 1
         val shardId = System.getenv("SHARD_ID")?.toIntOrNull() ?: 0
         val sharderHost: String? = System.getenv("SHARDER_HOST")
         val sharderPort = System.getenv("SHARDER_PORT")?.toIntOrNull()

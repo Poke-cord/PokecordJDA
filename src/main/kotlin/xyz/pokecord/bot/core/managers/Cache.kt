@@ -103,6 +103,8 @@ class Cache {
   fun withIdentifyLock(block: () -> Unit) {
     identifyLock.lock(5, TimeUnit.SECONDS)
     block()
-    identifyLock.unlock()
+    if (identifyLock.isLocked) {
+      identifyLock.unlock()
+    }
   }
 }
