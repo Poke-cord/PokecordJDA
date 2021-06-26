@@ -48,15 +48,17 @@ object App {
           bot.modules[it.name.toLowerCase()] = it
         }
         if (sharderHost != null && sharderPort != null) {
-          val client = Client(sharderHost, sharderPort, token, shardCount, shardId.toShort())
+          val client = Client(sharderHost, sharderPort, token, shardId.toShort())
           client.start()
-          client.session!!.on<MessageEvent.MessageReceivedEvent> {
-            if (it.message is LoginOkMessage) {
-              bot.cache.withIdentifyLock {
-                bot.start(shardCount, (it.message as LoginOkMessage).shardId.toInt())
-                bot.jda.awaitReady()
+          client.session?.let { session ->
+            session.on<MessageEvent.MessageReceivedEvent> {
+              if (it.message is LoginOkMessage) {
+                bot.cache.withIdentifyLock {
+                  bot.start(session.shardCount, (it.message as LoginOkMessage).shardId.toInt())
+                  bot.jda.awaitReady()
+                }
+                client.reportAsReady()
               }
-              client.reportAsReady()
             }
           }
         } else {
