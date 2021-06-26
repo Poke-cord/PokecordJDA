@@ -101,10 +101,10 @@ class Cache {
   }
 
   fun withIdentifyLock(block: () -> Unit) {
-    identifyLock.lock(5, TimeUnit.SECONDS)
+    identifyLock.lockAsync(5, TimeUnit.SECONDS, ProcessHandle.current().pid()).get()
     block()
-    if (identifyLock.isLocked) {
-      identifyLock.unlock()
+    if (identifyLock.isHeldByThread(ProcessHandle.current().pid())) {
+      identifyLock.unlockAsync().get()
     }
   }
 }
