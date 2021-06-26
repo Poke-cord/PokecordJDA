@@ -9,6 +9,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.extensions.asOptionType
+import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import xyz.pokecord.bot.utils.extensions.removeAccents
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
@@ -64,6 +65,11 @@ class ReadyEvent : Event() {
   @Handler
   suspend fun onReady(event: ReadyEvent) {
     prepareSlashCommands()
+
+    // Delete existing shard status when shard 0 logs in
+    if (module.bot.jda.shardInfo.shardId == 0) {
+      module.bot.cache.shardStatusMap.deleteAsync().awaitSuspending()
+    }
 
     module.bot.logger.info("Logged in as ${event.jda.selfUser.asTag}!")
     module.bot.updatePresence()
