@@ -110,9 +110,8 @@ class Cache {
       else Thread.sleep(100)
     }
 
-    identifyLock.setAsync(true, 1, TimeUnit.SECONDS).get()
+    identifyLock.setAsync(true, 5, TimeUnit.SECONDS).get()
     block()
-    identifyLock.deleteAsync().get()
   }
 
   fun shutdown() {
