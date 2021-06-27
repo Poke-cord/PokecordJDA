@@ -1,6 +1,6 @@
 name: Docker
 
-on: [push]
+on: [ push ]
 
 jobs:
   test-and-build:
@@ -15,6 +15,10 @@ jobs:
         run: |
           git config --global user.email "pokecord@pokecord.xyz"
           git config --global user.name "Pokecord"
+      - name: Gradle build
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          arguments: build
       - name: Docker login
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
       - name: Docker build
