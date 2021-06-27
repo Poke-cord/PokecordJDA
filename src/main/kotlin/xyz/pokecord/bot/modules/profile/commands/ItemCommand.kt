@@ -63,7 +63,7 @@ class ItemCommand : ParentCommand() {
         context.embedTemplates.error(
           context.translate("modules.profile.commands.item.errors.notAvailable")
         ).build()
-      )
+      ).queue()
       return
     }
 
@@ -76,6 +76,9 @@ class ItemCommand : ParentCommand() {
         itemData.identifier,
         true
       ) -> itemData.identifier.length
+      itemName
+        .replace(' ', '-')
+        .startsWith(itemData.identifier) -> itemData.identifier.length
       else -> throw IllegalStateException("What the hell did the user supply?? $itemName")
     }
 
@@ -169,7 +172,7 @@ class ItemCommand : ParentCommand() {
       }
 
       module.bot.database.pokemonRepository.giveItem(userData.selected!!, itemData.id) {
-        module.bot.database.userRepository.consumeInventoryItem(inventoryItem, it)
+        module.bot.database.userRepository.consumeInventoryItem(inventoryItem, 1, it)
       }
 
       context.reply(

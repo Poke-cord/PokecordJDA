@@ -46,7 +46,8 @@ class BagCommand : Command() {
         "modules.profile.commands.bag.description",
         mapOf(
           "credits" to context.translator.numberFormat(userData.credits),
-          "gems" to context.translator.numberFormat(userData.gems)
+          "gems" to context.translator.numberFormat(userData.gems),
+          "tokens" to context.translator.numberFormat(userData.tokens)
         )
       ),
       context.translate("modules.profile.commands.bag.title", "user" to context.author.asTag)

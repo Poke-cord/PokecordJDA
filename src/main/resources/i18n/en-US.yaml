@@ -396,17 +396,13 @@ modules:
         description: |-
           **Gems**: {{gems}}
           **Credits**: {{credits}}
+          **Tokens**: {{tokens}}
 
           All items you own will be available here.
         errors:
           noItems: '**Suggestion**: Try purchasing a few items before you
                         view them here!'
         title: '{{user}}''s Bag'
-      balance:
-        description: |-
-          **Gems**: {{gems}}
-          **Credits**: {{credits}}
-        title: '{{user}}''s Balance'
       item:
         errors:
           invalidTarget: '**Suggestion**: Try using another item or giving
@@ -477,20 +473,21 @@ modules:
     commands:
       buy:
         errors:
-          itemNotFound: '**Suggestion**: Try using a valid item!'
+          itemNotFound: '**Suggestion**: Try buying a valid item!'
           noItemName: '**Suggestion**: Try specifying an item name!'
           invalidAmount: '**Suggestion**: Try specifying an amount between 1 and 1024!'
           notEnoughCredits: "You don't have enough credits to buy this item."
           notEnoughGems: "You don't have enough gems to buy this item."
           notEnoughTokens: "You don't have enough tokens to buy this item."
         embed:
-          description: You have bought {{amount}} of {{item}}!
+          description: You have bought **{{amount}}** of **{{item}}**!
           title: Item Purchase Successful!
       shop:
         embed:
           description: |
             **Gems**: {{gems}}
             **Credits**: {{credits}}
+            **Tokens**: {{tokens}}
 
             All the items are listed below, flip the page to see more items.
         errors:
@@ -575,13 +572,26 @@ items:
   glimmeringCandy:
     embed:
       title: Glimmering Candy Used!
-      description: Your shiny chance has been increased until the next shiny!
+      description: Your shiny chance has been increased until the next shiny.
   rareCandy:
     embed:
       title: Rare Candy Used!
-      description: Your **{{pokemon}}** is now at **Level {{level}}**!
+      description: Your **{{pokemon}}** is now at **Level {{level}}**.
     errors:
       alreadyMaxLevel: Your **{{pokemon}}** is already at max level!
+  cct:
+    embed:
+      title: "Credit Conversion Token Used!"
+      description: "**{{cost}}** credits has been converted to **{{token}}** token(s)."
+    errors:
+      notEnoughCredits: |-
+        You don't have enough credits to use this item.
+        Required Credits: **{{cost}}**
+      notEnoughCCT: "You don't have enough Credit Conversion Tokens."
+  credits:
+    embed:
+      title: Credits Received!
+      description: You received **{{credits}}** credits from the credits package!
   redeem:
     errors:
       disallowedPokemon: '**Suggestion**: Try redeeming a Pokémon you

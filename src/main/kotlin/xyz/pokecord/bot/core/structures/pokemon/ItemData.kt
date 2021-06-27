@@ -3,10 +3,7 @@ package xyz.pokecord.bot.core.structures.pokemon
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
-import xyz.pokecord.bot.core.structures.pokemon.items.GlimmeringCandyItem
-import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
-import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
-import xyz.pokecord.bot.core.structures.pokemon.items.UnusableItem
+import xyz.pokecord.bot.core.structures.pokemon.items.*
 import xyz.pokecord.bot.utils.Json
 import kotlin.system.exitProcess
 
@@ -53,25 +50,30 @@ data class ItemData(
     fun getById(id: Int) = items.find { it.id == id }
 
     fun getByName(name: String): ItemData? {
-      return items.find { name.startsWith(it.name, true) || name.startsWith(it.identifier, true) }
+      return items.find {
+        name.startsWith(it.name, true) || name.startsWith(it.identifier, true) || name.replace(
+          ' ',
+          '-'
+        ).startsWith(it.identifier, true)
+      }
     }
 
     private fun addAllCustomItems() {
       // Credits
-//      items.addAll(
-//        CreditsItem.CreditsItems.values().map {
-//          ItemData(
-//            it.id,
-//            it.identifier,
-//            it.itemName,
-//            CreditsItem.categoryId,
-//            it.cost,
-//            it.flingPower,
-//            it.flingEffectId,
-//            it.useGems
-//          )
-//        }
-//      )
+      items.addAll(
+        CreditsItem.CreditsItems.values().map {
+          ItemData(
+            it.id,
+            it.identifier,
+            it.itemName,
+            CreditsItem.categoryId,
+            it.cost,
+            it.flingPower,
+            it.flingEffectId,
+            it.useGems
+          )
+        }
+      )
 
       // Redeems
       items.addAll(
@@ -100,6 +102,18 @@ data class ItemData(
           0,
           0,
           usesTokens = true
+        )
+      )
+      // Credit Conversion Token
+      items.add(
+        ItemData(
+          CCTItem.id,
+          "cct",
+          "Credit Conversion Token",
+          CCTItem.categoryId,
+          0,
+          0,
+          0
         )
       )
     }

@@ -71,7 +71,8 @@ class ShopCommand : Command() {
           "modules.economy.commands.shop.embed.description",
           mapOf(
             "gems" to context.translator.numberFormat(userData.gems),
-            "credits" to context.translator.numberFormat(userData.credits)
+            "credits" to context.translator.numberFormat(userData.credits),
+            "tokens" to context.translator.numberFormat(userData.tokens)
           )
         ),
       ).setAuthor(

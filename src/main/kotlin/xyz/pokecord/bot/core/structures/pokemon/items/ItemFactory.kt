@@ -6,7 +6,7 @@ object ItemFactory {
   val items: MutableMap<Int, Item> = mutableMapOf()
 
   init {
-//    items.putAll(CreditsItem.creditsMap)
+    items.putAll(CreditsItem.creditsMap)
     items.putAll(RedeemItem.redeemMap)
 
     items.putAll(
@@ -21,7 +21,9 @@ object ItemFactory {
       }
     )
 
-    items[GlimmeringCandyItem.id] = GlimmeringCandyItem
     items[RareCandyItem.id] = RareCandyItem
+
+    items[GlimmeringCandyItem.id] = GlimmeringCandyItem
+    items[CCTItem.id] = CCTItem
   }
 }

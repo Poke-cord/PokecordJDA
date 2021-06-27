@@ -4,9 +4,6 @@ import xyz.pokecord.bot.api.ICommandContext
 
 object RareCandyItem : Item(50) {
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
-    if (!context.hasStarted()) {
-      return UsageResult(false, context.embedTemplates.start())
-    }
     val userData = context.getUserData()
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
       ?: return UsageResult(false, context.embedTemplates.start())

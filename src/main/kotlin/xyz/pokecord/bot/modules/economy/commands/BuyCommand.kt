@@ -26,7 +26,9 @@ class BuyCommand : Command() {
       return
     }
 
-    val itemData = ItemData.getByName(itemName)
+    var effectiveAmount = amount ?: 1
+
+    val itemData = ItemData.getByName(itemName) ?: ItemData.getByName("$amount $itemName")?.also { effectiveAmount = 1 }
     if (itemData == null) {
       context.reply(
         context.embedTemplates.error(
@@ -35,8 +37,6 @@ class BuyCommand : Command() {
       ).queue()
       return
     }
-
-    val effectiveAmount = amount ?: 1
 
     if (effectiveAmount < 1 || effectiveAmount >= 1024) {
       context.reply(
