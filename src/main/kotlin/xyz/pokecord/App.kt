@@ -59,8 +59,9 @@ object App {
               bot.cache.withIdentifyLock {
                 bot.start(client.session?.shardCount, (it.message as LoginOkMessage).shardId.toInt())
                 bot.jda.awaitReady()
+                client.reportAsReady()
+                Thread.sleep(5000)
               }
-              client.reportAsReady()
             }
           }
           client.start()
