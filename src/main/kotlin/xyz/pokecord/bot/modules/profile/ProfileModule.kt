@@ -9,7 +9,6 @@ class ProfileModule(bot: Bot) : Module(
   bot,
   arrayOf(
     StartCommand(),
-    BalanceCommand(),
     BagCommand(),
     ItemCommand(),
     ItemCommand.GiveItemCommand(),
