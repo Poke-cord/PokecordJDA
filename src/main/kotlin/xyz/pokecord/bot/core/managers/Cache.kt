@@ -104,9 +104,15 @@ class Cache {
   }
 
   fun withIdentifyLock(block: () -> Unit) {
-    identifyLock.setAsync(true, 1, TimeUnit.SECONDS)
+    while (true) {
+      val locked = identifyLock.async.get()
+      if (locked != true) break
+      else Thread.sleep(100)
+    }
+
+    identifyLock.setAsync(true, 1, TimeUnit.SECONDS).get()
     block()
-    identifyLock.deleteAsync()
+    identifyLock.deleteAsync().get()
   }
 
   fun shutdown() {
