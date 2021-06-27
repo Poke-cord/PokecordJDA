@@ -40,8 +40,8 @@ class UserRepository(
     inventoryItemsCollection.createIndex(Indexes.compoundIndex(Indexes.ascending("id"), Indexes.ascending("ownerId")))
   }
 
-  private suspend fun getCacheUser(jdaUser: JDAUser): User? {
-    val json = cacheMap.getAsync(jdaUser.id).awaitSuspending() ?: return null
+  private suspend fun getCacheUser(userId: String): User? {
+    val json = cacheMap.getAsync(userId).awaitSuspending() ?: return null
     return Json.decodeFromString(json)
   }
 
@@ -50,11 +50,15 @@ class UserRepository(
   }
 
   suspend fun getUser(jdaUser: JDAUser): User {
-    var user: User? = getCacheUser(jdaUser)
+    return getUser(jdaUser.id)
+  }
+
+  suspend fun getUser(userId: String, userTag: String = ""): User {
+    var user: User? = getCacheUser(userId)
     if (user == null) {
-      user = collection.findOne(User::id eq jdaUser.id)
+      user = collection.findOne(User::id eq userId)
       if (user == null) {
-        user = User(jdaUser.id, jdaUser.asTag)
+        user = User(userId, userTag)
       } else setCacheUser(user)
     }
     return user
@@ -224,7 +228,7 @@ class UserRepository(
   suspend fun getInventoryItem(userId: String, id: Int) =
     inventoryItemsCollection.findOne(InventoryItem::ownerId eq userId, InventoryItem::id eq id)
 
-  suspend fun consumeInventoryItem(inventoryItem: InventoryItem, session: ClientSession? = null) {
+  suspend fun consumeInventoryItem(inventoryItem: InventoryItem, amount: Int = 1, session: ClientSession? = null) {
     if (inventoryItem.amount <= 1) {
       if (session == null) inventoryItemsCollection.deleteOne(InventoryItem::_id eq inventoryItem._id)
       else inventoryItemsCollection.deleteOne(session, InventoryItem::_id eq inventoryItem._id)
@@ -232,13 +236,13 @@ class UserRepository(
       if (session == null) {
         inventoryItemsCollection.updateOne(
           InventoryItem::_id eq inventoryItem._id,
-          inc(InventoryItem::amount, -1)
+          inc(InventoryItem::amount, -amount)
         )
       } else {
         inventoryItemsCollection.updateOne(
           session,
           InventoryItem::_id eq inventoryItem._id,
-          inc(InventoryItem::amount, -1)
+          inc(InventoryItem::amount, -amount)
         )
       }
     }

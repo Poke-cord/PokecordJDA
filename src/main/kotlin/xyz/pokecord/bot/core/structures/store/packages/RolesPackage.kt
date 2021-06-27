@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.store.packages
 
-import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
+import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.structures.discord.Bot
 
 object RolesPackage : Package() {
   override val id = "roles"
@@ -43,11 +44,10 @@ object RolesPackage : Package() {
     )
   )
 
-  override suspend fun giveReward(context: BaseCommandContext, item: Item) {
+  override suspend fun giveReward(bot: Bot, userData: User, item: Item) {
     if (item !is RoleItem) return
-    val userData = context.getUserData()
     if (userData.donationTier < item.donationTier) {
-      context.bot.database.userRepository.setDonationTier(
+      bot.database.userRepository.setDonationTier(
         userData,
         item.donationTier
       )

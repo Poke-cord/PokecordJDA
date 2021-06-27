@@ -1,12 +1,13 @@
 package xyz.pokecord.bot.core.structures.store.packages
 
-import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
+import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.structures.discord.Bot
 
 abstract class Package {
   abstract val id: String
   abstract val items: List<Item>
 
-  abstract suspend fun giveReward(context: BaseCommandContext, item: Item)
+  abstract suspend fun giveReward(bot: Bot, userData: User, item: Item)
 
   open class Item(
     val id: String,

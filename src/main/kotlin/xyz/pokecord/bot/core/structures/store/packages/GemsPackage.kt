@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.store.packages
 
-import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
+import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.structures.discord.Bot
 
 object GemsPackage : Package() {
   override val id = "gems"
@@ -37,9 +38,9 @@ object GemsPackage : Package() {
     )
   )
 
-  override suspend fun giveReward(context: BaseCommandContext, item: Item) {
+  override suspend fun giveReward(bot: Bot, userData: User, item: Item) {
     if (item !is GemItem) return
-    context.bot.database.userRepository.incGems(context.getUserData(), item.gems)
+    bot.database.userRepository.incGems(userData, item.gems)
   }
 
   class GemItem(

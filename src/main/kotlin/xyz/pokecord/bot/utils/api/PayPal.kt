@@ -6,6 +6,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import xyz.pokecord.bot.core.managers.database.Database
@@ -35,6 +36,41 @@ class PayPal(val database: Database) {
     val expires_in: Int
   )
 
+  enum class OrderIntent {
+    NONE,
+    CAPTURE,
+    AUTHORIZE
+  }
+
+  enum class OrderStatus {
+    CREATED,
+    SAVED,
+    APPROVED,
+    VOIDED,
+    COMPLETED,
+    PAYER_ACTION_REQUIRED
+  }
+
+  @Serializable
+  data class Payer(
+    @SerialName("email_address") val emailAddress: String
+  )
+
+  @Serializable
+  data class PurchaseUnit(
+    @SerialName("reference_id") val referenceId: String,
+    val payee: Payer? = null
+  )
+
+  @Serializable
+  data class OrderInfo(
+    val intent: OrderIntent = OrderIntent.NONE,
+    @SerialName("purchase_units") val purchaseUnits: List<PurchaseUnit>?,
+    val id: String,
+    val status: OrderStatus?,
+    val payer: Payer? = null
+  )
+
   private val clientId = System.getenv("PAYPAL_CLIENT_ID")
   private val clientSecret = System.getenv("PAYPAL_CLIENT_SECRET")
 
@@ -44,6 +80,7 @@ class PayPal(val database: Database) {
   val root = if (devEnv) "http://localhost:3000" else "https://pokecord.xyz"
 
   private val base64Encoder by lazy { Base64.getEncoder() }
+
   private val ktorClient by lazy {
     HttpClient {
       install(JsonFeature) {
@@ -67,7 +104,8 @@ class PayPal(val database: Database) {
       header("Accept", "application/json")
       header("Accept-Language", "en-US")
       header("Authorization", "Basic $auth")
-      header("Content-Type", "application/x-www-form-urlencoded")
+
+      contentType(ContentType.Application.FormUrlEncoded)
     }
     database.configRepository.setPaypalCredentials(
       PaypalCredentials(
@@ -77,14 +115,6 @@ class PayPal(val database: Database) {
     )
     return tokenResponse.access_token
   }
-
-//  suspend fun captureOrder(orderId: String): Boolean {
-//    val accessToken = getAccessToken()
-//    val httpResponse = ktorClient.post<HttpResponse>("${apiRoot}${Endpoint.Order.path}/${orderId}/capture") {
-//      header("Authorization", "Bearer $accessToken")
-//    }
-//    return httpResponse.status == HttpStatusCode.OK
-//  }
 
   suspend fun createOrder(
     username: String,
@@ -115,7 +145,7 @@ class PayPal(val database: Database) {
       }
 
       header("Authorization", "Bearer $accessToken")
-      header("Content-Type", "application/json")
+      contentType(ContentType.Application.Json)
     }
 
     if (httpResponse.status == HttpStatusCode.Created) {
@@ -137,6 +167,22 @@ class PayPal(val database: Database) {
       header("Authorization", "Bearer $accessToken")
     }
     return httpResponse.status == HttpStatusCode.OK
+  }
+
+  suspend fun captureOrder(orderId: String): OrderInfo {
+    val accessToken = getAccessToken()
+    return ktorClient.post("$apiRoot${Endpoint.Order.path}/${orderId}/capture") {
+      header("Authorization", "Bearer $accessToken")
+      contentType(ContentType.Application.Json)
+      body = buildJsonObject {}
+    }
+  }
+
+  suspend fun getOrderInfo(orderId: String): OrderInfo {
+    val accessToken = getAccessToken()
+    return ktorClient.get("${apiRoot}${Endpoint.Order.path}/${orderId}") {
+      header("Authorization", "Bearer $accessToken")
+    }
   }
 
   fun getCheckoutLink(orderId: String): String {

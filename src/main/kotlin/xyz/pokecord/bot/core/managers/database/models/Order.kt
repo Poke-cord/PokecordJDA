@@ -13,7 +13,7 @@ data class Order(
   val price: Double,
   val userId: String,
   val userName: String,
-  val paid: Boolean = false,
-  val payeeEmail: String? = null,
+  var paid: Boolean = false,
+  var payeeEmail: String? = null,
   @Contextual val _id: Id<Order> = newId()
 )

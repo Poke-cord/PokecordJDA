@@ -1,7 +1,9 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
 import com.mongodb.client.model.Indexes
+import org.litote.kmongo.combine
 import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.coroutine.replaceOne
 import org.litote.kmongo.eq
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Order
@@ -15,11 +17,19 @@ class OrderRepository(
   }
 
   suspend fun getUnpaidOrder(userId: String): Order? {
-    return orderCollection.findOne(Order::userId eq userId)
+    return orderCollection.findOne(combine(Order::userId eq userId, Order::paid eq false))
   }
 
   suspend fun createOrder(orderData: Order) {
     orderCollection.insertOne(orderData)
+  }
+
+  suspend fun replaceOrder(orderData: Order) {
+    orderCollection.replaceOne(orderData)
+  }
+
+  suspend fun getOrder(orderId: String): Order? {
+    return orderCollection.findOne(Order::orderId eq orderId)
   }
 
   suspend fun deleteOrder(orderData: Order) {

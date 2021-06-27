@@ -13,16 +13,13 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
-import xyz.pokecord.bot.utils.api.PayPal
 import xyz.pokecord.bot.utils.extensions.awaitReaction
 
 class StoreCommand : Command() {
   override val name = "Store"
 
   override var aliases = arrayOf("donate", "donation")
-  override var enabled = false
-
-  private val payPal by lazy { PayPal(module.bot.database) }
+//  override var enabled = false
 
   @Executor
   suspend fun execute(context: ICommandContext) {
@@ -138,7 +135,7 @@ class StoreCommand : Command() {
     val item = pkg.items[itemsEmojis.indexOf(itemReaction.reactionEmote.emoji)]
     val itemName = context.translate("store.packages.${pkg.id}.items.${item.id}")
 
-    val orderId = payPal.createOrder(
+    val orderId = module.bot.payPal.createOrder(
       context.author.name,
       item.price,
       itemName
@@ -157,7 +154,7 @@ class StoreCommand : Command() {
           item.id,
           item.price.toDouble(),
           context.author.id,
-          context.author.name
+          context.author.asTag
         )
       )
 
@@ -168,7 +165,7 @@ class StoreCommand : Command() {
             context.translate(
               "modules.economy.commands.store.dm.embed.description",
               mapOf(
-                "item" to itemName, "link" to payPal.getCheckoutLink(orderId)
+                "item" to itemName, "link" to module.bot.payPal.getCheckoutLink(orderId)
               )
             )
           ).build()
@@ -179,7 +176,7 @@ class StoreCommand : Command() {
             context.translate("modules.economy.commands.store.errors.dmsClosed")
           ).build()
         ).queue()
-        payPal.deleteOrder(orderId)
+        module.bot.payPal.deleteOrder(orderId)
         return
       }
 
