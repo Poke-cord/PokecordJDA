@@ -62,11 +62,11 @@ abstract class Command {
           val argumentAnnotation = parameter.findAnnotation<Argument>()
           if (argumentAnnotation != null) {
             if (usageString.isEmpty()) usageString += " "
-            var prefix = if (argumentAnnotation.optional) "[" else "<"
-            var suffix = if (argumentAnnotation.optional) "]" else ">"
+            var prefix = if (argumentAnnotation.optional || argumentAnnotation.prefixed) "[" else "<"
+            var suffix = if (argumentAnnotation.optional || argumentAnnotation.prefixed) "]" else ">"
             var argName = argumentAnnotation.name.ifEmpty { parameter.name }
             if (parameter.type.isBoolean) {
-              if (argumentAnnotation.optional) {
+              if (argumentAnnotation.optional || argumentAnnotation.prefixed) {
                 prefix = "["
                 suffix = "]"
               } else {
