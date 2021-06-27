@@ -74,7 +74,11 @@ class HelpCommand : Command() {
             context.embedTemplates.error("No command(s) found or you don't have access to the command(s).").build()
           ).queue()
         } else {
-          context.reply(module.bot.getHelpEmbed(context, module, prefix).build()).queue()
+          val embed = module.bot.getHelpEmbed(context, module, prefix)
+          context.reply(
+            (embed
+              ?: context.embedTemplates.error("No command(s) found or you don't have access to the command(s).")).build()
+          ).queue()
         }
       } else {
         getCommands(context, page, commandOrModuleName, commandName)

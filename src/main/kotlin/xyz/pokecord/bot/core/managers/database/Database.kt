@@ -80,4 +80,8 @@ class Database(cache: Cache) {
 
   suspend fun startSession(options: ClientSessionOptions? = null) =
     if (options != null) client.startSession(options) else client.startSession()
+
+  fun close() {
+    client.close()
+  }
 }

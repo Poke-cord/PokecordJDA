@@ -1,7 +1,10 @@
 package xyz.pokecord.bot.core.managers
 
 import org.redisson.Redisson
-import org.redisson.api.*
+import org.redisson.api.RBucketAsync
+import org.redisson.api.RMapCacheAsync
+import org.redisson.api.RSetMultimapCache
+import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -15,7 +18,7 @@ class Cache {
 
   private val commandRateLimitMap: RMapCacheAsync<String, Long>
   private val hasRunningCommandSet: RMapCacheAsync<String, Long>
-  private val identifyLock: RLock
+  private val identifyLock: RBucketAsync<Boolean?>
   private val maintenanceStatus: RBucketAsync<Boolean?>
 
   val guildMap: RMapCacheAsync<String, String>
@@ -51,7 +54,7 @@ class Cache {
 
     commandRateLimitMap = redissonClient.getMapCache("commandRateLimit")
     hasRunningCommandSet = redissonClient.getMapCache("hasRunningCommand")
-    identifyLock = redissonClient.getLock("identify")
+    identifyLock = redissonClient.getBucket("identify")
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
 
     guildMap = redissonClient.getMapCache("guild")
@@ -101,14 +104,12 @@ class Cache {
   }
 
   fun withIdentifyLock(block: () -> Unit) {
-    val pid = ProcessHandle.current().pid()
-    identifyLock.lockAsync(5, TimeUnit.SECONDS, pid).get()
+    identifyLock.setAsync(true, 1, TimeUnit.SECONDS)
     block()
-    if (identifyLock.isHeldByThread(pid)) {
-      try {
-        identifyLock.unlockAsync(pid).get()
-      } finally {
-      }
-    }
+    identifyLock.deleteAsync()
+  }
+
+  fun shutdown() {
+    redissonClient.shutdown()
   }
 }

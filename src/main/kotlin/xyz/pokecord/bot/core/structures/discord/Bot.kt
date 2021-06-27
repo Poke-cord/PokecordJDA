@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.pokecord.bot.WebSocketConnection
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.I18n
@@ -17,6 +18,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.api.PayPal
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
@@ -28,6 +30,8 @@ class Bot constructor(private val token: String) {
   private lateinit var version: String
 
   val devEnv = System.getenv("DEV").equals("true", true)
+
+  val payPal by lazy { PayPal(database) }
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -43,6 +47,10 @@ class Bot constructor(private val token: String) {
   }
 
   fun start(shardCount: Int? = null, shardId: Int? = null) {
+    System.getenv("WEBSOCKET_SERVER_URL")?.let {
+      WebSocketConnection(it, this)
+    }
+
     this.version = if (devEnv) "DEV" else Config.version
     val intents = mutableListOf(
       GatewayIntent.DIRECT_MESSAGES,
@@ -88,7 +96,7 @@ class Bot constructor(private val token: String) {
     return context.translate(command.descriptionI18nKey, "")
   }
 
-  suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder {
+  suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder? {
     val commandEntries: ArrayList<String> = arrayListOf()
     for (command in module.commands) {
       if (!command.enabled) continue
@@ -104,10 +112,13 @@ class Bot constructor(private val token: String) {
       }
       if (!command.excludeFromHelp) commandEntries.add(getModuleHelpEmbedLine(context, prefix, command))
     }
-    return context.embedTemplates.normal(
-      commandEntries.joinToString("\n"),
-      "${module.name} ${context.translate("misc.texts.commands")}"
-    )
+    if (commandEntries.isNotEmpty()) {
+      return context.embedTemplates.normal(
+        commandEntries.joinToString("\n"),
+        "${module.name} ${context.translate("misc.texts.commands")}"
+      )
+    }
+    return null
   }
 
   suspend fun getHelpEmbed(context: ICommandContext, command: Command): EmbedBuilder? {
@@ -148,7 +159,7 @@ class Bot constructor(private val token: String) {
   }
 
   suspend fun getHelpEmbeds(context: ICommandContext, prefix: String = "p!"): List<EmbedBuilder> {
-    return modules.map { getHelpEmbed(context, it.value, prefix) }
+    return modules.mapNotNull { getHelpEmbed(context, it.value, prefix) }
   }
 
   suspend fun getHelpEmbeds(context: ICommandContext, commands: List<Command>): List<EmbedBuilder> {
@@ -183,6 +194,14 @@ class Bot constructor(private val token: String) {
     } catch (e: IllegalArgumentException) {
       jda.presence.activity =
         Activity.playing("${commandHandler.prefix}help | pokecord.xyz | ${if (devEnv) "Development Edition" else "v$version"}")
+    }
+  }
+
+  fun shutdown() {
+    cache.shutdown()
+    database.close()
+    if (this::jda.isInitialized) {
+      jda.shutdown()
     }
   }
 }

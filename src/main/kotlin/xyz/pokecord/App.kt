@@ -50,21 +50,20 @@ object App {
         }
         if (sharderHost != null && sharderPort != null) {
           val client = Client(sharderHost, sharderPort, token, shardId.toShort())
-          client.start()
-          client.session?.let { session ->
-            client.on<MessageEvent.MessageReceivedEvent> {
-              if (it.message is LoginOkMessage) {
-                bot.cache.withIdentifyLock {
-                  bot.start(session.shardCount, (it.message as LoginOkMessage).shardId.toInt())
-                  bot.jda.awaitReady()
-                }
-                client.reportAsReady()
+          client.on<DisconnectEvent> {
+            bot.shutdown()
+            Sentry.close()
+          }
+          client.on<MessageEvent.MessageReceivedEvent> {
+            if (it.message is LoginOkMessage) {
+              bot.cache.withIdentifyLock {
+                bot.start(client.session?.shardCount, (it.message as LoginOkMessage).shardId.toInt())
+                bot.jda.awaitReady()
               }
+              client.reportAsReady()
             }
           }
-          client.on<DisconnectEvent> {
-            bot.jda.shutdown()
-          }
+          client.start()
         } else {
           bot.start(shardCount, shardId)
         }
