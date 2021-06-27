@@ -8,6 +8,7 @@ import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import xyz.pokecord.utils.RedissonNameMapper
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
@@ -30,6 +31,7 @@ class Cache {
   val userMap: RMapCacheAsync<String, String>
 
   init {
+    val nameMapper = RedissonNameMapper(System.getenv("REDIS_NAME_MAPPER"))
     val config = Config()
     val clusterServersData = System.getenv("REDIS_CLUSTERS")
     val redisUrl = System.getenv("REDIS_URL")
@@ -37,7 +39,9 @@ class Cache {
       config
         .useClusterServers()
         .addNodeAddress(*clusterServersData.split(",").toTypedArray())
+        .nameMapper = nameMapper
     } else if (!redisUrl.isNullOrEmpty()) {
+      config.useSingleServer().nameMapper = nameMapper
       config.useSingleServer().address = redisUrl
       System.getenv("REDIS_PASSWORD")?.let { password ->
         config.useSingleServer().password = password
