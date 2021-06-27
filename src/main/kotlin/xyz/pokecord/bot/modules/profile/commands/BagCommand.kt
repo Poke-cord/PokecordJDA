@@ -9,7 +9,7 @@ import xyz.pokecord.bot.core.structures.pokemon.ItemData
 class BagCommand : Command() {
   override val name = "Bag"
 
-  override var aliases = arrayOf("backpack", "bp", "inventory", "inv")
+  override var aliases = arrayOf("backpack", "bp", "inventory", "bal")
 
   @Executor
   suspend fun execute(
