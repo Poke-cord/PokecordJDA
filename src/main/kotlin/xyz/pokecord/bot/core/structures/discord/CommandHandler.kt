@@ -109,8 +109,14 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
       if (rateLimitEndsAt != null) {
         if (rateLimitEndsAt > System.currentTimeMillis()) {
-          // TODO: handle rate limit hit
           logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("misc.errors.embeds.commandRateLimitReached.description"),
+              context.translate("misc.errors.embeds.commandRateLimitReached.title")
+            ).build()
+          ).queue()
+          return
         } else {
           bot.cache.removeRateLimit(cacheKey)
         }
@@ -290,8 +296,14 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
       if (rateLimitEndsAt != null) {
         if (rateLimitEndsAt > System.currentTimeMillis()) {
-          // TODO: handle rate limit hit
           logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("misc.errors.embeds.commandRateLimitReached.description"),
+              context.translate("misc.errors.embeds.commandRateLimitReached.title")
+            ).build()
+          ).queue()
+          return
         } else {
           bot.cache.removeRateLimit(cacheKey)
         }

@@ -52,6 +52,9 @@ misc:
       commandExecutionFailed:
         description: Failed to execute the {{command}} command. Please report this issue [to us](https://discord.gg/poke) if it keeps happening.
         title: Command Execution Failed
+      commandRateLimitReached:
+        description: Looks like you're using commands too fast, try to calm down a little.
+        title: Calm down
     invalidAmount: '**Suggestion**: Try entering a valid amount!'
     notASpawnChannel: '**Suggestion**: Try using the command in a spawn channel
             or set this channel as a spawn channel!'
