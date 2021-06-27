@@ -79,6 +79,7 @@ misc:
     command: Command
     command_aliases: Aliases
     commands: Commands
+    commandTimedOut: Command execution timed out, please try again later.
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
