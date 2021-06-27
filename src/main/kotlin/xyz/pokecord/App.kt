@@ -1,5 +1,6 @@
 package xyz.pokecord
 
+import dev.zihad.remotesharding.api.events.DisconnectEvent
 import dev.zihad.remotesharding.api.events.MessageEvent
 import dev.zihad.remotesharding.client.Client
 import dev.zihad.remotesharding.messages.server.LoginOkMessage
@@ -51,7 +52,7 @@ object App {
           val client = Client(sharderHost, sharderPort, token, shardId.toShort())
           client.start()
           client.session?.let { session ->
-            session.on<MessageEvent.MessageReceivedEvent> {
+            client.on<MessageEvent.MessageReceivedEvent> {
               if (it.message is LoginOkMessage) {
                 bot.cache.withIdentifyLock {
                   bot.start(session.shardCount, (it.message as LoginOkMessage).shardId.toInt())
@@ -60,6 +61,9 @@ object App {
                 client.reportAsReady()
               }
             }
+          }
+          client.on<DisconnectEvent> {
+            bot.jda.shutdown()
           }
         } else {
           bot.start(shardCount, shardId)
