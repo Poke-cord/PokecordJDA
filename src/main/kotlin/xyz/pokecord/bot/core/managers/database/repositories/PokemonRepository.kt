@@ -15,6 +15,7 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
+import xyz.pokecord.bot.core.structures.pokemon.Nature
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Type
 import xyz.pokecord.bot.utils.CountResult
@@ -442,7 +443,10 @@ class PokemonRepository(
           aggregation.add(match(OwnedPokemon::shiny eq true))
         }
         if (nature != null) {
-          aggregation.add(match(OwnedPokemon::nature eq nature))
+          val natureObj = Nature.getByName(nature)
+          if (natureObj != null) {
+            aggregation.add(match(OwnedPokemon::nature eq natureObj.name!!.name))
+          }
         }
         if (ids.isNotEmpty()) {
           aggregation.add(match(OwnedPokemon::id `in` ids.asIterable()))
