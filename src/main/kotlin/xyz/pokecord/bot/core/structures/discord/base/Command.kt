@@ -89,6 +89,6 @@ abstract class Command {
   open fun getRateLimitCacheKey(context: ICommandContext, args: List<String>): String {
     return (if (rateLimitType == RateLimitType.Command) "${context.author.id}.${module.name}.${name}" else "${context.author.id}.${module.name}.${name}.${
       args.joinToString(" ")
-    }").toLowerCase()
+    }").lowercase()
   }
 }

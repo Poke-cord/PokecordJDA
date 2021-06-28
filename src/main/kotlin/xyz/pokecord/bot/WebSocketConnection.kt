@@ -3,8 +3,7 @@ package xyz.pokecord.bot
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
@@ -61,7 +60,7 @@ class WebSocketConnection(
 
   init {
     thread {
-      GlobalScope.launch {
+      runBlocking {
         httpClient.ws(address) {
           for (frame in incoming) {
             if (frame is Frame.Text) {

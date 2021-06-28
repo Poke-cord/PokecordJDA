@@ -15,6 +15,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.*
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
@@ -26,6 +27,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   var prefix: String = if (bot.maintenance) "!" else "p!"
 
+  private val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
+
   override suspend fun onEvent(event: GenericEvent) {
     when (event) {
       is ButtonClickEvent -> onButtonClick(event)
@@ -35,7 +38,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   }
 
   private fun onButtonClick(event: ButtonClickEvent) {
-    GlobalScope.launch {
+    coroutineScope.launch {
       delay(2500)
       if (!event.isAcknowledged) event.deferEdit().setActionRows().queue()
     }
@@ -49,7 +52,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       var command: Command? = null
       for (module in bot.modules.values) {
-        command = module.commandMap[event.name.toLowerCase()]
+        command = module.commandMap[event.name.lowercase()]
         if (command != null) break
       }
 
@@ -150,7 +153,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
                 val string = option?.asString
                 when {
                   string == null -> PokemonResolvable.Int(null)
-                  arrayOf("latest", "l").contains(string.toLowerCase()) -> PokemonResolvable.Latest()
+                  arrayOf("latest", "l").contains(string.lowercase()) -> PokemonResolvable.Latest()
                   else -> PokemonResolvable.Int(string.toIntOrNull())
                 }
               }
@@ -179,7 +182,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         }
       }
 
-      GlobalScope.launch(Dispatchers.Default) {
+      coroutineScope.launch {
         bot.cache.setRunningCommand(
           context.author.id,
           true
@@ -227,14 +230,14 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       var command: Command? = null
       for (module in bot.modules.values) {
-        command = module.commandMap[commandString.toLowerCase()]
+        command = module.commandMap[commandString.lowercase()]
         if (command != null) break
       }
 
       if (command != null && command.enabled) {
         if (splitMessage.size >= 1) {
           val childCommand =
-            command.module.commandMap["${command.name.toLowerCase()}.${splitMessage.first().toLowerCase()}"]
+            command.module.commandMap["${command.name.lowercase()}.${splitMessage.first().lowercase()}"]
           if (childCommand != null) {
             command = childCommand
             splitMessage.removeAt(0)
@@ -401,7 +404,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           bot.database.userRepository.updateTag(userData, context.author.asTag)
         }
 
-        val commandJob = GlobalScope.launch(Dispatchers.Default) {
+        val commandJob = coroutineScope.launch {
           bot.cache.setRunningCommand(
             context.author.id,
             true
@@ -418,7 +421,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           bot.cache.setRunningCommand(context.author.id, false)
         }
 
-        GlobalScope.launch(Dispatchers.Default + CoroutineName("StartTyping")) {
+        coroutineScope.launch {
           delay(1000)
           while (!commandJob.isCompleted) {
             event.channel.sendTyping().queue()
@@ -426,7 +429,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           }
         }
 
-        GlobalScope.launch(Dispatchers.Default + CoroutineName("TimeoutHandler")) {
+        coroutineScope.launch {
           val startedAt = System.currentTimeMillis()
           while (!commandJob.isCompleted) {
             delay(1000)

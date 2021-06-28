@@ -2,7 +2,8 @@ package xyz.pokecord.bot.core.managers.database
 
 import com.mongodb.ClientSessionOptions
 import com.mongodb.ConnectionString
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -12,6 +13,7 @@ import org.litote.kmongo.reactivestreams.KMongo
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.managers.database.repositories.*
+import java.util.concurrent.Executors
 
 class Database(cache: Cache) {
   private val client: CoroutineClient
@@ -65,7 +67,7 @@ class Database(cache: Cache) {
       SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)
     userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap, cache.leaderboardMap)
 
-    GlobalScope.launch { createIndexes() }
+    CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher()).launch { createIndexes() }
   }
 
   private suspend fun createIndexes() {

@@ -87,7 +87,7 @@ class Bot constructor(private val token: String) {
     command: Command
   ): String {
     val name =
-      (if (command.parentCommand != null) "${command.parentCommand!!.name} ${command.name}" else command.name).toLowerCase()
+      (if (command.parentCommand != null) "${command.parentCommand!!.name} ${command.name}" else command.name).lowercase()
     val commandDescription = getCommandDescription(context, command)
     return "**${prefix}${name}**${if (command.usage.isEmpty()) "" else " `${command.usage}` "}${if (commandDescription.isEmpty()) "" else " - $commandDescription "}"
   }

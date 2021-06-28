@@ -1,7 +1,8 @@
 package xyz.pokecord.bot.utils
 
 import dev.minn.jda.ktx.await
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.EmbedBuilder
@@ -15,6 +16,7 @@ import net.dv8tion.jda.api.interactions.components.Button
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
+import java.util.concurrent.Executors
 
 class EmbedPaginator(
   private val context: ICommandContext,
@@ -45,6 +47,7 @@ class EmbedPaginator(
   private var sentMessage: Message? = null
   private var currentPageIndex: Int = initialPageIndex
   private var endTime: Long? = null
+  private val coroutineScope = CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher())
 
   private suspend fun getEmbed(pageIndex: Int = currentPageIndex): MessageEmbed {
     val embedBuilder = pageExtractor(pageIndex)
@@ -68,7 +71,7 @@ class EmbedPaginator(
       return
     }
 
-    GlobalScope.launch {
+    coroutineScope.launch {
       val result = context.addActionRows(
         ActionRow.of(
           NavigationOptions.values.map {

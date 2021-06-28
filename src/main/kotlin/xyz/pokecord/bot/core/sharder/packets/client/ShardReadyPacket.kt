@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.core.sharder.packets.client
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import xyz.pokecord.bot.core.sharder.packets.Packet
@@ -29,7 +28,7 @@ class ShardReadyPacket : Packet() {
   override suspend fun processSend() {
     session.client.logger.info("Shard reported as ready! Starting sending keep alive requests...")
     val keepAliveRequestPacket = KeepAliveRequestPacket()
-    session.keepAliveSenderJob = GlobalScope.launch {
+    session.keepAliveSenderJob = session.client.coroutineScope.launch {
       while (true) {
         launch {
           session.sendPacket(keepAliveRequestPacket)

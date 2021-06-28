@@ -29,7 +29,7 @@ class DynamicByteBuffer(initialCapacity: Int = 64, private var operationMode: Op
     } else if (this.operationMode != operationMode) {
       throw IllegalStateException(
         "Current DynamicByteBuffer has already been initialized for ${
-          this.operationMode.toString().toLowerCase()
+          this.operationMode.toString().lowercase()
         } mode."
       )
     }

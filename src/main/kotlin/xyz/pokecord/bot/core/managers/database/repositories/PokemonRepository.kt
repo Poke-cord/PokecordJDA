@@ -379,7 +379,7 @@ class PokemonRepository(
 
     init {
       val rarities: MutableList<String> =
-        (rarity?.toLowerCase()?.split(Regex(",( )?"))?.toMutableList() ?: mutableListOf())
+        (rarity?.lowercase()?.split(Regex(",( )?"))?.toMutableList() ?: mutableListOf())
 
       for (rarity in rarities) {
         when {
@@ -414,7 +414,7 @@ class PokemonRepository(
         }
 
       if (order != null) {
-        val lowerCaseOrder = order.toLowerCase()
+        val lowerCaseOrder = order.lowercase()
         orderBson = when {
           arrayOf("i", "iv").contains(lowerCaseOrder) -> {
             sort(descending(OwnedPokemon::totalIv))

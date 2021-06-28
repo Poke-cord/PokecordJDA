@@ -61,7 +61,7 @@ class RewardsCommand : Command() {
       val embed = context.embedTemplates.empty()
         .setDescription(context.translate("modules.profile.commands.rewards.embed.description"))
 
-      val lowerCaseAction = action.toLowerCase()
+      val lowerCaseAction = action.lowercase()
       val all = allValues.contains(lowerCaseAction)
       val catch = catchValues.contains(lowerCaseAction)
       val vote = voteValues.contains(lowerCaseAction)

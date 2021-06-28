@@ -1,7 +1,8 @@
 package xyz.pokecord.bot.core.sharder
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
@@ -13,6 +14,7 @@ import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.AsynchronousSocketChannel
+import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
 @Suppress("UNUSED")
@@ -34,6 +36,8 @@ class SharderClient(
   private var receiving = false
   private var currentChannel: Channel<PacketHolder>? = null
 
+  val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
+
   suspend fun connect() {
     socket.asyncConnect(address)
   }
@@ -44,7 +48,7 @@ class SharderClient(
 
   suspend fun startReceiving() {
     currentChannel = Channel()
-    GlobalScope.launch(Dispatchers.IO) {
+    coroutineScope.launch(Dispatchers.IO) {
       receiving = true
       while (socket.isOpen && receiving) {
         try {
@@ -77,7 +81,7 @@ class SharderClient(
       receiving = false
       currentChannel?.close()
     }
-    GlobalScope.launch(Dispatchers.Default) {
+    coroutineScope.launch {
       while (currentChannel != null) {
         try {
           val packetHolder = currentChannel!!.receive()

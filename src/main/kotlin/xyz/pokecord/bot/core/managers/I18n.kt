@@ -83,7 +83,7 @@ object I18n {
   ) {
     obj.forEach { entry ->
       if (entry.value is String) {
-        target["$key.${entry.key}".toLowerCase()] = entry.value as String
+        target["$key.${entry.key}".lowercase()] = entry.value as String
       } else if (entry.value is Map<*, *>) {
         addRecursively(entry.value as Map<*, *>, target, if (key == "") entry.key.toString() else "$key.${entry.key}")
       }
@@ -97,7 +97,7 @@ object I18n {
     translate(language, key, mapOf(*data), default)
 
   fun translate(language: Language?, key: String, data: Map<String, String>, default: String? = null): String {
-    val lowerCaseKey = key.toLowerCase()
+    val lowerCaseKey = key.lowercase()
     val lang = language ?: Language.default
     var string = locales[lang.identifier]?.get(lowerCaseKey)
     if (string == null && lang != defaultLanguage) string =

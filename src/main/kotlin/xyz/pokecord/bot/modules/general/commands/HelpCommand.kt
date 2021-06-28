@@ -16,8 +16,8 @@ class HelpCommand : Command() {
     commandName: String?
   ) {
     val commands = this.module.bot.modules.mapNotNull {
-      it.value.commandMap["${commandOrModuleName.toLowerCase()}.${commandName?.toLowerCase()}"]
-        ?: it.value.commandMap[commandOrModuleName.toLowerCase()]
+      it.value.commandMap["${commandOrModuleName.lowercase()}.${commandName?.lowercase()}"]
+        ?: it.value.commandMap[commandOrModuleName.lowercase()]
     }
     if (commands.isNotEmpty()) {
       val helpEmbeds = this.module.bot.getHelpEmbeds(context, commands)
@@ -44,12 +44,12 @@ class HelpCommand : Command() {
   ) {
     val prefix = context.getPrefix()
     if (commandOrModuleName != null) {
-      val module = module.bot.modules[commandOrModuleName.toLowerCase()]
+      val module = module.bot.modules[commandOrModuleName.lowercase()]
       if (module != null) {
         if (commandName != null) {
           if (subCommandName != null) {
             val command =
-              module.commandMap["${commandName.toLowerCase()}.${subCommandName.toLowerCase()}"]
+              module.commandMap["${commandName.lowercase()}.${subCommandName.lowercase()}"]
 
             if (command != null) {
               val helpEmbed = this.module.bot.getHelpEmbed(context, command)
@@ -63,7 +63,7 @@ class HelpCommand : Command() {
             ).queue()
           }
           val command =
-            module.commandMap[commandName.toLowerCase()]
+            module.commandMap[commandName.lowercase()]
 
           if (command != null) {
             val helpEmbed = this.module.bot.getHelpEmbed(context, command)

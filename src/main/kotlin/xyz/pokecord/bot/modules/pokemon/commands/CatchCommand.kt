@@ -18,7 +18,7 @@ class CatchCommand : Command() {
     val pokemon = Pokemon.getByName(arg)
     return (if (rateLimitType == RateLimitType.Command) "${context.author.id}.${module.name}.${name}" else "${context.author.id}.${module.name}.${name}.${
       pokemon?.name ?: arg
-    }").toLowerCase()
+    }").lowercase()
   }
 
   @Executor

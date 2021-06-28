@@ -1,12 +1,14 @@
 package xyz.pokecord.bot.core.sharder
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import xyz.pokecord.bot.core.sharder.packets.Packet
 import xyz.pokecord.bot.core.sharder.packets.PacketFactory
 import java.nio.ByteBuffer
+import java.util.concurrent.Executors
 import kotlin.reflect.full.createInstance
 
 class Session(val client: SharderClient) {
@@ -34,7 +36,7 @@ class Session(val client: SharderClient) {
       )
     )
     packet.processSend()
-    GlobalScope.launch {
+    client.coroutineScope.launch {
       sentPacketChannel.send(packet)
     }
   }

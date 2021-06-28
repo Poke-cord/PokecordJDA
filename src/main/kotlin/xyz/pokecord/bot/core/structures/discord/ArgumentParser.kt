@@ -223,7 +223,7 @@ class ArgumentParser(
       when {
         string == null -> PokemonResolvable.Int(null)
         arrayOf("latest", "l").contains(
-          string.toLowerCase()
+          string.lowercase()
         ) -> PokemonResolvable.Latest()
         else -> PokemonResolvable.Int(string.toIntOrNull())
       }

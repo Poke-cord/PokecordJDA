@@ -46,7 +46,7 @@ object App {
           DeveloperModule(bot)
         )
         modules.forEach {
-          bot.modules[it.name.toLowerCase()] = it
+          bot.modules[it.name.lowercase()] = it
         }
         if (sharderHost != null && sharderPort != null) {
           val client = Client(sharderHost, sharderPort, token, shardId.toShort())

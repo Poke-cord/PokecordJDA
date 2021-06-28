@@ -8,7 +8,7 @@ val jdaKtxVersion = "985db81"
 val jdaUtilitiesVersion = "3.0.5"
 val jdaVersion = "4.3.0_284"
 val kmongoVersion = "4.2.4"
-val kotlinCoroutinesVersion = "1.4.3"
+val kotlinxCoroutinesVersion = "1.5.0"
 val kotlinxSerializationJsonVersion = "1.1.0"
 val ktorVersion = "1.5.4"
 val logbackVersion = "1.2.3"
@@ -21,8 +21,8 @@ val trove4jVersion = "3.0.3"
 plugins {
   id("com.github.johnrengelman.shadow") version "6.1.0"
   java
-  kotlin("jvm") version "1.4.31"
-  kotlin("plugin.serialization") version "1.4.31"
+  kotlin("jvm") version "1.5.10"
+  kotlin("plugin.serialization") version "1.5.10"
 }
 
 repositories {
@@ -52,7 +52,7 @@ dependencies {
 
   implementation("net.sf.trove4j:trove4j:$trove4jVersion")
 
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion")
 
   implementation("org.redisson:redisson:$redissonVersion")

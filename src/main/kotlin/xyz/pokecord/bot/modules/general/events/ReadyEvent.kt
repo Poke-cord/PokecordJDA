@@ -25,7 +25,7 @@ class ReadyEvent : Event() {
         val commandDescription = I18n.translate(null, command.descriptionI18nKey, "")
         if (commandDescription == "") return@mapNotNull null
         val commandData = CommandData(
-          command.name.toLowerCase(),
+          command.name.lowercase(),
           commandDescription
         )
 
