@@ -142,6 +142,6 @@ class EmbedPaginator(
 
 
   private suspend fun stop() {
-    sentMessage?.editMessage(getEmbed())?.setActionRows()?.queue()
+    sentMessage?.editMessageEmbeds(getEmbed())?.setActionRows()?.queue()
   }
 }

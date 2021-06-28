@@ -33,14 +33,14 @@ class StoreCommand : Command() {
       )
       when {
         confirmation.timedOut -> {
-          confirmation.sentMessage!!.editMessage(
+          confirmation.sentMessage!!.editMessageEmbeds(
             context.embedTemplates.error(
               context.translate("modules.economy.commands.store.errors.cancelOldOrder.noAction")
             ).build()
           )
         }
         confirmed -> {
-          confirmation.sentMessage!!.editMessage(
+          confirmation.sentMessage!!.editMessageEmbeds(
             context.embedTemplates.error(
               context.translate("modules.economy.commands.store.errors.cancelOldOrder.noAction")
             ).build()
@@ -110,7 +110,7 @@ class StoreCommand : Command() {
       }"
     }.joinToString("\n")
 
-    message.editMessage(
+    message.editMessageEmbeds(
       context.embedTemplates.normal(
         context.translate("store.packages.${pkg.id}.embed.description") + "\n\n" + itemsText,
         context.translate("store.packages.${pkg.id}.embed.title")
@@ -160,7 +160,7 @@ class StoreCommand : Command() {
 
       try {
         val privateChannel = context.author.openPrivateChannel().await()
-        privateChannel.sendMessage(
+        privateChannel.sendMessageEmbeds(
           context.embedTemplates.normal(
             context.translate(
               "modules.economy.commands.store.dm.embed.description",

@@ -73,7 +73,7 @@ class ReleaseCommand : Command() {
           )
 
         if (!result) {
-          confirmation.sentMessage!!.editMessage(
+          confirmation.sentMessage!!.editMessageEmbeds(
             context.embedTemplates.normal(
               context.translate("modules.pokemon.commands.release.embeds.cancelled.description"),
               context.translate("modules.pokemon.commands.release.embeds.cancelled.title")
@@ -90,7 +90,7 @@ class ReleaseCommand : Command() {
           clientSession.commitTransactionAndAwait()
         }
 
-        confirmation.sentMessage!!.editMessage(
+        confirmation.sentMessage!!.editMessageEmbeds(
           context.embedTemplates.normal(
             context.translate(
               "modules.pokemon.commands.release.embeds.released.description",

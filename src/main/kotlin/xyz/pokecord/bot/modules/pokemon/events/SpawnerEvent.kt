@@ -89,7 +89,7 @@ class SpawnerEvent : Event() {
                 }
               }
               .build()
-            randomSpawnChannelEntity.sendMessage(embed).queue()
+            randomSpawnChannelEntity.sendMessageEmbeds(embed).queue()
           } catch (e: Exception) {
             logger.error("Spawn error", e)
             // Undo the changes we made to the spawn channel since there was an error spawning

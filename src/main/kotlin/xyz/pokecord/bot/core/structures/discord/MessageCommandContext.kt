@@ -36,7 +36,7 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
     event.message.reply(content).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
 
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean) =
-    event.message.reply(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
+    event.message.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
 
   override suspend fun handleException(
     exception: Throwable,

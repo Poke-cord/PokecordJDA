@@ -39,7 +39,7 @@ class PingCommand : Command() {
         "ping" to "${context.timeCreated.until(message.timeCreated, ChronoUnit.MILLIS)}ms"
       )
     )
-    message.editMessage(context.embedTemplates.normal(embedDescription, embedTitle).build())
+    message.editMessageEmbeds(context.embedTemplates.normal(embedDescription, embedTitle).build())
       .queue()
   }
 }

@@ -109,7 +109,7 @@ class GiftCommand : ParentCommand() {
         module.bot.database.userRepository.giftCredits(userData, receiverData, amount)
         try {
           val privateChannel = receiver.openPrivateChannel().await()
-          privateChannel.sendMessage(
+          privateChannel.sendMessageEmbeds(
             context.embedTemplates.normal(
               context.translate(
                 "modules.pokemon.commands.gift.embeds.giftReceived.credits",
@@ -124,7 +124,7 @@ class GiftCommand : ParentCommand() {
         } catch (_: Exception) {
         }
 
-        confirmation.sentMessage!!.editMessage(
+        confirmation.sentMessage!!.editMessageEmbeds(
           context.embedTemplates.normal(
             context.translate(
               "modules.pokemon.commands.gift.embeds.giftSent.credits",
@@ -138,7 +138,7 @@ class GiftCommand : ParentCommand() {
           ).build()
         ).queue()
       } else {
-        confirmation.sentMessage!!.editMessage(
+        confirmation.sentMessage!!.editMessageEmbeds(
           context.embedTemplates.normal(
             context.translate("modules.pokemon.commands.gift.embeds.cancelled.description"),
             context.translate("modules.pokemon.commands.gift.embeds.cancelled.title")
@@ -269,7 +269,7 @@ class GiftCommand : ParentCommand() {
             }
             try {
               val privateChannel = receiver.openPrivateChannel().submit().await()
-              privateChannel.sendMessage(
+              privateChannel.sendMessageEmbeds(
                 context.embedTemplates.normal(
                   context.translate(
                     "modules.pokemon.commands.gift.embeds.giftReceived.pokemon",
@@ -286,7 +286,7 @@ class GiftCommand : ParentCommand() {
             } catch (_: Exception) {
             }
 
-            confirmation.sentMessage!!.editMessage(
+            confirmation.sentMessage!!.editMessageEmbeds(
               context.embedTemplates.normal(
                 context.translate(
                   "modules.pokemon.commands.gift.embeds.giftSent.pokemon",
@@ -302,7 +302,7 @@ class GiftCommand : ParentCommand() {
               ).build()
             ).queue()
           } else {
-            confirmation.sentMessage!!.editMessage(
+            confirmation.sentMessage!!.editMessageEmbeds(
               context.embedTemplates.normal(
                 context.translate("modules.pokemon.commands.gift.embeds.cancelled.description"),
                 context.translate("modules.pokemon.commands.gift.embeds.cancelled.title")

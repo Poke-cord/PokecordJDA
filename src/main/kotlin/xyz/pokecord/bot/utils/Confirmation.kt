@@ -114,6 +114,6 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
   }
 
   private fun stop() {
-    sentMessage?.embeds?.first()?.let { sentMessage?.editMessage(it)?.setActionRows()?.queue() }
+    sentMessage?.embeds?.first()?.let { sentMessage?.editMessageEmbeds(it)?.setActionRows()?.queue() }
   }
 }

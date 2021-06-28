@@ -67,7 +67,7 @@ class HintCommand : Command() {
       val name = it.name
       try {
         val privateChannel = context.author.openPrivateChannel().submit().await()
-        privateChannel.sendMessage(
+        privateChannel.sendMessageEmbeds(
           context.embedTemplates.normal(
             "```${name.take(1)} ${"_ ".repeat(name.length - 1)}```",
             context.translate("modules.pokemon.commands.hint.dm.embed.title")

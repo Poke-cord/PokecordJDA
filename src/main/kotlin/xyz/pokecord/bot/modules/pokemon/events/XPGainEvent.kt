@@ -85,7 +85,7 @@ class XPGainEvent : Event() {
 
     embedBuilder?.let {
       it.setColor(selectedPokemon.data.species.color.colorCode)
-      context.channel.sendMessage(it.build()).queue()
+      context.channel.sendMessageEmbeds(it.build()).queue()
     }
   }
 }
