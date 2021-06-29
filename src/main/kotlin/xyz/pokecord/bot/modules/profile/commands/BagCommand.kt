@@ -34,8 +34,16 @@ class BagCommand : Command() {
 
     if (items.isEmpty()) {
       context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.profile.commands.bag.errors.noItems")
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.profile.commands.bag.noItemsDescription",
+            mapOf(
+              "credits" to context.translator.numberFormat(userData.credits),
+              "gems" to context.translator.numberFormat(userData.gems),
+              "tokens" to context.translator.numberFormat(userData.tokens)
+            )
+          ),
+          context.translate("modules.profile.commands.bag.title", "user" to context.author.asTag)
         ).build()
       ).queue()
       return

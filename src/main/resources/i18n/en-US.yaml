@@ -397,15 +397,18 @@ modules:
   profile:
     commands:
       bag:
+        noItemsDescription: |-
+          **Gems**: {{gems}}
+          **Credits**: {{credits}}
+          **Tokens**: {{tokens}}
+
+          You don't have any items right now.
         description: |-
           **Gems**: {{gems}}
           **Credits**: {{credits}}
           **Tokens**: {{tokens}}
 
           All items you own will be available here.
-        errors:
-          noItems: '**Suggestion**: Try purchasing a few items before you
-                        view them here!'
         title: '{{user}}''s Bag'
       item:
         errors:
