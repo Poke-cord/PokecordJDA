@@ -46,6 +46,10 @@ class UserRepository(
   }
 
   private suspend fun setCacheUser(user: User) {
+    if (user._isNew) {
+      user._isNew = false
+      collection.insertOne(user)
+    }
     cacheMap.putAsync(user.id, Json.encodeToString(user.copy())).awaitSuspending()
   }
 
@@ -58,7 +62,7 @@ class UserRepository(
     if (user == null) {
       user = collection.findOne(User::id eq userId)
       if (user == null) {
-        user = User(userId, userTag)
+        user = User(userId, userTag, _isNew = true)
       } else setCacheUser(user)
     }
     return user
@@ -106,7 +110,7 @@ class UserRepository(
     extraOps: suspend (session: ClientSession) -> Unit = {}
   ): OwnedPokemon {
     if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
-    val isUnsavedUser = userData.isDefault
+    val isUnsavedUser = userData.isDefault || userData._isNew
     var ownedPokemon = OwnedPokemon(
       pokemonId,
       userData.nextPokemonIndices.first(),
@@ -128,6 +132,7 @@ class UserRepository(
       clientSession.startTransaction()
       database.pokemonRepository.insertPokemon(ownedPokemon, clientSession)
       if (isUnsavedUser) {
+        if (userData._isNew) userData._isNew = false
         collection.insertOne(clientSession, userData)
       } else {
         collection.updateOne(

@@ -2,6 +2,7 @@ package xyz.pokecord.bot.core.managers.database.models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 import xyz.pokecord.bot.core.managers.I18n
@@ -25,7 +26,8 @@ data class User(
   var agreedToTerms: Boolean = false,
   val language: I18n.Language? = null,
   val nextPokemonIndices: MutableList<Int> = mutableListOf(0),
-  @Contextual val _id: Id<User> = newId()
+  @Contextual val _id: Id<User> = newId(),
+  @Transient var _isNew: Boolean = false
 ) {
   fun getShopDiscount(): Double {
     return when (donationTier) {
