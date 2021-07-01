@@ -79,7 +79,7 @@ class Cache {
 
   suspend fun isRunningCommand(userId: String): Boolean {
     val time = hasRunningCommandSet.getAsync(userId).awaitSuspending()
-    return if (time != null && time + 60000 < System.currentTimeMillis()) {
+    return if (time != null && time + 60000 >= System.currentTimeMillis()) {
       true
     } else {
       hasRunningCommandSet.removeAsync(userId)
