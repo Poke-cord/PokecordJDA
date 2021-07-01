@@ -35,10 +35,10 @@ interface ICommandContext {
   val timeCreated: OffsetDateTime
   val translator: Translator
 
-  suspend fun getGuildData(): Guild?
+  suspend fun getGuildData(forceFetch: Boolean = false): Guild?
   suspend fun getLanguage(): I18n.Language
   suspend fun getPrefix(): String
-  suspend fun getUserData(): User
+  suspend fun getUserData(forceFetch: Boolean = false): User
   suspend fun handleException(
     exception: Throwable,
     module: Module? = null,

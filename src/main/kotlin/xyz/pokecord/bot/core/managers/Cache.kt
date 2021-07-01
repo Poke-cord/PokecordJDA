@@ -1,10 +1,8 @@
 package xyz.pokecord.bot.core.managers
 
+import kotlinx.coroutines.delay
 import org.redisson.Redisson
-import org.redisson.api.RBucketAsync
-import org.redisson.api.RMapCacheAsync
-import org.redisson.api.RSetMultimapCache
-import org.redisson.api.RedissonClient
+import org.redisson.api.*
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -21,6 +19,7 @@ class Cache {
   private val hasRunningCommandSet: RMapCacheAsync<String, Long>
   private val identifyLock: RBucketAsync<Boolean?>
   private val maintenanceStatus: RBucketAsync<Boolean?>
+  private val currentGifts: RSetCacheAsync<String>
 
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
@@ -60,6 +59,7 @@ class Cache {
     hasRunningCommandSet = redissonClient.getMapCache("hasRunningCommand")
     identifyLock = redissonClient.getBucket("identify")
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
+    currentGifts = redissonClient.getSetCache("currentGifts")
 
     guildMap = redissonClient.getMapCache("guild")
     guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
@@ -116,6 +116,21 @@ class Cache {
 
     identifyLock.setAsync(true, 5, TimeUnit.SECONDS).get()
     block()
+  }
+
+  suspend fun withGiftLock(senderId: String, receiverId: String, block: suspend () -> Unit) {
+    while (true) {
+      val inProgress = currentGifts.containsAsync(senderId).awaitSuspending() || currentGifts.containsAsync(receiverId)
+        .awaitSuspending()
+      if (!inProgress) break
+      else delay(100)
+    }
+
+    currentGifts.addAsync(senderId).awaitSuspending()
+    currentGifts.addAsync(receiverId).awaitSuspending()
+    block()
+    currentGifts.removeAsync(senderId).awaitSuspending()
+    currentGifts.removeAsync(receiverId).awaitSuspending()
   }
 
   fun shutdown() {

@@ -191,7 +191,7 @@ class GiftCommand : ParentCommand() {
         return
       }
 
-      val receiverData = module.bot.database.userRepository.getUser(receiver)
+      var receiverData = module.bot.database.userRepository.getUser(receiver)
       if (receiverData.selected == null) {
         context.reply(
           context.embedTemplates.error(
@@ -207,7 +207,7 @@ class GiftCommand : ParentCommand() {
         return
       }
 
-      val userData = context.getUserData()
+      var userData = context.getUserData()
       val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)
 
       when {
@@ -255,17 +255,24 @@ class GiftCommand : ParentCommand() {
 
           if (confirmed) {
             val session = module.bot.database.startSession()
-            session.use { clientSession ->
-              clientSession.startTransaction()
-              module.bot.database.pokemonRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
-              // TODO: test this
-              module.bot.database.userRepository.addPokemonIndex(userData, pokemon.index, clientSession)
-              module.bot.database.userRepository.removePokemonIndex(
-                receiverData,
-                receiverData.nextPokemonIndices.first(),
-                clientSession
-              )
-              clientSession.commitTransactionAndAwait()
+            module.bot.cache.withGiftLock(context.author.id, receiver.id) {
+              userData = context.getUserData(true)
+              receiverData = module.bot.database.userRepository.getUser(receiver)
+              println("Sender: ${userData.nextPokemonIndices}")
+              println("Receiver: ${receiverData.nextPokemonIndices}")
+              session.use { clientSession ->
+                clientSession.startTransaction()
+                module.bot.database.pokemonRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
+                module.bot.database.userRepository.addPokemonIndex(userData, pokemon.index, clientSession)
+                module.bot.database.userRepository.removePokemonIndex(
+                  receiverData,
+                  receiverData.nextPokemonIndices.first(),
+                  clientSession
+                )
+                println("Sender: ${userData.nextPokemonIndices}")
+                println("Receiver: ${receiverData.nextPokemonIndices}")
+                clientSession.commitTransactionAndAwait()
+              }
             }
             try {
               val privateChannel = receiver.openPrivateChannel().submit().await()

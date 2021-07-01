@@ -47,17 +47,17 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     return I18n.translate(getLanguage(), key, data, default)
   }
 
-  override suspend fun getUserData(): User {
-    if (userData == null) {
+  override suspend fun getUserData(forceFetch: Boolean): User {
+    if (userData == null || forceFetch) {
       userData = bot.database.userRepository.getUser(author)
       userData!!.tag = author.asTag
     }
     return userData!!
   }
 
-  override suspend fun getGuildData(): Guild? {
+  override suspend fun getGuildData(forceFetch: Boolean): Guild? {
     if (!isFromGuild) return null
-    if (guildData == null) {
+    if (guildData == null || forceFetch) {
       guildData = bot.database.guildRepository.getGuild(guild!!)
     }
     return guildData
