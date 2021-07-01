@@ -318,7 +318,7 @@ class PokemonRepository(
 
   suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, session: ClientSession) {
     if (pokemon.trainerId == null) {
-      collection.updateMany(
+      collection.updateOne(
         session,
         OwnedPokemon::_id eq pokemon._id,
         set(
