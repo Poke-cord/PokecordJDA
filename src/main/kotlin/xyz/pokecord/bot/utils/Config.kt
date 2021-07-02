@@ -9,8 +9,11 @@ object Config {
   val devs =
     mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752")
 
-  private const val mainServer = "718872125490069534"
+  const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"
+
+  const val publicNotificationChannel = "719524224036765737"
+
   val officialServers = listOf(
     mainServer,
     testingServer

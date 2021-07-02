@@ -9,11 +9,11 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import xyz.pokecord.bot.WebSocketConnection
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.Database
+import xyz.pokecord.bot.core.structures.HTTPServer
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
@@ -41,14 +41,20 @@ class Bot constructor(private val token: String) {
   private var started = false
   var maintenance = devEnv
 
+  private val httpServer by lazy { HTTPServer(this) }
+
   fun toggleMaintenance() {
     maintenance = !maintenance
     updatePresence()
   }
 
   fun start(shardCount: Int? = null, shardId: Int? = null) {
-    System.getenv("WEBSOCKET_SERVER_URL")?.let {
-      WebSocketConnection(it, this)
+    if (shardCount != null && shardId != null) {
+      if (shardId == ((Config.mainServer.toLong() shr 22) % shardCount).toInt()) {
+        httpServer.start()
+      }
+    } else {
+      httpServer.start()
     }
 
     this.version = if (devEnv) "DEV" else Config.version
