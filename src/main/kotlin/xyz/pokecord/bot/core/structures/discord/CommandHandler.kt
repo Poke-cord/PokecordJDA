@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
+import dev.minn.jda.ktx.await
 import kotlinx.coroutines.*
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -40,7 +41,10 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   private fun onButtonClick(event: ButtonClickEvent) {
     coroutineScope.launch {
       delay(2500)
-      if (!event.isAcknowledged) event.deferEdit().setActionRows().queue()
+      try {
+        if (!event.isAcknowledged) event.deferEdit().setActionRows().await()
+      } catch (ignored: Throwable) {
+      }
     }
   }
 
