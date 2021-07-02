@@ -258,8 +258,6 @@ class GiftCommand : ParentCommand() {
             module.bot.cache.withGiftLock(context.author.id, receiver.id) {
               userData = context.getUserData(true)
               receiverData = module.bot.database.userRepository.getUser(receiver)
-              println("Sender: ${userData.nextPokemonIndices}")
-              println("Receiver: ${receiverData.nextPokemonIndices}")
               session.use { clientSession ->
                 clientSession.startTransaction()
                 module.bot.database.pokemonRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
@@ -269,8 +267,6 @@ class GiftCommand : ParentCommand() {
                   receiverData.nextPokemonIndices.first(),
                   clientSession
                 )
-                println("Sender: ${userData.nextPokemonIndices}")
-                println("Receiver: ${receiverData.nextPokemonIndices}")
                 clientSession.commitTransactionAndAwait()
               }
             }
