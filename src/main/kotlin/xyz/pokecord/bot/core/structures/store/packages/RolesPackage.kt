@@ -2,6 +2,7 @@ package xyz.pokecord.bot.core.structures.store.packages
 
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.utils.Config
 
 object RolesPackage : Package() {
   override val id = "roles"
@@ -52,7 +53,9 @@ object RolesPackage : Package() {
         item.donationTier
       )
     }
-    // TODO: giveMemberRole(serverId, userData.id, item.roleId)
+    if (!bot.discordRestClient.giveMemberRole(Config.mainServer, userData.id, item.roleId)) {
+      bot.logger.error("Failed to give role ${item.roleId} to ${userData.id}")
+    }
   }
 
   class RoleItem(

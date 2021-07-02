@@ -18,6 +18,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.api.Discord
 import xyz.pokecord.bot.utils.api.PayPal
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
@@ -32,6 +33,7 @@ class Bot constructor(private val token: String) {
   val devEnv = System.getenv("DEV").equals("true", true)
 
   val payPal by lazy { PayPal(database) }
+  val discordRestClient by lazy { Discord(jda.token) }
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -49,13 +51,7 @@ class Bot constructor(private val token: String) {
   }
 
   fun start(shardCount: Int? = null, shardId: Int? = null) {
-    if (shardCount != null && shardId != null) {
-      if (shardId == ((Config.mainServer.toLong() shr 22) % shardCount).toInt()) {
-        httpServer.start()
-      }
-    } else {
-      httpServer.start()
-    }
+    httpServer.start()
 
     this.version = if (devEnv) "DEV" else Config.version
     val intents = mutableListOf(

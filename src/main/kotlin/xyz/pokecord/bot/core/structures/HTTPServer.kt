@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.core.structures
 
+import club.minnced.discord.webhook.WebhookClientBuilder
 import dev.minn.jda.ktx.EmbedBuilder
 import dev.minn.jda.ktx.await
 import io.ktor.application.*
@@ -14,6 +15,7 @@ import io.ktor.server.jetty.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import xyz.pokecord.bot.core.managers.I18n
+import xyz.pokecord.bot.core.managers.database.models.Order
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.Config
@@ -38,24 +40,51 @@ class HTTPServer(val bot: Bot) {
 
   private val topggSecret = System.getenv("TOPGG_SECRET") ?: throw Exception("top.gg secret is required.")
 
-  private suspend fun sendVoteNotification(args: BotVoteArgs) {
-    val guild = bot.jda.getGuildById(Config.mainServer)
-    val channel = guild?.getTextChannelById(Config.publicNotificationChannel)
-    channel?.sendMessageEmbeds(
+  private val publicNotificationWebhookClient = WebhookClientBuilder(Config.publicNotificationWebhook).buildJDA()
+  private val donationNotificationWebhookClient = WebhookClientBuilder(Config.donationNotificationWebhook).buildJDA()
+
+  private suspend fun sendVoteNotification(userId: String) {
+    publicNotificationWebhookClient.send(
       EmbedBuilder {
         color = 0xf0e365
         description =
-          "Big thanks to <@${args.user}> for voting over at [top.gg](https://top.gg/bot/705016654341472327/vote)!"
+          "Big thanks to <@${userId}> for voting over at [top.gg](https://top.gg/bot/705016654341472327/vote)!"
         title = "Thank You for Voting!"
 
         footer("Support us by using the p!donate command.")
       }.build()
-    )?.await()
+    ).await()
+  }
+
+  private suspend fun sendDonationNotification(order: Order, orderInfo: PayPal.OrderInfo, itemName: String) {
+    publicNotificationWebhookClient.send(
+      EmbedBuilder {
+        color = 0xf0e365
+        description =
+          "Big thanks to <@${order.userId}> for donating!"
+        title = "Thank You for Donating!"
+
+        footer("Support us by using the p!donate command.")
+      }.build()
+    ).await()
+
+    donationNotificationWebhookClient.send(
+      EmbedBuilder {
+        color = 0xf0e365
+        description = """            
+        **User**: <@${order.userId}> [${order.userId}]
+        **Amount**: ${order.price}
+        **Status**: ${orderInfo.status ?: "N/A"}
+        **Package**: $itemName
+        """.trimIndent()
+        title = "New Purchase"
+      }.build()
+    )
   }
 
   private suspend fun onVote(args: BotVoteArgs) {
     // TODO: Give vote rewards
-    sendVoteNotification(args)
+    sendVoteNotification(args.user)
   }
 
   suspend fun ApplicationCall.respond(statusCode: HttpStatusCode) {
@@ -79,7 +108,6 @@ class HTTPServer(val bot: Bot) {
             return@post
           }
           val voteArgs = call.receive<BotVoteArgs>()
-          println(voteArgs)
           if (voteArgs.bot == bot.jda.selfUser.id && (voteArgs.type == "upvote" || (voteArgs.type == "test" && bot.devEnv))) {
             onVote(voteArgs)
             call.respond(HttpStatusCode.OK)
@@ -88,7 +116,7 @@ class HTTPServer(val bot: Bot) {
           }
         }
 
-        get("/orders/id/{orderId?}") {
+        get("/api/orders/id/{orderId?}") {
           val orderId = call.parameters["orderId"]
           if (orderId == null) {
             call.respond(HttpStatusCode.BadRequest)
@@ -128,7 +156,7 @@ class HTTPServer(val bot: Bot) {
             )
           }
         }
-        get("/orders/cancel/{orderId?}") {
+        get("/api/orders/cancel/{orderId?}") {
           val orderId = call.parameters["orderId"]
           if (orderId == null) {
             call.respond(HttpStatusCode.BadRequest)
@@ -151,7 +179,7 @@ class HTTPServer(val bot: Bot) {
             }
           }
         }
-        get("/orders/confirm/{orderId?}") {
+        get("/api/orders/confirm/{orderId?}") {
           val orderId = call.parameters["orderId"]
           if (orderId == null) {
             call.respond(HttpStatusCode.BadRequest)
@@ -209,6 +237,8 @@ class HTTPServer(val bot: Bot) {
                       order.userName
                     )
                   )
+
+                  sendDonationNotification(order, orderInfo, itemName)
                 } else {
                   call.respondText(
                     "This order has already been paid.",

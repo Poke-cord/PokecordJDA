@@ -12,7 +12,10 @@ object Config {
   const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"
 
-  const val publicNotificationChannel = "719524224036765737"
+  const val publicNotificationWebhook =
+    "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"
+  const val donationNotificationWebhook =
+    "https://discord.com/api/webhooks/743592059231010976/OWTZ4wUvZXE8DL5YqFOo8WS4uRolpf6eSnDBL-o8b2OQA3Rfj1XmGk6rI4TU5i-8hEXd"
 
   val officialServers = listOf(
     mainServer,

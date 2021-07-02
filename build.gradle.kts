@@ -3,6 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 group = "xyz.pokecord"
 version = "2.0.0"
 
+val discordWebhooksVersion = "0.5.7"
 val graalJsVersion = "21.0.0.2"
 val jdaKtxVersion = "985db81"
 val jdaUtilitiesVersion = "3.0.5"
@@ -49,6 +50,8 @@ dependencies {
 //  implementation("com.github.dv8fromtheworld:jda:development") { // JitPack
     exclude(module = "opus-java")
   }
+
+  implementation("club.minnced:discord-webhooks:$discordWebhooksVersion")
 
   implementation("net.sf.trove4j:trove4j:$trove4jVersion")
 
