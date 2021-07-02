@@ -46,7 +46,7 @@ class UserRepository(
   }
 
   private suspend fun setCacheUser(user: User) {
-    if (user._isNew) {
+    if (user._isNew && !user.isDefault) {
       user._isNew = false
       collection.insertOne(user)
     }
