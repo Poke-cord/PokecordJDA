@@ -26,7 +26,8 @@ class MovesetCommand : Command() {
 
     if (pokemon == null) {
       context.reply(
-        context.embedTemplates.error("modules.pokemon.commands.moveset.errors.noPokemonFound").build()
+        context.embedTemplates.error(context.translate("modules.pokemon.commands.moveset.errors.noPokemonFound"))
+          .build()
       ).queue()
       return
     }
@@ -34,7 +35,7 @@ class MovesetCommand : Command() {
     val moveset = Moveset.getByPokemonId(pokemon.id)
     if (moveset == null) {
       context.reply(
-        context.embedTemplates.error("modules.pokemon.commands.moveset.errors.noMoveset")
+        context.embedTemplates.error(context.translate("modules.pokemon.commands.moveset.errors.noMoveset"))
           .build()
       ).queue()
       return
