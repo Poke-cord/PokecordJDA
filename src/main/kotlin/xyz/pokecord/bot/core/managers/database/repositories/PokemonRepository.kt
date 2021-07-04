@@ -466,7 +466,7 @@ class PokemonRepository(
                       }
                     }
                     addJsonObject {
-                      putJsonObject(OwnedPokemon::speciesId.name) {
+                      putJsonObject(OwnedPokemon::id.name) {
                         putJsonArray("\$in") {
                           searchIds.forEach {
                             add(it)
