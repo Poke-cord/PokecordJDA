@@ -219,10 +219,9 @@ class PokemonRepository(
     return pokemon
   }
 
-  suspend fun setNickname(pokemon: OwnedPokemon, nickname: String?): OwnedPokemon {
-    pokemon.nickname = nickname
+  suspend fun setNickname(pokemon: OwnedPokemon, nickname: String?) {
+    pokemon.nickname = if (nickname.isNullOrBlank()) null else nickname
     collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::nickname setTo pokemon.nickname))
-    return pokemon
   }
 
   suspend fun releasePokemon(pokemon: OwnedPokemon, session: ClientSession) {
@@ -458,7 +457,7 @@ class PokemonRepository(
                 putJsonObject("\$match") {
                   putJsonArray("\$or") {
                     addJsonObject {
-                      putJsonObject("nickname") {
+                      putJsonObject(OwnedPokemon::nickname.name) {
                         put("\$regex", (regex ?: searchQuery!!).toString())
                         put(
                           "\$options",
@@ -467,7 +466,7 @@ class PokemonRepository(
                       }
                     }
                     addJsonObject {
-                      putJsonObject("id") {
+                      putJsonObject(OwnedPokemon::speciesId.name) {
                         putJsonArray("\$in") {
                           searchIds.forEach {
                             add(it)

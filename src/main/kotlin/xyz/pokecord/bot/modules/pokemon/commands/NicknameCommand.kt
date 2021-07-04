@@ -18,14 +18,14 @@ class NicknameCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    var pokemon = context.resolvePokemon(context.author, context.getUserData(), pokemonResolvable)
+    val pokemon = context.resolvePokemon(context.author, context.getUserData(), pokemonResolvable)
     if (pokemon == null) {
       context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
         .queue()
       return
     }
 
-    if (nickname != null) {
+    if (!nickname.isNullOrBlank()) {
       if (nickname.length > 64) {
         context.reply(
           context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.tooLong")).build()
@@ -48,7 +48,7 @@ class NicknameCommand : Command() {
       }
     }
 
-    pokemon = module.bot.database.pokemonRepository.setNickname(pokemon, nickname)
+    module.bot.database.pokemonRepository.setNickname(pokemon, nickname)
 
     context.reply(
       context.embedTemplates.normal(
@@ -56,12 +56,12 @@ class NicknameCommand : Command() {
           "modules.pokemon.commands.nickname.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonName(pokemon)!!,
-            "nickname" to (pokemon.nickname ?: ""),
+            "nickname" to (pokemon.nickname ?: "None"),
             "level" to pokemon.level.toString(),
             "ivPercentage" to pokemon.ivPercentage
           )
         ),
-        context.translate(if (pokemon.nickname != null) "modules.pokemon.commands.nickname.updated" else "modules.pokemon.commands.nickname.reset")
+        context.translate(if (!nickname.isNullOrBlank()) "modules.pokemon.commands.nickname.updated" else "modules.pokemon.commands.nickname.reset")
       )
         .setColor(pokemon.data.species.color.colorCode)
         .build()
