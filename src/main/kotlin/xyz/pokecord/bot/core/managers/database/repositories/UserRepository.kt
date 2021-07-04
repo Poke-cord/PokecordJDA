@@ -110,7 +110,7 @@ class UserRepository(
     extraOps: suspend (session: ClientSession) -> Unit = {}
   ): OwnedPokemon {
     if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
-    val isUnsavedUser = userData.isDefault || userData._isNew
+    val isUnsavedUser = userData.isDefault && userData._isNew
     var ownedPokemon = OwnedPokemon(
       pokemonId,
       userData.nextPokemonIndices.first(),
