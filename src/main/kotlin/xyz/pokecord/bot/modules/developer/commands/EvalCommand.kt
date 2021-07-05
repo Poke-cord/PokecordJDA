@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.developer.commands
 
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import javax.script.Compilable
 import javax.script.ScriptContext
@@ -9,15 +10,17 @@ import javax.script.ScriptEngineManager
 class EvalCommand : DeveloperCommand() {
   override val name = "Eval"
 
-  private val codeRegex = "```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(RegexOption.MULTILINE)
+  private val codeRegex =
+    "```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL))
   private val scriptEngineManager = ScriptEngineManager()
 
   @Executor
-  fun execute(
-    context: ICommandContext,
-    @Argument(consumeRest = true, name = "code") input: String?
-  ) {
-    val groupValues = input?.let { codeRegex.matchEntire(it)?.groupValues }
+  suspend fun execute(context: ICommandContext) {
+    if (context !is MessageCommandContext) return
+
+    val input = context.event.message.contentRaw.drop(context.getPrefix().length + name.length).trim()
+
+    val groupValues = input.let { codeRegex.matchEntire(it)?.groupValues }
     var extension = groupValues?.get(1) ?: "kts"
     var code = groupValues?.get(2)
 
