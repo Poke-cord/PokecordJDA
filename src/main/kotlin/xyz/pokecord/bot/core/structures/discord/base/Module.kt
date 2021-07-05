@@ -22,11 +22,19 @@ import kotlin.reflect.jvm.javaType
 @Suppress("UNUSED", "COULD_BE_PRIVATE")
 abstract class Module(
   val bot: Bot,
-  val commands: Array<Command> = arrayOf(),
+  val commands: MutableList<Command> = mutableListOf(),
   val events: Array<Event> = arrayOf(),
   private val tasks: Array<Task> = arrayOf(),
   val intents: Array<GatewayIntent> = GatewayIntent.getIntents(GatewayIntent.DEFAULT).toTypedArray()
 ) : EventListener {
+  constructor(
+    bot: Bot,
+    commands: Array<Command> = arrayOf(),
+    events: Array<Event> = arrayOf(),
+    tasks: Array<Task> = arrayOf(),
+    intents: Array<GatewayIntent> = GatewayIntent.getIntents(GatewayIntent.DEFAULT).toTypedArray()
+  ) : this(bot, mutableListOf(*commands), events, tasks, intents)
+
   abstract val name: String
 
   val commandMap = linkedMapOf<String, Command>()
@@ -37,45 +45,7 @@ abstract class Module(
 
   fun load() {
     for (command in commands) {
-      val executorFunction =
-        command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
-          ?: continue
-
-      var allConsumed = false
-
-      for (param in executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }) {
-        val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
-        if (commandArgumentAnnotation != null) {
-          if (allConsumed) {
-            throw IllegalArgumentException("Command arguments cannot appear after another command argument that has consumeRest = true.")
-          }
-          if (!param.type.isMarkedNullable) {
-            throw IllegalArgumentException("All command arguments must be nullable.")
-          }
-          if (commandArgumentAnnotation.consumeRest) allConsumed = true
-        }
-      }
-      command.module = this
-      if (!command::class.hasAnnotation<Command.ChildCommand>()) {
-        this.commandMap[command.name.lowercase()] = command
-        for (alias in command.aliases) {
-          this.commandMap[alias.lowercase()] = command
-        }
-        if (command is ParentCommand) {
-          val childCommandClasses = command::class.nestedClasses.filter { it.hasAnnotation<Command.ChildCommand>() }
-          for (childCommandClass in childCommandClasses) {
-            val childCommand = command.module.commands.find { it::class == childCommandClass }
-            if (childCommand != null) {
-              childCommand.parentCommand = command
-              command.childCommands.add(childCommand)
-              this.commandMap["${command.name.lowercase()}.${childCommand.name.lowercase()}"] = childCommand
-              for (alias in childCommand.aliases) {
-                this.commandMap["${command.name.lowercase()}.${alias.lowercase()}"] = childCommand
-              }
-            }
-          }
-        }
-      }
+      addCommand(command)
     }
     for (event in events) {
       event.module = this
@@ -85,6 +55,49 @@ abstract class Module(
     for (task in tasks) {
       task.module = this
       taskMap[task.name] = task
+    }
+  }
+
+  @Suppress("COULD_BE_PRIVATE")
+  fun addCommand(command: Command) {
+    val executorFunction =
+      command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
+        ?: return
+
+    var allConsumed = false
+
+    for (param in executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }) {
+      val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
+      if (commandArgumentAnnotation != null) {
+        if (allConsumed) {
+          throw IllegalArgumentException("Command arguments cannot appear after another command argument that has consumeRest = true.")
+        }
+        if (!param.type.isMarkedNullable) {
+          throw IllegalArgumentException("All command arguments must be nullable.")
+        }
+        if (commandArgumentAnnotation.consumeRest) allConsumed = true
+      }
+    }
+    command.module = this
+    if (!command::class.hasAnnotation<Command.ChildCommand>()) {
+      this.commandMap[command.name.lowercase()] = command
+      for (alias in command.aliases) {
+        this.commandMap[alias.lowercase()] = command
+      }
+      if (command is ParentCommand) {
+        val childCommandClasses = command::class.nestedClasses.filter { it.hasAnnotation<Command.ChildCommand>() }
+        for (childCommandClass in childCommandClasses) {
+          val childCommand = command.module.commands.find { it::class == childCommandClass }
+          if (childCommand != null) {
+            childCommand.parentCommand = command
+            command.childCommands.add(childCommand)
+            this.commandMap["${command.name.lowercase()}.${childCommand.name.lowercase()}"] = childCommand
+            for (alias in childCommand.aliases) {
+              this.commandMap["${command.name.lowercase()}.${alias.lowercase()}"] = childCommand
+            }
+          }
+        }
+      }
     }
   }
 
