@@ -18,8 +18,10 @@ class EvalCommand : DeveloperCommand() {
     @Argument(consumeRest = true, name = "code") input: String?
   ) {
     val groupValues = input?.let { codeRegex.matchEntire(it)?.groupValues }
-    val extension = groupValues?.get(1) ?: "js"
-    val code = groupValues?.get(2)
+    var extension = groupValues?.get(1) ?: "kts"
+    var code = groupValues?.get(2)
+
+    if (extension == "kt") extension = "kts"
 
 //    if (extension == null) {
 //      context.reply(
@@ -52,16 +54,28 @@ class EvalCommand : DeveloperCommand() {
       ).queue()
       return
     }
-    if (scriptEngine.factory.engineName == "Graal.js") {
-      val bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE)
-      bindings["polyglot.js.allowHostAccess"] = true
+
+    if (scriptEngine.factory.engineName == "kotlin") {
+      code = """
+        import kotlinx.coroutines.runBlocking
+        
+        $code
+      """.trimIndent()
     }
-    scriptEngine.put("context", context)
-    scriptEngine.put("jda", context.jda)
-    scriptEngine.put("guild", context.guild)
-    scriptEngine.put("channel", context.channel)
-    scriptEngine.put("bot", module.bot)
-    scriptEngine.put("module", module)
+
+
+    scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).apply {
+      if (scriptEngine.factory.engineName == "Graal.js") {
+        put("polyglot.js.allowHostAccess", true)
+      }
+
+      put("context", context)
+      put("jda", context.jda)
+      context.guild?.let { put("guild", it) }
+      put("channel", context.channel)
+      put("bot", module.bot)
+      put("module", module)
+    }
 
     try {
       val result = (if (scriptEngine is Compilable) scriptEngine.compile(code).eval() else scriptEngine.eval(code))

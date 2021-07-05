@@ -35,6 +35,7 @@ repositories {
 }
 
 dependencies {
+  implementation(kotlin("scripting-jsr223"))
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
 
