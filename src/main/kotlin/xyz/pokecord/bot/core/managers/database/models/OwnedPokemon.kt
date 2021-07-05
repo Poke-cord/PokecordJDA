@@ -93,10 +93,11 @@ data class OwnedPokemon(
     } else {
       (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) + 5).roundToInt()
     }
-    val multiplier = when {
-      nature.increasedStatId == stat.id -> 1.1
-      nature.decreasedStatId == stat.id -> 0.9
-      else -> 1.0
+    var multiplier = 1.0
+
+    when {
+      nature.increasedStatId == stat.id -> multiplier += 0.1
+      nature.decreasedStatId == stat.id -> multiplier -= 0.1
     }
     return floor(statVal * multiplier).roundToInt()
   }
