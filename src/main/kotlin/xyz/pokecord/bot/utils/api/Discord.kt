@@ -13,7 +13,7 @@ class Discord(
 
   suspend fun giveMemberRole(guildId: String, userId: String, roleId: String): Boolean {
     val response = httpClient.put<HttpResponse>("${baseUrl}/guilds/${guildId}/members/${userId}/roles/${roleId}") {
-      header("Authorization", "Bot $token")
+      header("Authorization", token)
       userAgent("DiscordBot (https://pokecord.xyz, ${Config.version})")
     }
     return response.status == HttpStatusCode.OK
