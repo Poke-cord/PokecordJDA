@@ -13,13 +13,16 @@ import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.jetty.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Order
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.store.packages.Package
+import xyz.pokecord.bot.utils.CachedStaffMember
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.api.PayPal
+import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
 class HTTPServer(val bot: Bot) {
   @Serializable
@@ -101,6 +104,13 @@ class HTTPServer(val bot: Bot) {
       }
 
       routing {
+        get("/api/misc/team") {
+          val staffMemberObjects = bot.cache.staffMembersSet.readAllAsync().awaitSuspending().map {
+            Json.decodeFromString<CachedStaffMember>(it)
+          }
+          call.respond(staffMemberObjects)
+        }
+
         post("/topgg/vote") {
           val secret = call.request.header("Authorization")
           if (secret != topggSecret) {

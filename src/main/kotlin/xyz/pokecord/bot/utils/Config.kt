@@ -67,4 +67,13 @@ object Config {
       "🇿"
     )
   }
+
+  enum class Roles(val id: String) {
+    OWNER("719524189815439371"),
+    STAFF("719524196417536150");
+
+    companion object {
+      val ids = values().map { it.id }
+    }
+  }
 }

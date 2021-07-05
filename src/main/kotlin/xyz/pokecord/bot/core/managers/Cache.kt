@@ -29,6 +29,7 @@ class Cache {
   val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
+  val staffMembersSet: RSetCacheAsync<String>
 
   init {
     val nameMapper = RedissonNameMapper(System.getenv("REDIS_NAME_MAPPER"))
@@ -70,6 +71,7 @@ class Cache {
     shardStatusMap = redissonClient.getMapCache("shardStatus")
     spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
     userMap = redissonClient.getMapCache("user")
+    staffMembersSet = redissonClient.getSetCache("staffMembers")
   }
 
   suspend fun setRunningCommand(userId: String, isRunningCommand: Boolean): Long? {

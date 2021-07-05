@@ -29,3 +29,11 @@ sealed class PokemonResolvable(val data: Any?) {
   class Latest : PokemonResolvable("latest")
   class Int(data: kotlin.Int?) : PokemonResolvable(data)
 }
+
+@Serializable
+data class CachedStaffMember(
+  val tag: String,
+  val avatarUrl: String,
+  val roleName: String,
+  val rolePosition: Int
+)
