@@ -39,7 +39,7 @@ class SpawnerEvent : Event() {
       if (!envFlag || context.bot.maintenance) return
       if (context.event.channelType != ChannelType.TEXT) return
       val prefix = context.getPrefix()
-      if (context.event.message.contentRaw.startsWith(prefix)) return
+      if (context.event.message.contentRaw.startsWith(prefix, true)) return
       val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
       var randomSpawnChannel = spawnChannels.randomOrNull() ?: return
       SpawnChannelMutex[randomSpawnChannel.id].withLock {
@@ -51,10 +51,11 @@ class SpawnerEvent : Event() {
             Permission.MESSAGE_EMBED_LINKS
           )
         ) return // TODO: maybe let them know about missing permission somehow?
-        val lastMessageAt = context.bot.cache.lastCountedMessageMap.getAsync(context.author.id).awaitSuspending()
+        val lastMessageAt =
+          context.bot.cache.lastCountedSpawnMessageMap.getAsync(context.author.id).awaitSuspending()
         val now = System.currentTimeMillis()
         if (lastMessageAt != null && lastMessageAt + 5000 > now) return
-        context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
+        context.bot.cache.lastCountedSpawnMessageMap.fastPutAsync(context.author.id, now).awaitSuspending()
 
         val oldSpawnChannelData = SpawnChannel(
           randomSpawnChannel.id,

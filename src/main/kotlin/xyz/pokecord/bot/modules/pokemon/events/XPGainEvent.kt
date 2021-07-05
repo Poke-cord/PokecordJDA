@@ -16,15 +16,15 @@ class XPGainEvent : Event() {
     if (!envFlag || context.bot.maintenance) return
     if (context.event.message.contentRaw.length <= 2) return
     val prefix = context.getPrefix()
-    if (context.event.message.contentRaw.startsWith(prefix)) return
+    if (context.event.message.contentRaw.startsWith(prefix, true)) return
 
     val userData = context.getUserData()
     if (userData.selected == null) return
 
-    val lastMessageAt = context.bot.cache.lastCountedMessageMap.getAsync(context.author.id).awaitSuspending()
+    val lastMessageAt = context.bot.cache.lastCountedXpMessageMap.getAsync(context.author.id).awaitSuspending()
     val now = System.currentTimeMillis()
     if (lastMessageAt != null && lastMessageAt + 5000 > now) return
-    context.bot.cache.lastCountedMessageMap.replaceAsync(context.author.id, now).awaitSuspending()
+    context.bot.cache.lastCountedXpMessageMap.fastPutAsync(context.author.id, now).awaitSuspending()
 
     val selectedPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     if (selectedPokemon == null || selectedPokemon.level >= 100) return
