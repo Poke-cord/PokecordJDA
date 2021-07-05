@@ -95,10 +95,8 @@ data class OwnedPokemon(
     }
     var multiplier = 1.0
 
-    when {
-      nature.increasedStatId == stat.id -> multiplier += 0.1
-      nature.decreasedStatId == stat.id -> multiplier -= 0.1
-    }
+    if (nature.increasedStatId == stat.id) multiplier += 0.1
+    if (nature.decreasedStatId == stat.id) multiplier -= 0.1
     return floor(statVal * multiplier).roundToInt()
   }
 
