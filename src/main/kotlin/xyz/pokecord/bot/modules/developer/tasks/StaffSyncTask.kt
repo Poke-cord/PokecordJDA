@@ -24,7 +24,7 @@ class StaffSyncTask : Task() {
         val avatarUrl =
           if (guildMember.user.avatar == null) "https://cdn.discordapp.com/embed/avatars/${guildMember.user.discriminator.toInt() % 5}.png"
           else "https://cdn.discordapp.com/avatars/${guildMember.user.id}/${guildMember.user.avatar}.${
-            if (guildMember.avatar!!.startsWith(
+            if (guildMember.user.avatar.startsWith(
                 "a_"
               )
             ) "gif" else "png"
