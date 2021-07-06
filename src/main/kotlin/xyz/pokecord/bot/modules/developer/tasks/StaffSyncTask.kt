@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.developer.tasks
 
+import kotlinx.coroutines.delay
 import kotlinx.serialization.encodeToString
 import xyz.pokecord.bot.core.structures.discord.base.Task
 import xyz.pokecord.bot.utils.CachedStaffMember
@@ -30,6 +31,8 @@ class StaffSyncTask : Task() {
             ) "gif" else "png"
           }"
 
+        // TODO: implement rate limit handling
+        delay(1000)
         CachedStaffMember(
           guildMember.user.username,
           guildMember.user.discriminator,
