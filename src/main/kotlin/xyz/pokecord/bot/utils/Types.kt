@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.utils
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.pokecord.bot.core.managers.I18n
 
@@ -32,8 +33,32 @@ sealed class PokemonResolvable(val data: Any?) {
 
 @Serializable
 data class CachedStaffMember(
-  val tag: String,
+  val username: String,
+  val discriminator: String,
   val avatarUrl: String,
   val roleName: String,
   val rolePosition: Int
+)
+
+@Serializable
+data class GuildMemberResponseUser(
+  val id: String,
+  val username: String,
+  val avatar: String?,
+  val discriminator: String,
+  @SerialName("public_flags") val publicFlags: Int
+)
+
+@Serializable
+data class GuildMemberResponse(
+  val roles: List<String>,
+  val avatar: String?,
+  val user: GuildMemberResponseUser
+)
+
+@Serializable
+data class GuildRoleResponse(
+  val id: String,
+  val name: String,
+  val position: Int
 )

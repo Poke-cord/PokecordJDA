@@ -29,6 +29,7 @@ class Cache {
   val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
+  val staffMemberIds: RSetCacheAsync<String>
   val staffMembersSet: RSetCacheAsync<String>
 
   init {
@@ -71,6 +72,7 @@ class Cache {
     shardStatusMap = redissonClient.getMapCache("shardStatus")
     spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
     userMap = redissonClient.getMapCache("user")
+    staffMemberIds = redissonClient.getSetCache("staffMemberIds")
     staffMembersSet = redissonClient.getSetCache("staffMembers")
   }
 
