@@ -73,8 +73,7 @@ class CatchCommand : Command() {
               mapOf(
                 "user" to context.author.asMention,
                 "level" to "${ownedPokemon.level}",
-                "pokemon" to ownedPokemon.displayName,
-                "ivPercentage" to ownedPokemon.ivPercentage
+                "pokemon" to ownedPokemon.displayName
               )
             ),
             context.translate(

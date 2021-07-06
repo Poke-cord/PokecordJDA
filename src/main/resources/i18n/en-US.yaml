@@ -189,7 +189,6 @@ modules:
           description: |-
             **Name**: {{pokemon}}
             **Level**: {{level}}
-            **IV Percent**: {{ivPercentage}}
 
             Congratulations {{user}}!
           footer: The Pokémon has been added to your collection.
