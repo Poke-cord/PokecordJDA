@@ -41,6 +41,8 @@ class PokemonCommand : Command() {
       optional = true
     ) searchQuery: String?
   ) {
+    if (!context.hasStarted(true)) return
+
     val targetUser = user ?: context.author
     val checkingSelf = user == null
 
