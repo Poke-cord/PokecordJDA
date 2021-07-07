@@ -512,6 +512,8 @@ modules:
 
       store:
         embed:
+          oldOrderDescription: |
+            **[Click here]({{link}})** in order to pay for your last order for **{{item}}**.
           confirmation:
             cancelOldOrder: You already have an order open, would you like to cancel it?
           orderCreated:
@@ -522,6 +524,7 @@ modules:
         errors:
           cancelOldOrder:
             noAction: You didn't choose anything, ignoring store request.
+            orderCancelled: Your order has been cancelled successfully.
           failedToCancelOrder: There was an error creating the order, please contact the administrators.
           dmsClosed: Please open your DM's and restart the process above in order to continue.
         dm:
@@ -534,7 +537,7 @@ store:
   packages:
     gems:
       name: Gems
-      description: Purchase gems in order to buy exclusive items on the in-game item shop.
+      description: Purchase gems in order to buy exclusive items on the in-game item shoDp.
       embed:
         title: Purchase Gems
         description: Click the emoji corresponding to the amount of gems you would like to purchase.
