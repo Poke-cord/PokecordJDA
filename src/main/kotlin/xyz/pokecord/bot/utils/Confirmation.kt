@@ -44,7 +44,8 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
     val replyActionResult = context.addActionRows(
       ActionRow.of(
         ConfirmationOptions.values.map {
-          Button.secondary(it.id, it.text).withEmoji(Emoji.fromUnicode(it.emoji))
+          Button.primary(it.id, Emoji.fromUnicode(it.emoji))
+//          Button.secondary(it.id, it.text).withEmoji(Emoji.fromUnicode(it.emoji))
         }
       )).reply(embedBuilder.build()).await()
 
