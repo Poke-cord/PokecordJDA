@@ -75,7 +75,7 @@ class EmbedPaginator(
       val result = context.addActionRows(
         ActionRow.of(
           NavigationOptions.values.map {
-            Button.primary(it.buttonId, Emoji.fromUnicode(it.emoji))
+            Button.secondary(it.buttonId, Emoji.fromUnicode(it.emoji))
 //            Button.secondary(it.buttonId, it.buttonText)
 //              .withEmoji(Emoji.fromUnicode(it.emoji))
           }
