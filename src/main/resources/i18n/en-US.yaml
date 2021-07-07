@@ -175,8 +175,6 @@ modules:
         embed:
           description: |-
             **Voting Link**: [Vote for Pokecord]({{voteLink}})
-            **Vote Streak**: {{voteStreak}}
-            **Unclaimed Votes**: {{unclaimedVotes}}
             **Season End**: {{currentSeasonEndTime}}
 
             Use `{{prefix}}rewards vote` to claim your rewards before the season ends!
@@ -451,19 +449,12 @@ modules:
             catchRewards:
               name: '**Catch Rewards**: {{amount}}'
               value: '**Credits**: {{credits}}'
-            voteRewards:
-              name: '**Vote Rewards**: {{amount}}'
-              value: |-
-                **Credits**: {{credits}}
-                **Gems**: {{gems}}
-                **Pokémon XP**: {{xp}}
           title: '{{amount}} Rewards were Claimed'
         embeds:
           available:
             description: |-
               All rewards you have earned will be available here.
 
-              **Voting Rewards**: {{unclaimedVoteRewards}}
               **Catch Rewards**: {{unclaimedCatchRewards}}
 
               Use `{{prefix}}rewards <type of reward>` or `{{prefix}}rewards all` to claim rewards!
@@ -473,8 +464,6 @@ modules:
                         earn catch rewards!'
           noRewards: '**Suggestion**: Try earning a few rewards before checking
                         in!'
-          noVoteRewards: '**Suggestion**: Try voting for Pokecord to earn
-                        vote rewards!'
   economy:
     commands:
       buy:

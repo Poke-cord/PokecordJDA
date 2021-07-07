@@ -371,7 +371,7 @@ object Migration {
         val selected = if (it.isObjectId("selected")) it.getObjectId("selected").value else null
 
         val inventory = if (it.isArray("inventory")) it.getArray("inventory") else null
-        val rewards = if (it.isDocument("rewards")) it.getDocument("rewards") else null
+//        val rewards = if (it.isDocument("rewards")) it.getDocument("rewards") else null
 
         val inventoryItems = mutableListOf<InventoryItem>()
         val voteRewards = mutableListOf<VoteReward>()
@@ -389,22 +389,23 @@ object Migration {
           }
         }
 
-        if (rewards != null) {
-          if (rewards.isArray("vote")) {
-            rewards.getArray("vote").toArray().forEach { item ->
-              try {
-                if (item is BsonDocument) {
-                  val id = if (item.isObjectId("_id")) item.getObjectId("_id").value else null
-                  val claimed = item.getBoolean("claimed").value
-                  val season = item.getInt32("season").value
-                  voteRewards.add(VoteReward(userId, season, claimed, id?.toId() ?: newId()))
-                }
-              } catch (e: BsonInvalidOperationException) {
-                e.printStackTrace()
-              }
-            }
-          }
-        }
+        // TODO: migrate vote reward maybe
+//        if (rewards != null) {
+//          if (rewards.isArray("vote")) {
+//            rewards.getArray("vote").toArray().forEach { item ->
+//              try {
+//                if (item is BsonDocument) {
+//                  val id = if (item.isObjectId("_id")) item.getObjectId("_id").value else null
+//                  val claimed = item.getBoolean("claimed").value
+//                  val season = item.getInt32("season").value
+//                  voteRewards.add(VoteReward(userId, season, claimed, id?.toId() ?: newId()))
+//                }
+//              } catch (e: BsonInvalidOperationException) {
+//                e.printStackTrace()
+//              }
+//            }
+//          }
+//        }
 
         newUsersCollection.insertOne(
           User(

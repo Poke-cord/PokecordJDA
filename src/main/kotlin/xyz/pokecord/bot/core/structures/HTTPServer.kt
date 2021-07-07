@@ -15,12 +15,15 @@ import io.ktor.server.jetty.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Order
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.pokemon.items.CCTItem
 import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.CachedStaffMember
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.VoteUtils
 import xyz.pokecord.bot.utils.api.PayPal
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
@@ -86,7 +89,25 @@ class HTTPServer(val bot: Bot) {
   }
 
   private suspend fun onVote(args: BotVoteArgs) {
-    // TODO: Give vote rewards
+    // days 5, 10, 15, 20, 25, 30 (aka when day % 5 == 0) -> 10k credits, 1 CCT, 1 Token
+    // else -> 5k credits, 1 Token
+    val day = VoteUtils.getSeasonDay()
+
+    val (credits, tokens, cct) =
+      if (day % 5 == 0) Triple(10_000, 1, 1)
+      else Triple(5_000, 1, 0)
+
+    val session = bot.database.startSession()
+    session.use { clientSession ->
+      clientSession.startTransaction()
+      val userData = bot.database.userRepository.getUser(args.user)
+      bot.database.userRepository.incCredits(userData, credits, clientSession)
+      bot.database.userRepository.incTokens(userData, tokens, clientSession)
+      if (cct > 0) {
+        bot.database.userRepository.addInventoryItem(args.user, CCTItem.id, cct, clientSession)
+      }
+      clientSession.commitTransactionAndAwait()
+    }
     sendVoteNotification(args.user)
   }
 

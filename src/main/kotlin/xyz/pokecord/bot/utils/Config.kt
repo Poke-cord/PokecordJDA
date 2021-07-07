@@ -1,8 +1,13 @@
 package xyz.pokecord.bot.utils
 
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
+
 object Config {
   const val version = "2.0.0"
-  const val voteSeasonStartTimestamp = 1609459200000
+
+  val voteSeasonStartDate: LocalDate = Instant.ofEpochMilli(1609459200000).atZone(ZoneOffset.UTC).toLocalDate()
 
   val officialServerOnlyMode = System.getenv("OFFICIAL_SERVER_ONLY") != null
 
@@ -21,21 +26,6 @@ object Config {
     mainServer,
     testingServer
   )
-
-  enum class VoteRewards(
-    val minTier: Int,
-    val maxTier: Int,
-    val minCredits: Int,
-    val maxCredits: Int,
-    val minXp: Int,
-    val maxXp: Int,
-    val minGems: Int,
-    val maxGems: Int
-  ) {
-    TIER1(0, 10, 500, 2500, 500, 2500, 5, 7),
-    TIER2(11, 20, 500, 2500, 500, 2500, 7, 9),
-    TIER3(21, 30, 500, 2500, 500, 2500, 10, 12)
-  }
 
   object Emojis {
     val alphabet = listOf(

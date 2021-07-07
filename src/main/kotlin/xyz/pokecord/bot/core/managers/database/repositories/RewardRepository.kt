@@ -24,7 +24,7 @@ class RewardRepository(
     else voteRewardCollection.deleteMany(session, VoteReward::_id `in` voteRewardIds)
   }
 
-  suspend fun giveVoteReward(userId: String, season: Int) {
-    voteRewardCollection.insertOne(VoteReward(userId, season))
+  suspend fun giveVoteReward(reward: VoteReward) {
+    voteRewardCollection.insertOne(reward)
   }
 }

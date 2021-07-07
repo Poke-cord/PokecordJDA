@@ -1,34 +1,24 @@
 package xyz.pokecord.bot.utils
 
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import kotlin.math.ceil
-import kotlin.math.round
+import java.time.temporal.ChronoUnit
 
 object VoteUtils {
-  fun getCurrentSeason(startTimestamp: Long = Config.voteSeasonStartTimestamp): Int {
-    val daysSinceStartTimestamp =
-      round((System.currentTimeMillis() - startTimestamp) / (1000 * 3600 * 24).toDouble()).toInt()
-    var season = 1
-    var tmp = 0
-    for (i in 0 until daysSinceStartTimestamp) {
-      tmp++
-      if (tmp == 15) {
-        season++
-        tmp = 0
-      }
-    }
-    return season
+  fun getCurrentSeason(startDate: LocalDate = Config.voteSeasonStartDate, now: LocalDate = LocalDate.now()): Int {
+    val daysSinceSeasonStarted = startDate.until(now, ChronoUnit.DAYS)
+    return (daysSinceSeasonStarted / 30).toInt() + 1
   }
 
-  fun getSeasonEndTime(startTimestamp: Long = Config.voteSeasonStartTimestamp): String {
-    val daysSinceStartTimestamp =
-      round((System.currentTimeMillis() - startTimestamp) / (1000 * 3600 * 24).toDouble()).toInt()
-    val daysLeft = (15 * ceil(daysSinceStartTimestamp / 15.0) - daysSinceStartTimestamp).toInt() + 1
-    return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
-      .format(ZonedDateTime.of(LocalDate.now().plusDays(daysLeft.toLong()).atStartOfDay(), ZoneId.of("UTC")))
+  fun getSeasonDay(startDate: LocalDate = Config.voteSeasonStartDate, now: LocalDate = LocalDate.now()): Int {
+    val daysSinceSeasonStarted = startDate.until(now, ChronoUnit.DAYS)
+    return (daysSinceSeasonStarted % 30).toInt() + 1
+  }
+
+  fun getSeasonEndTime(
+    startDate: LocalDate = Config.voteSeasonStartDate,
+    now: LocalDate = LocalDate.now()
+  ): LocalDate {
+    val daysUntilNextSeason = (getCurrentSeason(startDate, now)) * 30
+    return startDate.plusDays(daysUntilNextSeason.toLong())
   }
 }
