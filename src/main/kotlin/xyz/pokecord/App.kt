@@ -69,7 +69,7 @@ object App {
           client.start()
         } else {
           shardManagerBuilder.setShardsTotal(shardCount).setShards(shardId)
-          bot.start(shardManagerBuilder)
+          bot.start(shardManagerBuilder, true)
         }
       } catch (e: Exception) {
         logger.error("Error occurred in App", e)

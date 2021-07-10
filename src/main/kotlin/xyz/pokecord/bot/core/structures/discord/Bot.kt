@@ -49,7 +49,7 @@ class Bot constructor(private val token: String) {
     updatePresence()
   }
 
-  fun start(shardManagerBuilder: DefaultShardManagerBuilder) {
+  fun start(shardManagerBuilder: DefaultShardManagerBuilder, build: Boolean = false) {
     httpServer.start()
 
     this.version = if (devEnv) "DEV" else Config.version
@@ -72,6 +72,9 @@ class Bot constructor(private val token: String) {
     shardManagerBuilder
       .addEventListeners(commandHandler, *moduleArray)
       .setEnabledIntents(intents)
+    if (build) {
+      shardManager = shardManagerBuilder.build()
+    }
     started = true
   }
 

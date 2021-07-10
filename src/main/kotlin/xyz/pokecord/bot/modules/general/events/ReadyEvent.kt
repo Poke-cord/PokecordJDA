@@ -72,7 +72,7 @@ class ReadyEvent : Event() {
       module.bot.cache.shardStatusMap.deleteAsync().awaitSuspending()
     }
 
-    module.bot.logger.info("Logged in as ${event.jda.selfUser.asTag}!")
+    module.bot.logger.info("Logged in as ${event.jda.selfUser.asTag} (shard ${event.jda.shardInfo.shardId})!")
     module.bot.updatePresence()
   }
 }
