@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.general.events
 
 import dev.minn.jda.ktx.await
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import xyz.pokecord.bot.core.managers.I18n
@@ -18,7 +19,7 @@ import kotlin.reflect.full.memberFunctions
 class ReadyEvent : Event() {
   override val name = "Ready"
 
-  private suspend fun prepareSlashCommands() {
+  private suspend fun prepareSlashCommands(jda: JDA) {
     val commandsData = module.bot.modules.map { (_, module) ->
       module.commands.mapNotNull { command ->
         if (command is DeveloperCommand) return@mapNotNull null // TODO: add check for mod commands
@@ -49,14 +50,14 @@ class ReadyEvent : Event() {
 
     if (System.getenv("REGISTER_SLASH_COMMANDS") != null) {
       if (module.bot.devEnv) {
-        module.bot.jda.getGuildById(Config.testingServer)?.let {
+        module.bot.shardManager.getGuildById(Config.testingServer)?.let {
           commandsData.forEach { commandData ->
             it.upsertCommand(commandData).await()
           }
         }
       } else {
         commandsData.forEach { commandData ->
-          module.bot.jda.upsertCommand(commandData).await()
+          jda.upsertCommand(commandData).await()
         }
       }
     }
@@ -64,10 +65,10 @@ class ReadyEvent : Event() {
 
   @Handler
   suspend fun onReady(event: ReadyEvent) {
-    prepareSlashCommands()
+    prepareSlashCommands(event.jda)
 
     // Delete existing shard status when shard 0 logs in
-    if (module.bot.jda.shardInfo.shardId == 0) {
+    if (event.jda.shardInfo.shardId == 0) {
       module.bot.cache.shardStatusMap.deleteAsync().awaitSuspending()
     }
 

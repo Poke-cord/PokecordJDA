@@ -14,7 +14,7 @@ val kotlinxSerializationJsonVersion = "1.1.0"
 val ktorVersion = "1.6.0"
 val logbackVersion = "1.2.3"
 val redissonVersion = "3.15.5"
-val remoteShardingKtVersion = "main-SNAPSHOT"
+val remoteShardingKtVersion = "68d53da93b"
 val sentryLogbackVersion = "5.0.1"
 val snakeYamlVersion = "1.28"
 val trove4jVersion = "3.0.3"
@@ -31,7 +31,6 @@ repositories {
   jcenter()
   maven("https://jitpack.io/")
   maven("https://m2.dv8tion.net/releases")
-  maven("https://zihadmahiuddin.github.io/remotesharding-kt")
 }
 
 dependencies {
@@ -44,11 +43,9 @@ dependencies {
 
   implementation("com.github.minndevelopment:jda-ktx:${jdaKtxVersion}")
 
-//  implementation("dev.zihad:remotesharding:1.0.2")
   implementation("com.github.zihadmahiuddin:remotesharding-kt:$remoteShardingKtVersion")
 
   implementation("net.dv8tion:JDA:$jdaVersion") {
-//  implementation("com.github.dv8fromtheworld:jda:development") { // JitPack
     exclude(module = "opus-java")
   }
 

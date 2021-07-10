@@ -1,10 +1,11 @@
 package xyz.pokecord
 
-import dev.zihad.remotesharding.api.events.DisconnectEvent
-import dev.zihad.remotesharding.api.events.MessageEvent
+import dev.minn.jda.ktx.injectKTX
 import dev.zihad.remotesharding.client.Client
-import dev.zihad.remotesharding.messages.server.LoginOkMessage
 import io.sentry.Sentry
+import net.dv8tion.jda.api.OnlineStatus
+import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.modules.developer.DeveloperModule
@@ -28,14 +29,20 @@ object App {
     } else {
       try {
         val token = System.getenv("BOT_TOKEN")
+        val encryptionKey = System.getenv("ENCRYPTION_KEY")
         if (token.isNullOrBlank()) {
           logger.error("Token was not provided. Exiting...")
-          exitProcess(0)
+          exitProcess(1)
+        }
+        if (encryptionKey.isNullOrBlank()) {
+          logger.error("Encryption key was not provided. Exiting...")
+          exitProcess(1)
         }
         val shardCount = System.getenv("SHARD_COUNT")?.toIntOrNull() ?: 1
         val shardId = System.getenv("SHARD_ID")?.toIntOrNull() ?: 0
         val sharderHost: String? = System.getenv("SHARDER_HOST")
         val sharderPort = System.getenv("SHARDER_PORT")?.toIntOrNull()
+        val shardCapacity = System.getenv("SHARD_CAPACITY")?.toIntOrNull() ?: 1
 
         bot = Bot(token)
         val modules = listOf(
@@ -48,25 +55,21 @@ object App {
         modules.forEach {
           bot.modules[it.name.lowercase()] = it
         }
+        val shardManagerBuilder = DefaultShardManagerBuilder
+          .createDefault(token)
+          .injectKTX()
+          .setStatus(OnlineStatus.DO_NOT_DISTURB)
+          .setActivity(Activity.playing("Initializing..."))
         if (sharderHost != null && sharderPort != null) {
-          val client = Client(sharderHost, sharderPort, token, shardId.toShort())
-          client.on<DisconnectEvent> {
-            bot.shutdown()
-            Sentry.close()
-          }
-          client.on<MessageEvent.MessageReceivedEvent> {
-            if (it.message is LoginOkMessage) {
-              bot.cache.withIdentifyLock {
-                bot.start(client.session?.shardCount, (it.message as LoginOkMessage).shardId.toInt())
-                bot.jda.awaitReady()
-                client.reportAsReady()
-                Thread.sleep(5000)
-              }
-            }
+          val client = Client(shardManagerBuilder, sharderHost, sharderPort, token, encryptionKey, shardCapacity)
+          bot.start(shardManagerBuilder)
+          client.onShardManagerBuild {
+            bot.shardManager = it
           }
           client.start()
         } else {
-          bot.start(shardCount, shardId)
+          shardManagerBuilder.setShardsTotal(shardCount).setShards(shardId)
+          bot.start(shardManagerBuilder)
         }
       } catch (e: Exception) {
         logger.error("Error occurred in App", e)

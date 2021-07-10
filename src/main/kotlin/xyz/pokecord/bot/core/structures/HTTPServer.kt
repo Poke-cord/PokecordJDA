@@ -138,8 +138,12 @@ class HTTPServer(val bot: Bot) {
             call.respond(HttpStatusCode.Unauthorized)
             return@post
           }
+          if (bot.shardManager.shardsRunning < 1) {
+            call.respond(HttpStatusCode.InternalServerError)
+            return@post
+          }
           val voteArgs = call.receive<BotVoteArgs>()
-          if (voteArgs.bot == bot.jda.selfUser.id && (voteArgs.type == "upvote" || (voteArgs.type == "test" && bot.devEnv))) {
+          if (voteArgs.bot == bot.shardManager.shards.first().selfUser.id && (voteArgs.type == "upvote" || (voteArgs.type == "test" && bot.devEnv))) {
             onVote(voteArgs)
             call.respond(HttpStatusCode.OK)
           } else {

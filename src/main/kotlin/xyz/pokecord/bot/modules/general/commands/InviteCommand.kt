@@ -15,7 +15,7 @@ class InviteCommand : Command() {
   ) {
     val embedAuthorText = context.translate(
       "modules.general.commands.invite.embed.author.text",
-      mapOf("botUsername" to module.bot.jda.selfUser.name)
+      mapOf("botUsername" to context.jda.selfUser.name)
     )
     val embedDescription = context.translate(
       "modules.general.commands.invite.embed.description",
@@ -27,7 +27,7 @@ class InviteCommand : Command() {
     context.reply(
       context.embedTemplates.normal(embedDescription)
         .setColor(EmbedTemplates.Color.GREEN.code)
-        .setAuthor(embedAuthorText, module.bot.jda.selfUser.effectiveAvatarUrl)
+        .setAuthor(embedAuthorText, context.jda.selfUser.effectiveAvatarUrl)
         .build()
     ).queue()
   }

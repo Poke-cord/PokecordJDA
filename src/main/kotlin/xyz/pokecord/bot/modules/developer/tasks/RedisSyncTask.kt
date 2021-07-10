@@ -14,19 +14,21 @@ class RedisSyncTask : Task() {
 
   override suspend fun execute() {
     // Shard Status
-    val shardInfo = module.bot.jda.shardInfo
-    val shardStatus = ShardStatus(
-      shardInfo.shardId,
-      shardInfo.shardTotal,
-      hostname,
-      module.bot.jda.gatewayPing,
-      module.bot.jda.guildCache.size(),
-      System.currentTimeMillis()
-    )
-    module.bot.cache.shardStatusMap.putAsync(
-      shardInfo.shardId,
-      Json.encodeToString(shardStatus)
-    ).awaitSuspending()
+    module.bot.shardManager.shards.forEach { jda ->
+      val shardInfo = jda.shardInfo
+      val shardStatus = ShardStatus(
+        shardInfo.shardId,
+        shardInfo.shardTotal,
+        hostname,
+        jda.gatewayPing,
+        jda.guildCache.size(),
+        System.currentTimeMillis()
+      )
+      module.bot.cache.shardStatusMap.putAsync(
+        shardInfo.shardId,
+        Json.encodeToString(shardStatus)
+      ).awaitSuspending()
+    }
 
     // Maintenance Status
     val maintenanceStatus = module.bot.cache.getMaintenanceStatus()

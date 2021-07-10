@@ -13,7 +13,7 @@ class StaffSyncTask : Task() {
   override val name = "StaffSync"
 
   override suspend fun execute() {
-    val mainServer = module.bot.jda.getGuildById(Config.mainServer)
+    val mainServer = module.bot.shardManager.getGuildById(Config.mainServer)
     if (mainServer != null) {
       val guildRoles =
         module.bot.discordRestClient.getGuildRoles(mainServer.id).filter { Config.Roles.ids.contains(it.id) }

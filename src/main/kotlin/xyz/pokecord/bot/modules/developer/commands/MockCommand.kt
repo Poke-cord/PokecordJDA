@@ -73,7 +73,7 @@ class MockCommand : DeveloperCommand() {
       listOf(),
       Message.MessageFlag.toBitField(sentMessage.flags)
     )
-    val fakeEvent = MessageReceivedEvent(module.bot.jda, context.event.responseNumber, fakeMessage)
-    module.bot.jda.eventManager.handle(fakeEvent)
+    val fakeEvent = MessageReceivedEvent(context.jda, context.event.responseNumber, fakeMessage)
+    context.jda.eventManager.handle(fakeEvent)
   }
 }

@@ -1,12 +1,11 @@
 package xyz.pokecord.bot.core.structures.discord
 
-import dev.minn.jda.ktx.injectKTX
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
+import net.dv8tion.jda.api.sharding.ShardManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
@@ -25,7 +24,7 @@ import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
 
 class Bot constructor(private val token: String) {
-  lateinit var jda: JDA
+  lateinit var shardManager: ShardManager
   lateinit var commandHandler: CommandHandler
 
   private lateinit var version: String
@@ -33,7 +32,7 @@ class Bot constructor(private val token: String) {
   val devEnv = System.getenv("DEV").equals("true", true)
 
   val payPal by lazy { PayPal(database) }
-  val discordRestClient by lazy { Discord(jda.token) }
+  val discordRestClient by lazy { Discord(token) }
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -50,7 +49,7 @@ class Bot constructor(private val token: String) {
     updatePresence()
   }
 
-  fun start(shardCount: Int? = null, shardId: Int? = null) {
+  fun start(shardManagerBuilder: DefaultShardManagerBuilder) {
     httpServer.start()
 
     this.version = if (devEnv) "DEV" else Config.version
@@ -70,16 +69,9 @@ class Bot constructor(private val token: String) {
       module.load()
     }
     commandHandler = CommandHandler(this)
-    var jdaBuilder = JDABuilder.createDefault(token)
-      .injectKTX()
-      .setStatus(OnlineStatus.DO_NOT_DISTURB)
-      .setActivity(Activity.playing("Initializing..."))
+    shardManagerBuilder
       .addEventListeners(commandHandler, *moduleArray)
       .setEnabledIntents(intents)
-    if (shardCount != null && shardId != null) {
-      jdaBuilder = jdaBuilder.useSharding(shardId, shardCount)
-    }
-    jda = jdaBuilder.build()
     started = true
   }
 
@@ -187,23 +179,26 @@ class Bot constructor(private val token: String) {
     val url = I18n.translate(null, urlTranslationKey)
 
     try {
-      jda.presence.setStatus(OnlineStatus.valueOf(status))
+      shardManager.setStatus(OnlineStatus.valueOf(status))
     } catch (e: IllegalArgumentException) {
-      jda.presence.setStatus(if (maintenance) OnlineStatus.DO_NOT_DISTURB else OnlineStatus.ONLINE)
+      shardManager.setStatus(if (maintenance) OnlineStatus.DO_NOT_DISTURB else OnlineStatus.ONLINE)
     }
     try {
-      jda.presence.activity = Activity.of(Activity.ActivityType.valueOf(type), activity, url)
+      shardManager.setActivity(Activity.of(Activity.ActivityType.valueOf(type), activity, url))
     } catch (e: IllegalArgumentException) {
-      jda.presence.activity =
+      shardManager.setActivity(
         Activity.playing("${commandHandler.prefix}help | pokecord.xyz | ${if (devEnv) "Development Edition" else "v$version"}")
+      )
     }
   }
 
+  // TODO: use it somewhere maybe
+  @Suppress("UNUSED")
   fun shutdown() {
     cache.shutdown()
     database.close()
-    if (this::jda.isInitialized) {
-      jda.shutdown()
+    if (this::shardManager.isInitialized) {
+      shardManager.shutdown()
     }
   }
 }
