@@ -55,7 +55,7 @@ class Cache {
       redissonClient = Redisson.create(config)
     } catch (e: Exception) {
       logger.error("Failed to create redisson client", e)
-      exitProcess(0)
+      exitProcess(1)
     }
 
     commandRateLimitMap = redissonClient.getMapCache("commandRateLimit")
@@ -111,17 +111,6 @@ class Cache {
 
   suspend fun setMaintenanceStatus(maintenance: Boolean) {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
-  }
-
-  fun withIdentifyLock(block: () -> Unit) {
-    while (true) {
-      val locked = identifyLock.async.get()
-      if (locked != true) break
-      else Thread.sleep(100)
-    }
-
-    identifyLock.setAsync(true, 5, TimeUnit.SECONDS).get()
-    block()
   }
 
   suspend fun withGiftLock(senderId: String, receiverId: String, block: suspend () -> Unit) {

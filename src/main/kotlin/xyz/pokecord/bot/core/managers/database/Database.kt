@@ -2,18 +2,18 @@ package xyz.pokecord.bot.core.managers.database
 
 import com.mongodb.ClientSessionOptions
 import com.mongodb.ConnectionString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.managers.database.repositories.*
 import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 class Database(cache: Cache) {
   private val client: CoroutineClient
@@ -44,6 +44,17 @@ class Database(cache: Cache) {
     val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main")
     client = KMongo.createClient(connectionString).coroutine
     database = client.getDatabase(connectionString.database ?: "main")
+
+    runBlocking {
+      try {
+        withTimeout(30_000) {
+          database.listCollectionNames()
+        }
+      } catch (e: TimeoutCancellationException) {
+        logger.error("Failed to verify mongo connection after 30 seconds. Exiting...")
+        exitProcess(1)
+      }
+    }
 
     configCollection = database.getCollection()
     faqCollection = database.getCollection()
@@ -85,5 +96,9 @@ class Database(cache: Cache) {
 
   fun close() {
     client.close()
+  }
+
+  companion object {
+    private val logger = LoggerFactory.getLogger(Database::class.java)
   }
 }
