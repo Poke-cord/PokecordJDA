@@ -55,6 +55,7 @@ misc:
       commandRateLimitReached:
         description: Looks like you're using commands too fast, try to calm down a little.
         title: Calm down
+    notYourButton: The button you tried using isn't from a message that's a reply to you, please use buttons that belongs to your command responses.
     invalidAmount: '**Suggestion**: Try entering a valid amount!'
     notASpawnChannel: '**Suggestion**: Try using the command in a spawn channel
             or set this channel as a spawn channel!'

@@ -74,7 +74,13 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
         }
 
         if (event.user.id != context.author.id) {
-          event.deferReply()
+          event.replyEmbeds(
+            context.embedTemplates.error(
+              context.translate("misc.errors.notYourButton")
+            ).build()
+          )
+            .setEphemeral(true)
+            .queue()
         } else {
           context.bot.cache.setRunningCommand(context.author.id, false)
           sentMessage?.let {

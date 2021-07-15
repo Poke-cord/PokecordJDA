@@ -108,7 +108,13 @@ class EmbedPaginator(
           }
 
           if (event.user.id != context.author.id) {
-            event.deferReply()
+            event.replyEmbeds(
+              context.embedTemplates.error(
+                context.translate("misc.errors.notYourButton")
+              ).build()
+            )
+              .setEphemeral(true)
+              .queue()
           } else {
             var newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
               NavigationOptions.First -> 0
