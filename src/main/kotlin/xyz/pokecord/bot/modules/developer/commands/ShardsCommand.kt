@@ -25,12 +25,15 @@ class ShardsCommand : DeveloperCommand() {
     EmbedPaginator(context, ceil(shardStatusSet.size / 10.0).toInt(), {
       val startingIndex = it * 10
       val items = shardStatusSet.drop(startingIndex).take(10)
+      var guildCount = 0L
+      val shardList = items.joinToString("\n") { status ->
+        guildCount += status.guildCacheSize
+        "${status.id}/${status.count} - ${status.gatewayPing}ms - ${status.hostname} - ${
+          (System.currentTimeMillis() - status.updatedAt).humanizeMs()
+        } - ${status.guildCacheSize}"
+      }
       context.embedTemplates.normal(
-        items.joinToString("\n") { status ->
-          "${status.id}/${status.count} - ${status.gatewayPing}ms - ${status.hostname} - ${
-            (System.currentTimeMillis() - status.updatedAt).humanizeMs()
-          } - ${status.guildCacheSize}"
-        },
+        "$shardList\n\nGuild Count: $guildCount",
         "Shard Status"
       )
     }, paginatorIndex).start()
