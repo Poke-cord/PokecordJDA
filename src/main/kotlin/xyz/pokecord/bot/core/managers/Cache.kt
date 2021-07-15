@@ -3,6 +3,7 @@ package xyz.pokecord.bot.core.managers
 import kotlinx.coroutines.delay
 import org.redisson.Redisson
 import org.redisson.api.*
+import org.redisson.config.BaseConfig
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -50,13 +51,16 @@ class Cache {
         .addSentinelAddress(*sentinelAddressesData.split(",").toTypedArray())
         .nameMapper = nameMapper
     } else if (!redisUrl.isNullOrEmpty()) {
-      config.useSingleServer().nameMapper = nameMapper
-      config.useSingleServer().address = redisUrl
-      System.getenv("REDIS_PASSWORD")?.let { password ->
-        config.useSingleServer().password = password
-      }
+      config.useSingleServer()
+        .setAddress(redisUrl)
+        .nameMapper = nameMapper
     } else {
       throw Exception("Redis configuration not found in environment variables. Please configure Redis first.")
+    }
+    System.getenv("REDIS_PASSWORD")?.let { password ->
+      if (config is BaseConfig<*>) {
+        config.password = password
+      }
     }
     try {
       redissonClient = Redisson.create(config)
