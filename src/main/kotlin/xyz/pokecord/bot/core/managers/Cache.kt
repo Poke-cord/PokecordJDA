@@ -3,7 +3,6 @@ package xyz.pokecord.bot.core.managers
 import kotlinx.coroutines.delay
 import org.redisson.Redisson
 import org.redisson.api.*
-import org.redisson.config.BaseConfig
 import org.redisson.config.Config
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -35,32 +34,32 @@ class Cache {
 
   init {
     val nameMapper = RedissonNameMapper(System.getenv("REDIS_NAME_MAPPER"))
-    val config = Config()
     val clusterServersData = System.getenv("REDIS_CLUSTERS")
     val sentinelAddressesData = System.getenv("REDIS_SENTINEL_ADDRESSES")
     val sentinelMasterName = System.getenv("REDIS_SENTINEL_MASTER_NAME")
     val redisUrl = System.getenv("REDIS_URL")
+    val redisPassword = System.getenv("REDIS_PASSWORD")
+
+    val config = Config()
     if (!clusterServersData.isNullOrEmpty()) {
       config
         .useClusterServers()
         .addNodeAddress(*clusterServersData.split(",").toTypedArray())
+        .setPassword(redisPassword)
         .nameMapper = nameMapper
     } else if (!sentinelAddressesData.isNullOrEmpty() && !sentinelMasterName.isNullOrEmpty()) {
       config.useSentinelServers()
         .setMasterName(sentinelMasterName)
         .addSentinelAddress(*sentinelAddressesData.split(",").toTypedArray())
+        .setPassword(redisPassword)
         .nameMapper = nameMapper
     } else if (!redisUrl.isNullOrEmpty()) {
       config.useSingleServer()
         .setAddress(redisUrl)
+        .setPassword(redisPassword)
         .nameMapper = nameMapper
     } else {
       throw Exception("Redis configuration not found in environment variables. Please configure Redis first.")
-    }
-    System.getenv("REDIS_PASSWORD")?.let { password ->
-      if (config is BaseConfig<*>) {
-        config.password = password
-      }
     }
     try {
       redissonClient = Redisson.create(config)
