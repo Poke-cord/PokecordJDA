@@ -37,14 +37,16 @@ class Cache {
     val config = Config()
     val clusterServersData = System.getenv("REDIS_CLUSTERS")
     val sentinelAddressesData = System.getenv("REDIS_SENTINEL_ADDRESSES")
+    val sentinelMasterName = System.getenv("REDIS_SENTINEL_MASTER_NAME")
     val redisUrl = System.getenv("REDIS_URL")
     if (!clusterServersData.isNullOrEmpty()) {
       config
         .useClusterServers()
         .addNodeAddress(*clusterServersData.split(",").toTypedArray())
         .nameMapper = nameMapper
-    } else if (!sentinelAddressesData.isNullOrEmpty()) {
+    } else if (!sentinelAddressesData.isNullOrEmpty() && !sentinelMasterName.isNullOrEmpty()) {
       config.useSentinelServers()
+        .setMasterName(sentinelMasterName)
         .addSentinelAddress(*sentinelAddressesData.split(",").toTypedArray())
         .nameMapper = nameMapper
     } else if (!redisUrl.isNullOrEmpty()) {
