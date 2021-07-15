@@ -471,12 +471,12 @@ object Migration {
       val indexMap = convertPokemonStructure(oldPokemonCollection, newPokemonCollection)
 //      addIndices(newDatabase, newPokemonCollection)
 //      File("indexMap.json").writeText(Json.encodeToString(indexMap))
+      convertUsers(indexMap, oldUsersCollection, newUsersCollection, newInventoryCollection, newRewardsCollection)
+//      File("users_done").writeText("1")
       convertFaqs(oldFaqsCollection, newFaqsCollection)
 //      File("faqs_done").writeText("1")
       convertSpawnChannels(oldSpawnChannelsCollection, newSpawnChannelsCollection)
 //      File("spawn_channels_done").writeText("1")
-      convertUsers(indexMap, oldUsersCollection, newUsersCollection, newInventoryCollection, newRewardsCollection)
-//      File("users_done").writeText("1")
     }
 
     logger.info("All done!")
