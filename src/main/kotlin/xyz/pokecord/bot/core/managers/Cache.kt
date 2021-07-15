@@ -36,11 +36,16 @@ class Cache {
     val nameMapper = RedissonNameMapper(System.getenv("REDIS_NAME_MAPPER"))
     val config = Config()
     val clusterServersData = System.getenv("REDIS_CLUSTERS")
+    val sentinelAddressesData = System.getenv("REDIS_SENTINEL_ADDRESSES")
     val redisUrl = System.getenv("REDIS_URL")
     if (!clusterServersData.isNullOrEmpty()) {
       config
         .useClusterServers()
         .addNodeAddress(*clusterServersData.split(",").toTypedArray())
+        .nameMapper = nameMapper
+    } else if (!sentinelAddressesData.isNullOrEmpty()) {
+      config.useSentinelServers()
+        .addSentinelAddress(*sentinelAddressesData.split(",").toTypedArray())
         .nameMapper = nameMapper
     } else if (!redisUrl.isNullOrEmpty()) {
       config.useSingleServer().nameMapper = nameMapper
