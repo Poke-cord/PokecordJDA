@@ -395,6 +395,10 @@ class PokemonRepository(
     }
   }
 
+  suspend fun getEstimatedPokemonCount(): Long {
+    return collection.estimatedDocumentCount()
+  }
+
   data class PokemonSearchOptions(
     val order: PokemonOrder? = PokemonOrder.DEFAULT,
     val favorites: Boolean? = null,

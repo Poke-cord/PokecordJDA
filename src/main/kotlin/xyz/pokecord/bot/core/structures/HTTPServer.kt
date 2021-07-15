@@ -15,14 +15,18 @@ import io.ktor.server.jetty.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Order
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.pokemon.items.CCTItem
 import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.CachedStaffMember
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.VoteUtils
 import xyz.pokecord.bot.utils.api.PayPal
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -130,6 +134,32 @@ class HTTPServer(val bot: Bot) {
             Json.decodeFromString<CachedStaffMember>(it)
           }
           call.respond(staffMemberObjects)
+        }
+        get("/api/stats/pokemonCount") {
+          val pokemonCount = bot.database.pokemonRepository.getEstimatedPokemonCount()
+          call.respond(
+            buildJsonObject {
+              put("count", pokemonCount)
+            }
+          )
+        }
+        get("/api/stats/userCount") {
+          val userCount = bot.database.userRepository.getEstimatedUserCount()
+          call.respond(
+            buildJsonObject {
+              put("count", userCount)
+            }
+          )
+        }
+        get("/api/stats/serverCount") {
+          val serverCount = bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
+            .map { json -> Json.decodeFromString<ShardStatus>(json) }
+            .sumOf { it.guildCacheSize }
+          call.respond(
+            buildJsonObject {
+              put("count", serverCount)
+            }
+          )
         }
 
         post("/topgg/vote") {

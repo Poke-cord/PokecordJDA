@@ -325,6 +325,10 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun getEstimatedUserCount(): Long {
+    return collection.estimatedDocumentCount()
+  }
+
   private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
     jsonObject {
       json("$group") {
