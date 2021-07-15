@@ -6,9 +6,7 @@ import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import org.bson.BsonDocument
 import org.litote.kmongo.*
-import org.litote.kmongo.MongoOperator.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.redisson.api.RMapCacheAsync
@@ -21,7 +19,6 @@ import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.PokemonStats
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
-import xyz.pokecord.bot.utils.jsonObject
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import net.dv8tion.jda.api.entities.User as JDAUser
@@ -35,6 +32,8 @@ class UserRepository(
 ) : Repository(database) {
   override suspend fun createIndexes() {
     collection.createIndex(Indexes.ascending("id"), IndexOptions().unique(true))
+    collection.createIndex(Indexes.ascending("credits"))
+    collection.createIndex(Indexes.ascending("pokemonCount"))
 
     inventoryItemsCollection.createIndex(Indexes.ascending("ownerId"))
     inventoryItemsCollection.createIndex(Indexes.compoundIndex(Indexes.ascending("id"), Indexes.ascending("ownerId")))
@@ -298,16 +297,28 @@ class UserRepository(
     return if (cachedString != null) {
       Json.decodeFromString(cachedString)
     } else {
-      val leaderboard = collection.aggregate<PokemonCountLeaderboardResult>(
-        listOf(
-          pokemonCountLeaderboardGroupStage,
-          pokemonCountLeaderboardProjectStage,
-          pokemonCountLeaderboardSortStage,
-          limit(limit)
-        )
-      )
-        .allowDiskUse(true)
-        .toList()
+      val leaderboard =
+        collection
+          .findAndCast<PokemonCountLeaderboardResult>(EMPTY_BSON)
+          .projection(
+            project(
+              User::id from User::id,
+              User::tag from User::tag,
+              User::pokemonCount from User::pokemonCount
+            )
+          )
+          .sort(descending(User::pokemonCount))
+          .limit(limit).toList()
+//      val leaderboard = collection.aggregate<PokemonCountLeaderboardResult>(
+//        listOf(
+//          pokemonCountLeaderboardGroupStage,
+//          pokemonCountLeaderboardProjectStage,
+//          pokemonCountLeaderboardSortStage,
+//          limit(limit)
+//        )
+//      )
+//        .allowDiskUse(true)
+//        .toList()
       leaderboardCacheMap.putAsync("pokemon", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
       leaderboard
     }
@@ -329,57 +340,57 @@ class UserRepository(
     return collection.estimatedDocumentCount()
   }
 
-  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
-    jsonObject {
-      json("$group") {
-        string("_id", "\$id")
-        json("pokemonCount") {
-          string("$max", "\$nextPokemonIndices")
-        }
-        json("nextPokemonIndices") {
-          string("$first", "\$nextPokemonIndices")
-        }
-        json("tag") {
-          string("$first", "\$tag")
-        }
-      }
-    }.toString()
-  )
-
-  private val pokemonCountLeaderboardProjectStage = BsonDocument.parse(
-    jsonObject {
-      json("$project") {
-        string("id", "\$_id")
-        number("tag", 1)
-        json("pokemonCount") {
-          array("$subtract") {
-            json {
-              array("$arrayElemAt") {
-                string("\$pokemonCount")
-                number(0)
-              }
-            }
-            json {
-              array("$subtract") {
-                json {
-                  string("$size", "\$nextPokemonIndices")
-                }
-                number(1)
-              }
-            }
-          }
-        }
-      }
-    }.toString()
-  )
-
-  private val pokemonCountLeaderboardSortStage = BsonDocument.parse(
-    jsonObject {
-      json("$sort") {
-        number("pokemonCount", -1)
-      }
-    }.toString()
-  )
+//  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
+//    jsonObject {
+//      json("$group") {
+//        string("_id", "\$id")
+//        json("pokemonCount") {
+//          string("$max", "\$nextPokemonIndices")
+//        }
+//        json("nextPokemonIndices") {
+//          string("$first", "\$nextPokemonIndices")
+//        }
+//        json("tag") {
+//          string("$first", "\$tag")
+//        }
+//      }
+//    }.toString()
+//  )
+//
+//  private val pokemonCountLeaderboardProjectStage = BsonDocument.parse(
+//    jsonObject {
+//      json("$project") {
+//        string("id", "\$_id")
+//        number("tag", 1)
+//        json("pokemonCount") {
+//          array("$subtract") {
+//            json {
+//              array("$arrayElemAt") {
+//                string("\$pokemonCount")
+//                number(0)
+//              }
+//            }
+//            json {
+//              array("$subtract") {
+//                json {
+//                  string("$size", "\$nextPokemonIndices")
+//                }
+//                number(1)
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }.toString()
+//  )
+//
+//  private val pokemonCountLeaderboardSortStage = BsonDocument.parse(
+//    jsonObject {
+//      json("$sort") {
+//        number("pokemonCount", -1)
+//      }
+//    }.toString()
+//  )
 
   @Serializable
   data class PokemonCountLeaderboardResult(val id: String, val tag: String, val pokemonCount: Int)
