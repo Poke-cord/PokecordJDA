@@ -11,6 +11,7 @@ import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.aggregate
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
+import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.User
@@ -19,16 +20,24 @@ import xyz.pokecord.bot.core.structures.pokemon.Nature
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Type
 import xyz.pokecord.bot.utils.CountResult
+import xyz.pokecord.bot.utils.PokemonOrder
+import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
+import xyz.pokecord.utils.withCoroutineLock
 
 class PokemonRepository(
   database: Database,
+  private val cache: Cache,
   private val collection: CoroutineCollection<OwnedPokemon>
 ) : Repository(database) {
   private val releasedPokemonCollection: CoroutineCollection<OwnedPokemon> =
     database.database.getCollection("releasedPokemon")
 
   override suspend fun createIndexes() {
+    collection.createIndex(Indexes.ascending("level"))
+    collection.createIndex(Indexes.ascending("totalIv"))
     collection.createIndex(Indexes.ascending("ownerId"))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("id"), Indexes.ascending("_id")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("_id")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("ownerId")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
   }
@@ -191,7 +200,7 @@ class PokemonRepository(
     val result = collection.aggregate<CountResult>(
       match(OwnedPokemon::ownerId eq ownerId),
       *PokemonSearchOptions(
-        null,
+        PokemonOrder.DEFAULT,
         searchOptions.favorites,
         searchOptions.nature,
         searchOptions.rarity,
@@ -316,21 +325,16 @@ class PokemonRepository(
   }
 
   suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, session: ClientSession) {
-    if (pokemon.trainerId == null) {
-      collection.updateOne(
-        session,
-        OwnedPokemon::_id eq pokemon._id,
-        set(
-          OwnedPokemon::trainerId setTo sender.id
-        )
-      )
-    }
     collection.updateOne(
       session,
       OwnedPokemon::_id eq pokemon._id,
-      set(
-        OwnedPokemon::index setTo receiver.nextPokemonIndices.first(),
-        OwnedPokemon::ownerId setTo receiver.id
+      combine(
+        set(
+          OwnedPokemon::index setTo receiver.nextIndex,
+          OwnedPokemon::ownerId setTo receiver.id
+        ),
+        if (pokemon.trainerId == null) set(OwnedPokemon::trainerId setTo sender.id)
+        else EMPTY_BSON
       )
     )
   }
@@ -361,8 +365,38 @@ class PokemonRepository(
     collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::moves setTo pokemon.moves))
   }
 
+  suspend fun reindexPokemon(ownerId: String, order: PokemonOrder) {
+    val sortProperty = order.getSortProperty()
+    cache.getUserLock(ownerId).withCoroutineLock {
+      val items = collection.aggregate<PokemonWithOnlyObjectId>(
+        match(OwnedPokemon::ownerId eq ownerId),
+        project(
+          OwnedPokemon::_id from OwnedPokemon::_id,
+          sortProperty from sortProperty
+        ),
+        sort(
+          if (order == PokemonOrder.POKEDEX || order == PokemonOrder.TIME) ascending(sortProperty)
+          else descending(sortProperty)
+        ),
+        project(OwnedPokemon::_id from OwnedPokemon::_id)
+      )
+        .allowDiskUse(true)
+        .toList()
+      val updates = items.mapIndexed { i, it ->
+        updateOne<OwnedPokemon>(
+          OwnedPokemon::_id eq it._id,
+          set(OwnedPokemon::index setTo i)
+        )
+      }
+      updates.chunked(1000)
+        .forEach {
+          collection.bulkWrite(it)
+        }
+    }
+  }
+
   data class PokemonSearchOptions(
-    val order: String? = null,
+    val order: PokemonOrder? = PokemonOrder.DEFAULT,
     val favorites: Boolean? = null,
     val nature: String? = null,
     val rarity: String? = null,
@@ -412,19 +446,18 @@ class PokemonRepository(
           searchIds = it.toSet()
         }
 
-      if (order != null) {
-        val lowerCaseOrder = order.lowercase()
-        orderBson = when {
-          arrayOf("i", "iv").contains(lowerCaseOrder) -> {
+      if (order != PokemonOrder.DEFAULT) {
+        orderBson = when (order) {
+          PokemonOrder.IV -> {
             sort(descending(OwnedPokemon::totalIv))
           }
-          arrayOf("l", "lv", "level").contains(lowerCaseOrder) -> {
+          PokemonOrder.LEVEL -> {
             sort(descending(OwnedPokemon::level))
           }
-          arrayOf("d", "dex", "pokedex").contains(lowerCaseOrder) -> {
+          PokemonOrder.POKEDEX -> {
             sort(ascending(OwnedPokemon::id))
           }
-          arrayOf("t", "time").contains(lowerCaseOrder) -> {
+          PokemonOrder.TIME -> {
             sort(ascending(OwnedPokemon::timestamp))
           }
           else -> null

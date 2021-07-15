@@ -25,7 +25,8 @@ data class User(
   var shinyRate: Double = 4908.0,
   var agreedToTerms: Boolean = false,
   val language: I18n.Language? = null,
-  val nextPokemonIndices: MutableList<Int> = mutableListOf(0),
+  var pokemonCount: Int = 0,
+  var nextIndex: Int = 0,
   @Contextual val _id: Id<User> = newId(),
   @Transient var _isNew: Boolean = false
 ) {
@@ -51,6 +52,7 @@ data class User(
         && releasedShinies.isEmpty()
         && !progressPrivate
         && donationTier == 0
-        && nextPokemonIndices.size == 1 && nextPokemonIndices.first() == 0
+        && pokemonCount == 0
+        && nextIndex == 0
         && shinyRate == 4908.0
 }

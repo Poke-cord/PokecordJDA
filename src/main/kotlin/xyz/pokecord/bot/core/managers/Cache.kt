@@ -128,6 +128,10 @@ class Cache {
     currentGifts.removeAsync(receiverId).awaitSuspending()
   }
 
+  fun getUserLock(userId: String): RLock {
+    return redissonClient.getFairLock("user_lock-${userId}")
+  }
+
   fun shutdown() {
     redissonClient.shutdown()
   }

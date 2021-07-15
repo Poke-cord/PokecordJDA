@@ -85,8 +85,8 @@ class ReleaseCommand : Command() {
         val session = module.bot.database.startSession()
         session.use { clientSession ->
           clientSession.startTransaction()
+          module.bot.database.pokemonRepository.releasePokemon(pokemon, clientSession)
           module.bot.database.userRepository.releasePokemon(userData, pokemon, clientSession)
-          module.bot.database.userRepository.addPokemonIndex(userData, pokemon.index, clientSession)
           clientSession.commitTransactionAndAwait()
         }
 

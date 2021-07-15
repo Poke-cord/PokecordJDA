@@ -3,6 +3,7 @@ package xyz.pokecord.bot.core.structures.discord
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.*
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.isBoolean
 import kotlin.reflect.KType
@@ -229,6 +230,27 @@ class ArgumentParser(
       }
     optionalArgCleanup(pokemonResolvable.data)
     return pokemonResolvable
+  }
+
+  fun getPokemonOrder(): PokemonOrder {
+    val orderString = nextArg()?.lowercase()
+    val pokemonOrder = when {
+      arrayOf("i", "iv").contains(orderString) -> {
+        PokemonOrder.IV
+      }
+      arrayOf("l", "lv", "level").contains(orderString) -> {
+        PokemonOrder.LEVEL
+      }
+      arrayOf("d", "dex", "pokedex").contains(orderString) -> {
+        PokemonOrder.POKEDEX
+      }
+      arrayOf("t", "time").contains(orderString) -> {
+        PokemonOrder.TIME
+      }
+      else -> PokemonOrder.DEFAULT
+    }
+    optionalArgCleanup(pokemonOrder)
+    return pokemonOrder
   }
 
   private fun <T> optionalArgCleanup(data: T?) {

@@ -7,6 +7,7 @@ import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
+import xyz.pokecord.bot.utils.PokemonOrder
 import kotlin.math.ceil
 
 class PokemonCommand : Command() {
@@ -22,7 +23,7 @@ class PokemonCommand : Command() {
       aliases = ["o", "sort"],
       prefixed = true,
       optional = true,
-    ) order: String?,
+    ) order: PokemonOrder?,
     @Argument(aliases = ["n"], prefixed = true, optional = true) nature: String?,
     @Argument(
       aliases = ["r"],
@@ -41,6 +42,7 @@ class PokemonCommand : Command() {
       optional = true
     ) searchQuery: String?
   ) {
+    val effectiveOrder = order ?: PokemonOrder.DEFAULT
     if (!context.hasStarted(true)) return
 
     val targetUser = user ?: context.author
@@ -55,7 +57,7 @@ class PokemonCommand : Command() {
 
     val count = module.bot.database.pokemonRepository.getPokemonCount(
       targetUser.id,
-      PokemonRepository.PokemonSearchOptions(order, favorites, nature, rarity, shiny, type, regex, searchQuery)
+      PokemonRepository.PokemonSearchOptions(effectiveOrder, favorites, nature, rarity, shiny, type, regex, searchQuery)
     )
     val templateEmbedBuilder =
       EmbedBuilder()
@@ -82,7 +84,7 @@ class PokemonCommand : Command() {
       val ownedPokemonList = module.bot.database.pokemonRepository.getPokemonList(
         targetUser.id,
         searchOptions = PokemonRepository.PokemonSearchOptions(
-          order,
+          effectiveOrder,
           favorites,
           nature,
           rarity,

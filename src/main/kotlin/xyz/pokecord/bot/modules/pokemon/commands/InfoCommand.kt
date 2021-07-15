@@ -90,7 +90,7 @@ class InfoCommand : Command() {
             "modules.pokemon.commands.info.embed.footer",
             mapOf(
               "index" to "${pokemon.index + 1}",
-              "total" to "${userData.nextPokemonIndices.maxOrNull() ?: "Unknown"}"
+              "total" to userData.pokemonCount.toString()
             )
           )
         )

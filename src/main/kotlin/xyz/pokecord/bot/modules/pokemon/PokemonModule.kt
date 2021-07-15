@@ -24,7 +24,8 @@ class PokemonModule(bot: Bot) : Module(
     GiftCommand.GiftPokemonCommand(),
     MovesetCommand(),
     MoveCommand(),
-    PokedexCommand()
+    PokedexCommand(),
+    OrderCommand()
   ),
   arrayOf(
     SpawnerEvent(),

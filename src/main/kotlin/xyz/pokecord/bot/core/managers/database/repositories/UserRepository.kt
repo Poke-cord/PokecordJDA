@@ -113,7 +113,7 @@ class UserRepository(
     val isUnsavedUser = userData.isDefault && userData._isNew
     var ownedPokemon = OwnedPokemon(
       pokemonId,
-      userData.nextPokemonIndices.first(),
+      userData.nextIndex,
       userData.id,
       Random.nextDouble(userData.shinyRate) <= 1
     )
@@ -125,8 +125,7 @@ class UserRepository(
 
     val targetList = if (ownedPokemon.shiny) userData.caughtShinies else userData.caughtPokemon
     if (!targetList.contains(pokemonId)) targetList.add(pokemonId)
-    userData.nextPokemonIndices.removeFirstOrNull()
-    if (userData.nextPokemonIndices.isEmpty()) userData.nextPokemonIndices.add(ownedPokemon.index + 1)
+    userData.nextIndex++
     val session = database.startSession()
     session.use { clientSession ->
       clientSession.startTransaction()
@@ -139,8 +138,10 @@ class UserRepository(
           clientSession,
           User::id eq userData.id,
           combine(
-            set(User::nextPokemonIndices setTo userData.nextPokemonIndices),
-            addToSet(if (ownedPokemon.shiny) User::caughtShinies else User::caughtPokemon, pokemonId),
+            inc(User::nextIndex, 1),
+            addToSet(
+              if (ownedPokemon.shiny) User::caughtShinies else User::caughtPokemon, pokemonId
+            ),
             if (select) set(User::selected setTo ownedPokemon._id) else EMPTY_BSON,
             if (!ownedPokemon.shiny) inc(User::shinyRate, -0.25) else EMPTY_BSON
           )
@@ -159,43 +160,18 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun addPokemonIndex(userData: User, index: Int, session: ClientSession) {
-    if (!userData.nextPokemonIndices.contains(index)) {
-      userData.nextPokemonIndices.add(index)
-      userData.nextPokemonIndices.sort()
-      collection.updateOne(
-        session,
-        User::id eq userData.id,
-        set(User::nextPokemonIndices setTo userData.nextPokemonIndices)
-      )
-      setCacheUser(userData)
-    }
-  }
-
-  suspend fun removePokemonIndex(userData: User, index: Int, session: ClientSession) {
-    if (userData.nextPokemonIndices.contains(index)) {
-      if (userData.nextPokemonIndices.size == 1) userData.nextPokemonIndices.add(1, index + 1)
-      userData.nextPokemonIndices.remove(index)
-      userData.nextPokemonIndices.sort()
-      collection.updateOne(
-        session,
-        User::id eq userData.id,
-        set(User::nextPokemonIndices setTo userData.nextPokemonIndices)
-      )
-      setCacheUser(userData)
-    }
-  }
-
   suspend fun releasePokemon(userData: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
     val targetList = if (pokemon.shiny) userData.releasedShinies else userData.releasedPokemon
     if (!targetList.contains(pokemon.id)) {
       targetList.add(pokemon.id)
     }
-    database.pokemonRepository.releasePokemon(pokemon, clientSession)
     collection.updateOne(
       clientSession,
       User::id eq userData.id,
-      addToSet((if (pokemon.shiny) User::releasedShinies else User::releasedPokemon), pokemon.id)
+      combine(
+        addToSet((if (pokemon.shiny) User::releasedShinies else User::releasedPokemon), pokemon.id),
+        inc(User::pokemonCount, -1)
+      )
     )
     setCacheUser(userData)
   }
@@ -210,6 +186,29 @@ class UserRepository(
       )
       setCacheUser(userData)
     }
+  }
+
+  suspend fun giftPokemon(sender: User, receiver: User, clientSession: ClientSession) {
+    sender.pokemonCount--
+
+    receiver.nextIndex++
+    receiver.pokemonCount++
+
+    collection.updateOne(
+      clientSession,
+      User::_id eq sender._id,
+      inc(User::pokemonCount, -1)
+    )
+    collection.updateOne(
+      clientSession,
+      User::_id eq receiver._id,
+      combine(
+        inc(User::pokemonCount, 1),
+        inc(User::nextIndex, 1)
+      )
+    )
+
+    setCacheUser(receiver)
   }
 
   suspend fun giftCredits(sender: User, receiver: User, amount: Int) {

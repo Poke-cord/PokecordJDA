@@ -261,12 +261,7 @@ class GiftCommand : ParentCommand() {
               session.use { clientSession ->
                 clientSession.startTransaction()
                 module.bot.database.pokemonRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
-                module.bot.database.userRepository.addPokemonIndex(userData, pokemon.index, clientSession)
-                module.bot.database.userRepository.removePokemonIndex(
-                  receiverData,
-                  receiverData.nextPokemonIndices.first(),
-                  clientSession
-                )
+                module.bot.database.userRepository.giftPokemon(userData, receiverData, clientSession)
                 clientSession.commitTransactionAndAwait()
               }
             }

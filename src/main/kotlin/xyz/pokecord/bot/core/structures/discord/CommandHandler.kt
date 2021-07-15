@@ -14,6 +14,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.*
 import java.util.concurrent.Executors
@@ -86,7 +87,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 //      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
 //    }
 
-      val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
+      val hasRunningCommand =
+        bot.cache.isRunningCommand(context.author.id) || bot.cache.getUserLock(context.author.id).isLocked
       if (hasRunningCommand) {
         context.reply(
           context.embedTemplates.error(
@@ -159,6 +161,24 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
                   string == null -> PokemonResolvable.Int(null)
                   arrayOf("latest", "l").contains(string.lowercase()) -> PokemonResolvable.Latest()
                   else -> PokemonResolvable.Int(string.toIntOrNull())
+                }
+              }
+              param.type.isPokemonOrder -> {
+                val orderString = option?.asString
+                when {
+                  arrayOf("i", "iv").contains(orderString) -> {
+                    PokemonOrder.IV
+                  }
+                  arrayOf("l", "lv", "level").contains(orderString) -> {
+                    PokemonOrder.LEVEL
+                  }
+                  arrayOf("d", "dex", "pokedex").contains(orderString) -> {
+                    PokemonOrder.POKEDEX
+                  }
+                  arrayOf("t", "time").contains(orderString) -> {
+                    PokemonOrder.TIME
+                  }
+                  else -> PokemonOrder.DEFAULT
                 }
               }
               else -> null
@@ -273,7 +293,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 //      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
 //    }
 
-      val hasRunningCommand = bot.cache.isRunningCommand(context.author.id)
+      val hasRunningCommand =
+        bot.cache.isRunningCommand(context.author.id) || bot.cache.getUserLock(context.author.id).isLocked
       if (hasRunningCommand) {
         context.reply(
           context.embedTemplates.error(
@@ -377,6 +398,9 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
                 }
                 param.type.isPokemonResolvable -> {
                   parsedParameters.add(argumentParser.getPokemonResolvable())
+                }
+                param.type.isPokemonOrder -> {
+                  parsedParameters.add(argumentParser.getPokemonOrder())
                 }
                 else -> {
                   throw UnsupportedCommandArgumentException(param.name.toString())

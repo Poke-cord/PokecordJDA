@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.put
@@ -32,9 +31,7 @@ import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.FAQTranslation
-import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.PokemonStats
-import java.io.File
 import kotlin.collections.set
 import kotlin.random.Random
 
@@ -247,7 +244,19 @@ object Migration {
 
     val indexMap = mutableMapOf<String, Int>()
 
-    val cursor = oldPokemonCollection.find().sort(ascending(OwnedPokemon::_id)).cursor()
+    val cursor =
+      oldPokemonCollection.find(
+//        BsonDocument.parse(buildJsonObject {
+//          putJsonObject("ownerId") {
+//            putJsonArray("\$in") {
+//              add("574951722645192734")
+//              add("693914342625771551")
+//              add("787542344688730152")
+//            }
+//          }
+//        }.toString())
+      ).sort(ascending(OwnedPokemon::id, OwnedPokemon::_id))
+        .cursor()
 
     val docs = arrayListOf<OwnedPokemon>()
     cursor.asFlow().map { it.toBsonDocument() }.collect {
@@ -407,6 +416,8 @@ object Migration {
 //          }
 //        }
 
+        val nextIndex = indexMap.getOrElse(userId) { 0 }
+
         newUsersCollection.insertOne(
           User(
             userId,
@@ -422,7 +433,8 @@ object Migration {
             progressPrivate,
             donationTier,
             selected?.toId(),
-            nextPokemonIndices = mutableListOf(indexMap.getOrElse(userId) { 0 })
+            nextIndex = nextIndex,
+            pokemonCount = nextIndex
           )
         )
         if (inventoryItems.isNotEmpty()) newInventoryCollection.insertMany(inventoryItems)
@@ -455,10 +467,10 @@ object Migration {
     val newRewardsCollection = newDatabase.getCollection<VoteReward>()
 
     runBlocking {
-      File("started").writeText("1")
+//      File("started").writeText("1")
       val indexMap = convertPokemonStructure(oldPokemonCollection, newPokemonCollection)
 //      addIndices(newDatabase, newPokemonCollection)
-      File("indexMap.json").writeText(Json.encodeToString(indexMap))
+//      File("indexMap.json").writeText(Json.encodeToString(indexMap))
       convertFaqs(oldFaqsCollection, newFaqsCollection)
 //      File("faqs_done").writeText("1")
       convertSpawnChannels(oldSpawnChannelsCollection, newSpawnChannelsCollection)

@@ -7,6 +7,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
+import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -50,6 +51,8 @@ val KType.isVoiceChannel
   get() = javaType === VoiceChannel::class.java
 val KType.isPokemonResolvable
   get() = javaType === PokemonResolvable::class.java
+val KType.isPokemonOrder
+  get() = javaType === PokemonOrder::class.java
 
 val KType.isCommandContext
   get() = javaType === ICommandContext::class.java

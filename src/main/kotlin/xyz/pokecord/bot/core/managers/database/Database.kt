@@ -72,7 +72,7 @@ class Database(cache: Cache) {
     faqRepository = FAQRepository(this, faqCollection)
     guildRepository = GuildRepository(this, guildCollection, cache.guildMap)
     orderRepository = OrderRepository(this, orderCollection)
-    pokemonRepository = PokemonRepository(this, ownedPokemonCollection)
+    pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
       SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)

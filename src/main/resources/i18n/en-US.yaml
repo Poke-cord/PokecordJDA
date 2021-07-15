@@ -315,6 +315,9 @@ modules:
           tooLong: '**Suggestion**: Try entering a nickname under 64 characters!'
         reset: A Nickname has been Reset
         updated: A Nickname has been Updated
+      order:
+        ordering: Ordering your Pokémon, please don't use any other command until this is done.
+        ordered: Finished ordering your Pokémon!
       pick:
         embed:
           description: You chose {{pokemon}} as your starter Pokémon!
