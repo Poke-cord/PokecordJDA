@@ -3,6 +3,7 @@ package xyz.pokecord.bot.utils
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.litote.kmongo.Id
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
@@ -17,6 +18,7 @@ data class PokemonStats(
   val specialDefense: Int,
   val speed: Int
 ) {
+  @Transient
   val total = attack + defense + hp + specialAttack + specialDefense + speed
 }
 
