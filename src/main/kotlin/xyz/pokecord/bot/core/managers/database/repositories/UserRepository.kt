@@ -301,13 +301,13 @@ class UserRepository(
         collection
           .findAndCast<PokemonCountLeaderboardResult>(EMPTY_BSON)
           .projection(
-            project(
-              User::id from User::id,
-              User::tag from User::tag,
-              User::pokemonCount from User::pokemonCount
+            combine(
+              PokemonCountLeaderboardResult::id from User::id,
+              PokemonCountLeaderboardResult::tag from User::tag,
+              PokemonCountLeaderboardResult::pokemonCount from User::pokemonCount
             )
           )
-          .sort(descending(User::pokemonCount))
+          .sort(descending(PokemonCountLeaderboardResult::pokemonCount))
           .limit(limit).toList()
 //      val leaderboard = collection.aggregate<PokemonCountLeaderboardResult>(
 //        listOf(
