@@ -29,7 +29,7 @@ class GuildRepository(
   suspend fun getGuild(jdaGuild: JDAGuild): Guild {
     var guild = getCacheGuild(jdaGuild.id)
     if (guild == null) {
-      guild = collection.findOneById(jdaGuild.id)
+      guild = collection.findOne(Guild::id eq jdaGuild.id)
       if (guild == null) {
         guild = Guild(jdaGuild.id)
       }
