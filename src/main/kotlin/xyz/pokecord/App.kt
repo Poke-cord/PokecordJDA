@@ -56,7 +56,7 @@ object App {
           bot.modules[it.name.lowercase()] = it
         }
         val shardManagerBuilder = DefaultShardManagerBuilder
-          .createDefault(token)
+          .createLight(token)
           .injectKTX()
           .setStatus(OnlineStatus.DO_NOT_DISTURB)
           .setActivity(Activity.playing("Initializing..."))
