@@ -69,35 +69,35 @@ class UserRepository(
 
   suspend fun updateTag(userData: User, tag: String) {
     userData.tag = tag
-    collection.updateOne(User::_id eq userData._id, set(User::tag setTo tag))
+    collection.updateOne(User::id eq userData.id, set(User::tag setTo tag))
     setCacheUser(userData)
   }
 
   suspend fun incCredits(userData: User, amount: Number, session: ClientSession? = null) {
     userData.credits += amount.toInt()
-    if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::credits, amount))
-    else collection.updateOne(session, User::_id eq userData._id, inc(User::credits, amount))
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::credits, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::credits, amount))
     setCacheUser(userData)
   }
 
   suspend fun incGems(userData: User, amount: Int, session: ClientSession? = null) {
     userData.gems += amount
-    if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::gems, amount))
-    else collection.updateOne(session, User::_id eq userData._id, inc(User::gems, amount))
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::gems, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::gems, amount))
     setCacheUser(userData)
   }
 
   suspend fun incTokens(userData: User, amount: Int, session: ClientSession? = null) {
     userData.tokens += amount
-    if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::tokens, amount))
-    else collection.updateOne(session, User::_id eq userData._id, inc(User::tokens, amount))
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::tokens, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::tokens, amount))
     setCacheUser(userData)
   }
 
   suspend fun incShinyRate(userData: User, amount: Int, session: ClientSession? = null) {
     userData.shinyRate += amount
-    if (session == null) collection.updateOne(User::_id eq userData._id, inc(User::shinyRate, amount))
-    else collection.updateOne(session, User::_id eq userData._id, inc(User::shinyRate, amount))
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::shinyRate, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::shinyRate, amount))
     setCacheUser(userData)
   }
 
@@ -155,7 +155,7 @@ class UserRepository(
 
   suspend fun selectPokemon(userData: User, pokemon: OwnedPokemon) {
     userData.selected = pokemon._id
-    collection.updateOne(User::_id eq userData._id, set(User::selected setTo userData.selected))
+    collection.updateOne(User::id eq userData.id, set(User::selected setTo userData.selected))
     setCacheUser(userData)
   }
 
@@ -180,7 +180,7 @@ class UserRepository(
     if (!targetList.contains(pokemon.id)) {
       targetList.add(pokemon.id)
       collection.updateOne(
-        User::_id eq userData._id,
+        User::id eq userData.id,
         addToSet((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
       )
       setCacheUser(userData)
@@ -195,12 +195,12 @@ class UserRepository(
 
     collection.updateOne(
       clientSession,
-      User::_id eq sender._id,
+      User::id eq sender.id,
       inc(User::pokemonCount, -1)
     )
     collection.updateOne(
       clientSession,
-      User::_id eq receiver._id,
+      User::id eq receiver.id,
       combine(
         inc(User::pokemonCount, 1),
         inc(User::nextIndex, 1)
@@ -214,8 +214,8 @@ class UserRepository(
     val session = database.startSession()
     session.use { clientSession ->
       clientSession.startTransaction()
-      collection.updateOne(clientSession, User::_id eq sender._id, inc(User::credits, -amount))
-      collection.updateOne(clientSession, User::_id eq receiver._id, inc(User::credits, amount))
+      collection.updateOne(clientSession, User::id eq sender.id, inc(User::credits, -amount))
+      collection.updateOne(clientSession, User::id eq receiver.id, inc(User::credits, amount))
       database.giftCollection.insertOne(clientSession, Gift(sender.id, receiver.id, amount, mutableListOf()))
       clientSession.commitTransactionAndAwait()
       sender.credits -= amount
@@ -233,8 +233,8 @@ class UserRepository(
 
   suspend fun consumeInventoryItem(inventoryItem: InventoryItem, amount: Int = 1, session: ClientSession? = null) {
     if (inventoryItem.amount <= 1) {
-      if (session == null) inventoryItemsCollection.deleteOne(InventoryItem::_id eq inventoryItem._id)
-      else inventoryItemsCollection.deleteOne(session, InventoryItem::_id eq inventoryItem._id)
+      if (session == null) inventoryItemsCollection.deleteOne(InventoryItem::id eq inventoryItem.id)
+      else inventoryItemsCollection.deleteOne(session, InventoryItem::id eq inventoryItem.id)
     } else {
       if (session == null) {
         inventoryItemsCollection.updateOne(
@@ -277,7 +277,7 @@ class UserRepository(
 
   suspend fun togglePrivate(userData: User) {
     userData.progressPrivate = !userData.progressPrivate
-    collection.updateOne(User::_id eq userData._id, set(User::progressPrivate setTo !userData.progressPrivate))
+    collection.updateOne(User::id eq userData.id, set(User::progressPrivate setTo !userData.progressPrivate))
     setCacheUser(userData)
   }
 
@@ -326,13 +326,13 @@ class UserRepository(
 
   suspend fun setAgreedToTerms(userData: User, agreed: Boolean = true) {
     userData.agreedToTerms = agreed
-    collection.updateOne(User::_id eq userData._id, set(User::agreedToTerms setTo userData.agreedToTerms))
+    collection.updateOne(User::id eq userData.id, set(User::agreedToTerms setTo userData.agreedToTerms))
     setCacheUser(userData)
   }
 
   suspend fun setDonationTier(userData: User, donationTier: Int) {
     userData.donationTier = donationTier
-    collection.updateOne(User::_id eq userData._id, set(User::donationTier setTo userData.donationTier))
+    collection.updateOne(User::id eq userData.id, set(User::donationTier setTo userData.donationTier))
     setCacheUser(userData)
   }
 
