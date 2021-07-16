@@ -51,7 +51,9 @@ class SetCommand : ParentCommand() {
 
       module.bot.database.guildRepository.setPrefix(context.getGuildData()!!, prefix)
       context.reply(
-        context.translate("modules.general.commands.set.prefix.updated", "prefix" to prefix)
+        context.embedTemplates.normal(
+          context.translate("modules.general.commands.set.prefix.updated", "prefix" to prefix)
+        ).build()
       ).queue()
     }
   }
