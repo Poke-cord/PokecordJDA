@@ -45,8 +45,10 @@ misc:
       title: A User Enabled Private Progress
     rules:
       description: |-
-        Hey {{user}}!
-        Please read and agree to our [Terms Of Service]({{tosUrl}}) to continue.
+        Welcome to {{botUsername}}, {{user}}!
+        Please read and agree to our [Terms Of Service]({{tosUrl}}) in order to continue.
+
+        By clicking ✅ you agree to our [Terms of Service]({{tosUrl}})
   errors:
     embeds:
       commandExecutionFailed:

@@ -50,6 +50,7 @@ interface ICommandContext {
   fun addActionRows(vararg actionRows: ActionRow): ICommandContext
   fun clearActionRows(): ICommandContext
 
+  suspend fun askForTOSAgreement(): Boolean
   suspend fun hasStarted(sendMessage: Boolean = false): Boolean
   fun reply(content: String, mentionRepliedUser: Boolean = false): RestAction<*>
   fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean = false): RestAction<*>

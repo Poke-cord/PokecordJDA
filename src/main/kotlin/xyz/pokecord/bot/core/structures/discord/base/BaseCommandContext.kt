@@ -14,6 +14,7 @@ import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
+import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 import java.lang.reflect.InvocationTargetException
 import net.dv8tion.jda.api.entities.User as JDAUser
@@ -185,6 +186,22 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
       )
       errorEmbed?.let { reply(it) }
     }
+  }
+
+  override suspend fun askForTOSAgreement(): Boolean {
+    val confirmation = Confirmation(this)
+    return confirmation.result(
+      embedTemplates.normal(
+        translate(
+          "misc.embeds.rules.description",
+          mapOf(
+            "botUsername" to jda.selfUser.name,
+            "user" to author.asMention,
+            "tosUrl" to "https://pokecord.xyz/rules"
+          )
+        )
+      )
+    )
   }
 
   companion object {

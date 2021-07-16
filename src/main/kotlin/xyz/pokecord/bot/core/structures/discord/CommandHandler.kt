@@ -67,25 +67,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val userData = context.getUserData()
       if (userData.blacklisted) return
-//    if (!userData.agreedToTerms) {
-//      context.reply(
-//        context.embedTemplates.normal(
-//          context.translate(
-//            "misc.embeds.rules.description",
-//            mapOf(
-//              "user" to context.author.asMention,
-//              "tosUrl" to "https://pokecord.xyz/rules"
-//            )
-//          )
-//        ).build(),
-//        true
-//      ).await()
-//      val responseMessage = event.channel.awaitMessage(context.author)
-//      if (!responseMessage.contentRaw.equals(context.author.id.asTrainerId.toInt().toString(16).reversed(), true)) {
-//        return
-//      }
-//      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
-//    }
+      if (!userData.agreedToTerms) {
+        val agreed = context.askForTOSAgreement()
+        if (agreed) context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
+        else return
+      }
 
       val hasRunningCommand =
         bot.cache.isRunningCommand(context.author.id) || bot.cache.getUserLock(context.author.id).isLocked
@@ -273,25 +259,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val userData = context.getUserData()
       if (userData.blacklisted) return
-//    if (!userData.agreedToTerms) {
-//      context.reply(
-//        context.embedTemplates.normal(
-//          context.translate(
-//            "misc.embeds.rules.description",
-//            mapOf(
-//              "user" to context.author.asMention,
-//              "tosUrl" to "https://pokecord.xyz/rules"
-//            )
-//          )
-//        ).build(),
-//        true
-//      ).await()
-//      val responseMessage = event.channel.awaitMessage(context.author)
-//      if (!responseMessage.contentRaw.equals(context.author.id.asTrainerId.toInt().toString(16).reversed(), true)) {
-//        return
-//      }
-//      context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
-//    }
+      if (!userData.agreedToTerms) {
+        val agreed = context.askForTOSAgreement()
+        if (agreed) context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
+        else return
+      }
 
       val hasRunningCommand =
         bot.cache.isRunningCommand(context.author.id) || bot.cache.getUserLock(context.author.id).isLocked
