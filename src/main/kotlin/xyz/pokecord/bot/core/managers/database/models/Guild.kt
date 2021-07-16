@@ -11,7 +11,7 @@ import xyz.pokecord.bot.core.managers.I18n
 data class Guild(
   val id: String,
   var prefix: String? = null,
-  val levelUpMessagesSilenced: Boolean = false,
+  var levelUpMessagesSilenced: Boolean = false,
   val language: I18n.Language? = null,
   @Contextual val _id: Id<Guild> = newId(),
   @Transient var _isNew: Boolean = false

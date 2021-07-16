@@ -12,6 +12,25 @@ import kotlin.random.Random
 class SetCommand : ParentCommand() {
   override val name = "Set"
 
+  override var aliases = arrayOf("settings", "setting", "config")
+
+  @ChildCommand
+  class SilenceCommand : Command() {
+    override val name = "Silence"
+
+    @Executor
+    suspend fun execute(context: ICommandContext) {
+      val guildData = context.getGuildData() ?: return
+      module.bot.database.guildRepository.toggleSilence(guildData)
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(if (!guildData.levelUpMessagesSilenced) "modules.general.commands.set.silence.enabled" else "modules.general.commands.set.silence.disabled"),
+          context.translate("modules.general.commands.set.silence.title")
+        ).build()
+      ).queue()
+    }
+  }
+
   @ChildCommand
   class SetPrefixCommand : Command() {
     override val name = "Prefix"
@@ -33,8 +52,7 @@ class SetCommand : ParentCommand() {
       if (prefix == null) {
         context.reply(
           context.embedTemplates.normal(
-            context.translate("modules.general.commands.set.prefix.current", "prefix" to context.getPrefix()),
-            ""
+            context.translate("modules.general.commands.set.prefix.current", "prefix" to context.getPrefix())
           ).build()
         ).queue()
         return

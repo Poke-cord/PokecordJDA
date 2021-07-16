@@ -185,9 +185,13 @@ modules:
           enabled: Your progress is now hidden from other players!
           disabled: Your progress is now shown to other players!
         prefix:
-          current: The current prefix is {{prefix}}.
+          current: The current prefix is `{{prefix}}`.
           tooLarge: Prefix can't be longer than 10 characters.
           updated: Prefix updated to {{prefix}}.
+        silence:
+          title: Level Up Messages
+          enabled: Level Up messages are now enabled!
+          disabled: Level Up messages are now disabled!
         spawn:
           description: |-
             **Channel Name**: {{channelName}}

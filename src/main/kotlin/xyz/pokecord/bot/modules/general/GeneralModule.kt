@@ -18,7 +18,8 @@ class GeneralModule(bot: Bot) : Module(
     SetCommand(),
     SetCommand.SetPrefixCommand(),
     SetCommand.SetPrivateCommand(),
-    SetCommand.SetSpawnChannelCommand()
+    SetCommand.SetSpawnChannelCommand(),
+    SetCommand.SilenceCommand()
   ),
   arrayOf(
     ReadyEvent()

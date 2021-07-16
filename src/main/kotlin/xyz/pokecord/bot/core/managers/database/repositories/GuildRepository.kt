@@ -9,6 +9,7 @@ import org.litote.kmongo.setTo
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Guild
+import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
@@ -47,5 +48,11 @@ class GuildRepository(
     collection.updateOne(Guild::id eq guildData.id, set(Guild::prefix setTo prefix))
     setCacheGuild(guildData.id, guildData)
     return guildData
+  }
+
+  suspend fun toggleSilence(guildData: Guild) {
+    guildData.levelUpMessagesSilenced = !guildData.levelUpMessagesSilenced
+    collection.updateOne(User::id eq guildData.id, set(User::progressPrivate setTo guildData.levelUpMessagesSilenced))
+    setCacheGuild(guildData.id, guildData)
   }
 }
