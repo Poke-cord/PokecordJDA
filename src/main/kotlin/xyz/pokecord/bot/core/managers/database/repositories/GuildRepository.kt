@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.eq
@@ -19,10 +20,14 @@ class GuildRepository(
 ) : Repository(database) {
   private suspend fun getCacheGuild(guildId: String): Guild? {
     val json = cacheMap.getAsync(guildId).awaitSuspending() ?: return null
-    return Guild(json)
+    return Json.decodeFromString(json)
   }
 
   private suspend fun setCacheGuild(guildId: String, guild: Guild) {
+    if (guild._isNew && !guild.isDefault) {
+      guild._isNew = false
+      collection.insertOne(guild)
+    }
     cacheMap.putAsync(guildId, Json.encodeToString(guild)).awaitSuspending()
   }
 
@@ -31,9 +36,8 @@ class GuildRepository(
     if (guild == null) {
       guild = collection.findOne(Guild::id eq jdaGuild.id)
       if (guild == null) {
-        guild = Guild(jdaGuild.id)
-      }
-      setCacheGuild(jdaGuild.id, guild)
+        guild = Guild(jdaGuild.id, _isNew = true)
+      } else setCacheGuild(jdaGuild.id, guild)
     }
     return guild
   }
