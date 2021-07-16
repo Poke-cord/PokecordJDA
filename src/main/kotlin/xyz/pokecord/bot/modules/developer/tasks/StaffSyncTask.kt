@@ -13,14 +13,14 @@ class StaffSyncTask : Task() {
   override val name = "StaffSync"
 
   override suspend fun execute() {
-    val mainServer = module.bot.shardManager.getGuildById(Config.mainServer)
-    if (mainServer != null) {
+    val mainServerShardId = ((Config.mainServer.toLong() shr 22) % module.bot.shardManager.shardsTotal).toInt()
+    if (module.bot.shardManager.getShardById(mainServerShardId) != null) {
       val guildRoles =
-        module.bot.discordRestClient.getGuildRoles(mainServer.id).filter { Config.Roles.ids.contains(it.id) }
+        module.bot.discordRestClient.getGuildRoles(Config.mainServer).filter { Config.Roles.ids.contains(it.id) }
           .sortedByDescending { it.position }
       val staffMemberIds = module.bot.cache.staffMemberIds.readAllAsync().awaitSuspending()
       val cachedStaffMemberObjects = staffMemberIds.mapNotNull { staffMemberId ->
-        val guildMember = module.bot.discordRestClient.getGuildMember(mainServer.id, staffMemberId)
+        val guildMember = module.bot.discordRestClient.getGuildMember(Config.mainServer, staffMemberId)
         val role = guildRoles.find { guildMember.roles.contains(it.id) } ?: return@mapNotNull null
         val avatarUrl =
           if (guildMember.user.avatar == null) "https://cdn.discordapp.com/embed/avatars/${guildMember.user.discriminator.toInt() % 5}.png"
