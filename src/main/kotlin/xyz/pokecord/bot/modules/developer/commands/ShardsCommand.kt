@@ -22,12 +22,12 @@ class ShardsCommand : DeveloperCommand() {
     val shardStatusSet = module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
       .map { json -> Json.decodeFromString<ShardStatus>(json) }.sortedBy { it.id }
 
+    val guildCount = shardStatusSet.sumOf { it.guildCacheSize }
+
     EmbedPaginator(context, ceil(shardStatusSet.size / 10.0).toInt(), {
       val startingIndex = it * 10
       val items = shardStatusSet.drop(startingIndex).take(10)
-      var guildCount = 0L
       val shardList = items.joinToString("\n") { status ->
-        guildCount += status.guildCacheSize
         "${status.id}/${status.count} - ${status.gatewayPing}ms - ${status.hostname} - ${
           (System.currentTimeMillis() - status.updatedAt).humanizeMs()
         } - ${status.guildCacheSize}"
