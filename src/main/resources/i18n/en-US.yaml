@@ -3,10 +3,10 @@ misc:
     developer:
       eval: Evaluates some JavaScript/Kotlin code.
     general:
-      faq: 'Have a question? I might have just the right answer for you :wink:'
+      faq: 'Have a question? I might have just the right answer for you'
       invite: Invite our bot to your own server.
-      help: "Pretty sure this is what you're looking at right now :sweat_smile:"
-      ping: 'Ping, pong! :ping_pong: :eyes::eyes::eyes:'
+      help: "Pretty sure this is what you're looking at right now"
+      ping: 'Ping, pong!'
     pokemon:
       info: In a hurry? Get nitty gritty statistics on the go.
       pick: Lonely? Pick a starter Pokémon to join you.
