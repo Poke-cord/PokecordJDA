@@ -1,17 +1,18 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
-import xyz.pokecord.bot.core.structures.discord.base.Event
 import kotlin.math.min
 
-class XPGainEvent : Event() {
-  override val name = "XPGain"
+object XPGainEvent
+//  : Event()
+{
+//  override val name = "XPGain"
 
   private val envFlag = System.getenv("XP_GAIN") != null
 
   private val lastCountedMessageMap = mutableMapOf<String, Long?>()
 
-  @Handler
+  //  @Handler
   suspend fun onMessage(context: MessageCommandContext) {
     if (!context.shouldProcess()) return
     if (!envFlag || context.bot.maintenance) return
@@ -27,7 +28,7 @@ class XPGainEvent : Event() {
     if (lastMessageAt != null && lastMessageAt + 5000 > now) return
     lastCountedMessageMap[context.author.id] = now
 
-    val selectedPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
+    val selectedPokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     if (selectedPokemon == null || selectedPokemon.level >= 100) return
 
     var xp = min(context.event.message.contentRaw.replace("[ \\n]".toRegex(), "").length * 10, 1000)
@@ -42,13 +43,13 @@ class XPGainEvent : Event() {
 
     val oldPokemonName = context.translator.pokemonDisplayName(selectedPokemon)
 
-    val (leveledUp, evolved) = module.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
+    val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
       selectedPokemon,
       gainedXp = xp
     )
 
     if (evolved) {
-      module.bot.database.userRepository.addDexCatchEntry(userData, selectedPokemon)
+      context.bot.database.userRepository.addDexCatchEntry(userData, selectedPokemon)
     }
 
     if (context.isFromGuild) {

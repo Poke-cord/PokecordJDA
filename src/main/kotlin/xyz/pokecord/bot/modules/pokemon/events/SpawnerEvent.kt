@@ -7,12 +7,13 @@ import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
-import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import kotlin.random.Random
 
-class SpawnerEvent : Event() {
-  override val name = "Spawner"
+object SpawnerEvent
+//  : Event()
+{
+//  override val name = "Spawner"
 
   private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -33,7 +34,7 @@ class SpawnerEvent : Event() {
     return pokemonId
   }
 
-  @Handler
+  //  @Handler
   suspend fun onMessage(context: MessageCommandContext) {
     try {
       if (!context.shouldProcess()) return
@@ -41,10 +42,11 @@ class SpawnerEvent : Event() {
       if (context.event.channelType != ChannelType.TEXT) return
       val prefix = context.getPrefix()
       if (context.event.message.contentRaw.startsWith(prefix, true)) return
-      val spawnChannels = module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
+      val spawnChannels = context.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)
       var randomSpawnChannel = spawnChannels.randomOrNull() ?: return
       SpawnChannelMutex[randomSpawnChannel.id].withLock {
-        randomSpawnChannel = module.bot.database.spawnChannelRepository.getSpawnChannel(randomSpawnChannel.id) ?: return
+        randomSpawnChannel =
+          context.bot.database.spawnChannelRepository.getSpawnChannel(randomSpawnChannel.id) ?: return
         val randomSpawnChannelEntity = context.guild!!.getTextChannelById(randomSpawnChannel.id) ?: return
         if (!randomSpawnChannelEntity.guild.selfMember.hasPermission(
             randomSpawnChannelEntity,
@@ -73,7 +75,7 @@ class SpawnerEvent : Event() {
             randomSpawnChannel.requiredMessages = Random.nextInt(5, 41)
             randomSpawnChannel.spawned = getNextSpawn()
 
-            module.bot.database.spawnChannelRepository.updateDetails(
+            context.bot.database.spawnChannelRepository.updateDetails(
               randomSpawnChannel
             )
             val embed = context.embedTemplates.normal(
@@ -95,16 +97,17 @@ class SpawnerEvent : Event() {
           } catch (e: Exception) {
             logger.error("Spawn error", e)
             // Undo the changes we made to the spawn channel since there was an error spawning
-            module.bot.database.spawnChannelRepository.updateDetails(
+            context.bot.database.spawnChannelRepository.updateDetails(
               oldSpawnChannelData
             )
           }
         } else {
-          module.bot.database.spawnChannelRepository.updateMessageCount(randomSpawnChannel)
+          context.bot.database.spawnChannelRepository.updateMessageCount(randomSpawnChannel)
         }
       }
     } catch (e: Exception) {
-      context.handleException(e, module, event = this)
+//      context.handleException(e, module, event = this)
+      context.handleException(e)
     }
   }
 }
