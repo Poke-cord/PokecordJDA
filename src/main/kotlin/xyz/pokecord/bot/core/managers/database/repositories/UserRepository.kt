@@ -277,7 +277,7 @@ class UserRepository(
 
   suspend fun togglePrivate(userData: User) {
     userData.progressPrivate = !userData.progressPrivate
-    collection.updateOne(User::id eq userData.id, set(User::progressPrivate setTo !userData.progressPrivate))
+    collection.updateOne(User::id eq userData.id, set(User::progressPrivate setTo userData.progressPrivate))
     setCacheUser(userData)
   }
 
