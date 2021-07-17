@@ -110,19 +110,20 @@ class SetCommand : ParentCommand() {
       }
       if (context.guild?.retrieveMember(context.author)?.await()?.hasPermission(Permission.ADMINISTRATOR) != true) {
         // TODO: say you're not admin PROPERLY
-        // context.reply("you're not admin").queue()
+        context.reply(
+          context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
+        ).queue()
         return
       }
 
       val spawnChannels =
         module.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id).toMutableList()
-      val spawnChannelCount = spawnChannels.size
 
-      spawnChannels.forEach {
-        context.guild!!.getTextChannelById(it.id) ?: spawnChannels.remove(it)
+      val removed = spawnChannels.removeAll {
+        context.guild!!.getTextChannelById(it.id) == null
       }
 
-      if (spawnChannelCount != spawnChannels.size) {
+      if (removed) {
         module.bot.database.spawnChannelRepository.setSpawnChannels(context.guild!!.id, spawnChannels)
       }
 
