@@ -49,6 +49,14 @@ class SetCommand : ParentCommand() {
         return
       }
 
+      if (context.guild?.retrieveMember(context.author)?.await()?.hasPermission(Permission.ADMINISTRATOR) != true) {
+        // TODO: say you're not admin PROPERLY
+        context.reply(
+          context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
+        ).queue()
+        return
+      }
+
       if (prefix == null) {
         context.reply(
           context.embedTemplates.normal(
