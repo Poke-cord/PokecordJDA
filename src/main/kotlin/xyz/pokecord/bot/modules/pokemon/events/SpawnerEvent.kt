@@ -9,7 +9,6 @@ import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import kotlin.random.Random
 
 class SpawnerEvent : Event() {
@@ -18,6 +17,8 @@ class SpawnerEvent : Event() {
   private val logger = LoggerFactory.getLogger(this::class.java)
 
   private val envFlag = System.getenv("SPAWNS") != null
+
+  private val lastCountedMessageMap = mutableMapOf<String, Long?>()
 
   private fun getNextSpawn(): Int {
     var pokemonId = Random.nextInt(1, 808)
@@ -52,10 +53,10 @@ class SpawnerEvent : Event() {
           )
         ) return // TODO: maybe let them know about missing permission somehow?
         val lastMessageAt =
-          context.bot.cache.lastCountedSpawnMessageMap.getAsync(context.author.id).awaitSuspending()
+          lastCountedMessageMap.getOrDefault(context.author.id, null)
         val now = System.currentTimeMillis()
         if (lastMessageAt != null && lastMessageAt + 5000 > now) return
-        context.bot.cache.lastCountedSpawnMessageMap.fastPutAsync(context.author.id, now).awaitSuspending()
+        lastCountedMessageMap[context.author.id] = now
 
         val oldSpawnChannelData = SpawnChannel(
           randomSpawnChannel.id,

@@ -2,13 +2,14 @@ package xyz.pokecord.bot.modules.pokemon.events
 
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Event
-import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import kotlin.math.min
 
 class XPGainEvent : Event() {
   override val name = "XPGain"
 
   private val envFlag = System.getenv("XP_GAIN") != null
+
+  private val lastCountedMessageMap = mutableMapOf<String, Long?>()
 
   @Handler
   suspend fun onMessage(context: MessageCommandContext) {
@@ -21,10 +22,10 @@ class XPGainEvent : Event() {
     val userData = context.getUserData()
     if (userData.selected == null) return
 
-    val lastMessageAt = context.bot.cache.lastCountedXpMessageMap.getAsync(context.author.id).awaitSuspending()
+    val lastMessageAt = lastCountedMessageMap.getOrDefault(context.author.id, null)
     val now = System.currentTimeMillis()
     if (lastMessageAt != null && lastMessageAt + 5000 > now) return
-    context.bot.cache.lastCountedXpMessageMap.fastPutAsync(context.author.id, now).awaitSuspending()
+    lastCountedMessageMap[context.author.id] = now
 
     val selectedPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     if (selectedPokemon == null || selectedPokemon.level >= 100) return
