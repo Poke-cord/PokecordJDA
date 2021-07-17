@@ -450,15 +450,21 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         if (shouldLog) logger.info("Before command job")
 
         val commandJob = coroutineScope.launch {
+          if (shouldLog) logger.info("Inside command job")
           bot.cache.setRunningCommand(
             context.author.id,
             true
           )
+          if (shouldLog) logger.info("After set running command")
           try {
             if (executorFunction.isSuspend) {
+              if (shouldLog) logger.info("Before callSuspend")
               executorFunction.callSuspend(command, *parsedParameters.toTypedArray())
+              if (shouldLog) logger.info("After callSuspend")
             } else {
+              if (shouldLog) logger.info("Before call")
               executorFunction.call(command, *parsedParameters.toTypedArray())
+              if (shouldLog) logger.info("After call")
             }
           } catch (e: Throwable) {
             if (shouldLog) logger.info("Error $e")
