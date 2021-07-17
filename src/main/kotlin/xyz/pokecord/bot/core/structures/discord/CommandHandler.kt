@@ -225,8 +225,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
     }
   }
 
-  @Suppress("UNUSED")
-  suspend fun onMessageReceived(event: MessageReceivedEvent) {
+  private suspend fun onMessageReceived(event: MessageReceivedEvent) {
     if (event.isFromGuild) {
       if (!event.guild.selfMember.hasPermission(
           Permission.VIEW_CHANNEL,
@@ -236,6 +235,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       ) return
       if (!event.guild.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
     }
+    val content = event.message.contentRaw
+    if (content.isNotEmpty()) logger.info("Message received from ${event.author.asTag}: $content")
 
     val context = MessageCommandContext(bot, event)
     try {
