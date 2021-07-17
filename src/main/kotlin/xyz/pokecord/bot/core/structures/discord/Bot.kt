@@ -78,7 +78,7 @@ class Bot constructor(private val token: String) {
     started = true
   }
 
-  private suspend fun getModuleHelpEmbedLine(
+  private suspend fun getListHelpEmbedLine(
     context: ICommandContext,
     prefix: String,
     command: Command
@@ -103,11 +103,11 @@ class Bot constructor(private val token: String) {
         command.childCommands.forEach { childClass ->
           val childCommand = module.commands.find { it::class == childClass }
           if (childCommand != null) {
-            if (!childCommand.excludeFromHelp) commandEntries.add(getModuleHelpEmbedLine(context, prefix, childCommand))
+            if (!childCommand.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, childCommand))
           }
         }
       }
-      if (!command.excludeFromHelp) commandEntries.add(getModuleHelpEmbedLine(context, prefix, command))
+      if (!command.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, command))
     }
     if (commandEntries.isNotEmpty()) {
       return context.embedTemplates.normal(
@@ -161,6 +161,35 @@ class Bot constructor(private val token: String) {
 
   suspend fun getHelpEmbeds(context: ICommandContext, commands: List<Command>): List<EmbedBuilder> {
     return commands.mapNotNull { getHelpEmbed(context, it) }
+  }
+
+  suspend fun getChildrenCommandListEmbed(
+    context: ICommandContext,
+    parentCommand: ParentCommand,
+    commands: List<Command>,
+    prefix: String = "p!"
+  ): EmbedBuilder? {
+    val commandEntries: ArrayList<String> = arrayListOf()
+    for (command in commands) {
+      if (!command.enabled) continue
+      if (!command.canRun(context)) continue
+      if (command is ParentCommand) {
+        command.childCommands.forEach { childClass ->
+          val childCommand = command.module.commands.find { it::class == childClass }
+          if (childCommand != null) {
+            if (!childCommand.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, childCommand))
+          }
+        }
+      }
+      if (!command.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, command))
+    }
+    if (commandEntries.isNotEmpty()) {
+      return context.embedTemplates.normal(
+        commandEntries.joinToString("\n"),
+        "${parentCommand.name} ${context.translate("misc.texts.commands")}"
+      )
+    }
+    return null
   }
 
   fun updatePresence() {
