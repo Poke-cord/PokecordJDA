@@ -2,7 +2,10 @@ package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
 import dev.minn.jda.ktx.await
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -20,7 +23,6 @@ import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.*
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
@@ -32,7 +34,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   var prefix: String = if (bot.maintenance) "!" else "p!"
 
-  private val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
+//  private val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
 
   override suspend fun onEvent(event: GenericEvent) {
     when (event) {
@@ -42,13 +44,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
     }
   }
 
-  private fun onButtonClick(event: ButtonClickEvent) {
-    coroutineScope.launch {
-      delay(2500)
-      try {
-        if (!event.isAcknowledged) event.deferEdit().setActionRows().await()
-      } catch (ignored: Throwable) {
-      }
+  private suspend fun onButtonClick(event: ButtonClickEvent) {
+    delay(2500)
+    try {
+      if (!event.isAcknowledged) event.deferEdit().setActionRows().await()
+    } catch (ignored: Throwable) {
     }
   }
 
@@ -205,22 +205,20 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         }
       }
 
-      coroutineScope.launch {
-        bot.cache.setRunningCommand(
-          context.author.id,
-          true
-        )
-        try {
-          if (executorFunction.isSuspend) {
-            executorFunction.callSuspend(command, *parsedParameters.toTypedArray()) // TODO: args
-          } else {
-            executorFunction.call(command, *parsedParameters.toTypedArray()) // TODO: args
-          }
-        } catch (e: Throwable) {
-          context.handleException(e, command.module, command)
+      bot.cache.setRunningCommand(
+        context.author.id,
+        true
+      )
+      try {
+        if (executorFunction.isSuspend) {
+          executorFunction.callSuspend(command, *parsedParameters.toTypedArray()) // TODO: args
+        } else {
+          executorFunction.call(command, *parsedParameters.toTypedArray()) // TODO: args
         }
-        bot.cache.setRunningCommand(context.author.id, false)
+      } catch (e: Throwable) {
+        context.handleException(e, command.module, command)
       }
+      bot.cache.setRunningCommand(context.author.id, false)
 
       bot.cache.setRateLimit(
         cacheKey,
@@ -254,11 +252,13 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       if (shouldLog) logger.info("After shouldProcess and maintenance & dev check")
 
-      coroutineScope.launch {
-        SpawnerEvent.onMessage(context)
-      }
-      coroutineScope.launch {
-        XPGainEvent.onMessage(context)
+      coroutineScope {
+        launch {
+          SpawnerEvent.onMessage(context)
+        }
+        launch {
+          XPGainEvent.onMessage(context)
+        }
       }
 
       if (shouldLog) logger.info("After launching spawner and xp gain coroutines")
@@ -449,53 +449,54 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
         if (shouldLog) logger.info("Before command job")
 
-        val commandJob = coroutineScope.launch {
-          if (shouldLog) logger.info("Inside command job")
-          bot.cache.setRunningCommand(
-            context.author.id,
-            true
-          )
-          if (shouldLog) logger.info("After set running command")
-          try {
-            if (executorFunction.isSuspend) {
-              if (shouldLog) logger.info("Before callSuspend")
-              executorFunction.callSuspend(command, *parsedParameters.toTypedArray())
-              if (shouldLog) logger.info("After callSuspend")
-            } else {
-              if (shouldLog) logger.info("Before call")
-              executorFunction.call(command, *parsedParameters.toTypedArray())
-              if (shouldLog) logger.info("After call")
+        coroutineScope {
+          val commandJob = launch {
+            if (shouldLog) logger.info("Inside command job")
+            bot.cache.setRunningCommand(
+              context.author.id,
+              true
+            )
+            if (shouldLog) logger.info("After set running command")
+            try {
+              if (executorFunction.isSuspend) {
+                if (shouldLog) logger.info("Before callSuspend")
+                executorFunction.callSuspend(command, *parsedParameters.toTypedArray())
+                if (shouldLog) logger.info("After callSuspend")
+              } else {
+                if (shouldLog) logger.info("Before call")
+                executorFunction.call(command, *parsedParameters.toTypedArray())
+                if (shouldLog) logger.info("After call")
+              }
+            } catch (e: Throwable) {
+              if (shouldLog) logger.info("Error $e")
+              context.handleException(e, command.module, command)
             }
-          } catch (e: Throwable) {
-            if (shouldLog) logger.info("Error $e")
-            context.handleException(e, command.module, command)
+            if (shouldLog) logger.info("After execution")
+            bot.cache.setRunningCommand(context.author.id, false)
           }
-          if (shouldLog) logger.info("After execution")
-          bot.cache.setRunningCommand(context.author.id, false)
-        }
+          if (shouldLog) logger.info("After launching command job")
 
-        if (shouldLog) logger.info("After launching command job")
-
-        coroutineScope.launch {
-          delay(1000)
-          while (!commandJob.isCompleted) {
-            event.channel.sendTyping().queue()
-            delay(5000)
-          }
-        }
-
-        coroutineScope.launch {
-          val startedAt = System.currentTimeMillis()
-          while (!commandJob.isCompleted) {
+          launch {
             delay(1000)
-            if (System.currentTimeMillis() - startedAt >= 60_000) {
-              commandJob.cancelAndJoin()
-              context.reply(
-                context.embedTemplates.error(
-                  context.translate("misc.texts.commandTimedOut")
-                ).build()
-              ).queue()
-              break
+            while (!commandJob.isCompleted) {
+              event.channel.sendTyping().queue()
+              delay(5000)
+            }
+          }
+
+          launch {
+            val startedAt = System.currentTimeMillis()
+            while (!commandJob.isCompleted) {
+              delay(1000)
+              if (System.currentTimeMillis() - startedAt >= 60_000) {
+                commandJob.cancelAndJoin()
+                context.reply(
+                  context.embedTemplates.error(
+                    context.translate("misc.texts.commandTimedOut")
+                  ).build()
+                ).queue()
+                break
+              }
             }
           }
         }
