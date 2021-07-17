@@ -245,13 +245,14 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       ) return
       if (!event.guild.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
     }
-    val content = event.message.contentRaw
-    if (content.isNotEmpty()) logger.info("Message received from ${event.author.asTag}: $content")
 
     val context = MessageCommandContext(bot, event)
     try {
+      val shouldLog = context.author.id == "574951722645192734"
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
+
+      if (shouldLog) logger.info("After shouldProcess and maintenance & dev check")
 
       coroutineScope.launch {
         SpawnerEvent.onMessage(context)
@@ -260,7 +261,10 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         XPGainEvent.onMessage(context)
       }
 
+      if (shouldLog) logger.info("After launching spawner and xp gain coroutines")
+
       val effectivePrefix = context.getPrefix()
+      if (shouldLog) logger.info("Got prefix: $effectivePrefix")
       val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
       var commandString = splitMessage.removeFirst()
       if (!commandString.startsWith(effectivePrefix, true)) return
@@ -269,6 +273,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         splitMessage.removeFirstOrNull() ?: return
       }
 
+      if (shouldLog) logger.info("Command string: $commandString")
       var command: Command? = null
       for (module in bot.modules.values) {
         command = module.commandMap[commandString.lowercase()]
@@ -286,9 +291,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         }
       }
 
+      if (shouldLog) logger.info("Command: $command")
       if (command == null || !command.enabled) return
 
       val userData = context.getUserData()
+      if (shouldLog) logger.info("User data: $userData")
       if (userData.blacklisted) return
       if (!userData.agreedToTerms) {
         val agreed = context.askForTOSAgreement()
@@ -298,6 +305,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val hasRunningCommand =
         bot.cache.isRunningCommand(context.author.id) || bot.cache.getUserLock(context.author.id).isLocked
+      if (shouldLog) logger.info("Has running command: $hasRunningCommand")
       if (hasRunningCommand) {
         context.reply(
           context.embedTemplates.error(
@@ -320,11 +328,13 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       }
 
       if (!command.canRun(context)) return
+      if (shouldLog) logger.info("After can run: $hasRunningCommand")
       // TODO: Let the user know they can't run the command?
 
       val cacheKey = command.getRateLimitCacheKey(context, splitMessage)
 
       val rateLimitEndsAt = bot.cache.getRateLimit(cacheKey)
+      if (shouldLog) logger.info("Ratelimit ends at: $rateLimitEndsAt")
       if (rateLimitEndsAt != null) {
         if (rateLimitEndsAt > System.currentTimeMillis()) {
           logger.debug("User ${context.author.asTag}[${context.author.id}] hit the rate limit for the ${command.module.name}.${command.name} command.")
@@ -342,6 +352,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val executorFunction =
         command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
+
+      if (shouldLog) logger.info("Executor function: $executorFunction")
 
       if (executorFunction != null) {
         val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
@@ -435,6 +447,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           bot.database.userRepository.updateTag(userData, context.author.asTag)
         }
 
+        if (shouldLog) logger.info("Before command job")
+
         val commandJob = coroutineScope.launch {
           bot.cache.setRunningCommand(
             context.author.id,
@@ -447,10 +461,14 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
               executorFunction.call(command, *parsedParameters.toTypedArray())
             }
           } catch (e: Throwable) {
+            if (shouldLog) logger.info("Error $e")
             context.handleException(e, command.module, command)
           }
+          if (shouldLog) logger.info("After execution")
           bot.cache.setRunningCommand(context.author.id, false)
         }
+
+        if (shouldLog) logger.info("After launching command job")
 
         coroutineScope.launch {
           delay(1000)
