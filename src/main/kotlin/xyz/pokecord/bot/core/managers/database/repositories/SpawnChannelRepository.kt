@@ -88,11 +88,17 @@ class SpawnChannelRepository(
 
   suspend fun setSpawnChannels(guildId: String, spawnChannels: List<SpawnChannel>) {
     setCacheSpawnChannels(guildId, spawnChannels)
-    collection.bulkWrite(
-      *spawnChannels.map {
-        replaceOne(SpawnChannel::id eq it.id, it)
-      }.toTypedArray()
-    )
+    if (spawnChannels.isNotEmpty()) {
+      collection.bulkWrite(
+        *spawnChannels.map {
+          replaceOne(SpawnChannel::id eq it.id, it)
+        }.toTypedArray()
+      )
+    } else {
+      collection.deleteMany(
+        SpawnChannel::guildId eq guildId
+      )
+    }
   }
 
   suspend fun updateMessageCount(spawnChannel: SpawnChannel): Boolean {
