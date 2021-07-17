@@ -133,7 +133,7 @@ class EmbedPaginator(
 
               currentPageIndex = newPageIndex
 
-              event.editMessageEmbeds(getEmbed()).await()
+              sentMessage?.editMessageEmbeds(getEmbed())?.await()
             } else {
               0 // return 0 lol
             }
