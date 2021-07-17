@@ -24,12 +24,12 @@ class GuildRepository(
     return Json.decodeFromString(json)
   }
 
-  private suspend fun setCacheGuild(guildId: String, guild: Guild) {
+  private suspend fun setCacheGuild(guild: Guild) {
     if (guild._isNew && !guild.isDefault) {
       guild._isNew = false
       collection.insertOne(guild)
     }
-    cacheMap.putAsync(guildId, Json.encodeToString(guild)).awaitSuspending()
+    cacheMap.putAsync(guild.id, Json.encodeToString(guild)).awaitSuspending()
   }
 
   suspend fun getGuild(jdaGuild: JDAGuild): Guild {
@@ -38,7 +38,7 @@ class GuildRepository(
       guild = collection.findOne(Guild::id eq jdaGuild.id)
       if (guild == null) {
         guild = Guild(jdaGuild.id, _isNew = true)
-      } else setCacheGuild(jdaGuild.id, guild)
+      } else setCacheGuild(guild)
     }
     return guild
   }
@@ -46,13 +46,13 @@ class GuildRepository(
   suspend fun setPrefix(guildData: Guild, prefix: String?): Guild {
     guildData.prefix = prefix
     collection.updateOne(Guild::id eq guildData.id, set(Guild::prefix setTo prefix))
-    setCacheGuild(guildData.id, guildData)
+    setCacheGuild(guildData)
     return guildData
   }
 
   suspend fun toggleSilence(guildData: Guild) {
     guildData.levelUpMessagesSilenced = !guildData.levelUpMessagesSilenced
     collection.updateOne(User::id eq guildData.id, set(User::progressPrivate setTo guildData.levelUpMessagesSilenced))
-    setCacheGuild(guildData.id, guildData)
+    setCacheGuild(guildData)
   }
 }
