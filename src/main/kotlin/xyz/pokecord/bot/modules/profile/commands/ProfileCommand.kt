@@ -32,21 +32,28 @@ class ProfileCommand : ParentCommand() {
           caughtSet.getOrNull(it)?.let { id -> Pokemon.getById(id) }
         }
         val pokemonNames = pokemonList.mapNotNull { context.translator.pokemonName(it) }
-        val longestPokemonNameLength = pokemonNames.maxOf { it.length }
-        for (i in pokemonList.indices) {
-          entries.add(
-            "`${pokemonList[i].formattedSpeciesId} ${pokemonNames[i].padEnd(longestPokemonNameLength, ' ')}` - ${
-              if (userData.caughtShinies.contains(
-                  pokemonList[i].id
-                )
-              ) "⭐" else " ✅"
-            }"
-          )
+        val longestPokemonNameLength = pokemonNames.maxOfOrNull { it.length }
+        if (longestPokemonNameLength == null) {
+          EmbedBuilder()
+            .setTitle("Caught Pokémon")
+            .setColor(EmbedTemplates.Color.RED.code)
+            .setDescription("No Pokémon found on this page.")
+        } else {
+          for (i in pokemonList.indices) {
+            entries.add(
+              "`${pokemonList[i].formattedSpeciesId} ${pokemonNames[i].padEnd(longestPokemonNameLength, ' ')}` - ${
+                if (userData.caughtShinies.contains(
+                    pokemonList[i].id
+                  )
+                ) "⭐" else " ✅"
+              }"
+            )
+          }
+          EmbedBuilder()
+            .setTitle("Caught Pokémon")
+            .setColor(EmbedTemplates.Color.GREEN.code)
+            .setDescription(entries.joinToString("\n"))
         }
-        EmbedBuilder()
-          .setTitle("Caught Pokémon")
-          .setColor(EmbedTemplates.Color.GREEN.code)
-          .setDescription(entries.joinToString("\n"))
       }).start()
     }
   }
