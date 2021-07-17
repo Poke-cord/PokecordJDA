@@ -133,10 +133,15 @@ class EmbedPaginator(
 
               currentPageIndex = newPageIndex
 
-              sentMessage?.editMessageEmbeds(getEmbed())?.await()
+              try {
+                event.editMessageEmbeds(getEmbed()).await()
+              } catch (ignored: IllegalStateException) {
+                // already replied somehow
+              }
             } else {
-              0 // return 0 lol
+              event.deferEdit().queue()
             }
+            0 // return 0 lol
           }
         }
 
