@@ -105,7 +105,7 @@ abstract class Module(
     if (!enabled) return
     if (event is ReadyEvent) {
       for (task in tasks) {
-        if (task.enabled) task.start()
+        if (task.enabled && !task.started) task.start()
       }
     }
     for (ev in events) {

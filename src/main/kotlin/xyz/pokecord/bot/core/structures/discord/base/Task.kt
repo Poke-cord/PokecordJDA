@@ -17,9 +17,11 @@ abstract class Task : CoroutineScope {
 
   var enabled = true
   var lastRunAt: Long = System.currentTimeMillis()
+  var started = false
 
   fun start() {
     if (!module.enabled || !enabled) return
+    started = true
     val executeMethod = this::execute
     launch {
       while (isActive && enabled && module.enabled) {
