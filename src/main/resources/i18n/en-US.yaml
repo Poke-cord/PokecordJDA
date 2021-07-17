@@ -15,6 +15,7 @@ misc:
       set: The usual settings stuff.
       "set.prefix": Set server prefix.
       "set.private": Change your progress visibility to public/private.
+      "set.silence": Toggle Pokémon level up message notifications.
       "set.spawn": Set server spawn channels.
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
