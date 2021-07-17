@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
 import java.util.concurrent.Executors
 import kotlin.reflect.KParameter
@@ -103,6 +104,14 @@ abstract class Module(
 
   override fun onEvent(event: GenericEvent) {
     if (!enabled) return
+
+    if (this is PokemonModule && event is MessageReceivedEvent) {
+      if (event.channel.id == "719524226708668446") {
+        val content = event.message.contentRaw
+        if (content.isNotEmpty()) bot.logger.info("Message received from ${event.author.asTag}: $content")
+      }
+    }
+
     if (event is ReadyEvent) {
       for (task in tasks) {
         if (task.enabled && !task.started) task.start()
