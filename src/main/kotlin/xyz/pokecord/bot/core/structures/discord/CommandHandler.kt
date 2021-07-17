@@ -3,6 +3,7 @@ package xyz.pokecord.bot.core.structures.discord
 import dev.minn.jda.ktx.CoroutineEventListener
 import dev.minn.jda.ktx.await
 import kotlinx.coroutines.*
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.GenericEvent
@@ -224,6 +225,16 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   @Suppress("UNUSED")
   suspend fun onMessageReceived(event: MessageReceivedEvent) {
+    if (event.isFromGuild) {
+      if (!event.guild.selfMember.hasPermission(
+          Permission.VIEW_CHANNEL,
+          Permission.MESSAGE_READ,
+          Permission.MESSAGE_WRITE
+        )
+      ) return
+      if (!event.guild.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
+    }
+
     val context = MessageCommandContext(bot, event)
     try {
       if (!context.shouldProcess()) return
