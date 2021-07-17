@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
-import dev.minn.jda.ktx.await
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -10,7 +9,6 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.GenericEvent
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.LoggerFactory
@@ -34,21 +32,10 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   var prefix: String = if (bot.maintenance) "!" else "p!"
 
-//  private val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
-
   override suspend fun onEvent(event: GenericEvent) {
     when (event) {
-      is ButtonClickEvent -> onButtonClick(event)
       is SlashCommandEvent -> onSlashCommand(event)
       is MessageReceivedEvent -> onMessageReceived(event)
-    }
-  }
-
-  private suspend fun onButtonClick(event: ButtonClickEvent) {
-    delay(2500)
-    try {
-      if (!event.isAcknowledged) event.deferEdit().setActionRows().await()
-    } catch (ignored: Throwable) {
     }
   }
 
