@@ -1,5 +1,8 @@
 package xyz.pokecord.bot.core.structures.discord
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
@@ -19,6 +22,7 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.api.Discord
 import xyz.pokecord.bot.utils.api.PayPal
+import java.util.concurrent.Executors
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
@@ -33,6 +37,7 @@ class Bot constructor(private val token: String) {
 
   val payPal by lazy { PayPal(database) }
   val discordRestClient by lazy { Discord(token) }
+  val backgroundCoroutineScope = CoroutineScope(Executors.newFixedThreadPool(2).asCoroutineDispatcher())
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
@@ -227,6 +232,7 @@ class Bot constructor(private val token: String) {
   // TODO: use it somewhere maybe
   @Suppress("UNUSED")
   fun shutdown() {
+    backgroundCoroutineScope.cancel()
     cache.shutdown()
     database.close()
     if (this::shardManager.isInitialized) {
