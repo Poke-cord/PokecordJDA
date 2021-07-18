@@ -563,7 +563,7 @@ store:
   packages:
     gems:
       name: Gems
-      description: Purchase gems in order to buy exclusive items on the in-game item shoDp.
+      description: Purchase gems in order to buy exclusive items on the in-game item shop.
       embed:
         title: Purchase Gems
         description: Click the emoji corresponding to the amount of gems you would like to purchase.
