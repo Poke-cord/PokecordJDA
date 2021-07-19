@@ -23,7 +23,7 @@ class Discord(
       )
     }
     defaultRequest {
-      header("Authorization", token)
+      header("Authorization", if (token.startsWith("Bot ")) token else "Bot $token")
       userAgent("DiscordBot (https://pokecord.xyz, ${Config.version})")
     }
   }
