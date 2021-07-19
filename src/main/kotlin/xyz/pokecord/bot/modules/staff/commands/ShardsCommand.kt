@@ -33,7 +33,7 @@ class ShardsCommand : StaffCommand() {
         } - ${status.guildCacheSize}"
       }
       context.embedTemplates.normal(
-        "$shardList\n\nGuild Count: $guildCount",
+        "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount",
         "Shard Status"
       )
     }, paginatorIndex).start()
