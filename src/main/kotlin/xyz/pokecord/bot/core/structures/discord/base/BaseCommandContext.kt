@@ -16,6 +16,7 @@ import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
+import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import java.lang.reflect.InvocationTargetException
 import net.dv8tion.jda.api.entities.User as JDAUser
 
@@ -202,6 +203,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
         )
       )
     )
+  }
+
+  override suspend fun isStaff(): Boolean {
+    return Config.devs.contains(author.id) || bot.cache.staffMemberIds.containsAsync(author.id).awaitSuspending()
   }
 
   companion object {

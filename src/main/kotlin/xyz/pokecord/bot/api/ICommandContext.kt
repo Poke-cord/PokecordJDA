@@ -2,6 +2,7 @@ package xyz.pokecord.bot.api
 
 import io.sentry.Breadcrumb
 import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
@@ -51,6 +52,7 @@ interface ICommandContext {
   fun clearActionRows(): ICommandContext
 
   suspend fun askForTOSAgreement(): Boolean
+  suspend fun isStaff(): Boolean
   suspend fun hasStarted(sendMessage: Boolean = false): Boolean
   fun reply(content: String, mentionRepliedUser: Boolean = false): RestAction<*>
   fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean = false): RestAction<*>
