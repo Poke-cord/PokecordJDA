@@ -13,36 +13,40 @@ class StaffSyncTask : Task() {
   override val name = "StaffSync"
 
   override suspend fun execute() {
-    val mainServerShardId = ((Config.mainServer.toLong() shr 22) % module.bot.shardManager.shardsTotal).toInt()
-    if (module.bot.shardManager.getShardById(mainServerShardId) != null) {
-      val guildRoles =
-        module.bot.discordRestClient.getGuildRoles(Config.mainServer).filter { Config.Roles.ids.contains(it.id) }
-          .sortedByDescending { it.position }
-      val staffMemberIds = module.bot.cache.staffMemberIds.readAllAsync().awaitSuspending()
-      val cachedStaffMemberObjects = staffMemberIds.mapNotNull { staffMemberId ->
-        val guildMember = module.bot.discordRestClient.getGuildMember(Config.mainServer, staffMemberId)
-        val role = guildRoles.find { guildMember.roles.contains(it.id) } ?: return@mapNotNull null
-        val avatarUrl =
-          if (guildMember.user.avatar == null) "https://cdn.discordapp.com/embed/avatars/${guildMember.user.discriminator.toInt() % 5}.png"
-          else "https://cdn.discordapp.com/avatars/${guildMember.user.id}/${guildMember.user.avatar}.${
-            if (guildMember.user.avatar.startsWith(
-                "a_"
-              )
-            ) "gif" else "png"
-          }"
+    try {
+      val mainServerShardId = ((Config.mainServer.toLong() shr 22) % module.bot.shardManager.shardsTotal).toInt()
+      if (module.bot.shardManager.getShardById(mainServerShardId) != null) {
+        val guildRoles =
+          module.bot.discordRestClient.getGuildRoles(Config.mainServer).filter { Config.Roles.ids.contains(it.id) }
+            .sortedByDescending { it.position }
+        val staffMemberIds = module.bot.cache.staffMemberIds.readAllAsync().awaitSuspending()
+        val cachedStaffMemberObjects = staffMemberIds.mapNotNull { staffMemberId ->
+          val guildMember = module.bot.discordRestClient.getGuildMember(Config.mainServer, staffMemberId)
+          val role = guildRoles.find { guildMember.roles.contains(it.id) } ?: return@mapNotNull null
+          val avatarUrl =
+            if (guildMember.user.avatar == null) "https://cdn.discordapp.com/embed/avatars/${guildMember.user.discriminator.toInt() % 5}.png"
+            else "https://cdn.discordapp.com/avatars/${guildMember.user.id}/${guildMember.user.avatar}.${
+              if (guildMember.user.avatar.startsWith(
+                  "a_"
+                )
+              ) "gif" else "png"
+            }"
 
-        // TODO: implement rate limit handling
-        delay(1000)
-        CachedStaffMember(
-          guildMember.user.username,
-          guildMember.user.discriminator,
-          avatarUrl,
-          role.name,
-          role.position
-        )
+          // TODO: implement rate limit handling
+          delay(1000)
+          CachedStaffMember(
+            guildMember.user.username,
+            guildMember.user.discriminator,
+            avatarUrl,
+            role.name,
+            role.position
+          )
+        }
+        module.bot.cache.staffMembersSet.deleteAsync().awaitSuspending()
+        module.bot.cache.staffMembersSet.addAllAsync(cachedStaffMemberObjects.map { Json.encodeToString(it) })
       }
-      module.bot.cache.staffMembersSet.deleteAsync().awaitSuspending()
-      module.bot.cache.staffMembersSet.addAllAsync(cachedStaffMemberObjects.map { Json.encodeToString(it) })
+    } catch (e: Throwable) {
+      e.printStackTrace()
     }
   }
 }
