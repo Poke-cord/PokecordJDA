@@ -21,8 +21,7 @@ class BagCommand : Command() {
     val checkingSelf = user == null
 
     val userData = if (checkingSelf) context.getUserData() else module.bot.database.userRepository.getUser(targetUser)
-    // TODO: moderator check
-    if (userData.progressPrivate && !checkingSelf) {
+    if (!context.isStaff() || userData.progressPrivate && !checkingSelf) {
       context.reply(context.embedTemplates.progressPrivate(targetUser).build()).queue()
       return
     }
