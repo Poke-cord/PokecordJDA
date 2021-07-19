@@ -1,18 +1,15 @@
 package xyz.pokecord.bot.core.structures.discord.base
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
+import dev.minn.jda.ktx.CoroutineEventListener
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
-import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
-import java.util.concurrent.Executors
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.findAnnotation
@@ -27,7 +24,7 @@ abstract class Module(
   val events: Array<Event> = arrayOf(),
   private val tasks: Array<Task> = arrayOf(),
   val intents: Array<GatewayIntent> = GatewayIntent.getIntents(GatewayIntent.DEFAULT).toTypedArray()
-) : EventListener {
+) : CoroutineEventListener {
   constructor(
     bot: Bot,
     commands: Array<Command> = arrayOf(),
@@ -42,7 +39,6 @@ abstract class Module(
   open var enabled = true
   private val eventMap = hashMapOf<String, Event>()
   private val taskMap = hashMapOf<String, Task>()
-  private val coroutineScope = CoroutineScope(Executors.newCachedThreadPool().asCoroutineDispatcher())
 
   fun load() {
     for (command in commands) {
@@ -102,7 +98,7 @@ abstract class Module(
     }
   }
 
-  override fun onEvent(event: GenericEvent) {
+  override suspend fun onEvent(event: GenericEvent) {
     if (!enabled) return
 
     if (event is ReadyEvent) {
@@ -127,8 +123,10 @@ abstract class Module(
         try {
           if (firstParam.type.javaType == event::class.java) {
             if (handlerFunction.isSuspend) {
-              coroutineScope.launch {
-                handlerFunction.callSuspend(ev, event)
+              coroutineScope {
+                launch {
+                  handlerFunction.callSuspend(ev, event)
+                }
               }
             } else {
               handlerFunction.call(ev, event)
@@ -136,8 +134,10 @@ abstract class Module(
           } else if (firstParam.type.isMessageCommandContext && event::class.java == MessageReceivedEvent::class.java) {
             val context = MessageCommandContext(bot, event as MessageReceivedEvent)
             if (handlerFunction.isSuspend) {
-              coroutineScope.launch {
-                handlerFunction.callSuspend(ev, context)
+              coroutineScope {
+                launch {
+                  handlerFunction.callSuspend(ev, context)
+                }
               }
             } else {
               handlerFunction.call(ev, context)
