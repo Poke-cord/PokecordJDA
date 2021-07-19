@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.economy
 
-import net.dv8tion.jda.api.hooks.EventListener
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.economy.commands.BuyCommand
@@ -14,6 +13,6 @@ class EconomyModule(bot: Bot) : Module(
     ShopCommand(),
     StoreCommand()
   )
-), EventListener {
+) {
   override val name = "Economy"
 }

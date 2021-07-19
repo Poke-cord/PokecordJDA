@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.profile
 
-import net.dv8tion.jda.api.hooks.EventListener
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.profile.commands.*
@@ -17,6 +16,6 @@ class ProfileModule(bot: Bot) : Module(
     ProfileCommand.ProfilePokedexCommand(),
     RewardsCommand()
   )
-), EventListener {
+) {
   override val name = "Profile"
 }

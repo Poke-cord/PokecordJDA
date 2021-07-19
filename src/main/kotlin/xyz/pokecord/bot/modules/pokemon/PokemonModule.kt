@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.pokemon
 
-import net.dv8tion.jda.api.hooks.EventListener
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.pokemon.commands.*
@@ -29,6 +28,6 @@ class PokemonModule(bot: Bot) : Module(
 //    SpawnerEvent(),
 //    XPGainEvent()
 //  )
-), EventListener {
+) {
   override val name = "Pokémon"
 }

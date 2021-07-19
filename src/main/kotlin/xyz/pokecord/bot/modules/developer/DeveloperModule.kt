@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.developer
 
-import net.dv8tion.jda.api.hooks.EventListener
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.developer.commands.*
@@ -20,6 +19,6 @@ class DeveloperModule(bot: Bot) : Module(
   tasks = arrayOf(
     RedisSyncTask(), StaffSyncTask()
   )
-), EventListener {
+) {
   override val name = "Developer"
 }
