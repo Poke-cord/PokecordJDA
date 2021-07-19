@@ -1,18 +1,17 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
+import xyz.pokecord.bot.core.structures.discord.base.Event
 import kotlin.math.min
 
-object XPGainEvent
-//  : Event()
-{
-//  override val name = "XPGain"
+class XPGainEvent : Event() {
+  override val name = "XPGain"
 
   private val envFlag = System.getenv("XP_GAIN") != null
 
   private val lastCountedMessageMap = mutableMapOf<String, Long?>()
 
-  //  @Handler
+  @Handler
   suspend fun onMessage(context: MessageCommandContext) {
     if (!context.shouldProcess()) return
     if (!envFlag || context.bot.maintenance) return

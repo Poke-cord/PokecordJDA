@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
+import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import kotlin.random.Random
 
-object SpawnerEvent
-//  : Event()
-{
-//  override val name = "Spawner"
+class SpawnerEvent : Event() {
+  override val name = "Spawner"
 
   private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -34,7 +33,7 @@ object SpawnerEvent
     return pokemonId
   }
 
-  //  @Handler
+  @Handler
   suspend fun onMessage(context: MessageCommandContext) {
     try {
       if (!context.shouldProcess()) return

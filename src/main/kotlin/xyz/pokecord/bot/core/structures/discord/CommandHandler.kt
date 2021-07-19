@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.pokemon.events.SpawnerEvent
-import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
@@ -235,15 +233,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
     try {
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
-
-      coroutineScope {
-        launch {
-          SpawnerEvent.onMessage(context)
-        }
-        launch {
-          XPGainEvent.onMessage(context)
-        }
-      }
 
       val effectivePrefix = context.getPrefix()
       val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
