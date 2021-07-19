@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.developer.commands
+package xyz.pokecord.bot.modules.staff.commands
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.modules.developer.DeveloperCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 
-class MaintenanceCommand : DeveloperCommand() {
+class MaintenanceCommand : StaffCommand() {
   override val name = "Maintenance"
 
   @Executor

@@ -1,16 +1,16 @@
-package xyz.pokecord.bot.modules.developer.commands
+package xyz.pokecord.bot.modules.staff.commands
 
 import kotlinx.serialization.decodeFromString
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
-import xyz.pokecord.bot.modules.developer.DeveloperCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import xyz.pokecord.bot.utils.extensions.humanizeMs
 import kotlin.math.ceil
 
-class ShardsCommand : DeveloperCommand() {
+class ShardsCommand : StaffCommand() {
   override val name = "Shards"
 
   @Executor

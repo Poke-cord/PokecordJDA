@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.developer.tasks
+package xyz.pokecord.bot.modules.staff.tasks
 
 import kotlinx.coroutines.delay
 import kotlinx.serialization.encodeToString

@@ -13,6 +13,7 @@ import xyz.pokecord.bot.modules.economy.EconomyModule
 import xyz.pokecord.bot.modules.general.GeneralModule
 import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.modules.profile.ProfileModule
+import xyz.pokecord.bot.modules.staff.StaffModule
 import xyz.pokecord.migration.Migration
 import kotlin.system.exitProcess
 
@@ -50,6 +51,7 @@ object App {
           GeneralModule(bot),
           ProfileModule(bot),
           EconomyModule(bot),
+          StaffModule(bot),
           DeveloperModule(bot)
         )
         modules.forEach {
