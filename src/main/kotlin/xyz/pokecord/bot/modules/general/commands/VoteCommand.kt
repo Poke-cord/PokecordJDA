@@ -21,8 +21,7 @@ class VoteCommand : Command() {
             "currentSeasonEndTime" to context.translator.dateFormat(
               Date.from(VoteUtils.getSeasonEndTime().atStartOfDay().atZone(ZoneOffset.UTC).toInstant())
             ),
-            "voteLink" to "https://top.gg/bot/${context.jda.selfUser.id}/vote",
-            "prefix" to context.getPrefix()
+            "voteLink" to "https://top.gg/bot/${context.jda.selfUser.id}/vote"
           )
         ),
         context.translate(

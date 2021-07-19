@@ -209,8 +209,6 @@ modules:
           description: |-
             **Voting Link**: [Vote for Pokecord]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
-
-            Use `{{prefix}}rewards vote` to claim your rewards before the season ends!
           footer: Want more rewards? Check in every 12 hours to vote!
           title: Pokecord City Voting | Season {{season}}
   pokemon:
