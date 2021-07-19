@@ -82,7 +82,7 @@ abstract class Command {
     return@lazy ""
   }
 
-  open fun canRun(context: ICommandContext): Boolean {
+  open suspend fun canRun(context: ICommandContext): Boolean {
     return true
   }
 
