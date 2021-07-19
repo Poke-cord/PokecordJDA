@@ -26,7 +26,7 @@ class BagCommand : Command() {
       return
     }
 
-    val items = module.bot.database.userRepository.getInventoryItems(context.author.id).mapNotNull {
+    val items = module.bot.database.userRepository.getInventoryItems(targetUser.id).mapNotNull {
       val itemData = ItemData.getById(it.id) ?: return@mapNotNull null
       MessageEmbed.Field(itemData.name, context.translator.numberFormat(it.amount), true)
     }
