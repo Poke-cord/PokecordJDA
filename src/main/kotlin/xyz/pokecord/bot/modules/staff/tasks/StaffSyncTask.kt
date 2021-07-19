@@ -14,8 +14,7 @@ class StaffSyncTask : Task() {
 
   override suspend fun execute() {
     try {
-      val mainServerShardId = ((Config.mainServer.toLong() shr 22) % module.bot.shardManager.shardsTotal).toInt()
-      if (module.bot.shardManager.getShardById(mainServerShardId) != null) {
+      if (module.bot.shardManager.getGuildById(Config.mainServer) != null) {
         val guildRoles =
           module.bot.discordRestClient.getGuildRoles(Config.mainServer).filter { Config.Roles.ids.contains(it.id) }
             .sortedByDescending { it.position }
