@@ -11,7 +11,7 @@ import xyz.pokecord.bot.core.managers.I18n
 data class User(
   val id: String,
   var tag: String? = null,
-  val blacklisted: Boolean = false,
+  var blacklisted: Boolean = false,
   val caughtPokemon: MutableList<Int> = mutableListOf(),
   val caughtShinies: MutableList<Int> = mutableListOf(),
   var credits: Int = 1000,

@@ -351,6 +351,12 @@ class UserRepository(
     return collection.estimatedDocumentCount()
   }
 
+  suspend fun setBlacklisted(userData: User, blacklisted: Boolean) {
+    userData.blacklisted = blacklisted
+    collection.updateOne(User::id eq userData.id, set(User::blacklisted setTo userData.blacklisted))
+    setCacheUser(userData)
+  }
+
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
 //    jsonObject {
 //      json("$group") {
