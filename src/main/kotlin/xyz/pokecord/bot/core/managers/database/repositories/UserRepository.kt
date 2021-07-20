@@ -256,7 +256,7 @@ class UserRepository(
     val inventoryItem = existingItem ?: InventoryItem(itemId, userId, 0)
 
     if (existingItem == null) {
-      inventoryItem.amount++
+      inventoryItem.amount += amount
       if (session == null) inventoryItemsCollection.insertOne(inventoryItem)
       else inventoryItemsCollection.insertOne(session, inventoryItem)
     } else {
