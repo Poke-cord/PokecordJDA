@@ -81,10 +81,7 @@ class EvalCommand : DeveloperCommand() {
       }
 
       put("context", context)
-      put("jda", context.jda)
       context.guild?.let { put("guild", it) }
-      put("channel", context.channel)
-      put("bot", module.bot)
       put("module", module)
     }
 
