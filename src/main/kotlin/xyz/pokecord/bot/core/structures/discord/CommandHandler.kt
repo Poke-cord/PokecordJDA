@@ -6,6 +6,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.GenericEvent
@@ -39,12 +40,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   private suspend fun onSlashCommand(event: SlashCommandEvent) {
     if (event.isFromGuild) {
-      if (!event.guild!!.selfMember.hasPermission(
-          Permission.VIEW_CHANNEL,
-          Permission.MESSAGE_READ,
-          Permission.MESSAGE_WRITE
-        )
-      ) return
       if (!event.guild!!.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
     }
 
@@ -84,7 +79,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       }
 
       if (event.isFromGuild) {
-        if (!event.guild!!.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
+        if (!event.guild!!.selfMember.permissions.containsAll(command.requiredBotPermissions.toList())) {
           return
         } else if (event.member != null) {
           if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
@@ -220,12 +215,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   private suspend fun onMessageReceived(event: MessageReceivedEvent) {
     if (event.isFromGuild) {
-      if (!event.guild.selfMember.hasPermission(
-          Permission.VIEW_CHANNEL,
-          Permission.MESSAGE_READ,
-          Permission.MESSAGE_WRITE
-        )
-      ) return
       if (!event.guild.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
     }
 
@@ -283,13 +272,13 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       }
 
       if (event.isFromGuild) {
-        if (!event.guild.selfMember.permissions.containsAll(command.requiredClientPermissions.toList())) {
-          return
-        } else if (event.member != null) {
-          if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
-            return
-          }
-        }
+        if (!event.guild.selfMember.hasPermission(
+            event.channel as GuildChannel,
+            *command.requiredBotPermissions
+          )
+        ) return
+        if (event.member?.hasPermission(event.channel as GuildChannel, *command.requiredUserPermissions) != true) return
+
         // TODO: Let the user know that the bot is or they are missing required permissions
       }
 

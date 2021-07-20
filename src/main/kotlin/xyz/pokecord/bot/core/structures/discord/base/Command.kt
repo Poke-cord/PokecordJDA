@@ -42,9 +42,10 @@ abstract class Command {
   open var excludeFromHelp = false
   open var rateLimit = 1500L
   open var rateLimitType = RateLimitType.Command
-  open var requiredClientPermissions: Array<Permission> =
-    arrayOf(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
-  open var requiredUserPermissions: Array<Permission> = arrayOf(Permission.MESSAGE_READ)
+  open var requiredBotPermissions: Array<Permission> =
+    arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
+  open var requiredUserPermissions: Array<Permission> =
+    arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
 
   open val descriptionI18nKey by lazy {
     val key =
