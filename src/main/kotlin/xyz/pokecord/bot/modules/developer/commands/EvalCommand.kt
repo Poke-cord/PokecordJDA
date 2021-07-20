@@ -5,6 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import javax.script.Compilable
 import javax.script.ScriptContext
+import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 
 class EvalCommand : DeveloperCommand() {
@@ -13,6 +14,8 @@ class EvalCommand : DeveloperCommand() {
   private val codeRegex =
     "```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL))
   private val scriptEngineManager = ScriptEngineManager()
+
+  private val scriptEngines = mutableMapOf<String, ScriptEngine>()
 
   @Executor
   suspend fun execute(context: ICommandContext) {
@@ -48,7 +51,12 @@ class EvalCommand : DeveloperCommand() {
       return
     }
 
-    val scriptEngine = scriptEngineManager.getEngineByExtension(extension)
+    var scriptEngine = scriptEngines[extension]
+    if (scriptEngine == null) {
+      scriptEngine = scriptEngineManager.getEngineByExtension(extension)
+      if (scriptEngine != null) scriptEngines[extension] = scriptEngine
+    }
+
     if (scriptEngine == null) {
       context.reply(
         """
@@ -81,7 +89,9 @@ class EvalCommand : DeveloperCommand() {
     }
 
     try {
+      val now = System.currentTimeMillis()
       val result = (if (scriptEngine is Compilable) scriptEngine.compile(code).eval() else scriptEngine.eval(code))
+      println(System.currentTimeMillis() - now)
       context.reply(
         """Evaluated Successfully:
 ```
