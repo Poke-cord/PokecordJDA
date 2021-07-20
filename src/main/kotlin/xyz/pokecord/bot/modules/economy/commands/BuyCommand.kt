@@ -82,8 +82,8 @@ class BuyCommand : Command() {
       it.startTransaction()
       module.bot.database.userRepository.addInventoryItem(context.author.id, itemData.id, effectiveAmount, session)
       when {
-        itemData.usesGems -> module.bot.database.userRepository.incGems(userData, -itemData.cost, it)
-        itemData.usesTokens -> module.bot.database.userRepository.incTokens(userData, -itemData.cost, it)
+        itemData.usesGems -> module.bot.database.userRepository.incGems(userData, -cost, it)
+        itemData.usesTokens -> module.bot.database.userRepository.incTokens(userData, -cost, it)
         else -> module.bot.database.userRepository.incCredits(userData, -cost, it)
       }
       it.commitTransactionAndAwait()
