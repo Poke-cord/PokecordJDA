@@ -336,6 +336,17 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun setLastVoteTime(
+    userData: User,
+    lastVoteAt: Long = System.currentTimeMillis(),
+    session: ClientSession? = null
+  ) {
+    userData.lastVoteAt = lastVoteAt
+    if (session == null) collection.updateOne(User::id eq userData.id, set(User::lastVoteAt setTo userData.lastVoteAt))
+    else collection.updateOne(session, User::id eq userData.id, set(User::lastVoteAt setTo userData.lastVoteAt))
+    setCacheUser(userData)
+  }
+
   suspend fun getEstimatedUserCount(): Long {
     return collection.estimatedDocumentCount()
   }

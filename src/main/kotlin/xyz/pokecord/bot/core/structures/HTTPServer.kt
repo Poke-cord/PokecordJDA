@@ -105,6 +105,7 @@ class HTTPServer(val bot: Bot) {
     session.use { clientSession ->
       clientSession.startTransaction()
       val userData = bot.database.userRepository.getUser(args.user)
+      bot.database.userRepository.setLastVoteTime(userData, session = clientSession)
       bot.database.userRepository.incCredits(userData, credits, clientSession)
       bot.database.userRepository.incTokens(userData, tokens, clientSession)
       if (cct > 0) {

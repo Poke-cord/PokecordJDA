@@ -27,6 +27,7 @@ data class User(
   val language: I18n.Language? = null,
   var pokemonCount: Int = 0,
   var nextIndex: Int = 0,
+  var lastVoteAt: Long? = null,
   @Contextual val _id: Id<User> = newId(),
   @Transient var _isNew: Boolean = false
 ) {

@@ -205,10 +205,12 @@ modules:
             added: A Spawn Channel was Added
             removed: A Spawn Channel was Removed
       vote:
+        now: now
         embed:
           description: |-
             **Voting Link**: [Vote for Pokecord]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
+            **You Can Vote**: {{nextVoteTime}}!
           footer: Want more rewards? Check in every 12 hours to vote!
           title: Pokecord City Voting | Season {{season}}
   pokemon:
