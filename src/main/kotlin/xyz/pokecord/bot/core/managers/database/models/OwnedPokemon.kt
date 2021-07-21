@@ -108,7 +108,7 @@ data class OwnedPokemon(
       } ?: 0
     }
 
-    private fun defaultIV(): PokemonStats {
+    fun defaultIV(): PokemonStats {
       return PokemonStats(
         Random.nextInt(0, 32),
         Random.nextInt(0, 32),
