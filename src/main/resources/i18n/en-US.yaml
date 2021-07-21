@@ -506,6 +506,7 @@ modules:
       buy:
         errors:
           itemNotFound: '**Suggestion**: Try buying a valid item!'
+          cannotBePurchased: '**Suggestion**: Try buying a purchasable item!'
           noItemName: '**Suggestion**: Try specifying an item name!'
           invalidAmount: '**Suggestion**: Try specifying an amount between 1 and 1024!'
           notEnoughCredits: "You don't have enough credits to buy this item."

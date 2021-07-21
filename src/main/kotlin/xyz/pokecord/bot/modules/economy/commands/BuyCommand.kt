@@ -38,6 +38,15 @@ class BuyCommand : Command() {
       return
     }
 
+    if (itemData.cost <= 0) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.economy.commands.buy.errors.cannotBePurchased")
+        ).build()
+      ).queue()
+      return
+    }
+
     if (effectiveAmount < 1 || effectiveAmount >= 1024) {
       context.reply(
         context.embedTemplates.error(
