@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.PokemonStats
 import kotlin.math.floor
@@ -69,6 +70,7 @@ class RedeemItem(
   }
 
   private fun getIvs(): PokemonStats {
+    if (id == Redeems.Chromatic.id) return OwnedPokemon.defaultIV()
     val minTotal = round((minIvPercentage / 100.0) * 186).toInt()
     val maxTotal = round((maxIvPercentage / 100.0) * 186).toInt()
     val items = spreadRandomly(0, 31, 6, Random.nextInt(minTotal, maxTotal + 1))
