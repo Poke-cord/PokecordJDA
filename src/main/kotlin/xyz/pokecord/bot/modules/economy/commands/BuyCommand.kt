@@ -61,20 +61,24 @@ class BuyCommand : Command() {
 
     var cost = itemData.cost * effectiveAmount
 
-    if (itemData.usesGems && userData.gems < cost) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.economy.commands.buy.errors.notEnoughGems")
-        ).build()
-      ).queue()
-      return
-    } else if (itemData.usesTokens && userData.tokens < cost) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.economy.commands.buy.errors.notEnoughTokens")
-        ).build()
-      ).queue()
-      return
+    if (itemData.usesGems) {
+      if (userData.gems < cost) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.economy.commands.buy.errors.notEnoughGems")
+          ).build()
+        ).queue()
+        return
+      }
+    } else if (itemData.usesTokens) {
+      if (userData.tokens < cost) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.economy.commands.buy.errors.notEnoughTokens")
+          ).build()
+        ).queue()
+        return
+      }
     } else {
       cost = (cost * userData.getShopDiscount()).roundToInt()
       if (userData.credits < cost) {
