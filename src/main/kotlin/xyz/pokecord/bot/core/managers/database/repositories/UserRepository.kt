@@ -233,8 +233,8 @@ class UserRepository(
 
   suspend fun consumeInventoryItem(inventoryItem: InventoryItem, amount: Int = 1, session: ClientSession? = null) {
     if (inventoryItem.amount <= 1) {
-      if (session == null) inventoryItemsCollection.deleteOne(InventoryItem::id eq inventoryItem.id)
-      else inventoryItemsCollection.deleteOne(session, InventoryItem::id eq inventoryItem.id)
+      if (session == null) inventoryItemsCollection.deleteOne(InventoryItem::_id eq inventoryItem._id)
+      else inventoryItemsCollection.deleteOne(session, InventoryItem::_id eq inventoryItem._id)
     } else {
       if (session == null) {
         inventoryItemsCollection.updateOne(
