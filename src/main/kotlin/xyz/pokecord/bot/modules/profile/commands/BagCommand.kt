@@ -42,7 +42,7 @@ class BagCommand : Command() {
               "tokens" to context.translator.numberFormat(userData.tokens)
             )
           ),
-          context.translate("modules.profile.commands.bag.title", "user" to context.author.asTag)
+          context.translate("modules.profile.commands.bag.title", "user" to targetUser.asTag)
         ).build()
       ).queue()
       return
@@ -57,7 +57,7 @@ class BagCommand : Command() {
           "tokens" to context.translator.numberFormat(userData.tokens)
         )
       ),
-      context.translate("modules.profile.commands.bag.title", "user" to context.author.asTag)
+      context.translate("modules.profile.commands.bag.title", "user" to targetUser.asTag)
     )
     items.forEach(embed::addField)
     context.reply(embed.build()).queue()
