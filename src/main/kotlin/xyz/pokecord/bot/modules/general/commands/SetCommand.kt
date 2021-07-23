@@ -20,7 +20,22 @@ class SetCommand : ParentCommand() {
 
     @Executor
     suspend fun execute(context: ICommandContext) {
-      val guildData = context.getGuildData() ?: return
+      if (!context.isFromGuild) {
+        context.reply(
+          context.translate("misc.texts.serverOnlyCommand")
+        ).queue()
+        return
+      }
+
+      if (!context.guild!!.retrieveMember(context.author).await().hasPermission(Permission.ADMINISTRATOR)) {
+        // TODO: say you're not admin PROPERLY
+        context.reply(
+          context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
+        ).queue()
+        return
+      }
+
+      val guildData = context.getGuildData()!!
       module.bot.database.guildRepository.toggleSilence(guildData)
       context.reply(
         context.embedTemplates.normal(
@@ -49,7 +64,7 @@ class SetCommand : ParentCommand() {
         return
       }
 
-      if (context.guild?.retrieveMember(context.author)?.await()?.hasPermission(Permission.ADMINISTRATOR) != true) {
+      if (!context.guild!!.retrieveMember(context.author).await().hasPermission(Permission.ADMINISTRATOR)) {
         // TODO: say you're not admin PROPERLY
         context.reply(
           context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
@@ -116,7 +131,7 @@ class SetCommand : ParentCommand() {
         ).queue()
         return
       }
-      if (context.guild?.retrieveMember(context.author)?.await()?.hasPermission(Permission.ADMINISTRATOR) != true) {
+      if (!context.guild!!.retrieveMember(context.author).await().hasPermission(Permission.ADMINISTRATOR)) {
         // TODO: say you're not admin PROPERLY
         context.reply(
           context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
