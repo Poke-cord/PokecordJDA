@@ -86,9 +86,7 @@ class EvalCommand : DeveloperCommand() {
     }
 
     try {
-      val now = System.currentTimeMillis()
       val result = (if (scriptEngine is Compilable) scriptEngine.compile(code).eval() else scriptEngine.eval(code))
-      println(System.currentTimeMillis() - now)
       context.reply(
         """Evaluated Successfully:
 ```
