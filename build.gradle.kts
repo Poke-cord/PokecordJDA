@@ -9,6 +9,7 @@ val jdaKtxVersion = "985db81"
 val jdaUtilitiesVersion = "3.0.5"
 val jdaVersion = "4.3.0_285"
 val kmongoVersion = "4.2.4"
+val kotestVersion = "4.6.1"
 val kotlinxCoroutinesVersion = "1.5.0"
 val kotlinxSerializationJsonVersion = "1.1.0"
 val ktorVersion = "1.6.0"
@@ -76,12 +77,18 @@ dependencies {
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
 
   implementation("io.ktor:ktor-serialization:$ktorVersion")
+
+  testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
 }
 
 tasks {
   named<ShadowJar>("shadowJar") {
     archiveBaseName.set("pokecord")
     mergeServiceFiles()
+  }
+
+  withType<Test> {
+    useJUnitPlatform()
   }
 
   jar {
