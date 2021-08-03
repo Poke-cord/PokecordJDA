@@ -121,6 +121,7 @@ class UserRepository(
 
     if (select) userData.selected = ownedPokemon._id
     if (!ownedPokemon.shiny) userData.shinyRate -= 0.25
+    else userData.shinyRate = 4908.0
 
     val targetList = if (ownedPokemon.shiny) userData.caughtShinies else userData.caughtPokemon
     if (!targetList.contains(pokemonId)) targetList.add(pokemonId)
