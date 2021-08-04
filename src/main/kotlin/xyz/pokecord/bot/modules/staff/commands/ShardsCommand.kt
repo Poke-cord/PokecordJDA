@@ -22,6 +22,8 @@ class ShardsCommand : StaffCommand() {
     val shardStatusSet = module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
       .map { json -> Json.decodeFromString<ShardStatus>(json) }.sortedBy { it.id }
 
+    val now = System.currentTimeMillis()
+    val possiblyDeadHosts = shardStatusSet.filter { now - it.updatedAt >= ALIVE_TIMEOUT_MS }.map { it.hostname }
     val guildCount = shardStatusSet.sumOf { it.guildCacheSize }
 
     EmbedPaginator(context, ceil(shardStatusSet.size / 10.0).toInt(), {
@@ -33,9 +35,15 @@ class ShardsCommand : StaffCommand() {
         } - ${status.guildCacheSize}"
       }
       context.embedTemplates.normal(
-        "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount",
+        "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount\n\nPossibly Dead Hosts: ${
+          possiblyDeadHosts.joinToString(", ")
+        }",
         "Shard Status"
       )
     }, paginatorIndex).start()
+  }
+
+  companion object {
+    const val ALIVE_TIMEOUT_MS = 300_000
   }
 }
