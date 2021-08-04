@@ -351,6 +351,7 @@ modules:
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.
         ordered: Finished ordering your Pokémon!
+        tooManyPokemon: You must have {{maxPokemonCount}} or less amount of Pokémon in order to be able to use this command.
       pick:
         embed:
           description: You chose {{pokemon}} as your starter Pokémon!
