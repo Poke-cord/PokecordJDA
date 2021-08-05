@@ -36,7 +36,7 @@ class ShardsCommand : StaffCommand() {
       }
       context.embedTemplates.normal(
         "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount\n\nPossibly Dead Hosts: ${
-          possiblyDeadHosts.joinToString(", ")
+          possiblyDeadHosts.joinToString(", ").ifEmpty { "None" }
         }",
         "Shard Status"
       )
