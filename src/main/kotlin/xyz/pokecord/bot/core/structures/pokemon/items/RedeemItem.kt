@@ -140,8 +140,8 @@ class RedeemItem(
       ),
       RedeemItem(
         Redeems.Fanatical.id,
-        minIvPercentage = 55,
-        maxIvPercentage = 90
+        minIvPercentage = 50,
+        maxIvPercentage = 70
       ).asPair(),
       RedeemItem(
         Redeems.Chromatic.id
