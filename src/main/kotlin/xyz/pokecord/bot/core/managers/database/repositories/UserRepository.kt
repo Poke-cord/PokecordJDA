@@ -188,7 +188,7 @@ class UserRepository(
     }
   }
 
-  suspend fun giftPokemon(sender: User, receiver: User, clientSession: ClientSession) {
+  suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
     sender.pokemonCount--
 
     receiver.nextIndex++
@@ -207,7 +207,7 @@ class UserRepository(
         inc(User::nextIndex, 1)
       )
     )
-
+    database.giftCollection.insertOne(clientSession, Gift(sender.id, receiver.id, 0, mutableListOf(pokemon._id)))
     setCacheUser(receiver)
   }
 
