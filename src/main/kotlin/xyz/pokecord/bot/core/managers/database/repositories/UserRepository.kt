@@ -96,6 +96,7 @@ class UserRepository(
 
   suspend fun incShinyRate(userData: User, amount: Int, session: ClientSession? = null) {
     userData.shinyRate += amount
+    if (userData.shinyRate < 1) userData.shinyRate = 1.0
     if (session == null) collection.updateOne(User::id eq userData.id, inc(User::shinyRate, amount))
     else collection.updateOne(session, User::id eq userData.id, inc(User::shinyRate, amount))
     setCacheUser(userData)
