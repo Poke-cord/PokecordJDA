@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
+import net.dv8tion.jda.api.Permission
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import kotlin.math.min
@@ -54,6 +55,7 @@ class XPGainEvent : Event() {
     if (context.isFromGuild) {
       val guildData = context.getGuildData()
       if (guildData?.levelUpMessagesSilenced == true) return
+      if (!context.guild!!.selfMember.hasPermission(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)) return
     }
 
     val embedBuilder =
