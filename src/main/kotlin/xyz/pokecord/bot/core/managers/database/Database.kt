@@ -30,6 +30,7 @@ class Database(cache: Cache) {
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
 
   val giftCollection: CoroutineCollection<Gift>
+  val transferLogCollection: CoroutineCollection<TransferLog>
 
   val configRepository: ConfigRepository
   val faqRepository: FAQRepository
@@ -67,6 +68,7 @@ class Database(cache: Cache) {
     voteRewardsCollection = database.getCollection()
 
     giftCollection = database.getCollection()
+    transferLogCollection = database.getCollection()
 
     configRepository = ConfigRepository(this, configCollection)
     faqRepository = FAQRepository(this, faqCollection)
