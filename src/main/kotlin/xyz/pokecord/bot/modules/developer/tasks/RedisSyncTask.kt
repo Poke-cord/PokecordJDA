@@ -10,8 +10,6 @@ class RedisSyncTask : Task() {
   override val interval = 15_000L
   override val name = "RedisSync"
 
-  private val hostname = System.getenv("HOSTNAME") ?: System.getenv("COMPUTERNAME") ?: "Unknown"
-
   override suspend fun execute() {
     // Shard Status
     module.bot.shardManager.shards.forEach { jda ->
@@ -19,7 +17,7 @@ class RedisSyncTask : Task() {
       val shardStatus = ShardStatus(
         shardInfo.shardId,
         shardInfo.shardTotal,
-        hostname,
+        module.bot.hostname,
         jda.gatewayPing,
         jda.guildCache.size(),
         System.currentTimeMillis()
