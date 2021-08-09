@@ -71,7 +71,6 @@ dependencies {
   implementation("io.ktor:ktor-client-core:$ktorVersion")
   implementation("io.ktor:ktor-client-java:$ktorVersion")
   implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-  implementation("io.ktor:ktor-client-websockets:$ktorVersion")
 
   implementation("io.ktor:ktor-server-core:$ktorVersion")
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
