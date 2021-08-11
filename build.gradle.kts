@@ -14,6 +14,7 @@ val kotlinxCoroutinesVersion = "1.5.0"
 val kotlinxSerializationJsonVersion = "1.1.0"
 val ktorVersion = "1.6.0"
 val logbackVersion = "1.2.3"
+val prometheusVersion = "0.11.0"
 val redissonVersion = "3.15.5"
 val remoteShardingKtVersion = "179806a49c"
 val sentryLogbackVersion = "5.0.1"
@@ -76,6 +77,9 @@ dependencies {
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
 
   implementation("io.ktor:ktor-serialization:$ktorVersion")
+
+  implementation("io.prometheus:simpleclient:$prometheusVersion")
+  implementation("io.prometheus:simpleclient_pushgateway:$prometheusVersion")
 
   testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
 }

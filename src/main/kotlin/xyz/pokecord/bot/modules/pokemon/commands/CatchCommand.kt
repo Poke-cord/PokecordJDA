@@ -1,7 +1,9 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
+import io.prometheus.client.Counter
 import kotlinx.coroutines.sync.withLock
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
@@ -12,6 +14,11 @@ class CatchCommand : Command() {
   override var aliases = arrayOf("c")
   override var rateLimit = 5000L
   override var rateLimitType = RateLimitType.Args
+
+  private val caught = Counter
+    .build("bot_commands_catch_catches", "Total number of Pokémon caught using the Catch Command.")
+    .labelNames("hostname", "user_id", "user_tag", "shard", "guild", "channel")
+    .register(PrometheusService.registry)
 
   override fun getRateLimitCacheKey(context: ICommandContext, args: List<String>): String {
     val arg = args.joinToString(" ")
@@ -84,7 +91,16 @@ class CatchCommand : Command() {
             .setColor(pokemon.species.color.colorCode)
             .setFooter(context.translate("modules.pokemon.commands.catch.embed.footer"))
             .build()
-        ).queue()
+        ).queue {
+          caught.labels(
+            module.bot.hostname,
+            context.author.id,
+            context.author.asTag,
+            context.jda.shardInfo.shardId.toString(),
+            context.guild!!.id,
+            context.channel.id
+          ).inc()
+        }
       } else {
         context.reply(
           context.embedTemplates.error(

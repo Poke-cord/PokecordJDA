@@ -1,10 +1,12 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
+import io.prometheus.client.Counter
 import kotlinx.coroutines.sync.withLock
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.ChannelType
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
+import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Event
@@ -19,6 +21,13 @@ class SpawnerEvent : Event() {
   private val envFlag = System.getenv("SPAWNS") != null
 
   private val lastCountedMessageMap = mutableMapOf<String, Long?>()
+
+  private val spawns by lazy {
+    Counter
+      .build("bot_spawner_spawns", "Total number of Pokémon spawned by the Spawner Event.")
+      .labelNames("hostname", "shard", "guild", "channel")
+      .register(PrometheusService.registry)
+  }
 
   private fun getNextSpawn(): Int {
     var pokemonId = Random.nextInt(1, 808)
@@ -92,7 +101,14 @@ class SpawnerEvent : Event() {
                 }
               }
               .build()
-            randomSpawnChannelEntity.sendMessageEmbeds(embed).queue()
+            randomSpawnChannelEntity.sendMessageEmbeds(embed).queue {
+              spawns.labels(
+                module.bot.hostname,
+                context.jda.shardInfo.shardId.toString(),
+                context.guild!!.id,
+                context.channel.id
+              ).inc()
+            }
           } catch (e: Exception) {
             logger.error("Spawn error", e)
             // Undo the changes we made to the spawn channel since there was an error spawning
