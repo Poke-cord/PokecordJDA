@@ -24,7 +24,11 @@ object PrometheusService {
       pushGateway = PushGateway(pushGatewayUrl)
       Executors.newSingleThreadScheduledExecutor()
         .scheduleWithFixedDelay({
-          pushGateway?.pushAdd(registry, "pokecord-bot")
+          try {
+            pushGateway?.pushAdd(registry, "pokecord-bot")
+          } catch (e: Throwable) {
+            e.printStackTrace()
+          }
         }, 0, 30, TimeUnit.SECONDS)
     }
   }
