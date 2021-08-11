@@ -22,7 +22,7 @@ object PrometheusService {
     }
     if (pushGatewayUrl != null) {
       pushGateway = PushGateway(pushGatewayUrl)
-      Executors.newSingleThreadScheduledExecutor()
+      Executors.newScheduledThreadPool(2)
         .scheduleWithFixedDelay({
           try {
             pushGateway?.pushAdd(registry, "pokecord-bot")
