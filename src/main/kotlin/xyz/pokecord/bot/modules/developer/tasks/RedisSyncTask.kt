@@ -15,17 +15,14 @@ class RedisSyncTask : Task() {
 
   private val guildCount = Gauge
     .build("bot_misc_guild_count", "Guild Count")
-    .labelNames("hostname")
     .register(PrometheusService.registry)
 
   private val pokemonCount = Gauge
     .build("bot_misc_pokemon_count", "Pokémon Count")
-    .labelNames("hostname")
     .register(PrometheusService.registry)
 
   private val userCount = Gauge
     .build("bot_misc_user_count", "User Count")
-    .labelNames("hostname")
     .register(PrometheusService.registry)
 
   override suspend fun execute() {
@@ -55,14 +52,13 @@ class RedisSyncTask : Task() {
     }
 
     // Prometheus Stats
-    guildCount.labels(module.bot.hostname).set(
+    guildCount.set(
       module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
         .map { json ->
           Json.decodeFromString<ShardStatus>(json)
         }.sumOf { it.guildCacheSize }.toDouble()
     )
-    pokemonCount.labels(module.bot.hostname)
-      .set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
-    userCount.labels(module.bot.hostname).set(module.bot.database.userRepository.getEstimatedUserCount().toDouble())
+    pokemonCount.set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
+    userCount.set(module.bot.database.userRepository.getEstimatedUserCount().toDouble())
   }
 }
