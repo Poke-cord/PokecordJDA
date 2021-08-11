@@ -32,6 +32,12 @@ abstract class Command {
     Args
   }
 
+  val identifier by lazy {
+    val key =
+      if (parentCommand != null) "${module.name}.${parentCommand!!.name}.${name}"
+      else "${module.name}.${name}"
+    key.removeAccents()
+  }
   abstract val name: String
 
   lateinit var module: Module
@@ -48,10 +54,7 @@ abstract class Command {
     arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
 
   open val descriptionI18nKey by lazy {
-    val key =
-      if (parentCommand != null) "${module.name}.${parentCommand!!.name}.${name}"
-      else "${module.name}.${name}"
-    "misc.command_descriptions.${key.removeAccents()}"
+    "misc.command_descriptions.${identifier}"
   }
 
   open val usage: String by lazy {
