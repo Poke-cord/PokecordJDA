@@ -4,8 +4,7 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.exporter.PushGateway
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 object PrometheusService {
   private var pushGateway: PushGateway? = null
@@ -22,14 +21,16 @@ object PrometheusService {
     }
     if (pushGatewayUrl != null) {
       pushGateway = PushGateway(pushGatewayUrl)
-      Executors.newScheduledThreadPool(2)
-        .scheduleWithFixedDelay({
+      thread {
+        while (true) {
           try {
             pushGateway?.pushAdd(registry, "pokecord-bot")
           } catch (e: Throwable) {
             e.printStackTrace()
           }
-        }, 0, 30, TimeUnit.SECONDS)
+          Thread.sleep(30_000)
+        }
+      }
     }
   }
 }
