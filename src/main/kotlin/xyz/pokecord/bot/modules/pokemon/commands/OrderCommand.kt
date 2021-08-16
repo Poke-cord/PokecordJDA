@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.pokemon.commands
 
 import kotlinx.coroutines.launch
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.PokemonOrder
@@ -36,7 +37,13 @@ class OrderCommand : Command() {
       ).build()
     ).queue()
     context.bot.backgroundCoroutineScope.launch {
-      module.bot.database.pokemonRepository.reindexPokemon(context.author.id, effectiveOrder)
+      val session = module.bot.database.startSession()
+      session.use {
+        it.startTransaction()
+        module.bot.database.pokemonRepository.reindexPokemon(it, context.author.id, effectiveOrder)
+        module.bot.database.userRepository.resetNextIndex(it, userData)
+        it.commitTransactionAndAwait()
+      }
       context.reply(
         context.embedTemplates.normal(
           context.translate("modules.pokemon.commands.order.ordered")

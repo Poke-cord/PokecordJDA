@@ -369,7 +369,7 @@ class PokemonRepository(
     collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::moves setTo pokemon.moves))
   }
 
-  suspend fun reindexPokemon(ownerId: String, order: PokemonOrder) {
+  suspend fun reindexPokemon(session: ClientSession, ownerId: String, order: PokemonOrder) {
     val sortProperty = order.getSortProperty()
     cache.getUserLock(ownerId).withCoroutineLock {
       val items = collection.aggregate<PokemonWithOnlyObjectId>(
@@ -394,7 +394,7 @@ class PokemonRepository(
       }
       updates.chunked(1000)
         .forEach {
-          collection.bulkWrite(it)
+          collection.bulkWrite(session, it)
         }
     }
   }
