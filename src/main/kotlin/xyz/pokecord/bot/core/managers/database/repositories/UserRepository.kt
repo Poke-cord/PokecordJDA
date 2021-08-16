@@ -362,12 +362,6 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun resetNextIndex(session: ClientSession, userData: User) {
-    userData.nextIndex = userData.pokemonCount
-    collection.updateOne(session, User::id eq userData.id, set(User::nextIndex setTo userData.pokemonCount))
-    setCacheUser(userData)
-  }
-
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
 //    jsonObject {
 //      json("$group") {
