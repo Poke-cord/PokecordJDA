@@ -111,6 +111,9 @@ class UserRepository(
   ): OwnedPokemon {
     if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
     val isUnsavedUser = userData.isDefault && userData._isNew
+
+    if (userData.shinyRate < 1) userData.shinyRate = 4908.0
+
     var ownedPokemon = OwnedPokemon(
       pokemonId,
       userData.nextIndex,
@@ -144,7 +147,7 @@ class UserRepository(
               if (ownedPokemon.shiny) User::caughtShinies else User::caughtPokemon, pokemonId
             ),
             if (select) set(User::selected setTo ownedPokemon._id) else EMPTY_BSON,
-            if (!ownedPokemon.shiny) inc(User::shinyRate, -0.25) else EMPTY_BSON
+            set(User::shinyRate setTo userData.shinyRate)
           )
         )
       }
