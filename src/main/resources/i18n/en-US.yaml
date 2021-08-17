@@ -597,7 +597,7 @@ items:
         **Evolved Into**: {{evolvedPokemon}}
 
         Congratulations {{user}}!
-      title: A Pokémon has been Evolve
+      title: A Pokémon has been Evolved
   machine:
     embed:
       title: A Machine has been Used
