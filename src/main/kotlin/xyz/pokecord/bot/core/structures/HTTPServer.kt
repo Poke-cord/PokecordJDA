@@ -67,6 +67,19 @@ class HTTPServer(val bot: Bot) {
     ).await()
   }
 
+  suspend fun sendBoostNotification(userId: String, redeemName: String) {
+    publicNotificationWebhookClient.send(
+      EmbedBuilder {
+        color = 0xf0e365
+        description =
+          "Thank you to <@${userId}> for boosting, they were rewarded with a **$redeemName**!"
+        title = "Thank You for Boosting!"
+
+        footer("Support us by using the p!donate command.")
+      }.build()
+    ).await()
+  }
+
   private suspend fun sendDonationNotification(order: Order, orderInfo: PayPal.OrderInfo, itemName: String) {
     publicNotificationWebhookClient.send(
       EmbedBuilder {

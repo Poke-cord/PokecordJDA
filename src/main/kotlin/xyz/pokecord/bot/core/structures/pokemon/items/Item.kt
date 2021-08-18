@@ -12,7 +12,7 @@ abstract class Item(
     val responseEmbed: EmbedBuilder
   )
 
-  protected val data by lazy { ItemData.getById(id)!! }
+  val data by lazy { ItemData.getById(id)!! }
 
   abstract suspend fun use(context: ICommandContext, args: List<String>): UsageResult
 }

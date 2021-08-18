@@ -49,7 +49,7 @@ class Bot constructor(private val token: String) {
   private var started = false
   var maintenance = devEnv
 
-  private val httpServer by lazy { HTTPServer(this) }
+  val httpServer by lazy { HTTPServer(this) }
 
   fun toggleMaintenance() {
     maintenance = !maintenance
@@ -64,7 +64,7 @@ class Bot constructor(private val token: String) {
       GatewayIntent.DIRECT_MESSAGES,
       GatewayIntent.DIRECT_MESSAGE_REACTIONS,
       GatewayIntent.GUILD_MESSAGES,
-      GatewayIntent.GUILD_MESSAGE_REACTIONS
+      GatewayIntent.GUILD_MESSAGE_REACTIONS,
     )
     val moduleArray = modules.values.filter { it.enabled }.map { it }.toTypedArray()
     for (module in moduleArray) {

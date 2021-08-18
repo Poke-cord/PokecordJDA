@@ -28,6 +28,7 @@ data class User(
   var pokemonCount: Int = 0,
   var nextIndex: Int = 0,
   var lastVoteAt: Long? = null,
+  var lastBoostAt: Long? = null,
   @Contextual val _id: Id<User> = newId(),
   @Transient var _isNew: Boolean = false
 ) {
