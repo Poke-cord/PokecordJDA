@@ -352,6 +352,17 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun setLastBoostTime(
+    userData: User,
+    lastBoostAt: Long = System.currentTimeMillis(),
+    session: ClientSession? = null
+  ) {
+    userData.lastBoostAt = lastBoostAt
+    if (session == null) collection.updateOne(User::id eq userData.id, set(User::lastBoostAt setTo userData.lastBoostAt))
+    else collection.updateOne(session, User::id eq userData.id, set(User::lastBoostAt setTo userData.lastBoostAt))
+    setCacheUser(userData)
+  }
+
   suspend fun getEstimatedUserCount(): Long {
     return collection.estimatedDocumentCount()
   }

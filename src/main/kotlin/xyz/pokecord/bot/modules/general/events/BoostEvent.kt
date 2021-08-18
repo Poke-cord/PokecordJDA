@@ -12,11 +12,10 @@ class BoostEvent: Event() {
 
   suspend fun onBoost(event: GuildMessageReceivedEvent) {
     if(event.message.type == MessageType.GUILD_MEMBER_BOOST && event.guild.id == Config.mainServer) {
-      val boostCooldown = 2_592_000_000L
-
       val randomRedeem = RedeemItem.redeemMap.values.random()
       val userData = module.bot.database.userRepository.getUser(event.member!!.user)
-      if(userData.lastBoostAt!! < System.currentTimeMillis() - boostCooldown) {
+      if(userData.lastBoostAt == null || userData.lastBoostAt!! < System.currentTimeMillis() - Config.boostCooldown) {
+        module.bot.database.userRepository.setLastBoostTime(userData)
         module.bot.database.userRepository.addInventoryItem(userData.id, randomRedeem.data.id, 1)
         module.bot.httpServer.sendBoostNotification(event.member!!.id, randomRedeem.data.name)
       }

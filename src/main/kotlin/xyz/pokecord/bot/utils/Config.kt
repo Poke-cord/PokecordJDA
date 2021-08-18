@@ -17,6 +17,8 @@ object Config {
   const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"
 
+  const val boostCooldown = 2_592_000_000L
+
   const val publicNotificationWebhook =
     "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"
   const val donationNotificationWebhook =
