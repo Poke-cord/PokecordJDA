@@ -23,7 +23,7 @@ class Cache {
 
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
-  val leaderboardMap:  MapCacheAsync<String, String>
+  val leaderboardMap: RMapCacheAsync<String, String>
   val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
