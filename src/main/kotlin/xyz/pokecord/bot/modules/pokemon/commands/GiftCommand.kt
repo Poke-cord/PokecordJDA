@@ -261,7 +261,7 @@ class GiftCommand : ParentCommand() {
               session.use { clientSession ->
                 clientSession.startTransaction()
                 module.bot.database.pokemonRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
-                module.bot.database.userRepository.giftPokemon(userData, receiverData, clientSession)
+                module.bot.database.userRepository.giftPokemon(userData, receiverData, pokemon, clientSession)
                 clientSession.commitTransactionAndAwait()
               }
             }

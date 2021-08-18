@@ -15,6 +15,20 @@ class OrderCommand : Command() {
       optional = true
     ) order: PokemonOrder?
   ) {
+    val userData = context.getUserData()
+    if (userData.pokemonCount > MAX_POKEMON_COUNT) {
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.pokemon.commands.order.tooManyPokemon",
+            mapOf(
+              "maxPokemonCount" to context.translator.numberFormat(MAX_POKEMON_COUNT)
+            )
+          )
+        ).build()
+      ).queue()
+      return
+    }
     val effectiveOrder = order ?: PokemonOrder.POKEDEX
     context.reply(
       context.embedTemplates.normal(
@@ -29,5 +43,9 @@ class OrderCommand : Command() {
         ).build()
       ).queue()
     }
+  }
+
+  companion object {
+    private const val MAX_POKEMON_COUNT = 20000
   }
 }

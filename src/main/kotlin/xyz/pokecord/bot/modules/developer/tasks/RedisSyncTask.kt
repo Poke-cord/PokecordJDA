@@ -1,6 +1,9 @@
 package xyz.pokecord.bot.modules.developer.tasks
 
+import io.prometheus.client.Gauge
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.discord.base.Task
 import xyz.pokecord.bot.utils.Json
@@ -10,7 +13,17 @@ class RedisSyncTask : Task() {
   override val interval = 15_000L
   override val name = "RedisSync"
 
-  private val hostname = System.getenv("HOSTNAME") ?: System.getenv("COMPUTERNAME") ?: "Unknown"
+  private val guildCount = Gauge
+    .build("bot_misc_guild_count", "Guild Count")
+    .register(PrometheusService.registry)
+
+  private val pokemonCount = Gauge
+    .build("bot_misc_pokemon_count", "Pokémon Count")
+    .register(PrometheusService.registry)
+
+  private val userCount = Gauge
+    .build("bot_misc_user_count", "User Count")
+    .register(PrometheusService.registry)
 
   override suspend fun execute() {
     // Shard Status
@@ -19,7 +32,7 @@ class RedisSyncTask : Task() {
       val shardStatus = ShardStatus(
         shardInfo.shardId,
         shardInfo.shardTotal,
-        hostname,
+        module.bot.hostname,
         jda.gatewayPing,
         jda.guildCache.size(),
         System.currentTimeMillis()
@@ -37,5 +50,15 @@ class RedisSyncTask : Task() {
         module.bot.toggleMaintenance()
       }
     }
+
+    // Prometheus Stats
+    guildCount.set(
+      module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
+        .map { json ->
+          Json.decodeFromString<ShardStatus>(json)
+        }.sumOf { it.guildCacheSize }.toDouble()
+    )
+    pokemonCount.set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
+    userCount.set(module.bot.database.userRepository.getEstimatedUserCount().toDouble())
   }
 }

@@ -2,7 +2,9 @@ package xyz.pokecord.bot.core.managers.database.repositories
 
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
+import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.InsertOneResult
+import com.mongodb.client.result.UpdateResult
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.json.*
 import org.bson.BsonDocument
@@ -11,9 +13,11 @@ import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.aggregate
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
+import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
+import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
 import xyz.pokecord.bot.core.structures.pokemon.Nature
@@ -397,6 +401,37 @@ class PokemonRepository(
 
   suspend fun getEstimatedPokemonCount(): Long {
     return collection.estimatedDocumentCount()
+  }
+
+  @Suppress("UNUSED")
+  suspend fun transferPokemon(
+    context: ICommandContext,
+    filter: Bson,
+    update: Bson,
+    updateOptions: UpdateOptions = UpdateOptions()
+  ): UpdateResult {
+    val session = database.startSession()
+    return session.use { clientSession ->
+      clientSession.startTransaction()
+      val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
+        .projection(OwnedPokemon::_id from OwnedPokemon::_id)
+        .toList()
+        .map { it._id }
+      database.transferLogCollection.insertOne(
+        clientSession,
+        TransferLog(
+          filter.json,
+          update.json,
+          matchedIds,
+          context.author.id,
+          context.channel.id,
+          context.guild?.id
+        )
+      )
+      val updateResult = collection.updateMany(filter, update, updateOptions)
+      clientSession.commitTransactionAndAwait()
+      updateResult
+    }
   }
 
   data class PokemonSearchOptions(

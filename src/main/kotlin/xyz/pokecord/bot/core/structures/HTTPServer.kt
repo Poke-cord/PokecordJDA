@@ -17,6 +17,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import net.dv8tion.jda.api.JDA
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Order
@@ -329,6 +330,16 @@ class HTTPServer(val bot: Bot) {
               e.printStackTrace()
             }
           }
+        }
+
+        get("/_/internal/ready") {
+          try {
+            if (bot.shardManager.statuses.all { it.value == JDA.Status.CONNECTED }) {
+              return@get call.respond(HttpStatusCode.OK)
+            }
+          } catch (e: UninitializedPropertyAccessException) {
+          }
+          call.respond(HttpStatusCode.ServiceUnavailable)
         }
       }
     }.start()

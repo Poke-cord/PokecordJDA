@@ -12,7 +12,10 @@ data class PokemonMoveData(
   val moveMethodId: Int,
   val requiredLevel: Int,
   val order: Int
-)
+) {
+  val moveData by lazy { MoveData.getById(id)!! }
+  val moveMeta by lazy { MoveMeta.getById(id)!! }
+}
 
 @Serializable
 data class PokemonMove(

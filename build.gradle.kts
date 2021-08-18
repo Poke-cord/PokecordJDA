@@ -9,12 +9,14 @@ val jdaKtxVersion = "985db81"
 val jdaUtilitiesVersion = "3.0.5"
 val jdaVersion = "4.3.0_285"
 val kmongoVersion = "4.2.4"
+val kotestVersion = "4.6.1"
 val kotlinxCoroutinesVersion = "1.5.0"
 val kotlinxSerializationJsonVersion = "1.1.0"
 val ktorVersion = "1.6.0"
 val logbackVersion = "1.2.3"
+val prometheusVersion = "0.11.0"
 val redissonVersion = "3.15.5"
-val remoteShardingKtVersion = "179806a49c"
+val remoteShardingKtVersion = "58ac220fc7"
 val sentryLogbackVersion = "5.0.1"
 val snakeYamlVersion = "1.28"
 val trove4jVersion = "3.0.3"
@@ -70,18 +72,26 @@ dependencies {
   implementation("io.ktor:ktor-client-core:$ktorVersion")
   implementation("io.ktor:ktor-client-java:$ktorVersion")
   implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-  implementation("io.ktor:ktor-client-websockets:$ktorVersion")
 
   implementation("io.ktor:ktor-server-core:$ktorVersion")
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
 
   implementation("io.ktor:ktor-serialization:$ktorVersion")
+
+  implementation("io.prometheus:simpleclient:$prometheusVersion")
+  implementation("io.prometheus:simpleclient_pushgateway:$prometheusVersion")
+
+  testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
 }
 
 tasks {
   named<ShadowJar>("shadowJar") {
     archiveBaseName.set("pokecord")
     mergeServiceFiles()
+  }
+
+  withType<Test> {
+    useJUnitPlatform()
   }
 
   jar {

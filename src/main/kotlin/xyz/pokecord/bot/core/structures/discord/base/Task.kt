@@ -2,7 +2,6 @@ package xyz.pokecord.bot.core.structures.discord.base
 
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.Job
 
 abstract class Task : CoroutineScope {
   override val coroutineContext: CoroutineContext
@@ -25,7 +24,11 @@ abstract class Task : CoroutineScope {
     val executeMethod = this::execute
     launch {
       while (isActive && enabled && module.enabled) {
-        executeMethod()
+        try {
+          executeMethod()
+        } catch (e: Throwable) {
+          e.printStackTrace()
+        }
         delay(interval)
       }
     }

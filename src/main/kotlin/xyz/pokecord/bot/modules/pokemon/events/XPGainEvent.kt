@@ -1,5 +1,8 @@
 package xyz.pokecord.bot.modules.pokemon.events
 
+import io.prometheus.client.Counter
+import net.dv8tion.jda.api.Permission
+import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import kotlin.math.min
@@ -10,6 +13,11 @@ class XPGainEvent : Event() {
   private val envFlag = System.getenv("XP_GAIN") != null
 
   private val lastCountedMessageMap = mutableMapOf<String, Long?>()
+
+  private val processedMessages = Counter
+    .build("bot_xp_gain_processed_messages", "Messages processed by the XP Gain Event.")
+    .labelNames("hostname", "user_id", "user_tag", "shard", "guild", "channel")
+    .register(PrometheusService.registry)
 
   @Handler
   suspend fun onMessage(context: MessageCommandContext) {
@@ -51,9 +59,19 @@ class XPGainEvent : Event() {
       context.bot.database.userRepository.addDexCatchEntry(userData, selectedPokemon)
     }
 
+    processedMessages.labels(
+      module.bot.hostname,
+      context.author.id,
+      context.author.asTag,
+      context.jda.shardInfo.shardId.toString(),
+      context.guild?.id ?: "DM",
+      context.channel.id
+    ).inc()
+
     if (context.isFromGuild) {
       val guildData = context.getGuildData()
       if (guildData?.levelUpMessagesSilenced == true) return
+      if (!context.guild!!.selfMember.hasPermission(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)) return
     }
 
     val embedBuilder =

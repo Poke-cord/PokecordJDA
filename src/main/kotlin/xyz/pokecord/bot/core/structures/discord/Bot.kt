@@ -33,6 +33,8 @@ class Bot constructor(private val token: String) {
 
   private lateinit var version: String
 
+  val hostname = System.getenv("HOSTNAME") ?: System.getenv("COMPUTERNAME") ?: "Unknown"
+
   val devEnv = System.getenv("DEV").equals("true", true)
 
   val payPal by lazy { PayPal(database) }

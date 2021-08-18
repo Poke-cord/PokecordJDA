@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
+import io.prometheus.client.Counter
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -14,6 +15,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Config
@@ -30,6 +32,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   private val logger = LoggerFactory.getLogger(CommandHandler::class.java)
 
   var prefix: String = if (bot.maintenance) "!" else "p!"
+
+  private val commandUsages = Counter
+    .build("bot_commands_usages", "Total number of command usages.")
+    .labelNames("hostname", "command", "user_id", "user_tag", "shard", "guild", "channel")
+    .register(PrometheusService.registry)
 
   override suspend fun onEvent(event: GenericEvent) {
     when (event) {
@@ -189,6 +196,15 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         context.author.id,
         true
       )
+      commandUsages.labels(
+        bot.hostname,
+        command.identifier,
+        context.author.id,
+        context.author.asTag,
+        context.jda.shardInfo.shardId.toString(),
+        context.guild?.id ?: "DM",
+        context.channel.id
+      ).inc()
       try {
         if (executorFunction.isSuspend) {
           executorFunction.callSuspend(command, *parsedParameters.toTypedArray()) // TODO: args
@@ -404,6 +420,15 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
               context.author.id,
               true
             )
+            commandUsages.labels(
+              bot.hostname,
+              command.identifier,
+              context.author.id,
+              context.author.asTag,
+              context.jda.shardInfo.shardId.toString(),
+              context.guild?.id ?: "DM",
+              context.channel.id
+            ).inc()
             try {
               if (executorFunction.isSuspend) {
                 executorFunction.callSuspend(command, *parsedParameters.toTypedArray())

@@ -80,27 +80,37 @@ data class OwnedPokemon(
     return nextLevelExperienceEntry.experience - currentLevelExperienceEntry.experience
   }
 
-  private fun getStatValue(stat: Stat, nature: Nature, iv: Int, ev: Int = stat.getBaseEffortValue(id)!!): Int {
-    val base = stat.getBaseValue(id)!!
-
-    val statVal = if (stat.identifier == "hp") {
-      if (id == 292) 1
-      else floor(
-        floor((floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) +
-            level +
-            10
-      ).roundToInt()
-    } else {
-      (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) + 5).roundToInt()
-    }
-    var multiplier = 1.0
-
-    if (nature.increasedStatId == stat.id) multiplier += 0.1
-    if (nature.decreasedStatId == stat.id) multiplier -= 0.1
-    return floor(statVal * multiplier).roundToInt()
-  }
+  private fun getStatValue(stat: Stat, nature: Nature, iv: Int, ev: Int = stat.getBaseEffortValue(id)!!) =
+    getStatValue(id, level, stat, nature, iv, ev)
 
   companion object {
+    fun getStatValue(
+      id: Int,
+      level: Int,
+      stat: Stat,
+      nature: Nature,
+      iv: Int,
+      ev: Int = stat.getBaseEffortValue(id)!!
+    ): Int {
+      val base = stat.getBaseValue(id)!!
+
+      val statVal = if (stat.identifier == "hp") {
+        if (id == 292) 1
+        else floor(
+          floor((floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) +
+              level +
+              10
+        ).roundToInt()
+      } else {
+        (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) + 5).roundToInt()
+      }
+      var multiplier = 1.0
+
+      if (nature.increasedStatId == stat.id) multiplier += 0.1
+      if (nature.decreasedStatId == stat.id) multiplier -= 0.1
+      return floor(statVal * multiplier).roundToInt()
+    }
+
     private fun defaultGender(speciesId: Int): Int {
       val genderRate = Species.getById(speciesId)?.genderRate
       return genderRate?.let {

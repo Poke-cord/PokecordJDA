@@ -96,6 +96,7 @@ class UserRepository(
 
   suspend fun incShinyRate(userData: User, amount: Int, session: ClientSession? = null) {
     userData.shinyRate += amount
+    if (userData.shinyRate < 1) userData.shinyRate = 1.0
     if (session == null) collection.updateOne(User::id eq userData.id, inc(User::shinyRate, amount))
     else collection.updateOne(session, User::id eq userData.id, inc(User::shinyRate, amount))
     setCacheUser(userData)
@@ -110,6 +111,9 @@ class UserRepository(
   ): OwnedPokemon {
     if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
     val isUnsavedUser = userData.isDefault && userData._isNew
+
+    if (userData.shinyRate < 1) userData.shinyRate = 4908.0
+
     var ownedPokemon = OwnedPokemon(
       pokemonId,
       userData.nextIndex,
@@ -121,6 +125,7 @@ class UserRepository(
 
     if (select) userData.selected = ownedPokemon._id
     if (!ownedPokemon.shiny) userData.shinyRate -= 0.25
+    else userData.shinyRate = 4908.0
 
     val targetList = if (ownedPokemon.shiny) userData.caughtShinies else userData.caughtPokemon
     if (!targetList.contains(pokemonId)) targetList.add(pokemonId)
@@ -142,7 +147,7 @@ class UserRepository(
               if (ownedPokemon.shiny) User::caughtShinies else User::caughtPokemon, pokemonId
             ),
             if (select) set(User::selected setTo ownedPokemon._id) else EMPTY_BSON,
-            if (!ownedPokemon.shiny) inc(User::shinyRate, -0.25) else EMPTY_BSON
+            set(User::shinyRate setTo userData.shinyRate)
           )
         )
       }
@@ -187,7 +192,7 @@ class UserRepository(
     }
   }
 
-  suspend fun giftPokemon(sender: User, receiver: User, clientSession: ClientSession) {
+  suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
     sender.pokemonCount--
 
     receiver.nextIndex++
@@ -206,7 +211,7 @@ class UserRepository(
         inc(User::nextIndex, 1)
       )
     )
-
+    database.giftCollection.insertOne(clientSession, Gift(sender.id, receiver.id, 0, mutableListOf(pokemon._id)))
     setCacheUser(receiver)
   }
 
