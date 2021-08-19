@@ -3,12 +3,14 @@ package xyz.pokecord.bot.modules.developer.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
+import java.util.concurrent.TimeUnit
 import javax.script.Compilable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
 class EvalCommand : DeveloperCommand() {
   override val name = "Eval"
+  override var timeout = TimeUnit.MINUTES.toMillis(15)
 
   private val codeRegex =
     "```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL))
