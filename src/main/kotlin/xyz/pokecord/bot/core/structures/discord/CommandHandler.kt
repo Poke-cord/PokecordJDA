@@ -453,7 +453,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
             val startedAt = System.currentTimeMillis()
             while (!commandJob.isCompleted) {
               delay(1000)
-              if (System.currentTimeMillis() - startedAt >= 60_000) {
+              if (System.currentTimeMillis() - startedAt >= command.timeout) {
                 commandJob.cancelAndJoin()
                 context.reply(
                   context.embedTemplates.error(

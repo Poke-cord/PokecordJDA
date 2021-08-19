@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.Permission
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.utils.extensions.isBoolean
 import xyz.pokecord.bot.utils.extensions.removeAccents
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberFunctions
 
@@ -52,6 +53,7 @@ abstract class Command {
     arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
   open var requiredUserPermissions: Array<Permission> =
     arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
+  open var timeout = TimeUnit.SECONDS.toMillis(60)
 
   open val descriptionI18nKey by lazy {
     "misc.command_descriptions.${identifier}"
