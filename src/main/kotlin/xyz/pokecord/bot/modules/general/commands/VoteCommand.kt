@@ -16,6 +16,10 @@ class VoteCommand : Command() {
     context: ICommandContext
   ) {
     val lastVoteAt = context.getUserData().lastVoteAt
+    val nextVoteTime =
+      if (lastVoteAt == null || lastVoteAt + TimeUnit.HOURS.toMillis(12) < System.currentTimeMillis()) context.translate(
+        "modules.general.commands.vote.now"
+      ) else TimeFormat.RELATIVE.format(lastVoteAt + TimeUnit.HOURS.toMillis(12))
     context.reply(
       context.embedTemplates.normal(
         context.translate(
@@ -25,9 +29,7 @@ class VoteCommand : Command() {
               Date.from(VoteUtils.getSeasonEndTime().atStartOfDay().atZone(ZoneOffset.UTC).toInstant())
             ),
             "voteLink" to "https://top.gg/bot/${context.jda.selfUser.id}/vote",
-            "nextVoteTime" to (lastVoteAt?.let {
-              TimeFormat.RELATIVE.format(it + TimeUnit.HOURS.toMillis(12))
-            } ?: context.translate("modules.general.commands.vote.now"))
+            "nextVoteTime" to nextVoteTime
           )
         ),
         context.translate(
