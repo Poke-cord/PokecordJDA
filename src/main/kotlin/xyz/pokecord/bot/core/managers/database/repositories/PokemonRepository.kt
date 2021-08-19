@@ -434,7 +434,6 @@ class PokemonRepository(
           .limit(Config.transferChunkSize)
           .toList()
           .map { it._id }
-        if (matchedIds.size < Config.transferChunkSize) break
         done += matchedIds.size
         database.transferLogCollection.updateOne(
           clientSession,
@@ -444,6 +443,7 @@ class PokemonRepository(
             set(TransferLog::status setTo TransferLog.Status.STARTED)
           )
         )
+        if (matchedIds.size < Config.transferChunkSize) break
       } while (true)
 
       val updateResult = collection.updateMany(filter, update, updateOptions)
