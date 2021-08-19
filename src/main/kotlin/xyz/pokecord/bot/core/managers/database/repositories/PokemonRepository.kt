@@ -13,6 +13,7 @@ import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.aggregate
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
+import org.litote.kmongo.id.toId
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.Cache
 import xyz.pokecord.bot.core.managers.database.Database
@@ -23,6 +24,7 @@ import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
 import xyz.pokecord.bot.core.structures.pokemon.Nature
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Type
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.CountResult
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
@@ -413,22 +415,45 @@ class PokemonRepository(
     val session = database.startSession()
     return session.use { clientSession ->
       clientSession.startTransaction()
-      val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
-        .projection(OwnedPokemon::_id from OwnedPokemon::_id)
-        .toList()
-        .map { it._id }
-      database.transferLogCollection.insertOne(
+      val insertedId = database.transferLogCollection.insertOne(
         clientSession,
         TransferLog(
           filter.json,
           update.json,
-          matchedIds,
           context.author.id,
           context.channel.id,
-          context.guild?.id
+          performedInGuild = context.guild?.id
+        )
+      ).insertedId!!.asObjectId().value.toId<TransferLog>()
+
+      var done = 0
+      do {
+        val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
+          .projection(OwnedPokemon::_id from OwnedPokemon::_id)
+          .skip(done)
+          .limit(Config.transferChunkSize)
+          .toList()
+          .map { it._id }
+        if (matchedIds.size < Config.transferChunkSize) break
+        done += matchedIds.size
+        database.transferLogCollection.updateOne(
+          clientSession,
+          TransferLog::_id eq insertedId,
+          combine(
+            pushEach(TransferLog::matchedIds, matchedIds),
+            set(TransferLog::status setTo TransferLog.Status.STARTED)
+          )
+        )
+      } while (true)
+
+      val updateResult = collection.updateMany(filter, update, updateOptions)
+      database.transferLogCollection.updateOne(
+        clientSession,
+        TransferLog::_id eq insertedId,
+        combine(
+          set(TransferLog::status setTo TransferLog.Status.COMPLETE)
         )
       )
-      val updateResult = collection.updateMany(filter, update, updateOptions)
       clientSession.commitTransactionAndAwait()
       updateResult
     }
