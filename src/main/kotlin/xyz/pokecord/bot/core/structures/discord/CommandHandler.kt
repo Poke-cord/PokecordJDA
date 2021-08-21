@@ -67,6 +67,18 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val userData = context.getUserData()
       if (userData.blacklisted) return
+
+      if (event.isFromGuild) {
+        if (!event.guild!!.selfMember.permissions.containsAll(command.requiredBotPermissions.toList())) {
+          return
+        } else if (event.member != null) {
+          if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
+            return
+          }
+        }
+        // TODO: Let the user know that the bot is or they are missing required permissions
+      }
+
       if (!userData.agreedToTerms) {
         val agreed = context.askForTOSAgreement()
         if (agreed) context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
@@ -85,16 +97,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         return
       }
 
-      if (event.isFromGuild) {
-        if (!event.guild!!.selfMember.permissions.containsAll(command.requiredBotPermissions.toList())) {
-          return
-        } else if (event.member != null) {
-          if (!event.member!!.permissions.containsAll(command.requiredUserPermissions.toList())) {
-            return
-          }
-        }
-        // TODO: Let the user know that the bot is or they are missing required permissions
-      }
+
 
       if (!command.canRun(context)) return
       // TODO: Let the user know they can't run the command?
@@ -269,6 +272,18 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       val userData = context.getUserData()
       if (userData.blacklisted) return
+
+      if (event.isFromGuild) {
+        if (!event.guild.selfMember.hasPermission(
+            event.channel as GuildChannel,
+            *command.requiredBotPermissions
+          )
+        ) return
+        if (event.member?.hasPermission(event.channel as GuildChannel, *command.requiredUserPermissions) != true) return
+
+        // TODO: Let the user know that the bot is or they are missing required permissions
+      }
+
       if (!userData.agreedToTerms) {
         val agreed = context.askForTOSAgreement()
         if (agreed) context.bot.database.userRepository.setAgreedToTerms(context.getUserData())
@@ -285,17 +300,6 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           ).build()
         ).queue()
         return
-      }
-
-      if (event.isFromGuild) {
-        if (!event.guild.selfMember.hasPermission(
-            event.channel as GuildChannel,
-            *command.requiredBotPermissions
-          )
-        ) return
-        if (event.member?.hasPermission(event.channel as GuildChannel, *command.requiredUserPermissions) != true) return
-
-        // TODO: Let the user know that the bot is or they are missing required permissions
       }
 
       if (!command.canRun(context)) return
