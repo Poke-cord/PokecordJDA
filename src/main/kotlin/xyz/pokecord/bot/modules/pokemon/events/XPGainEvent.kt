@@ -71,7 +71,13 @@ class XPGainEvent : Event() {
     if (context.isFromGuild) {
       val guildData = context.getGuildData()
       if (guildData?.levelUpMessagesSilenced == true) return
-      if (!context.guild!!.selfMember.hasPermission(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)) return
+      if (!context.guild!!.selfMember.hasPermission(
+          Permission.VIEW_CHANNEL,
+          Permission.MESSAGE_READ,
+          Permission.MESSAGE_WRITE,
+          Permission.MESSAGE_EMBED_LINKS
+        )
+      ) return
     }
 
     val embedBuilder =
