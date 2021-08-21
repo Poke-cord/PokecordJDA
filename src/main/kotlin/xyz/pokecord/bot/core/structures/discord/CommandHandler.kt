@@ -47,7 +47,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   private suspend fun onSlashCommand(event: SlashCommandEvent) {
     if (event.isFromGuild) {
-      if (!event.guild!!.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
+      if (!event.guild!!.selfMember.hasPermission(
+          event.channel as GuildChannel,
+          Permission.MESSAGE_EMBED_LINKS
+        )
+      ) return // TODO: send a normal text message
     }
 
     val context = SlashCommandContext(bot, event)
@@ -234,7 +238,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
   private suspend fun onMessageReceived(event: MessageReceivedEvent) {
     if (event.isFromGuild) {
-      if (!event.guild.selfMember.hasPermission(Permission.MESSAGE_EMBED_LINKS)) return // TODO: send a normal text message
+      if (!event.guild.selfMember.hasPermission(
+          event.channel as GuildChannel,
+          Permission.MESSAGE_EMBED_LINKS
+        )
+      ) return // TODO: send a normal text message
     }
 
     val context = MessageCommandContext(bot, event)

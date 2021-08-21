@@ -2,6 +2,7 @@ package xyz.pokecord.bot.modules.pokemon.events
 
 import io.prometheus.client.Counter
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.GuildChannel
 import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Event
@@ -72,6 +73,7 @@ class XPGainEvent : Event() {
       val guildData = context.getGuildData()
       if (guildData?.levelUpMessagesSilenced == true) return
       if (!context.guild!!.selfMember.hasPermission(
+          context.channel as GuildChannel,
           Permission.VIEW_CHANNEL,
           Permission.MESSAGE_READ,
           Permission.MESSAGE_WRITE,
