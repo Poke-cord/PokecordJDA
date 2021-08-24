@@ -358,7 +358,10 @@ class UserRepository(
     session: ClientSession? = null
   ) {
     userData.lastBoostAt = lastBoostAt
-    if (session == null) collection.updateOne(User::id eq userData.id, set(User::lastBoostAt setTo userData.lastBoostAt))
+    if (session == null) collection.updateOne(
+      User::id eq userData.id,
+      set(User::lastBoostAt setTo userData.lastBoostAt)
+    )
     else collection.updateOne(session, User::id eq userData.id, set(User::lastBoostAt setTo userData.lastBoostAt))
     setCacheUser(userData)
   }
@@ -371,6 +374,16 @@ class UserRepository(
     userData.blacklisted = blacklisted
     collection.updateOne(User::id eq userData.id, set(User::blacklisted setTo userData.blacklisted))
     setCacheUser(userData)
+  }
+
+  suspend fun postReindex(userData: User, pokemonCount: Int, clientSession: ClientSession) {
+    userData.pokemonCount = pokemonCount
+    userData.nextIndex = pokemonCount
+    collection.updateOne(
+      clientSession,
+      User::id eq userData.id,
+      set(User::pokemonCount setTo pokemonCount, User::nextIndex setTo pokemonCount)
+    )
   }
 
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(

@@ -371,33 +371,50 @@ class PokemonRepository(
     collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::moves setTo pokemon.moves))
   }
 
-  suspend fun reindexPokemon(ownerId: String, order: PokemonOrder) {
+  suspend fun reindexPokemon(
+    ownerId: String,
+    order: PokemonOrder,
+    extraOps: suspend (session: ClientSession, pokemonCount: Int) -> Unit = { _, _ -> }
+  ) {
     val sortProperty = order.getSortProperty()
     cache.getUserLock(ownerId).withCoroutineLock {
-      val items = collection.aggregate<PokemonWithOnlyObjectId>(
-        match(OwnedPokemon::ownerId eq ownerId),
-        project(
-          OwnedPokemon::_id from OwnedPokemon::_id,
-          sortProperty from sortProperty
-        ),
-        sort(
-          if (order == PokemonOrder.POKEDEX || order == PokemonOrder.TIME) ascending(sortProperty)
-          else descending(sortProperty)
-        ),
-        project(OwnedPokemon::_id from OwnedPokemon::_id)
-      )
-        .allowDiskUse(true)
-        .toList()
-      val updates = items.mapIndexed { i, it ->
-        updateOne<OwnedPokemon>(
-          OwnedPokemon::_id eq it._id,
-          set(OwnedPokemon::index setTo i)
-        )
+      var done = 0
+      val session = database.startSession()
+      session.use {
+        it.startTransaction()
+        do {
+          val items = collection.aggregate<PokemonWithOnlyObjectId>(
+            match(OwnedPokemon::ownerId eq ownerId),
+            project(
+              OwnedPokemon::_id from OwnedPokemon::_id,
+              sortProperty from sortProperty
+            ),
+            sort(
+              combine(
+                if (order == PokemonOrder.POKEDEX || order == PokemonOrder.TIME) ascending(sortProperty)
+                else descending(sortProperty),
+                ascending(OwnedPokemon::_id)
+              )
+            ),
+            project(OwnedPokemon::_id from OwnedPokemon::_id),
+            skip(done),
+            limit(Config.reindexChunkSize)
+          )
+            .allowDiskUse(true)
+            .toList()
+          val updates = items.mapIndexed { i, pokemon ->
+            updateOne<OwnedPokemon>(
+              OwnedPokemon::_id eq pokemon._id,
+              set(OwnedPokemon::index setTo done + i)
+            )
+          }
+          collection.bulkWrite(updates)
+          done += items.size
+          if (items.size < Config.reindexChunkSize) break
+        } while (true)
+        extraOps(session, done)
+        it.commitTransactionAndAwait()
       }
-      updates.chunked(1000)
-        .forEach {
-          collection.bulkWrite(it)
-        }
     }
   }
 
