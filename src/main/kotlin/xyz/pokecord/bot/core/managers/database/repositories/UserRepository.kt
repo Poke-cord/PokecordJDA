@@ -384,6 +384,7 @@ class UserRepository(
       User::id eq userData.id,
       set(User::pokemonCount setTo pokemonCount, User::nextIndex setTo pokemonCount)
     )
+    setCacheUser(userData)
   }
 
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
