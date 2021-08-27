@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import net.dv8tion.jda.api.EmbedBuilder
@@ -39,7 +40,8 @@ class Bot constructor(private val token: String) {
 
   val payPal by lazy { PayPal(database) }
   val discordRestClient by lazy { Discord(token) }
-  val backgroundCoroutineScope = CoroutineScope(Executors.newFixedThreadPool(2).asCoroutineDispatcher())
+  val backgroundCoroutineScope =
+    CoroutineScope(Executors.newFixedThreadPool(2).asCoroutineDispatcher() + SupervisorJob())
 
   val cache: Cache = Cache()
   val database: Database = Database(cache)
