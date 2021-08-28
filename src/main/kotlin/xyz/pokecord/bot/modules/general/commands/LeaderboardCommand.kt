@@ -13,8 +13,9 @@ class LeaderboardCommand : Command() {
     context: ICommandContext,
     @Argument(aliases = ["c"], prefixed = true, optional = true) credits: Boolean?
   ) {
+    val selfUserId = context.jda.selfUser.id
     if (credits == true) {
-      val entries = module.bot.database.userRepository.getCreditLeaderboard()
+      val entries = module.bot.database.userRepository.getCreditLeaderboard(selfUserId)
       context.reply(
         context.embedTemplates.normal(
           entries.mapIndexed { i, it ->
@@ -25,7 +26,7 @@ class LeaderboardCommand : Command() {
           .build()
       ).queue()
     } else {
-      val entries = module.bot.database.userRepository.getPokemonCountLeaderboard()
+      val entries = module.bot.database.userRepository.getPokemonCountLeaderboard(selfUserId)
       context.reply(
         context.embedTemplates.normal(
           entries.mapIndexed { i, it ->

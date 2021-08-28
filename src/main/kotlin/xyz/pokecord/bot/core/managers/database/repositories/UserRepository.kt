@@ -286,25 +286,25 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun getCreditLeaderboard(limit: Int = 10): List<User> {
+  suspend fun getCreditLeaderboard(selfUserId: String, limit: Int = 10): List<User> {
     val cachedString = leaderboardCacheMap.getAsync("credit").awaitSuspending()
     return if (cachedString != null) {
       Json.decodeFromString(cachedString)
     } else {
-      val leaderboard = collection.find(EMPTY_BSON).sort(descending(User::credits)).limit(limit).toList()
+      val leaderboard = collection.find(User::id ne selfUserId).sort(descending(User::credits)).limit(limit).toList()
       leaderboardCacheMap.putAsync("credit", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
       leaderboard
     }
   }
 
-  suspend fun getPokemonCountLeaderboard(limit: Int = 10): List<PokemonCountLeaderboardResult> {
-    val cachedString = leaderboardCacheMap.getAsync("pokemon").awaitSuspending()
+  suspend fun getPokemonCountLeaderboard(selfUserId: String, limit: Int = 10): List<PokemonCountLeaderboardResult> {
+    val cachedString = leaderboardCacheMap.getAsync("pokemon-${limit}").awaitSuspending()
     return if (cachedString != null) {
       Json.decodeFromString(cachedString)
     } else {
       val leaderboard =
         collection
-          .findAndCast<PokemonCountLeaderboardResult>(EMPTY_BSON)
+          .findAndCast<PokemonCountLeaderboardResult>(User::id ne selfUserId)
           .projection(
             combine(
               PokemonCountLeaderboardResult::id from User::id,
@@ -324,7 +324,7 @@ class UserRepository(
 //      )
 //        .allowDiskUse(true)
 //        .toList()
-      leaderboardCacheMap.putAsync("pokemon", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
+      leaderboardCacheMap.putAsync("pokemon-${limit}", Json.encodeToString(leaderboard), 1, TimeUnit.HOURS)
       leaderboard
     }
   }
