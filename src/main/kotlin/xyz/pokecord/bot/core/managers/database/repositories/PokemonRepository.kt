@@ -402,13 +402,15 @@ class PokemonRepository(
           )
             .allowDiskUse(true)
             .toList()
-          val updates = items.mapIndexed { i, pokemon ->
-            updateOne<OwnedPokemon>(
-              OwnedPokemon::_id eq pokemon._id,
-              set(OwnedPokemon::index setTo done + i)
-            )
+          if (items.isNotEmpty()) {
+            val updates = items.mapIndexed { i, pokemon ->
+              updateOne<OwnedPokemon>(
+                OwnedPokemon::_id eq pokemon._id,
+                set(OwnedPokemon::index setTo done + i)
+              )
+            }
+            collection.bulkWrite(updates)
           }
-          collection.bulkWrite(updates)
           done += items.size
           if (items.size < Config.reindexChunkSize) break
         } while (true)
