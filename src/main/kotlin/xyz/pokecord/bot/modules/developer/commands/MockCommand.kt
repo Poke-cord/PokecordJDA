@@ -71,7 +71,8 @@ class MockCommand : DeveloperCommand() {
       listOf(),
       listOf(),
       listOf(),
-      Message.MessageFlag.toBitField(sentMessage.flags)
+      Message.MessageFlag.toBitField(sentMessage.flags),
+      null
     )
     val fakeEvent = MessageReceivedEvent(context.jda, context.event.responseNumber, fakeMessage)
     context.jda.eventManager.handle(fakeEvent)
