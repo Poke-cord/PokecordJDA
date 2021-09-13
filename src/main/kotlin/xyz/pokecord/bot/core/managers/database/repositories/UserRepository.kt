@@ -3,7 +3,6 @@ package xyz.pokecord.bot.core.managers.database.repositories
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.litote.kmongo.*
@@ -335,9 +334,13 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun setDonationTier(userData: User, donationTier: Int) {
+  suspend fun setDonationTier(userData: User, donationTier: Int, session: ClientSession? = null) {
     userData.donationTier = donationTier
-    collection.updateOne(User::id eq userData.id, set(User::donationTier setTo userData.donationTier))
+    if (session == null) collection.updateOne(
+      User::id eq userData.id,
+      set(User::donationTier setTo userData.donationTier)
+    )
+    else collection.updateOne(session, User::id eq userData.id, set(User::donationTier setTo userData.donationTier))
     setCacheUser(userData)
   }
 
