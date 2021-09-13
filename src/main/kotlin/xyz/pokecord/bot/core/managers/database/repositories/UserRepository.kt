@@ -5,6 +5,7 @@ import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.Serializable
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
