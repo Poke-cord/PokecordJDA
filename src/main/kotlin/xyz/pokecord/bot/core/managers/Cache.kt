@@ -119,6 +119,10 @@ class Cache {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
   }
 
+  suspend fun clearGiftLocks() {
+    currentGifts.deleteAsync().awaitSuspending()
+  }
+
   suspend fun withGiftLock(senderId: String, receiverId: String, block: suspend () -> Unit) {
     while (true) {
       val inProgress = currentGifts.containsAsync(senderId).awaitSuspending() || currentGifts.containsAsync(receiverId)
