@@ -9,7 +9,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import kotlin.random.Random
 
-class SetCommand : ParentCommand() {
+class   SetCommand : ParentCommand() {
   override val name = "Set"
 
   override var aliases = arrayOf("settings", "setting", "config")

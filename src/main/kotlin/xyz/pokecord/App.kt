@@ -14,6 +14,7 @@ import xyz.pokecord.bot.modules.general.GeneralModule
 import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.modules.profile.ProfileModule
 import xyz.pokecord.bot.modules.staff.StaffModule
+import xyz.pokecord.bot.modules.trading.TradingModule
 import xyz.pokecord.migration.Migration
 import kotlin.system.exitProcess
 
@@ -52,7 +53,8 @@ object App {
           ProfileModule(bot),
           EconomyModule(bot),
           StaffModule(bot),
-          DeveloperModule(bot)
+          DeveloperModule(bot),
+          TradingModule(bot)
         )
         modules.forEach {
           bot.modules[it.name.lowercase()] = it

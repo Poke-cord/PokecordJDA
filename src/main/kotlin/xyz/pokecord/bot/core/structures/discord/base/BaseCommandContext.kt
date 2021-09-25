@@ -9,6 +9,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Guild
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
+import xyz.pokecord.bot.core.managers.database.models.Trade
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
@@ -55,6 +56,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
       userData!!.tag = author.asTag
     }
     return userData!!
+  }
+
+  override suspend fun getTradeState(): Trade? {
+    return bot.database.tradeRepository.getTrade(author.id)
   }
 
   override suspend fun getGuildData(forceFetch: Boolean): Guild? {
@@ -190,7 +195,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun askForTOSAgreement(): Boolean {
-    val confirmation = Confirmation(this)
+    val confirmation = Confirmation(this, this.author.id)
     return confirmation.result(
       embedTemplates.normal(
         translate(

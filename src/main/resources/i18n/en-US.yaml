@@ -158,6 +158,55 @@ misc:
     weight: Weight
     xp: XP
 modules:
+  trading:
+    commands:
+      trade:
+        confirmation:
+          title: Trade Request
+          description: "{{trader}} has requested to trade {{traded}}!\n\nWanna trade with {{trader}}?"
+        tradeStarted:
+          title: Trade Request Accepted
+          description: "{{partner}} accepted {{author}}'s trade request.\n**NOTE: You can only trade 20 Pokémon per session.**"
+        tradeCancelled:
+          description:
+            title: Trade Request Cancelled
+            description: "Trade request to {{partner}} has been denied or has expired."
+        errors:
+          noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
+          tradingYourself: You can't trade with yourself!
+          partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `p!start` command?"
+          alreadyInTrade: You cannot start another trade until your new one is done..
+          alreadyRequested: You've already sent out a trade request that has not been accepted yet! Please be patient in order to start another trade.
+      status:
+        embeds:
+          tradeEnded:
+            title: Trade Ended
+            description: You have ended the trade.
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noPartnerFound:
+            title: Partner Not Found
+            description: Your partner seems to not have access to the bot currently, would you like to end the trade?
+      cancel:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+        embeds:
+          cancelTrade:
+            title: Trading Cancelled
+            description: "The trading session between {{author}} and {{partner}} ended because... Well idk why. You tell me."
+      add:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noTypeProvided: What would you like to add to the trade? Credits or a pokemon.
+          noNumberPokemon: Please provide the index number of the pokemon you would like to add.
+          noNumberCredits: Please provide the amount of credits you would like to add.
+          notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
+          noPokemonFound: "There was no pokemon found with the index value {{index}}."
+          maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
+        embeds:
+          addCredits:
+            title: Credits Added
+            description: "You have successfully added {{credits}} to your trading session."
   general:
     commands:
       faq:

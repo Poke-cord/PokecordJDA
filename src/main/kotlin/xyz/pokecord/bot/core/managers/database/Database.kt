@@ -28,6 +28,7 @@ class Database(cache: Cache) {
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
   private val userCollection: CoroutineCollection<User>
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
+  private val tradeCollection: CoroutineCollection<Trade>
 
   val giftCollection: CoroutineCollection<Gift>
   val transferLogCollection: CoroutineCollection<TransferLog>
@@ -40,6 +41,7 @@ class Database(cache: Cache) {
   val rewardRepository: RewardRepository
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
+  val tradeRepository: TradeRepository
 
   init {
     val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main")
@@ -66,6 +68,7 @@ class Database(cache: Cache) {
     spawnChannelCollection = database.getCollection()
     userCollection = database.getCollection()
     voteRewardsCollection = database.getCollection()
+    tradeCollection = database.getCollection()
 
     giftCollection = database.getCollection()
     transferLogCollection = database.getCollection()
@@ -79,6 +82,7 @@ class Database(cache: Cache) {
     spawnChannelRepository =
       SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)
     userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap, cache.leaderboardMap)
+    tradeRepository = TradeRepository(this, tradeCollection)
 
     CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher()).launch { createIndexes() }
   }
