@@ -228,7 +228,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         System.currentTimeMillis() + command.rateLimit,
         command.rateLimit, TimeUnit.MILLISECONDS
       )
-      if (userData.tag !== context.author.asTag) {
+      if (userData.tag != context.author.asTag) {
         bot.database.userRepository.updateTag(userData, context.author.asTag)
       }
     } catch (e: Throwable) {
@@ -422,7 +422,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           }
         }
 
-        if (userData.tag !== context.author.asTag) {
+        if (userData.tag != context.author.asTag) {
           bot.database.userRepository.updateTag(userData, context.author.asTag)
         }
 

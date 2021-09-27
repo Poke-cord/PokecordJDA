@@ -7,10 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.managers.database.models.Guild
-import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
-import xyz.pokecord.bot.core.managers.database.models.Trade
-import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
@@ -60,6 +57,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
 
   override suspend fun getTradeState(): Trade? {
     return bot.database.tradeRepository.getTrade(author.id)
+  }
+
+  override suspend fun getTraderState(): TraderData? {
+    return bot.database.tradeRepository.getTraderData(author.id)
   }
 
   override suspend fun getGuildData(forceFetch: Boolean): Guild? {

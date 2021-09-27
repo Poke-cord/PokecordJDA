@@ -1,10 +1,7 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.div
-import org.litote.kmongo.eq
-import org.litote.kmongo.inc
-import org.litote.kmongo.or
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.*
 
@@ -29,6 +26,23 @@ class TradeRepository(
     )
   }
 
+  suspend fun getTraderData(userId: String): TraderData? {
+    val trade = collection.findOne(
+      or(
+        Trade::initiator / TraderData::userId eq userId,
+        Trade::receiver / TraderData::userId eq userId
+      )
+    )
+
+    return if(trade != null) {
+      if(trade.initiator.userId == userId) {
+        trade.initiator
+      } else {
+        trade.receiver
+      }
+    } else null
+  }
+
   suspend fun deleteTrade(userId: String) {
     collection.deleteOne(
       or(
@@ -48,6 +62,20 @@ class TradeRepository(
       collection.updateOne(
         Trade::_id eq trade._id,
         inc(Trade::receiver / TraderData::credits, amount)
+      )
+    }
+  }
+
+  suspend fun addPokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
+    if(trade.initiator.userId == traderId) {
+      collection.updateOne(
+        Trade::_id eq trade._id,
+        push(Trade::initiator / TraderData::pokemon, pokemonId)
+      )
+    } else {
+      collection.updateOne(
+        Trade::_id eq trade._id,
+        push(Trade::receiver / TraderData::pokemon, pokemonId)
       )
     }
   }

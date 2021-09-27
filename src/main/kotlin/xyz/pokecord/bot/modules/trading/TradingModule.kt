@@ -8,9 +8,11 @@ class TradingModule(bot: Bot): Module(
   bot,
   arrayOf(
     TradeCommand(),
-    TradeCommand.StatusCommand(),
     TradeCommand.CancelCommand(),
-    TradeCommand.AddCommand()
+    TradeCommand.AddCommand(),
+    TradeCommand.StatusCommand(),
+    TradeCommand.AddCommand.AddCredits(),
+    TradeCommand.AddCommand.AddPokemon(),
   )
 ) {
   override val name = "Trading"

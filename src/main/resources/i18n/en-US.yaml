@@ -206,7 +206,10 @@ modules:
         embeds:
           addCredits:
             title: Credits Added
-            description: "You have successfully added {{credits}} to your trading session."
+            description: "You have successfully added 1{{credits}}1 credits to your trading session."
+          addPokemon:
+            title: Pokémon Added
+            description: "{{pokemon}} has been added to your trading session."
   general:
     commands:
       faq:

@@ -3,9 +3,11 @@ package xyz.pokecord.bot.modules.trading.commands
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Confirmation
+import xyz.pokecord.bot.utils.PokemonResolvable
 import java.util.concurrent.TimeUnit
 
 class TradeCommand : ParentCommand() {
@@ -149,105 +151,150 @@ class TradeCommand : ParentCommand() {
   class AddCommand: Command() {
     override val name = "add"
 
-    enum class Types(val identifier: String) {
-      POKEMON("pokemon"),
-      CREDITS("credits")
-    }
-
-    val pokemonTypes = listOf("p", "pkmn", "pokemon", "poke")
-    val creditTypes = listOf("c", "creds", "credits", "credit")
-
     @Executor
     suspend fun execute(
-      context: ICommandContext,
-      @Argument(description = "pokemon or credits") type: String?,
-      @Argument number: Int?
+      context: ICommandContext
     ) {
-      if (!context.hasStarted(true)) return
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.commands.add.errors.noTypeProvided")
+        ).build()
+      ).queue()
+    }
 
-      val tradeState = context.getTradeState()
-      if(tradeState == null) {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.trading.commands.add.errors.notInTrade")
-          ).build()
-        ).queue()
-        return
-      }
+    @ChildCommand
+    class AddCredits: Command() {
+      override val name = "credits"
+      override var aliases = arrayOf("c", "creds", "credits", "credit")
 
-      val authorTradeData = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+      @Executor
+      suspend fun execute(
+        context: ICommandContext,
+        @Argument amount: Int?
+      ) {
+        if (!context.hasStarted(true)) return
 
-      if(type == null) {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.trading.commands.add.errors.noTypeProvided")
-          ).build()
-        ).queue()
-      } else {
-        val tradeType = if(pokemonTypes.contains(type.lowercase())) Types.POKEMON else Types.CREDITS
-
-        if(number == null) {
+        val tradeState = context.getTradeState()
+        if(tradeState == null) {
           context.reply(
             context.embedTemplates.error(
-              if(tradeType == Types.CREDITS)
-                context.translate("modules.trading.commands.add.errors.noNumberCredits")
-              else
-                context.translate("modules.trading.commands.add.errors.noNumberPokemon")
+              context.translate("modules.trading.commands.add.errors.notInTrade")
             ).build()
           ).queue()
           return
         }
 
-        if(tradeType == Types.CREDITS) {
-          val userData = context.getUserData()
-          if(number > userData.credits) {
+        if(amount == null) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.trading.commands.add.errors.noNumberCredits")
+            ).build()
+          ).queue()
+          return
+        }
+
+        val userData = context.getUserData()
+        if(amount > userData.credits) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.trading.commands.add.errors.notEnoughCredits")
+            ).build()
+          ).queue()
+          return
+        }
+
+        context.bot.database.userRepository.incCredits(userData, -amount)
+        context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount)
+
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "modules.trading.commands.add.embeds.addCredits.description",
+              "credits" to amount.toString()
+            ),
+            context.translate("modules.trading.commands.add.embeds.addCredits.title")
+          ).build()
+        ).queue()
+      }
+    }
+
+    @ChildCommand
+    class AddPokemon: Command() {
+      override val name = "pokemon"
+      override var aliases = arrayOf("p", "pkmn", "pokemon", "poke")
+
+      @Executor
+      suspend fun execute(
+        context: ICommandContext,
+        @Argument pokemon: PokemonResolvable?
+      ) {
+        if (!context.hasStarted(true)) return
+
+        val tradeState = context.getTradeState()
+        if(tradeState == null) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.trading.commands.add.errors.notInTrade")
+            ).build()
+          ).queue()
+        } else {
+          if(pokemon == null) {
             context.reply(
               context.embedTemplates.error(
-                context.translate("modules.trading.commands.add.errors.notEnoughCredits")
+                context.translate("modules.trading.commands.add.errors.noNumberPokemon")
               ).build()
             ).queue()
             return
           }
 
-          context.bot.database.userRepository.incCredits(userData, -number)
-          context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, number)
+          val userData = context.getUserData()
+          val selectedPokemon = context.resolvePokemon(context.author, userData, pokemon)
 
-          context.reply(
-            context.embedTemplates.normal(
-              context.translate(
-                "modules.trading.commands.add.embeds.addCredits.description",
-                "credits" to number.toString()
-              ),
-              context.translate("modules.trading.commands.add.embeds.addCredits.title")
-            ).build()
-          ).queue()
-        } else {
-          if(authorTradeData.pokemon.size >= 20) {
-            context.reply(
-              context.embedTemplates.error(
-                context.translate("modules.trading.commands.add.errors.maxPokemonCount")
-              ).build()
-            ).queue()
-          }
-
-          val selectedPokemon = context.bot.database.pokemonRepository.getPokemonByIndex(context.author.id, number)
           if(selectedPokemon == null) {
             context.reply(
               context.embedTemplates.error(
                 context.translate(
                   "modules.trading.commands.add.errors.noPokemonFound",
-                  "index" to number.toString()
+                  "index" to pokemon.toString()
                 )
               ).build()
             ).queue()
-            return
+          } else {
+            val authorTradeState = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+            if (authorTradeState.pokemon.size >= 20) {
+              context.reply(
+                context.embedTemplates.error(
+                  context.translate("modules.trading.commands.add.errors.maxPokemonCount")
+                ).build()
+              ).queue()
+            }
+
+            val transfer = selectedPokemon.transferable(context.bot.database)
+            if (transfer != OwnedPokemon.TransferStates.SUCCESS) {
+              context.reply(
+                context.embedTemplates.error(
+                  transfer.errMessage!!,
+                  context.translate("modules.trading.commands.add.errors.notTransferableTitle")
+                ).build()
+              ).queue()
+            }
+
+            context.bot.database.tradeRepository.addPokemon(tradeState, context.author.id, selectedPokemon._id)
+
+            context.reply(
+              context.embedTemplates.normal(
+                context.translate(
+                  "modules.trading.commands.add.embeds.addPokemon.description",
+                  "pokemon" to selectedPokemon.displayName
+                ),
+                context.translate("modules.trading.commands.add.embeds.addPokemon.title")
+              ).build()
+            ).queue()
           }
-          // Add pokemon to trade
         }
       }
     }
   }
-
 
   @ChildCommand
   class StatusCommand: Command() {
