@@ -102,53 +102,7 @@ class TradeCommand : ParentCommand() {
   }
 
   @ChildCommand
-  class CancelCommand: Command() {
-    override val name = "cancel"
-
-    @Executor
-    suspend fun execute(
-      context: ICommandContext
-    ) {
-      if (!context.hasStarted(true)) return
-
-      val tradeState = context.getTradeState()
-      if(tradeState == null) {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.trading.commands.cancel.errors.notInTrade")
-          ).build()
-        ).queue()
-        return
-      }
-
-      val initiator = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
-      val partner = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
-
-      val partnerUser = context.jda.retrieveUserById(partner.userId).await()
-      val partnerData = context.bot.database.userRepository.getUser(partnerUser)
-
-      context.bot.database.userRepository.incCredits(partnerData, partner.credits)
-      context.bot.database.userRepository.incCredits(context.getUserData(), initiator.credits)
-
-      context.bot.database.tradeRepository.deleteTrade(initiator.userId)
-
-      context.reply(
-        context.embedTemplates.normal(
-          context.translate(
-            "modules.trading.commands.cancel.embeds.cancelTrade.description",
-            mapOf(
-              "author" to context.author.asMention,
-              "partner" to partnerUser.asMention
-            )
-          ),
-          context.translate("modules.trading.commands.cancel.embeds.cancelTrade.title")
-        ).build()
-      ).queue()
-    }
-  }
-
-  @ChildCommand
-  class AddCommand: Command() {
+  class AddCommand: ParentCommand() {
     override val name = "add"
 
     @Executor
@@ -173,6 +127,8 @@ class TradeCommand : ParentCommand() {
         @Argument amount: Int?
       ) {
         if (!context.hasStarted(true)) return
+
+        println(amount)
 
         val tradeState = context.getTradeState()
         if(tradeState == null) {
@@ -296,6 +252,55 @@ class TradeCommand : ParentCommand() {
     }
   }
 
+  // @ChildCommand
+  // class RemoveCommand: Command() {}
+
+  @ChildCommand
+  class CancelCommand: Command() {
+    override val name = "cancel"
+
+    @Executor
+    suspend fun execute(
+      context: ICommandContext
+    ) {
+      if (!context.hasStarted(true)) return
+
+      val tradeState = context.getTradeState()
+      if(tradeState == null) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.trading.commands.cancel.errors.notInTrade")
+          ).build()
+        ).queue()
+        return
+      }
+
+      val initiator = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+      val partner = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
+
+      val partnerUser = context.jda.retrieveUserById(partner.userId).await()
+      val partnerData = context.bot.database.userRepository.getUser(partnerUser)
+
+      context.bot.database.userRepository.incCredits(partnerData, partner.credits)
+      context.bot.database.userRepository.incCredits(context.getUserData(), initiator.credits)
+
+      context.bot.database.tradeRepository.deleteTrade(initiator.userId)
+
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.trading.commands.cancel.embeds.cancelTrade.description",
+            mapOf(
+              "author" to context.author.asMention,
+              "partner" to partnerUser.asMention
+            )
+          ),
+          context.translate("modules.trading.commands.cancel.embeds.cancelTrade.title")
+        ).build()
+      ).queue()
+    }
+  }
+
   @ChildCommand
   class StatusCommand: Command() {
     override val name = "status"
@@ -349,4 +354,7 @@ class TradeCommand : ParentCommand() {
       ).queue()
     }
   }
+
+  // @ChildCommand
+  // class ConfirmCommand: Command() {}
 }
