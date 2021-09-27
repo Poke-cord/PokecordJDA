@@ -4,16 +4,9 @@ import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.trading.commands.TradeCommand
 
-class TradingModule(bot: Bot): Module(
+class TradingModule(bot: Bot) : Module(
   bot,
-  arrayOf(
-    TradeCommand(),
-    TradeCommand.CancelCommand(),
-    TradeCommand.AddCommand(),
-    TradeCommand.StatusCommand(),
-    TradeCommand.AddCommand.AddCredits(),
-    TradeCommand.AddCommand.AddPokemon(),
-  )
+  arrayOf(TradeCommand)
 ) {
   override val name = "Trading"
 }

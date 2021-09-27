@@ -13,7 +13,6 @@ import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaType
 
@@ -76,24 +75,13 @@ abstract class Module(
       }
     }
     command.module = this
-    if (!command::class.hasAnnotation<Command.ChildCommand>()) {
-      this.commandMap[command.name.lowercase()] = command
-      for (alias in command.aliases) {
-        this.commandMap[alias.lowercase()] = command
-      }
-      if (command is ParentCommand) {
-        val childCommandClasses = command::class.nestedClasses.filter { it.hasAnnotation<Command.ChildCommand>() }
-        for (childCommandClass in childCommandClasses) {
-          val childCommand = command.module.commands.find { it::class == childCommandClass }
-          if (childCommand != null) {
-            childCommand.parentCommand = command
-            command.childCommands.add(childCommand)
-            this.commandMap["${command.name.lowercase()}.${childCommand.name.lowercase()}"] = childCommand
-            for (alias in childCommand.aliases) {
-              this.commandMap["${command.name.lowercase()}.${alias.lowercase()}"] = childCommand
-            }
-          }
-        }
+    command.identifiersForCommandHandler.forEach {
+      commandMap[it] = command
+    }
+    if (command is ParentCommand) {
+      for (childCommand in command.childCommands) {
+        childCommand.parentCommand = command
+        addCommand(childCommand)
       }
     }
   }

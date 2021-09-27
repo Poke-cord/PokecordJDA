@@ -266,10 +266,13 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       }
 
       if (command != null && command.enabled) {
-        while(splitMessage.size >= 1) {
+        var lastCommandString = commandString.lowercase()
+        while (splitMessage.size >= 1) {
+          val childCommandName = splitMessage.first().lowercase()
           val childCommand =
-            command?.module?.commandMap?.get("${command.name.lowercase()}.${splitMessage.first().lowercase()}")
+            command?.module?.commandMap?.get("${lastCommandString}.${childCommandName}")
           if (childCommand != null) {
+            lastCommandString = "${lastCommandString}.${childCommandName}"
             command = childCommand
             splitMessage.removeAt(0)
           } else break

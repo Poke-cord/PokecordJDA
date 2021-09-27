@@ -68,7 +68,7 @@ class Confirmation(private val context: ICommandContext, val authorId: String, v
         break
       }
 
-      var timeoutStatus = withTimeoutOrNull(difference) {
+      val timeoutStatus = withTimeoutOrNull(difference) {
         val event = context.jda.await<ButtonClickEvent> {
           it.messageId == sentMessage!!.id
         }
@@ -112,7 +112,7 @@ class Confirmation(private val context: ICommandContext, val authorId: String, v
         }
       }
       if (timeoutStatus == null) {
-        timeoutStatus = true
+        timedOut = true
         stop()
         break
       }
