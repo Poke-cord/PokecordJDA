@@ -197,12 +197,12 @@ modules:
       add:
         errors:
           notInTrade: You haven't started a trading session yet, please do that first.
-          noTypeProvided: What would you like to add to the trade? Credits or a pokemon.
           noNumberPokemon: Please provide the index number of the pokemon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
           noPokemonFound: "There was no pokemon found with the index value {{index}}."
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
+          notTransferableTitle: Not Transferable
         embeds:
           addCredits:
             title: Credits Added
@@ -210,6 +210,28 @@ modules:
           addPokemon:
             title: Pokémon Added
             description: "{{pokemon}} has been added to your trading session."
+      remove:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noNumberPokemon: Please provide the index number of the pokemon you would like to add.
+          noNumberCredits: Please provide the amount of credits you would like to add.
+          notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
+          noPokemonFound: "There was no pokemon found with the index value {{index}}."
+          notTransferable: This pokemon is not in your trading session.
+        embeds:
+          removeCredits:
+            title: Credits Withdrawn
+            description: "You have successfully withdrew `{{credits}}` credits to your trading session."
+          removePokemon:
+            title: Pokémon Withdrawn
+            description: "{{pokemon}} has been withdrawn from your trading session."
+      confirm:
+        errors:
+          emptyTrade: Both you and your partner must at least choose a Pokémon or some credits before confirming the trade.
+        embeds:
+          partConfirmed:
+            title: "Pending Trading Confirmation"
+            description: "The trading session has been confirmed by you. Changes will be applied once your partner confirms."
   general:
     commands:
       faq:

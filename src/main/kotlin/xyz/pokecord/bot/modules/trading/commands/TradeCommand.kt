@@ -8,7 +8,7 @@ import xyz.pokecord.bot.utils.Confirmation
 import java.util.concurrent.TimeUnit
 
 object TradeCommand : ParentCommand() {
-  override val childCommands = mutableListOf(TradeAddCommand, TradeCancelCommand, TradeStatusCommand)
+  override val childCommands = mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
   override val name = "Trade"
 
   @Executor
@@ -95,9 +95,6 @@ object TradeCommand : ParentCommand() {
       ).queue()
     }
   }
-
-  // @ChildCommand
-  // class RemoveCommand: Command() {}
 
   // @ChildCommand
   // class ConfirmCommand: Command() {}
