@@ -32,7 +32,7 @@ object TradeCancelCommand: Command() {
     context.bot.database.userRepository.incCredits(partnerData, partner.credits)
     context.bot.database.userRepository.incCredits(context.getUserData(), initiator.credits)
 
-    context.bot.database.tradeRepository.deleteTrade(initiator.userId)
+    context.bot.database.tradeRepository.deleteTrade(tradeState)
 
     context.reply(
       context.embedTemplates.normal(

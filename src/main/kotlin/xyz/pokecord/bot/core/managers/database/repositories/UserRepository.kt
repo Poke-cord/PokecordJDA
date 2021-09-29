@@ -192,6 +192,23 @@ class UserRepository(
     }
   }
 
+  suspend fun removeDexCatchEntry(userData: User, pokemon: OwnedPokemon) {
+    val targetList = if (pokemon.shiny) userData.caughtShinies else userData.caughtPokemon
+    if (!targetList.contains(pokemon.id)) {
+      targetList.remove(pokemon.id)
+      collection.updateOne(
+        User::id eq userData.id,
+        pull((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
+      )
+      setCacheUser(userData)
+    }
+  }
+
+  suspend fun tradeCountUpdate(pokemon: OwnedPokemon, userFrom: User, userTo: User) {
+    addDexCatchEntry(userTo, pokemon)
+    removeDexCatchEntry(userFrom, pokemon)
+  }
+
   suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
     sender.pokemonCount--
 

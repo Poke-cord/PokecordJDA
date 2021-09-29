@@ -38,7 +38,7 @@ object TradeStatusCommand: Command() {
       )
 
       if(confirmed) {
-        context.bot.database.tradeRepository.deleteTrade(context.author.id)
+        context.bot.database.tradeRepository.deleteTrade(tradeState)
         context.reply(
           context.embedTemplates.normal(
             context.translate("modules.trading.commands.status.embeds.tradeEnded.description"),
@@ -46,7 +46,6 @@ object TradeStatusCommand: Command() {
           ).build()
         ).queue()
       }
-
       return
     }
 

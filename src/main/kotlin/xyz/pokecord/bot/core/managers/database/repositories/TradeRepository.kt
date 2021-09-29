@@ -43,13 +43,8 @@ class TradeRepository(
     } else null
   }
 
-  suspend fun deleteTrade(userId: String) {
-    collection.deleteOne(
-      or(
-        Trade::initiator / TraderData::userId eq userId,
-        Trade::receiver / TraderData::userId eq userId
-      )
-    )
+  suspend fun deleteTrade(trade: Trade) {
+    collection.deleteOne(Trade::_id eq trade._id)
   }
 
   suspend fun confirm(trade: Trade, traderId: String) {
