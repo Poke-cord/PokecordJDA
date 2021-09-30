@@ -72,7 +72,7 @@ object TradeAddPokemonCommand : Command() {
           context.embedTemplates.normal(
             context.translate(
               "modules.trading.commands.add.embeds.addPokemon.description",
-              "pokemon" to selectedPokemon.displayName
+              "pokemon" to context.translator.pokemonName(selectedPokemon).toString()
             ),
             context.translate("modules.trading.commands.add.embeds.addPokemon.title")
           ).build()

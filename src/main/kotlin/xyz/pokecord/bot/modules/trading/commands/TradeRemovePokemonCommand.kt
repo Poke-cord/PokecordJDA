@@ -64,7 +64,7 @@ object TradeRemovePokemonCommand : Command() {
         context.embedTemplates.normal(
           context.translate(
             "modules.trading.commands.remove.embeds.removePokemon.description",
-            "pokemon" to selectedPokemon.displayName
+            "pokemon" to context.translator.pokemonName(selectedPokemon).toString()
           ),
           context.translate("modules.trading.commands.remove.embeds.removePokemon.title")
         ).build()

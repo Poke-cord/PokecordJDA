@@ -61,45 +61,49 @@ object TradeConfirmCommand: Command() {
         val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorTradeData.pokemon)
         val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
-        if(authorTradeData.pokemon.isNotEmpty()) {
-          for(pokemon in authorPokemon) {
-            val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-              pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
-            )
+        val authorPokemonText = authorPokemon.map { pokemon ->
+          val initialName = context.translator.pokemonName(pokemon)
+          val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
+            pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
+          )
 
-            context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id)
-            context.bot.database.userRepository.tradeCountUpdate(pokemon, authorUserData, partnerUserData)
+          context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id)
+          context.bot.database.userRepository.tradeCountUpdate(pokemon, authorUserData, partnerUserData)
 
-          }
+          val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
+          "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
         }
 
-        if(partnerTradeData.pokemon.isNotEmpty()) {
-          for(pokemon in partnerPokemon) {
-            val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-              pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
-            )
+        val partnerPokemonText = partnerPokemon.map { pokemon ->
+          val initialName = context.translator.pokemonName(pokemon)
+          val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
+            pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
+          )
 
-            context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id)
-            context.bot.database.userRepository.tradeCountUpdate(pokemon, partnerUserData, authorUserData)
-          }
+          context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id)
+          context.bot.database.userRepository.tradeCountUpdate(pokemon, partnerUserData, authorUserData)
+
+          val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
+          "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
         }
 
         session.commitTransactionAndAwait()
-      }
 
-      context.reply(
-        context.embedTemplates
-          .normal(
-            "testing"
-          )
-          .addField("Trainer", authorUserData.tag, true)
-          .addField("Credits", context.translator.numberFormat(authorTradeData.credits), true)
-          .addField("Pokemon", "test", true)
-          .addField("Trainer", partnerUserData.tag, true)
-          .addField("Credits", context.translator.numberFormat(partnerTradeData.credits), true)
-          .addField("Pokemon", "test", true)
-          .build()
-      ).queue()
+        context.reply(
+          context.embedTemplates
+            .normal(
+              context.translate("module.trading.commands.confirm.embeds.confirmed.description"),
+              context.translate("module.trading.commands.confirm.embeds.confirmed.title"),
+            )
+            .addField("Trainer", authorUserData.tag, true)
+            .addField("Credits", context.translator.numberFormat(authorTradeData.credits), true)
+            .addField("Pokemon", authorPokemonText.joinToString { "\n" }, true)
+            .addField("Trainer", partnerUserData.tag, true)
+            .addField("Credits", context.translator.numberFormat(partnerTradeData.credits), true)
+            .addField("Pokemon", partnerPokemonText.joinToString { "\n" }, true)
+            .build()
+        ).queue()
+      }
     } else {
       context.bot.database.tradeRepository.confirm(tradeState, context.author.id)
 
