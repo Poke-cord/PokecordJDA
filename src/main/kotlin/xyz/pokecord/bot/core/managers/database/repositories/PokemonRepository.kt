@@ -230,10 +230,10 @@ class PokemonRepository(
   suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String) {
     collection.updateOne(
       OwnedPokemon::_id eq pokemon._id,
-        set(
-          OwnedPokemon::ownerId setTo ownerId,
-          OwnedPokemon::favorite setTo false
-        )
+      set(
+        OwnedPokemon::ownerId setTo ownerId,
+        OwnedPokemon::favorite setTo false
+      )
     )
   }
 
@@ -267,7 +267,8 @@ class PokemonRepository(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
     gainedXp: Int? = null,
-    beingTradedFor: MutableList<Int>? = null
+    beingTradedFor: MutableList<Int>? = null,
+    updateInDb: Boolean = true
   ): Pair<Boolean, Boolean> {
     var leveledUp = false
     var evolved = false
@@ -294,8 +295,8 @@ class PokemonRepository(
           if (evolutionDetails?.knownMoveId != 0) pokemon.moves.contains(evolutionDetails?.knownMoveId) else true
         val isLevelUpOk = if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
         val isMinimumLevelOk = (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
-        val isTradeStateOk = if(evolutionDetails?.evolutionTriggerId == 2)
-          if(evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
+        val isTradeStateOk = if (evolutionDetails?.evolutionTriggerId == 2)
+          if (evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
           else beingTradedFor != null
         else true
         val isTriggerItemOk =
@@ -338,7 +339,7 @@ class PokemonRepository(
       updatesBson.add(set(OwnedPokemon::id setTo pokemon.id))
     }
 
-    if (leveledUp || evolved || gainedXp != null) {
+    if (updateInDb && updatesBson.isNotEmpty()) {
       collection.updateOne(
         OwnedPokemon::_id eq pokemon._id,
         combine(updatesBson)

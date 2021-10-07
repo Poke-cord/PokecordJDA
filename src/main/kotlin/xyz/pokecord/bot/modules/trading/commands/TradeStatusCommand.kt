@@ -1,12 +1,11 @@
 package xyz.pokecord.bot.modules.trading.commands
 
 import dev.minn.jda.ktx.await
-import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Confirmation
 
-object TradeStatusCommand: Command() {
+object TradeStatusCommand : Command() {
   override val name = "status"
 
   @Executor
@@ -16,7 +15,7 @@ object TradeStatusCommand: Command() {
     if (!context.hasStarted(true)) return
 
     val tradeState = context.getTradeState()
-    if(tradeState == null) {
+    if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.trading.commands.status.errors.notInTrade")
@@ -25,11 +24,11 @@ object TradeStatusCommand: Command() {
       return
     }
 
-    val partner = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
-    val initiator = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+    val partner = if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
+    val initiator = if (tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
 
     val partnerUser = context.jda.retrieveUserById(partner.userId).await()
-    if(partnerUser == null) {
+    if (partnerUser == null) {
       val confirmation = Confirmation(context, initiator.userId)
       val confirmed = confirmation.result(
         context.embedTemplates.confirmation(
@@ -38,7 +37,7 @@ object TradeStatusCommand: Command() {
         )
       )
 
-      if(confirmed) {
+      if (confirmed) {
         context.bot.database.tradeRepository.deleteTrade(tradeState)
         context.reply(
           context.embedTemplates.normal(
@@ -52,8 +51,10 @@ object TradeStatusCommand: Command() {
 
     context.bot.database.tradeRepository.deleteTrade(tradeState)
 
-    val authorTradeData = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
-    val partnerTradeData = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
+    val authorTradeData =
+      if (tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+    val partnerTradeData =
+      if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
 
     val authorUserData = context.bot.database.userRepository.getUser(authorTradeData.userId)
     val partnerUserData = context.bot.database.userRepository.getUser(partnerTradeData.userId)
@@ -64,28 +65,28 @@ object TradeStatusCommand: Command() {
     val authorPokemonText = authorPokemon.map { pokemon ->
       val initialName = context.translator.pokemonName(pokemon)
       val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-        pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
+        pokemon, null, null, partnerPokemon.map { it.id }.toMutableList(), false
       )
 
-      val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
+      val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
       "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
     }
 
     val partnerPokemonText = partnerPokemon.map { pokemon ->
       val initialName = context.translator.pokemonName(pokemon)
       val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-        pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
+        pokemon, null, null, authorPokemon.map { it.id }.toMutableList(), false
       )
 
-      val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
+      val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
       "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
     }
 
     val statusTitle =
-      if(authorTradeData.confirmed || partnerTradeData.confirmed)
+      if (authorTradeData.confirmed || partnerTradeData.confirmed)
         context.translate(
           "module.trading.commands.status.embeds.status.title",
-          "confirmator" to if(authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
+          "confirmator" to if (authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
         )
       else null
 
