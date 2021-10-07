@@ -10,6 +10,7 @@ import kotlin.random.Random
 class BoostEvent: Event() {
   override val name = "BoostRewards"
 
+  @Handler
   suspend fun onBoost(event: GuildMessageReceivedEvent) {
     if(event.message.type == MessageType.GUILD_MEMBER_BOOST && event.guild.id == Config.mainServer) {
       val randomRedeem = RedeemItem.redeemMap.values.random()
