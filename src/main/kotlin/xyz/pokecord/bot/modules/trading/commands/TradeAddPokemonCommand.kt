@@ -64,6 +64,7 @@ object TradeAddPokemonCommand : Command() {
               context.translate("modules.trading.commands.add.errors.notTransferableTitle")
             ).build()
           ).queue()
+          return
         }
 
         context.bot.database.tradeRepository.addPokemon(tradeState, context.author.id, selectedPokemon._id)

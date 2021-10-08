@@ -33,7 +33,7 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
   override fun clearActionRows() = this.also { actionRows.clear() }
 
   override fun reply(content: String, mentionRepliedUser: Boolean) =
-    event.message.reply(content).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
+    event.message.reply(content).mentionRepliedUser(mentionRepliedUser).set`ActionRows(actionRows)
 
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean) =
     event.message.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)

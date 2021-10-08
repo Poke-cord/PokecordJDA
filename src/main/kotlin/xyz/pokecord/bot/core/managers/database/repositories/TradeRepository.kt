@@ -48,58 +48,30 @@ class TradeRepository(
   }
 
   suspend fun confirm(trade: Trade, traderId: String) {
-    if(trade.initiator.userId == traderId) {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        set(Trade::initiator / TraderData::confirmed setTo true)
-      )
-    } else {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        set(Trade::receiver / TraderData::confirmed setTo true)
-      )
-    }
+    collection.updateOne(
+      Trade::_id eq trade._id,
+      set((if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::confirmed setTo true)
+    )
   }
 
   suspend fun incCredits(trade: Trade, traderId: String, amount: Int) {
-    if(trade.initiator.userId == traderId) {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        inc(Trade::initiator / TraderData::credits, amount)
-      )
-    } else {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        inc(Trade::receiver / TraderData::credits, amount)
-      )
-    }
+    collection.updateOne(
+      Trade::_id eq trade._id,
+      inc((if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::credits, amount)
+    )
   }
 
   suspend fun addPokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
-    if(trade.initiator.userId == traderId) {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        push(Trade::initiator / TraderData::pokemon, pokemonId)
-      )
-    } else {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        push(Trade::receiver / TraderData::pokemon, pokemonId)
-      )
-    }
+    collection.updateOne(
+      Trade::_id eq trade._id,
+      push((if(trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon, pokemonId)
+    )
   }
 
   suspend fun removePokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
-    if(trade.initiator.userId == traderId) {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        pull(Trade::initiator / TraderData::pokemon, pokemonId)
-      )
-    } else {
-      collection.updateOne(
-        Trade::_id eq trade._id,
-        pull(Trade::receiver / TraderData::pokemon, pokemonId)
-      )
-    }
+    collection.updateOne(
+      Trade::_id eq trade._id,
+      pull((if(trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon, pokemonId)
+    )
   }
 }

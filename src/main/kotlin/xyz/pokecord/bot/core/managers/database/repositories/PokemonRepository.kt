@@ -227,13 +227,14 @@ class PokemonRepository(
     return result.first().count
   }
 
-  suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String) {
+  suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String, session: ClientSession) {
     collection.updateOne(
+      session,
       OwnedPokemon::_id eq pokemon._id,
         set(
           OwnedPokemon::ownerId setTo ownerId,
           OwnedPokemon::favorite setTo false
-        )
+        ),
     )
   }
 
@@ -267,7 +268,8 @@ class PokemonRepository(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
     gainedXp: Int? = null,
-    beingTradedFor: MutableList<Int>? = null
+    beingTradedFor: MutableList<Int>? = null,
+    updateInDb: Boolean = true
   ): Pair<Boolean, Boolean> {
     var leveledUp = false
     var evolved = false
@@ -338,7 +340,7 @@ class PokemonRepository(
       updatesBson.add(set(OwnedPokemon::id setTo pokemon.id))
     }
 
-    if (leveledUp || evolved || gainedXp != null) {
+    if (leveledUp || evolved || updateInDb) {
       collection.updateOne(
         OwnedPokemon::_id eq pokemon._id,
         combine(updatesBson)

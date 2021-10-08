@@ -67,11 +67,11 @@ object TradeConfirmCommand: Command() {
             pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
           )
 
-          context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id)
+          context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id, session)
           context.bot.database.userRepository.tradeCountUpdate(pokemon, authorUserData, partnerUserData)
 
           val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-          "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
+          "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
         }
 
         val partnerPokemonText = partnerPokemon.map { pokemon ->
@@ -80,12 +80,15 @@ object TradeConfirmCommand: Command() {
             pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
           )
 
-          context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id)
+          context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id, session)
           context.bot.database.userRepository.tradeCountUpdate(pokemon, partnerUserData, authorUserData)
 
           val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-          "${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
+          "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
         }
+
+        context.bot.database.userRepository.incPokemonCount(authorUserData, partnerPokemon.size - authorPokemon.size, session)
+        context.bot.database.userRepository.incPokemonCount(partnerUserData, authorPokemon.size - partnerPokemon.size, session)
 
         session.commitTransactionAndAwait()
 

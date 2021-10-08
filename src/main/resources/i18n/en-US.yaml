@@ -168,9 +168,8 @@ modules:
           title: Trade Request Accepted
           description: "{{partner}} accepted {{author}}'s trade request.\n**NOTE: You can only trade 20 Pokémon per session.**"
         tradeCancelled:
-          description:
-            title: Trade Request Cancelled
-            description: "Trade request to {{partner}} has been denied or has expired."
+          title: Trade Request Cancelled
+          description: "Trade request to {{partner}} has been denied or has expired."
         errors:
           noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
           tradingYourself: You can't trade with yourself!

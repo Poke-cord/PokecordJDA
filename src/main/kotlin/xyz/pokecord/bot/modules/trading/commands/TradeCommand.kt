@@ -89,13 +89,13 @@ object TradeCommand : ParentCommand() {
     } else {
       context.reply(
         context.embedTemplates.normal(
-          context.translate("modules.trading.commands.trade.tradeCancelled.description"),
+          context.translate(
+            "modules.trading.commands.trade.tradeCancelled.description",
+            "partner" to partner.asMention
+          ),
           context.translate("modules.trading.commands.trade.tradeCancelled.title")
         ).build()
       ).queue()
     }
   }
-
-  // @ChildCommand
-  // class ConfirmCommand: Command() {}
 }

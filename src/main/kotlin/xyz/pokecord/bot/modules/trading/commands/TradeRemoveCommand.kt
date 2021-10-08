@@ -4,5 +4,5 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 
 object TradeRemoveCommand : ParentCommand() {
   override val childCommands = mutableListOf(TradeRemovePokemonCommand, TradeRemoveCreditsCommand)
-  override val name = "Add"
+  override val name = "Remove"
 }

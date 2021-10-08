@@ -80,6 +80,13 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun incPokemonCount(userData: User, amount: Number, session: ClientSession? = null) {
+    userData.pokemonCount += amount.toInt()
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::pokemonCount, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::pokemonCount, amount))
+    setCacheUser(userData)
+  }
+
   suspend fun incGems(userData: User, amount: Int, session: ClientSession? = null) {
     userData.gems += amount
     if (session == null) collection.updateOne(User::id eq userData.id, inc(User::gems, amount))
