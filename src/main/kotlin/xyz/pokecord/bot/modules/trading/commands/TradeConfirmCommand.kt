@@ -63,7 +63,7 @@ object TradeConfirmCommand: Command() {
 
         val authorPokemonText = authorPokemon.map { pokemon ->
           val initialName = context.translator.pokemonName(pokemon)
-          val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
+          val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
             pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
           )
 
@@ -76,7 +76,7 @@ object TradeConfirmCommand: Command() {
 
         val partnerPokemonText = partnerPokemon.map { pokemon ->
           val initialName = context.translator.pokemonName(pokemon)
-          val (leveledUp, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
+          val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
             pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
           )
 
