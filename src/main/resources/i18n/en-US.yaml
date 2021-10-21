@@ -157,7 +157,85 @@ misc:
     usage: Usage
     weight: Weight
     xp: XP
+    noBids: No Bids
 modules:
+  auctions:
+    commands:
+      list:
+        errors:
+          inTrade: You can't post auctions while in a trade.
+          noPokemonProvided: Please provide the pokémon you would like to list.
+          startingBidPrice: The starting bid can't be less than 1,000 credits or more than 10,000,000 credits!
+        confirmation:
+          description: "Please confirm you would like to start an auction for your **IV{{pokemonIV}} {{pokemonName}}**."
+          title: Auction Post
+        confirmed:
+          description: |-
+            You have posted your **IV{{pokemonIV}} {{pokemonName}}** on the auction.
+            IV: **{{pokemonIV}}**
+            End Time: **{{formattedDate}}**
+            Starting Bid: **{{startingBid}}**
+          title: Auction Posted
+      unlist:
+        confirmations:
+          description: "Please confirm you would like to remove an auction for **IV{{pokemonIV}} {{pokemonName}}**."
+          title: Remove An Auction
+        confirmed:
+          description: Auction Removed
+          title: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the auction and added back to your inventory."
+        errors:
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          notYourAuction: You can't unlist an auction that isn't yours.
+          bidsActive: You can't unlist an auction that has bids on it.
+          noPokemonFound: The auctioned pokemon seems to be lost?
+          noAuctionId: Please provide a valid auction ID.
+      bid:
+        outbid:
+          description: {{bidder}} outbid you on the auction for the **Auction ID{{ID}} Pokemon {{pokemonName}}** by **{{bidDifference}} credits**.
+          title: You have been outbid
+        confirmed:
+          title: Bid Posted
+          description: Successfully set a bid of **{{bid}}** on **IV{{pokemonIV}} {{pokemonName}}**.
+        confirmation:
+          description: Please confirm you would like to bid **{{bid}} credits** for **IV{{pokemonIV}} {{pokemonName}}**.
+          title: Bid Confirmation
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          selfBid: You can't bid on your own auction!
+          noPokemonFound: The auctioned pokemon seems to be lost?
+          noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
+          topBid: You already have the top bid of **{{bid}}**.
+          bidTooLow: You must bid at least **{{bid}} credits** on this auction.
+          notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
+      info:
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          noPokemonFound: The auctioned pokemon seems to be lost?
+        displayInfo:
+          description: |-
+            **Auction ID**: {{auctionId}}
+            **Starting Bid**: {{startingBid}} Credits
+            **Bids Amount**: {{bidCount}} Bids
+            **Ending Time**: {{endingTime}}
+            **Current Bid**: {{currentBid}}
+            **XP**: {{XP}}
+            **Gender**: {{gender}}
+            **Nature**: {{nature}}
+            **HP**: {{hp}}/31
+            **Attack**: {{attack}}/31
+            **Defense**: {{defense}}/31
+            **Sp. Atk**: {{special-attack}}/31
+            **Sp. Def**: {{special-defense}}/31
+            **Speed**: {{speed}}/31
+            **Total IV**: {{ivPercentage}}
+          title: Level {{pokemonLevel}} {{pokemonName}} | {{auctionId}} | Auction Info
+      auctions:
+        embeds:
+          title: 🎪 Auctions
+        errors:
+          noResults: No auctions found.
   trading:
     commands:
       trade:

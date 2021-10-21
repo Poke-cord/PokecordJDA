@@ -121,6 +121,10 @@ class Cache {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
   }
 
+  suspend fun auctionIdLock(): RLock {
+    return redissonClient.getFairLock("auction_id")
+  }
+
   suspend fun clearGiftLocks() {
     currentGifts.deleteAsync().awaitSuspending()
   }

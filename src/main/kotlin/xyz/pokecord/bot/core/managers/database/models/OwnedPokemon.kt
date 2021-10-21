@@ -71,13 +71,13 @@ data class OwnedPokemon(
     PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
   }
 
-  enum class TransferStates(var errMessage: String? = null) {
+  enum class TransferStates(var errMessage: String) {
     STICKY("You cannot transfer this pokemon because its sticky."),
     FAVORITE("You cannot transfer this pokemon because its favorited."),
     TRADE_SESSION("You cannot transfer this pokemon because its in a trade session."),
     NO_POKEMON("You cannot transfer this pokemon because its the only one you have."),
     SELECTED("You cannot transfer this pokemon because you have it selected."),
-    SUCCESS
+    SUCCESS("The pokemon is transferable.")
   }
 
   suspend fun transferable(database: Database): TransferStates {

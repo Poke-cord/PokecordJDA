@@ -60,7 +60,7 @@ object TradeAddPokemonCommand : Command() {
         if (transfer != OwnedPokemon.TransferStates.SUCCESS) {
           context.reply(
             context.embedTemplates.error(
-              transfer.errMessage!!,
+              transfer.errMessage,
               context.translate("modules.trading.commands.add.errors.notTransferableTitle")
             ).build()
           ).queue()

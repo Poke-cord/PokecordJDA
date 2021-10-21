@@ -67,6 +67,9 @@ class PokemonRepository(
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
 
+  suspend fun updateOwnerId(pokemon: Id<OwnedPokemon>, newOwnerId: String) =
+    collection.updateOne(OwnedPokemon::_id eq pokemon, set(OwnedPokemon::ownerId setTo newOwnerId))
+
   suspend fun claimUnclaimedPokemon(ownerId: String, session: ClientSession? = null): CatchRewardClaimResult {
     val unclaimedMythical = when (session) {
       null -> collection.updateMany(
