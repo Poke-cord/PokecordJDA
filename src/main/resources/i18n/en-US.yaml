@@ -191,11 +191,11 @@ modules:
           noAuctionId: Please provide a valid auction ID.
       bid:
         outbid:
-          description: {{bidder}} outbid you on the auction for the **Auction ID{{ID}} Pokemon {{pokemonName}}** by **{{bidDifference}} credits**.
+          description: "{{bidder}} outbid you on the auction for the **Auction ID{{ID}} Pokemon {{pokemonName}}** by **{{bidDifference}} credits**."
           title: You have been outbid
         confirmed:
           title: Bid Posted
-          description: Successfully set a bid of **{{bid}}** on **IV{{pokemonIV}} {{pokemonName}}**.
+          description: "Successfully set a bid of **{{bid}}** on **IV{{pokemonIV}} {{pokemonName}}**."
         confirmation:
           description: Please confirm you would like to bid **{{bid}} credits** for **IV{{pokemonIV}} {{pokemonName}}**.
           title: Bid Confirmation

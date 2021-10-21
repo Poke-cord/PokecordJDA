@@ -73,7 +73,7 @@ object BidCommand: Command() {
     }
 
     val userData = context.getUserData()
-    val highestBid = context.bot.database.auctionRepository.getHighestBid(auction)
+    val highestBid = auction.highestBid
     if(highestBid != null) {
       if(userData.credits < highestBid.amount) {
         context.reply(

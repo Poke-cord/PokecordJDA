@@ -33,7 +33,7 @@ object InfoCommand: Command() {
       val auctionPokemon = context.bot.database.pokemonRepository.getPokemonById(auction.pokemon)
       if(auctionPokemon != null) {
         val pokemon = Pokemon.getById(auctionPokemon.id)
-        val highestBid = context.bot.database.auctionRepository.getHighestBid(auction)
+        val highestBid = auction.highestBid
         val xp = if(auctionPokemon.level >= 100) "Max" else auctionPokemon.xp.toString() + "/" + auctionPokemon.requiredXpToLevelUp().toString() + "xp"
 
         context.reply(
