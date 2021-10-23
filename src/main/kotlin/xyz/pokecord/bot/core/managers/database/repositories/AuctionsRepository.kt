@@ -1,36 +1,27 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import com.mongodb.client.ClientSession
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
+import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.*
-import org.bson.BsonDocument
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.coroutine.CoroutineFindPublisher
 import org.litote.kmongo.coroutine.aggregate
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.Bid
-import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
-import xyz.pokecord.bot.core.managers.database.models.User
-import xyz.pokecord.bot.core.structures.pokemon.Nature
-import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Type
 import xyz.pokecord.bot.utils.CountResult
 import xyz.pokecord.bot.utils.Json
-import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
 class AuctionsRepository(
   database: Database,
   private val collection: CoroutineCollection<Auction>,
   private val cacheMap: RMapCacheAsync<String, String>
-): Repository(database) {
+) : Repository(database) {
   override suspend fun createIndexes() {
     collection.createIndex(Indexes.ascending("id"))
     collection.createIndex(Indexes.ascending("ownerId"))
@@ -52,8 +43,9 @@ class AuctionsRepository(
     cacheMap.putAsync(auction.id.toString(), Json.encodeToString(auction.copy())).awaitSuspending()
   }
 
-  suspend fun createAuction(auction: Auction) {
-    collection.insertOne(auction)
+  suspend fun createAuction(auction: Auction, clientSession: ClientSession? = null) {
+    if (clientSession == null) collection.insertOne(auction)
+    else collection.insertOne(clientSession, auction)
     cacheMap.putAsync(auction.id.toString(), Json.encodeToString(auction.copy())).awaitSuspending()
   }
 
@@ -107,5 +99,13 @@ class AuctionsRepository(
     ).toList()
     if (result.isEmpty()) return 0
     return result.first().count
+  }
+
+  suspend fun getLatestAuction(clientSession: ClientSession? = null): Auction? {
+    return if (clientSession == null) {
+      collection.find(EMPTY_BSON).sort(descending(Auction::id)).limit(1).first()
+    } else {
+      collection.find(clientSession, EMPTY_BSON).sort(descending(Auction::id)).limit(1).first()
+    }
   }
 }

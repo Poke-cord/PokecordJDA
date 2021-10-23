@@ -9,7 +9,7 @@ import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.utils.withCoroutineLock
 
-object ListCommand: Command() {
+object ListCommand : Command() {
   override val name = "List"
   override var aliases = arrayOf("create")
 
@@ -18,10 +18,10 @@ object ListCommand: Command() {
     context: ICommandContext,
     @Argument pokemonRes: PokemonResolvable?,
     @Argument startingBid: Int?,
-      @Argument time: String?
+    @Argument time: String?
   ) {
     if (!context.hasStarted(true)) return
-    if(context.getTradeState() != null) {
+    if (context.getTradeState() != null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.inTrade")
@@ -32,7 +32,7 @@ object ListCommand: Command() {
 
     val userData = context.getUserData()
     val pokemon = context.resolvePokemon(context.author, userData, pokemonRes)
-    if(pokemon == null) {
+    if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.noPokemonProvided")
@@ -41,7 +41,7 @@ object ListCommand: Command() {
       return
     }
 
-    if(startingBid != null && startingBid < 10 && startingBid > 10000000) {
+    if (startingBid != null && startingBid < 10 && startingBid > 10000000) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.startingBidPrice")
@@ -53,7 +53,7 @@ object ListCommand: Command() {
     val endingTimestamp = 4 * 60 * 60 * 1000
 
     val transferable = pokemon.transferable(context.bot.database)
-    if(transferable != OwnedPokemon.TransferStates.SUCCESS) {
+    if (transferable != OwnedPokemon.TransferStates.SUCCESS) {
       context.reply(
         context.embedTemplates.error(transferable.errMessage).build()
       ).queue()
@@ -74,24 +74,23 @@ object ListCommand: Command() {
       )
     )
 
-    if(confirmed) {
-      context.bot.cache.auctionIdLock().withCoroutineLock {
+    if (confirmed) {
+      context.bot.cache.getAuctionIdLock().withCoroutineLock {
         val session = context.bot.database.startSession()
         session.use {
           session.startTransaction()
-          // Get the last id of auctions
-          // Set it to the create auction
-          // Incease it by one
+          val latestAuctionId = context.bot.database.auctionRepository.getLatestAuction(session)?.id ?: 0
           context.bot.database.auctionRepository.createAuction(
             Auction(
-              1,
+              latestAuctionId + 1,
               pokemon.ownerId,
               pokemon._id,
               endingTimestamp,
               _isNew = true
-            )
+            ),
+            session
           )
-          context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, context.jda.selfUser.id)
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "auction-pokemon-holder", session)
           session.commitTransactionAndAwait()
         }
       }
