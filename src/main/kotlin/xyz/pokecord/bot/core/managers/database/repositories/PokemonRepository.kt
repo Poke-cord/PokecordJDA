@@ -67,8 +67,16 @@ class PokemonRepository(
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
 
-  suspend fun updateOwnerId(pokemon: Id<OwnedPokemon>, newOwnerId: String) =
-    collection.updateOne(OwnedPokemon::_id eq pokemon, set(OwnedPokemon::ownerId setTo newOwnerId))
+  suspend fun updateOwnerId(pokemonId: Id<OwnedPokemon>, newOwnerId: String, clientSession: ClientSession? = null) {
+    if (clientSession == null) {
+      collection.updateOne(
+        OwnedPokemon::_id eq pokemonId,
+        set(OwnedPokemon::ownerId setTo newOwnerId)
+      )
+    } else {
+      collection.updateOne(clientSession, OwnedPokemon::_id eq pokemonId, set(OwnedPokemon::ownerId setTo newOwnerId))
+    }
+  }
 
   suspend fun claimUnclaimedPokemon(ownerId: String, session: ClientSession? = null): CatchRewardClaimResult {
     val unclaimedMythical = when (session) {
@@ -234,10 +242,10 @@ class PokemonRepository(
     collection.updateOne(
       session,
       OwnedPokemon::_id eq pokemon._id,
-        set(
-          OwnedPokemon::ownerId setTo ownerId,
-          OwnedPokemon::favorite setTo false
-        ),
+      set(
+        OwnedPokemon::ownerId setTo ownerId,
+        OwnedPokemon::favorite setTo false
+      ),
     )
   }
 
