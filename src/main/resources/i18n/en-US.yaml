@@ -218,7 +218,7 @@ modules:
             **Auction ID**: {{auctionId}}
             **Starting Bid**: {{startingBid}} Credits
             **Bids Amount**: {{bidCount}} Bids
-            **Ending Time**: {{endingTime}}
+            **Time Left**: {{timeLeft}}
             **Current Bid**: {{currentBid}}
             **XP**: {{XP}}
             **Gender**: {{gender}}

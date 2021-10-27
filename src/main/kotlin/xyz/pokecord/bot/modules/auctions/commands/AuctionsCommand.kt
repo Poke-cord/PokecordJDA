@@ -26,10 +26,8 @@ object AuctionsCommand: ParentCommand() {
     return auctions.map {
       val auctionPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
       if(auctionPokemon != null) {
-        val auctionId = it.id
-
-        val pokemonName = context.translator.pokemonDisplayName(auctionPokemon)
         val pokemonIv = auctionPokemon.ivPercentage
+        val pokemonName = context.translator.pokemonDisplayName(auctionPokemon)
 
         val highestBid = it.highestBid
         val outbid = if(highestBid != null) highestBid.userId != context.author.id else false
@@ -38,9 +36,8 @@ object AuctionsCommand: ParentCommand() {
         } else "Starting Bid: ${it.startingBid}"
         val outbidStatus = if(showBids && outbid) " | Outbid" else ""
 
-        val timeLeft = it.endsAtTimestamp - System.currentTimeMillis()
-        if(timeLeft > 0) {
-          "$auctionId IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus | Time Left ${timeLeft.humanizeMs()}"
+        if(it.timeLeft > 0) {
+          "${it.id} IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus | Time Left ${it.timeLeft.humanizeMs()}"
         }
       }
     }.joinToString("\n")

@@ -5,8 +5,11 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
+import xyz.pokecord.bot.utils.extensions.humanizeMs
+import xyz.pokecord.bot.utils.extensions.parseTime
 import xyz.pokecord.utils.withCoroutineLock
 
 object ListCommand : Command() {
@@ -75,6 +78,7 @@ object ListCommand : Command() {
     )
 
     if (confirmed) {
+      val auctionTime = time?.parseTime() ?: Config.defaultAuctionTime
       context.bot.cache.getAuctionIdLock().withCoroutineLock {
         val session = context.bot.database.startSession()
         session.use {
@@ -85,7 +89,7 @@ object ListCommand : Command() {
               latestAuctionId + 1,
               pokemon.ownerId,
               pokemon._id,
-              endingTimestamp,
+              auctionTime,
               _isNew = true
             ),
             session
@@ -102,7 +106,7 @@ object ListCommand : Command() {
             mapOf(
               "pokemonIV" to pokemon.ivPercentage,
               "pokemonName" to context.translator.pokemonDisplayName(pokemon),
-              "formattedDate" to endingTimestamp.toString(), // Change this to formatted date
+              "formattedDate" to auctionTime.humanizeMs(),
               "startingBid" to startingBid.toString()
             )
           ),

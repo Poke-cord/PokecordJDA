@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.auctions.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.utils.extensions.humanizeMs
 
 object InfoCommand: Command() {
   override val name = "Info"
@@ -45,7 +46,7 @@ object InfoCommand: Command() {
                   "auctionId" to auction.id.toString(),
                   "startingBid" to auction.startingBid.toString(),
                   "bidCount" to auction.bids.size.toString(),
-                  "endingTime" to auction.endsAtTimestamp.toString(),
+                  "timeLeft" to auction.timeLeft.humanizeMs(),
                   "currentBid" to (highestBid?.amount?.toString() ?: context.translate("misc.texts.noBids")),
                   "XP" to xp,
                   "gender" to context.translator.gender(auctionPokemon.gender),

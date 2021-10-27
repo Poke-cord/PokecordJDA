@@ -17,7 +17,7 @@ data class Auction(
   val ownerId: String,
   val pokemon: @Contextual Id<OwnedPokemon>,
 
-  val endsAtTimestamp: Int,
+  val timeLeft: Long,
   val startingBid: Int = 1000,
   var ended: Boolean = false,
 
