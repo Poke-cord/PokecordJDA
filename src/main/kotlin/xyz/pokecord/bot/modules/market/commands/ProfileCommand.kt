@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.market.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.User
@@ -13,14 +13,11 @@ object ProfileCommand: Command() {
 
   suspend fun execute(
     context: ICommandContext,
-    @Argument(optional = true) bids: String?,
     @Argument(optional = true) page: Int?,
     @Argument(optional = true) user: User?
   ) {
-    print("ran")
     if(!context.hasStarted(true)) return
 
-    val showBids = bids == "b" || bids == "bid" || bids == "bids"
     val targetUser = user ?: context.author
     val targetData = context.bot.database.userRepository.getUser(targetUser)
     if(!context.isStaff() && user != null && targetData.progressPrivate) {
@@ -32,16 +29,16 @@ object ProfileCommand: Command() {
       EmbedBuilder()
         .setTitle(
           context.translate(
-            "modules.auctions.commands.profile.embeds.title",
-            "userTag" to targetUser.asTag
+            "modules.market.commands.profile.embeds.title",
+            "user" to targetUser.asTag
           )
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val count = context.bot.database.auctionRepository.getAuctionCount(targetUser.id)
+    val count = context.bot.database.marketRepository.getListingCount(targetUser.id)
     if (count < 1) {
       context.reply(
-        templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.profile.errors.noResults"))
+        templateEmbedBuilder.setDescription(context.translate("modules.market.commands.profile.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).build()
       ).queue()
       return
@@ -50,13 +47,13 @@ object ProfileCommand: Command() {
     val pageCount = ceil((count.toDouble() / 10)).toInt()
     val paginator = EmbedPaginator(context, pageCount, { pageIndex ->
       if (pageIndex >= pageCount) {
-        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
+        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
-      val auctionsList = context.bot.database.auctionRepository.getAuctionList(targetUser.id, skip = pageIndex * 10)
+      val listings = context.bot.database.marketRepository.getListings(targetUser.id, skip = pageIndex * 10)
       templateEmbedBuilder.clearFields().setFooter(null)
       templateEmbedBuilder.setDescription(
-        AuctionsCommand.formatAuctions(context, auctionsList, showBids)
+        MarketCommand.formatListings(context, listings)
       )
       templateEmbedBuilder
     }, if (page == null) 0 else page - 1)

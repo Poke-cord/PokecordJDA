@@ -24,6 +24,7 @@ class Database(cache: Cache) {
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>
+  private val marketCollection: CoroutineCollection<Listing>
   private val orderCollection: CoroutineCollection<Order>
   private val ownedPokemonCollection: CoroutineCollection<OwnedPokemon>
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
@@ -38,6 +39,7 @@ class Database(cache: Cache) {
   val configRepository: ConfigRepository
   val faqRepository: FAQRepository
   val guildRepository: GuildRepository
+  val marketRepository: MarketRepository
   val orderRepository: OrderRepository
   val pokemonRepository: PokemonRepository
   val rewardRepository: RewardRepository
@@ -66,6 +68,7 @@ class Database(cache: Cache) {
     faqCollection = database.getCollection()
     guildCollection = database.getCollection()
     inventoryItemsCollection = database.getCollection()
+    marketCollection = database.getCollection()
     orderCollection = database.getCollection()
     ownedPokemonCollection = database.getCollection()
     spawnChannelCollection = database.getCollection()
@@ -80,6 +83,8 @@ class Database(cache: Cache) {
     configRepository = ConfigRepository(this, configCollection)
     faqRepository = FAQRepository(this, faqCollection)
     guildRepository = GuildRepository(this, guildCollection, cache.guildMap)
+
+    marketRepository = MarketRepository(this, marketCollection, cache.listingMap)
     orderRepository = OrderRepository(this, orderCollection)
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
@@ -95,6 +100,7 @@ class Database(cache: Cache) {
     auctionRepository.createIndexes()
     faqRepository.createIndexes()
     guildRepository.createIndexes()
+    marketRepository.createIndexes()
     orderRepository.createIndexes()
     pokemonRepository.createIndexes()
     rewardRepository.createIndexes()

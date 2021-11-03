@@ -35,7 +35,7 @@ object ListCommand : Command() {
 
     val userData = context.getUserData()
     val pokemon = context.resolvePokemon(context.author, userData, pokemonRes)
-    if (pokemon == null) {
+    if (pokemonRes == null || pokemon == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.noPokemonProvided")
@@ -52,8 +52,6 @@ object ListCommand : Command() {
       ).queue()
       return
     }
-
-    val endingTimestamp = 4 * 60 * 60 * 1000
 
     val transferable = pokemon.transferable(context.bot.database)
     if (transferable != OwnedPokemon.TransferStates.SUCCESS) {
@@ -90,6 +88,7 @@ object ListCommand : Command() {
               pokemon.ownerId,
               pokemon._id,
               auctionTime,
+              startingBid ?: Config.defaultAuctionStartingBid,
               _isNew = true
             ),
             session
@@ -107,7 +106,7 @@ object ListCommand : Command() {
               "pokemonIV" to pokemon.ivPercentage,
               "pokemonName" to context.translator.pokemonDisplayName(pokemon),
               "formattedDate" to auctionTime.humanizeMs(),
-              "startingBid" to startingBid.toString()
+              "startingBid" to (startingBid ?: Config.defaultAuctionStartingBid).toString()
             )
           ),
           context.translate("modules.auctions.commands.list.confirmed.title"),

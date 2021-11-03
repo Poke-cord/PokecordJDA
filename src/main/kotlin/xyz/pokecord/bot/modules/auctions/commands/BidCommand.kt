@@ -108,64 +108,6 @@ object BidCommand : Command() {
           ).queue()
           return@withCoroutineLock
         }
-
-        val confirmation = Confirmation(context, context.author.id)
-        val confirmed = confirmation.result(
-          context.embedTemplates.confirmation(
-            context.translate(
-              "modules.auctions.commands.bid.confirmation.description",
-              mapOf(
-                "bid" to bidAmount.toString(),
-                "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonDisplayName(pokemon)
-              )
-            ),
-            context.translate("modules.auctions.commands.bid.confirmation.title")
-          )
-        )
-
-        if (confirmed) {
-          val session = context.bot.database.startSession()
-
-          val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
-          val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
-          session.use {
-            session.startTransaction()
-            context.bot.database.userRepository.incCredits(highestBidUserData, bidAmount, session)
-            context.bot.database.userRepository.incCredits(userData, -bidAmount, session)
-            context.bot.database.auctionRepository.insertBid(auction, Bid(context.author.id, bidAmount))
-            session.commitTransactionAndAwait()
-          }
-
-          highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
-            context.embedTemplates.normal(
-              context.translate(
-                "modules.auctions.commands.bid.outbid.description",
-                mapOf(
-                  "bidder" to context.author.asMention,
-                  "ID" to auction.id.toString(),
-                  "pokemonName" to context.translator.pokemonDisplayName(pokemon),
-                  "bidDifference" to (highestBid.amount - bidAmount).toString()
-                )
-              ),
-              context.translate("modules.auctions.commands.bid.outbid.title")
-            ).build()
-          ).queue()
-
-          context.reply(
-            context.embedTemplates.normal(
-              context.translate(
-                "modules.auctions.commands.bid.confirmed.description",
-                mapOf(
-                  "bid" to bidAmount.toString(),
-                  "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonDisplayName(pokemon)
-                )
-              ),
-              context.translate("modules.auctions.commands.bid.confirmed.title")
-            ).build()
-          ).queue()
-        }
       } else {
         if (auction.startingBid > bidAmount) {
           context.reply(
@@ -178,6 +120,68 @@ object BidCommand : Command() {
           ).queue()
           return@withCoroutineLock
         }
+      }
+
+      val confirmation = Confirmation(context, context.author.id)
+      val confirmed = confirmation.result(
+        context.embedTemplates.confirmation(
+          context.translate(
+            "modules.auctions.commands.bid.confirmation.description",
+            mapOf(
+              "bid" to bidAmount.toString(),
+              "pokemonIV" to pokemon.ivPercentage,
+              "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+            )
+          ),
+          context.translate("modules.auctions.commands.bid.confirmation.title")
+        )
+      )
+
+      if (confirmed) {
+        val session = context.bot.database.startSession()
+        session.use {
+          session.startTransaction()
+
+          if(highestBid != null) {
+            val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
+            val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
+
+            context.bot.database.userRepository.incCredits(highestBidUserData, bidAmount, session)
+
+            highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
+              context.embedTemplates.normal(
+                context.translate(
+                  "modules.auctions.commands.bid.outbid.description",
+                  mapOf(
+                    "bidder" to context.author.asMention,
+                    "ID" to auction.id.toString(),
+                    "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+                    "bidDifference" to (highestBid.amount - bidAmount).toString()
+                  )
+                ),
+                context.translate("modules.auctions.commands.bid.outbid.title")
+              ).build()
+            ).queue()
+          }
+
+          context.bot.database.userRepository.incCredits(userData, -bidAmount, session)
+          context.bot.database.auctionRepository.insertBid(auction, Bid(context.author.id, bidAmount))
+          session.commitTransactionAndAwait()
+        }
+
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "modules.auctions.commands.bid.confirmed.description",
+              mapOf(
+                "bid" to bidAmount.toString(),
+                "pokemonIV" to pokemon.ivPercentage,
+                "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+              )
+            ),
+            context.translate("modules.auctions.commands.bid.confirmed.title")
+          ).build()
+        ).queue()
       }
     }
   }

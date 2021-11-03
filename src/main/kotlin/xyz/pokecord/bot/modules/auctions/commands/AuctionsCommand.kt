@@ -3,10 +3,7 @@ package xyz.pokecord.bot.modules.auctions.commands
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Auction
-import xyz.pokecord.bot.core.managers.database.repositories.AuctionsRepository
-import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
-import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
@@ -23,7 +20,7 @@ object AuctionsCommand: ParentCommand() {
     auctions: List<Auction>,
     showBids: Boolean = false,
   ): String {
-    return auctions.map {
+    val desc = auctions.map {
       val auctionPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
       if(auctionPokemon != null) {
         val pokemonIv = auctionPokemon.ivPercentage
@@ -36,11 +33,13 @@ object AuctionsCommand: ParentCommand() {
         } else "Starting Bid: ${it.startingBid}"
         val outbidStatus = if(showBids && outbid) " | Outbid" else ""
 
-        if(it.timeLeft > 0) {
+        if(it.timeLeft > 0 && !it.ended) {
           "${it.id} IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus | Time Left ${it.timeLeft.humanizeMs()}"
-        }
-      }
-    }.joinToString("\n")
+        } else null
+      } else null
+    }
+    print(desc)
+    return desc.filterNotNull().joinToString("\n")
   }
 
   @Executor
