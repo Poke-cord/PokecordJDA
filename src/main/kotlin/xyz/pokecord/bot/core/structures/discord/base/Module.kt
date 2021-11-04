@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.requests.GatewayIntent
+import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
@@ -58,7 +59,11 @@ abstract class Module(
   fun addCommand(command: Command) {
     val executorFunction =
       command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
-        ?: return
+
+    if (executorFunction == null) {
+      logger.warn("${command::class.java.name} doesn't have a function annotated with ${Command.Executor::class.java.name}")
+      return
+    }
 
     var allConsumed = false
 
@@ -137,5 +142,9 @@ abstract class Module(
 //        }
       }
     }
+  }
+
+  companion object {
+    private val logger = LoggerFactory.getLogger(Module::class.java)
   }
 }
