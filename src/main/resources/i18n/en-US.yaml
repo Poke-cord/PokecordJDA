@@ -180,6 +180,7 @@ modules:
             IV: **{{pokemonIV}}**
             End Time: **{{formattedDate}}**
             Starting Bid: **{{startingBid}}**
+            Bid Increment: **{{bidIncrement}}**
           title: Auction Posted
       unlist:
         confirmation:
@@ -213,7 +214,10 @@ modules:
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
           notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
           topBid: You already have the top bid of **{{bid}}**.
-          bidTooLow: You must bid at least **{{bid}} credits** on this auction.
+          bidTooLow: |-
+            You must bid at least **{{bid}} credits** on this auction.
+            The bid increment is currently set to **{{bidIncrement}} credits**.
+
       info:
         errors:
           noAuctionId: Please provide a valid auction ID.

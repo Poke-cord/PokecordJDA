@@ -21,7 +21,8 @@ object ListCommand : Command() {
     context: ICommandContext,
     @Argument pokemonRes: PokemonResolvable?,
     @Argument startingBid: Int?,
-    @Argument time: String?
+    @Argument bidIncrement: Int?,
+    @Argument time: String?,
   ) {
     if (!context.hasStarted(true)) return
     if (context.getTradeState() != null) {
@@ -82,36 +83,36 @@ object ListCommand : Command() {
         session.use {
           session.startTransaction()
           val latestAuctionId = context.bot.database.auctionRepository.getLatestAuction(session)?.id ?: 0
-          context.bot.database.auctionRepository.createAuction(
-            Auction(
-              latestAuctionId + 1,
-              pokemon.ownerId,
-              pokemon._id,
-              auctionTime,
-              startingBid ?: Config.defaultAuctionStartingBid,
-              _isNew = true
-            ),
-            session
+          val auction = Auction(
+            latestAuctionId + 1,
+            pokemon.ownerId,
+            pokemon._id,
+            auctionTime,
+            startingBid ?: Config.defaultStartingBid,
+            bidIncrement ?: Config.defaultBidIncrement,
+            _isNew = true
           )
+          context.bot.database.auctionRepository.createAuction(auction, session)
           context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "auction-pokemon-holder", session)
           session.commitTransactionAndAwait()
+
+          context.reply(
+            context.embedTemplates.normal(
+              context.translate(
+                "modules.auctions.commands.list.confirmed.description",
+                mapOf(
+                  "pokemonIV" to pokemon.ivPercentage,
+                  "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+                  "formattedDate" to auction.timeLeft.humanizeMs(),
+                  "startingBid" to auction.startingBid.toString(),
+                  "bidIncrement" to auction.bidIncrement.toString()
+                )
+              ),
+              context.translate("modules.auctions.commands.list.confirmed.title"),
+            ).build()
+          ).queue()
         }
       }
-
-      context.reply(
-        context.embedTemplates.normal(
-          context.translate(
-            "modules.auctions.commands.list.confirmed.description",
-            mapOf(
-              "pokemonIV" to pokemon.ivPercentage,
-              "pokemonName" to context.translator.pokemonDisplayName(pokemon),
-              "formattedDate" to auctionTime.humanizeMs(),
-              "startingBid" to (startingBid ?: Config.defaultAuctionStartingBid).toString()
-            )
-          ),
-          context.translate("modules.auctions.commands.list.confirmed.title"),
-        ).build()
-      ).queue()
     }
   }
 }

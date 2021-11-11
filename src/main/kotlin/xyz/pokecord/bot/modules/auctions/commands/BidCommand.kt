@@ -97,12 +97,15 @@ object BidCommand : Command() {
             ).build()
           ).queue()
           return@withCoroutineLock
-        } else if (highestBid.amount + 100 > bidAmount) {
+        } else if (highestBid.amount + auction.bidIncrement > bidAmount) {
           context.reply(
             context.embedTemplates.error(
               context.translate(
                 "modules.auctions.commands.bid.errors.bidTooLow",
-                "bid" to (highestBid.amount + 100).toString()
+                mapOf(
+                  "bid" to (highestBid.amount + auction.bidIncrement).toString(),
+                  "bidIncrement" to auction.bidIncrement.toString()
+                )
               )
             ).build()
           ).queue()

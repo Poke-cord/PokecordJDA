@@ -18,8 +18,9 @@ data class Auction(
   val ownerId: String,
   val pokemon: @Contextual Id<OwnedPokemon>,
 
-  val timeLeft: Long,
-  val startingBid: Int = Config.defaultAuctionStartingBid,
+  val timeLeft: Long = Config.defaultAuctionTime,
+  val startingBid: Int = Config.defaultStartingBid,
+  val bidIncrement: Int = Config.defaultBidIncrement,
   var ended: Boolean = false,
 
   val bids: MutableList<Bid> = mutableListOf(),
