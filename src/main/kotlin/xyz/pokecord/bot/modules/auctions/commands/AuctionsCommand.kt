@@ -38,7 +38,6 @@ object AuctionsCommand: ParentCommand() {
         } else null
       } else null
     }
-    print(desc)
     return desc.filterNotNull().joinToString("\n")
   }
 

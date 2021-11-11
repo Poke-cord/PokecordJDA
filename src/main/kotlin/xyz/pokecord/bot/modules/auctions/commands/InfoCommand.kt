@@ -8,6 +8,7 @@ import xyz.pokecord.bot.utils.extensions.humanizeMs
 object InfoCommand: Command() {
   override val name = "Info"
 
+  @Executor
   suspend fun execute(
     context: ICommandContext,
     @Argument auctionId: Int?

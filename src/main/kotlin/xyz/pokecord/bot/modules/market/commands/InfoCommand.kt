@@ -7,6 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 object InfoCommand: Command() {
   override val name = "Info"
 
+  @Executor
   suspend fun execute(
     context: ICommandContext,
     @Argument listingId: Int?

@@ -11,6 +11,7 @@ import kotlin.math.ceil
 object ProfileCommand: Command() {
   override val name = "Profile"
 
+  @Executor
   suspend fun execute(
     context: ICommandContext,
     @Argument(optional = true) page: Int?,
