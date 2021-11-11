@@ -4,6 +4,7 @@ import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.User
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
@@ -20,8 +21,6 @@ object GiftPokemonCommand : Command() {
     @Argument(name = "pokemon") pokemonResolvable: PokemonResolvable?
   ) {
     if (!context.hasStarted(true)) return
-
-    // TODO: check battle and trade state
 
     if (receiver == null) {
       context.reply(
@@ -67,10 +66,8 @@ object GiftPokemonCommand : Command() {
     }
 
     var userData = context.getUserData()
-    val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)
-
-    when {
-      pokemon == null -> {
+    when (val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)) {
+      null -> {
         context.reply(
           context.embedTemplates.error(
             context.translate("misc.errors.pokemonNotFound")
@@ -78,23 +75,18 @@ object GiftPokemonCommand : Command() {
         ).queue()
         return
       }
-      userData.selected == pokemon._id -> {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.pokemon.commands.gift.errors.selectedPokemon")
-          ).build()
-        ).queue()
-        return
-      }
-      pokemon.favorite -> {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.pokemon.commands.gift.errors.favoritePokemon")
-          ).build()
-        ).queue()
-        return
-      }
       else -> {
+        val transfer = pokemon.transferable(context.bot.database)
+        if (transfer != OwnedPokemon.TransferStates.SUCCESS) {
+          context.reply(
+            context.embedTemplates.error(
+              transfer.errMessage,
+              context.translate("modules.trading.commands.add.errors.notTransferableTitle")
+            ).build()
+          ).queue()
+          return
+        }
+
         val confirmation = Confirmation(context, context.author.id)
         val confirmed = confirmation.result(
           context.embedTemplates.confirmation(

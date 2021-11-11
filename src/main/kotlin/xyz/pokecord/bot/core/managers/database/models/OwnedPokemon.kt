@@ -82,7 +82,7 @@ data class OwnedPokemon(
 
   suspend fun transferable(database: Database): TransferStates {
     if(this.sticky) return TransferStates.STICKY
-    else if(this.favorite) return TransferStates.FAVORITE
+    if(this.favorite) return TransferStates.FAVORITE
 
     val tradeData = database.tradeRepository.getTraderData(this.ownerId)
     if(tradeData != null) {

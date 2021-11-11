@@ -351,7 +351,7 @@ class PokemonRepository(
       updatesBson.add(set(OwnedPokemon::id setTo pokemon.id))
     }
 
-    if (leveledUp || evolved || updateInDb) {
+    if (updatesBson.isNotEmpty() && updateInDb) {
       collection.updateOne(
         OwnedPokemon::_id eq pokemon._id,
         combine(updatesBson)

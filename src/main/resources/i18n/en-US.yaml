@@ -367,7 +367,7 @@ modules:
             description: "You have successfully added `{{credits}}` credits to your trading session."
           addPokemon:
             title: Pokémon Added
-            description: "{{pokemon}} has been added to your trading session."
+            description: "**{{pokemon}}** has been added to your trading session."
       remove:
         errors:
           notInTrade: You haven't started a trading session yet, please do that first.
