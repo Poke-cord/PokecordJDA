@@ -1,6 +1,8 @@
 package xyz.pokecord.bot.modules.auctions.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
+import org.litote.kmongo.eq
+import org.litote.kmongo.match
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
@@ -58,7 +60,7 @@ object AuctionsCommand: ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val count = context.bot.database.auctionRepository.getAuctionCount()
+    val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = arrayListOf(match(Auction::ended eq false)))
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))

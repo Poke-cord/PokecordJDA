@@ -9,6 +9,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.ContextEmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
@@ -25,7 +26,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   protected var userData: User? = null
 
   override val sentryBreadcrumbs = mutableListOf<Pair<Breadcrumb, Any?>>()
-  override val embedTemplates by lazy { EmbedTemplates(this) }
+  override val embedTemplates by lazy { ContextEmbedTemplates(this) }
   override val translator by lazy { Translator(this) }
 
   override fun shouldProcess(): Boolean {

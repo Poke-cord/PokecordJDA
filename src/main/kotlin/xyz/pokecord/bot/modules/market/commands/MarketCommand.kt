@@ -1,7 +1,10 @@
 package xyz.pokecord.bot.modules.market.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
+import org.litote.kmongo.eq
+import org.litote.kmongo.match
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.Listing
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -47,7 +50,7 @@ object MarketCommand: ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val count = context.bot.database.marketRepository.getListingCount()
+    val count = context.bot.database.marketRepository.getListingCount(aggregation = arrayListOf(match(Listing::sold eq false)))
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))

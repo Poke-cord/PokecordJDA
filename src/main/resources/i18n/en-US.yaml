@@ -217,7 +217,6 @@ modules:
           bidTooLow: |-
             You must bid at least **{{bid}} credits** on this auction.
             The bid increment is currently set to **{{bidIncrement}} credits**.
-
       info:
         errors:
           noAuctionId: Please provide a valid auction ID.
@@ -246,6 +245,17 @@ modules:
           title: 🎪 Auctions
         errors:
           noResults: There aren't any available auctions right now, please try again later.
+    tasks:
+      checker:
+        auctionEnded:
+          title: Auction Ended
+          description: Your auctioned **{{pokemon}}** has ended without any bids, your Pokémon has been refunded.
+        auctionSold:
+          title: Auction Sold
+          description: Your auctioned **{{pokemon}}** has sold for **{{amount}} credits**.
+        auctionWon:
+          title: Auction Won
+          description: You won the bidding war on **{{pokemon}}** at **{{amount}} credits**.
   market:
     commands:
       profile:

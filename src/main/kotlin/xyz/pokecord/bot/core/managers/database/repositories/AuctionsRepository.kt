@@ -1,10 +1,14 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import net.dv8tion.jda.api.utils.MiscUtil
+
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
+import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import net.dv8tion.jda.api.sharding.ShardManager
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -75,6 +79,13 @@ class AuctionsRepository(
     setCacheAuction(auction)
   }
 
+  suspend fun decTimeLeft(auction: Auction, amount: Long, session: ClientSession? = null) {
+    auction.timeLeft += amount
+    if (session == null) collection.updateOne(Auction::id eq auction.id, inc(Auction::timeLeft, amount))
+    else collection.updateOne(session, Auction::id eq auction.id, inc(Auction::timeLeft, amount))
+    setCacheAuction(auction)
+  }
+
   suspend fun getAuctionList(
     ownerId: String? = null,
     limit: Int? = 15,
@@ -107,5 +118,24 @@ class AuctionsRepository(
     } else {
       collection.find(clientSession, EMPTY_BSON).sort(descending(Auction::id)).limit(1).first()
     }
+  }
+
+  suspend fun auctionTask(interval: Long, shardManager: ShardManager): MutableList<Auction> {
+    val endedAuctions: MutableList<Auction> = mutableListOf()
+
+    collection.find(Auction::ended eq false).toFlow().collect {
+      val targetShard = MiscUtil.getShardForGuild(it.ownerId, shardManager.shardsTotal)
+      if (shardManager.getShardById(targetShard) != null) return@collect
+
+      it.timeLeft -= interval
+      if(it.timeLeft <= 0) {
+        endedAuctions.add(it)
+        endAuction(it)
+      } else {
+        decTimeLeft(it, interval)
+      }
+    }
+
+    return endedAuctions
   }
 }

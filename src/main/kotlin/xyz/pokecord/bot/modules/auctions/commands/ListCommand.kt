@@ -87,9 +87,9 @@ object ListCommand : Command() {
             latestAuctionId + 1,
             pokemon.ownerId,
             pokemon._id,
-            auctionTime,
             startingBid ?: Config.defaultStartingBid,
             bidIncrement ?: Config.defaultBidIncrement,
+            auctionTime,
             _isNew = true
           )
           context.bot.database.auctionRepository.createAuction(auction, session)
