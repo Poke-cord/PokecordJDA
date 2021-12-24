@@ -88,6 +88,7 @@ tasks {
   named<ShadowJar>("shadowJar") {
     archiveBaseName.set("pokecord")
     mergeServiceFiles()
+    isZip64 = true
   }
 
   withType<Test> {
