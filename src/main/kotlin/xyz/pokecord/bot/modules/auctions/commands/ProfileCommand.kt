@@ -18,7 +18,6 @@ object ProfileCommand: Command() {
     @Argument(optional = true) page: Int?,
     @Argument(optional = true) user: User?
   ) {
-    print("ran")
     if(!context.hasStarted(true)) return
 
     val showBids = bids == "b" || bids == "bid" || bids == "bids"

@@ -109,6 +109,12 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun toggleBidNotifications(userData: User) {
+    userData.bidNotifications = !userData.bidNotifications
+    collection.updateOne(User::id eq userData.id, set(User::bidNotifications setTo userData.bidNotifications))
+    setCacheUser(userData)
+  }
+
   suspend fun givePokemon(
     userData: User,
     pokemonId: Int,

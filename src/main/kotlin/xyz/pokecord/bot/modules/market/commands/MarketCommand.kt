@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.market.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.utils.TimeFormat
 import org.litote.kmongo.eq
 import org.litote.kmongo.match
 import xyz.pokecord.bot.api.ICommandContext
@@ -27,7 +28,7 @@ object MarketCommand: ParentCommand() {
         val pokemonIv = listingPokemon.ivPercentage
         val pokemonName = context.translator.pokemonDisplayName(listingPokemon)
         if(!it.sold) {
-          "${it.id} IV **$pokemonIv $pokemonName** | ${it.price}"
+          "`${it.id}` IV **$pokemonIv $pokemonName** | ${it.price}"
         }
       }
     }.joinToString("\n")
@@ -50,7 +51,8 @@ object MarketCommand: ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val count = context.bot.database.marketRepository.getListingCount(aggregation = arrayListOf(match(Listing::sold eq false)))
+    val aggregation = arrayListOf(match(Listing::sold eq false))
+    val count = context.bot.database.marketRepository.getListingCount(aggregation = aggregation)
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))
@@ -65,7 +67,7 @@ object MarketCommand: ParentCommand() {
         return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
-      val listings = context.bot.database.marketRepository.getListings(skip = pageIndex * 10)
+      val listings = context.bot.database.marketRepository.getListings(skip = pageIndex * 10, aggregation = aggregation)
       templateEmbedBuilder.clearFields().setFooter(null)
       templateEmbedBuilder.setDescription(formatListings(context, listings))
       templateEmbedBuilder

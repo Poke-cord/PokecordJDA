@@ -5,6 +5,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Bid
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.auctions.tasks.AuctionTask
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.utils.withCoroutineLock
 
@@ -117,7 +118,10 @@ object BidCommand : Command() {
             context.embedTemplates.error(
               context.translate(
                 "modules.auctions.commands.bid.errors.bidTooLow",
-                "bid" to auction.startingBid.toString()
+                mapOf(
+                  "bid" to auction.startingBid.toString(),
+                  "bidIncrement" to auction.bidIncrement.toString()
+                )
               )
             ).build()
           ).queue()
@@ -185,6 +189,24 @@ object BidCommand : Command() {
             context.translate("modules.auctions.commands.bid.confirmed.title")
           ).build()
         ).queue()
+
+        val owner = context.jda.retrieveUserById(auction.ownerId).await()
+        val ownerData = context.bot.database.userRepository.getUser(owner.id)
+        if(owner != null && ownerData.bidNotifications) {
+          val ownerDmChannel = owner.openPrivateChannel().await()
+          ownerDmChannel.sendMessageEmbeds(
+            context.embedTemplates.normal(
+              context.translate("modules.auctions.commands.bid.bidNotification.description",
+                mapOf("bidderTag" to context.author.asTag,
+                  "amount" to bidAmount.toString(),
+                  "pokemonIV" to pokemon.ivPercentage,
+                  "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+                )
+              ),
+              context.translate("modules.auctions.commands.bid.bidNotification.title")
+            ).build()
+          ).queue()
+        }
       }
     }
   }

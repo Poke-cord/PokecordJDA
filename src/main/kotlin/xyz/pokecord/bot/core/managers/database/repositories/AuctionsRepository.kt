@@ -80,9 +80,9 @@ class AuctionsRepository(
   }
 
   suspend fun decTimeLeft(auction: Auction, amount: Long, session: ClientSession? = null) {
-    auction.timeLeft += amount
-    if (session == null) collection.updateOne(Auction::id eq auction.id, inc(Auction::timeLeft, amount))
-    else collection.updateOne(session, Auction::id eq auction.id, inc(Auction::timeLeft, amount))
+    auction.timeLeft -= amount
+    if (session == null) collection.updateOne(Auction::id eq auction.id, inc(Auction::timeLeft, -amount))
+    else collection.updateOne(session, Auction::id eq auction.id, inc(Auction::timeLeft, -amount))
     setCacheAuction(auction)
   }
 
@@ -94,7 +94,7 @@ class AuctionsRepository(
   ): List<Auction> {
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
-    if (ownerId != null) aggregation.add(Auction::ownerId eq ownerId)
+    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<Auction>(*aggregation.toTypedArray())
     return result.toList()
   }
@@ -103,7 +103,7 @@ class AuctionsRepository(
     ownerId: String? = null,
     aggregation: ArrayList<Bson> = arrayListOf()
   ): Int {
-    if (ownerId != null) aggregation.add(Auction::ownerId eq ownerId)
+    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(
       *aggregation.toTypedArray(),
       Aggregates.count("count")
@@ -125,7 +125,7 @@ class AuctionsRepository(
 
     collection.find(Auction::ended eq false).toFlow().collect {
       val targetShard = MiscUtil.getShardForGuild(it.ownerId, shardManager.shardsTotal)
-      if (shardManager.getShardById(targetShard) != null) return@collect
+      if (shardManager.getShardById(targetShard) == null) return@collect
 
       it.timeLeft -= interval
       if(it.timeLeft <= 0) {

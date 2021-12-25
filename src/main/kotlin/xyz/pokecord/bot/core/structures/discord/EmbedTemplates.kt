@@ -13,16 +13,16 @@ open class EmbedTemplates {
     YELLOW(0xf0e365)
   }
 
+  open suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
+    return I18n.translate(null, key, data, default)
+  }
+
   open suspend fun translate(key: String, vararg data: Pair<String, String>): String {
     return I18n.translate(null, key, *data)
   }
 
   open suspend fun translate(key: String, default: String, vararg data: Pair<String, String>): String {
     return I18n.translate(null, key, default, *data)
-  }
-
-  open suspend fun translate(key: String, data: Map<String, String>, default: String?): String {
-    return I18n.translate(null, key, data, default)
   }
 
   fun empty() = EmbedBuilder().setColor(Color.YELLOW.code)

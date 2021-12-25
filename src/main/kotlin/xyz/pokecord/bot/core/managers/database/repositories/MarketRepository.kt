@@ -74,7 +74,7 @@ class MarketRepository(
   ): List<Listing> {
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
-    if (ownerId != null) aggregation.add(Listing::ownerId eq ownerId)
+    if (ownerId != null) aggregation.add(match(Listing::ownerId eq ownerId))
     return collection.aggregate<Listing>(*aggregation.toTypedArray()).toList()
   }
 
@@ -82,7 +82,7 @@ class MarketRepository(
     ownerId: String? = null,
     aggregation: ArrayList<Bson> = arrayListOf()
   ): Int {
-    if (ownerId != null) aggregation.add(Auction::ownerId eq ownerId)
+    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(
       *aggregation.toTypedArray(),
       Aggregates.count("count")

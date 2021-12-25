@@ -63,7 +63,8 @@ object ListCommand : Command() {
               "modules.market.commands.list.confirmation.description",
               mapOf(
                 "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+                "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+                "price" to price.toString()
               )
             ),
             context.translate("modules.market.commands.list.confirmation.title")
