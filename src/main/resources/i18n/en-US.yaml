@@ -158,6 +158,53 @@ misc:
     weight: Weight
     xp: XP
 modules:
+  battle:
+    commands:
+      battle:
+        errors:
+          alreadyBattling: "You are currently in a battle, you must complete it first to start a new one!"
+          partnerAlreadyBattling: "{{partner}} is currently in a battle, they must complete it before you can challenge them to a new one!"
+          partnerPokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
+          pokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
+          noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
+          noPokemonMoves: Your selected Pokémon doesn't have any moves.
+          noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
+          partnerHasNotStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the p!start command?"
+          selfBattle: Why are you trying to fight yourself? Please tag another user to fight with.
+        embeds:
+          battleRequest:
+            title: Battle Request
+            description: |-
+              {{initiator}} has requested to battle {{partner}}!
+
+              Wanna battle with {{initiator}}?
+      moves:
+        embed:
+          title: "Level {{level}} {{pokemon}} | Pokémon Info"
+        errors:
+          pokemonNotFound: Specified Pokémon was not found.
+        teach:
+          embed:
+            title: Move Taught
+            description: "**{{move}}** has been taught to **{{pokemon}}**(Slot **#{{slot}}**)!"
+          errors:
+            inBattle: You're currently in a battle, please wait until it has ended to teach your Pokémon new moves.
+            cancelled: Move teaching cancelled.
+            moveNotFound: Specified move was not found.
+            moveNotSpecified: Please specify a move to teach.
+            slotNotSpecified: You must specify a slot to teach a move to.
+            slotOutOfRange: You must specify a slot between 1 and 4.
+          replaceConfirmation:
+            title: Confirm Replacing Move
+            description: |-
+              This will replace the move in **Slot #{{slot}} ({{move}})**.
+              **React to this message with a ✅ within the next 30 seconds to confirm.**
+        texts:
+          availableMoves: Available Moves
+          learnedMoves: Learned Moves
+          noMove: No Move
+          noMoves: No Moves
+          unknownMove: Unknown Move
   general:
     commands:
       faq:

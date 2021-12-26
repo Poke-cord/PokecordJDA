@@ -32,7 +32,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
   var sentMessage: Message? = null
   var timedOut = false
 
-  suspend fun result(embedBuilder: EmbedBuilder): Boolean {
+  suspend fun result(embedBuilder: EmbedBuilder, mentionRepliedUser: Boolean = false): Boolean {
     context.bot.cache.setRunningCommand(context.author.id, true)
 
     val footer = embedBuilder.build().footer?.text
@@ -47,7 +47,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
           Button.secondary(it.id, Emoji.fromUnicode(it.emoji))
 //          Button.secondary(it.id, it.text).withEmoji(Emoji.fromUnicode(it.emoji))
         }
-      )).reply(embedBuilder.build()).await()
+      )).reply(embedBuilder.build(), mentionRepliedUser).await()
 
     context.clearActionRows()
 

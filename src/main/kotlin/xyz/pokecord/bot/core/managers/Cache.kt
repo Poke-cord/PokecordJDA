@@ -21,6 +21,7 @@ class Cache {
   private val maintenanceStatus: RBucketAsync<Boolean?>
   private val currentGifts: RSetCacheAsync<String>
 
+  val battleRequestsMap: RMapCacheAsync<String, String>
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
   val leaderboardMap: RMapCacheAsync<String, String>
@@ -72,6 +73,7 @@ class Cache {
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
     currentGifts = redissonClient.getSetCache("currentGifts")
 
+    battleRequestsMap = redissonClient.getMapCache("battleRequests")
     guildMap = redissonClient.getMapCache("guild")
     guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
     leaderboardMap = redissonClient.getMapCache("leaderboard")

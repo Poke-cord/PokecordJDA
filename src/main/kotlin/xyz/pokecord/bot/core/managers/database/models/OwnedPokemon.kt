@@ -27,7 +27,7 @@ data class OwnedPokemon(
   var xp: Int = 0,
   var gender: Int = 2, // hack for default gender, see the init block below
   val heldItemId: Int = 0,
-  var moves: MutableList<Int> = mutableListOf(0, 0, 0, 0),
+  var moves: MutableList<Int> = mutableListOf(),
   var favorite: Boolean = false,
   val rewardClaimed: Boolean = false,
   val timestamp: Long = System.currentTimeMillis(),
@@ -39,6 +39,9 @@ data class OwnedPokemon(
   init {
     if (gender < -1 || gender > 1) {
       gender = defaultGender(id)
+    }
+    if (moves.isEmpty()) {
+      repeat(4) { moves.add(0) }
     }
   }
 
