@@ -31,7 +31,7 @@ object ProfileCommand: Command() {
         .setTitle(
           context.translate(
             "modules.market.commands.profile.embeds.title",
-            "user" to targetUser.asTag
+            "userTag" to targetUser.asTag
           )
         )
         .setColor(EmbedTemplates.Color.GREEN.code)

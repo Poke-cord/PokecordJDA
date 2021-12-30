@@ -22,22 +22,23 @@ object MarketCommand: ParentCommand() {
     context: ICommandContext,
     listings: List<Listing>
   ): String {
-    return listings.map {
+    val desc = listings.map {
       val listingPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
-      if(listingPokemon != null) {
+      if (listingPokemon != null) {
         val pokemonIv = listingPokemon.ivPercentage
         val pokemonName = context.translator.pokemonDisplayName(listingPokemon)
-        if(!it.sold) {
-          "`${it.id}` IV **$pokemonIv $pokemonName** | ${it.price}"
-        }
-      }
-    }.joinToString("\n")
+        if (!it.sold) {
+          "`${it.id}` IV **$pokemonIv $pokemonName** | **${it.price}** Credits"
+        } else null
+      } else null
+    }
+
+    return desc.filterNotNull().joinToString("\n")
   }
 
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument(optional = true) bids: String?,
     @Argument(optional = true) page: Int?,
   ) {
     if(!context.hasStarted(true)) return

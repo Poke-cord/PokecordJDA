@@ -284,6 +284,8 @@ modules:
         errors:
           inTrade: You can't create listings while in a trade.
           noPokemonProvided: Please provide the pokémon you would like to list.
+          noPokemonFound: The pokémon you are looking for doesn't exist!
+          noPriceProvided: Please provide the price you would like to list your pokémon for.
           startingBidPrice: The price can't be less than 10 credits or more than 10,000,000 credits!
         confirmation:
           description: "Please confirm you would like to create a listing of your **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."
@@ -295,12 +297,12 @@ modules:
             Price: **{{price}}**
           title: Listing Posted
       unlist:
-        confirmations:
-          description: "Please confirm you would like to remove your listing for **IV{{pokemonIV}} {{pokemonName}}**."
+        confirmation:
           title: Remove A Listing
+          description: "Please confirm you would like to remove your listing for **IV{{pokemonIV}} {{pokemonName}}**."
         confirmed:
-          description: Listing Removed
-          title: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the market and added back to your inventory."
+          title: Listing Removed
+          description: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the market and added back to your inventory."
         errors:
           noListingId: Please provide a valid listing ID.
           noListingFound: No listing was found with the ID **{{id}}**.

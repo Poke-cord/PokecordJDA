@@ -29,9 +29,7 @@ object ListCommand : Command() {
       return
     }
 
-    val userData = context.getUserData()
-    val pokemon = context.resolvePokemon(context.author, userData, pokemonRes)
-    if (pokemon == null) {
+    if (pokemonRes == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.market.commands.list.errors.noPokemonProvided")
@@ -40,73 +38,90 @@ object ListCommand : Command() {
       return
     }
 
-    if(price != null) {
-      if (price in 9..10000001) {
-        context.reply(
-          context.embedTemplates.error(
-            context.translate("modules.market.commands.list.errors.startingBidPrice")
-          ).build()
-        ).queue()
-      } else {
-        val transferable = pokemon.transferable(context.bot.database)
-        if (transferable != OwnedPokemon.TransferStates.SUCCESS) {
-          context.reply(
-            context.embedTemplates.error(transferable.errMessage).build()
-          ).queue()
-          return
-        }
+    val userData = context.getUserData()
+    val pokemon = context.resolvePokemon(context.author, userData, pokemonRes)
+    if (pokemon == null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.market.commands.list.errors.noPokemonFound")
+        ).build()
+      ).queue()
+      return
+    }
 
-        val confirmation = Confirmation(context, context.author.id)
-        val confirmed = confirmation.result(
-          context.embedTemplates.confirmation(
-            context.translate(
-              "modules.market.commands.list.confirmation.description",
-              mapOf(
-                "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonDisplayName(pokemon),
-                "price" to price.toString()
-              )
-            ),
-            context.translate("modules.market.commands.list.confirmation.title")
+    if(price == null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.market.commands.list.errors.noPriceProvided")
+        ).build()
+      ).queue()
+      return
+    } else if (price !in 9..10000001) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.market.commands.list.errors.startingBidPrice")
+        ).build()
+      ).queue()
+      return
+    }
+
+    val transferable = pokemon.transferable(context.bot.database)
+    if (transferable != OwnedPokemon.TransferStates.SUCCESS) {
+      context.reply(
+        context.embedTemplates.error(transferable.errMessage).build()
+      ).queue()
+      return
+    }
+
+    val confirmation = Confirmation(context, context.author.id)
+    val confirmed = confirmation.result(
+      context.embedTemplates.confirmation(
+        context.translate(
+          "modules.market.commands.list.confirmation.description",
+          mapOf(
+            "pokemonIV" to pokemon.ivPercentage,
+            "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+            "price" to price.toString()
           )
-        )
+        ),
+        context.translate("modules.market.commands.list.confirmation.title")
+      )
+    )
 
-        if (confirmed) {
-          context.bot.cache.getMarketIdLock().withCoroutineLock {
-            val session = context.bot.database.startSession()
-            session.use {
-              session.startTransaction()
-              val latestMarketId = context.bot.database.marketRepository.getLatestListing(session)?.id ?: 0
-              context.bot.database.marketRepository.createListing(
-                Listing(
-                  latestMarketId + 1,
-                  pokemon.ownerId,
-                  pokemon._id,
-                  price,
-                  _isNew = true
-                ),
-                session
-              )
-              context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "market-pokemon-holder", session)
-              session.commitTransactionAndAwait()
-            }
-          }
-
-          context.reply(
-            context.embedTemplates.normal(
-              context.translate(
-                "modules.market.commands.list.confirmed.description",
-                mapOf(
-                  "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonDisplayName(pokemon),
-                  "price" to price.toString()
-                )
-              ),
-              context.translate("modules.market.commands.list.confirmed.title"),
-            ).build()
-          ).queue()
+    if (confirmed) {
+      context.bot.cache.getMarketIdLock().withCoroutineLock {
+        val session = context.bot.database.startSession()
+        session.use {
+          session.startTransaction()
+          val latestMarketId = context.bot.database.marketRepository.getLatestListing(session)?.id ?: 0
+          context.bot.database.marketRepository.createListing(
+            Listing(
+              latestMarketId + 1,
+              pokemon.ownerId,
+              pokemon._id,
+              price,
+              _isNew = true
+            ),
+            session
+          )
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "market-pokemon-holder", session)
+          session.commitTransactionAndAwait()
         }
       }
+
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.market.commands.list.confirmed.description",
+            mapOf(
+              "pokemonIV" to pokemon.ivPercentage,
+              "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+              "price" to price.toString()
+            )
+          ),
+          context.translate("modules.market.commands.list.confirmed.title"),
+        ).build()
+      ).queue()
     }
   }
 }
