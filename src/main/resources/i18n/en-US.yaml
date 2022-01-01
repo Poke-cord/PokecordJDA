@@ -210,7 +210,7 @@ modules:
     commands:
       profile:
         embeds:
-          title: 🏠 {{userTag}} Market Listings
+          title: 🎪 {{userTag}} Auctions
         errors:
           noResults: There aren't any available auctions right now, please try again later.
       list:
@@ -324,7 +324,7 @@ modules:
     commands:
       profile:
         embeds:
-          title: 🎪 {{userTag}} Auctions
+          title: 🏠 {{userTag}} Market Listings
         errors:
           noResults: There aren't any available auctions right now, please try again later.
       list:
