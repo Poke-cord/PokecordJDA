@@ -20,6 +20,9 @@ object Config {
   const val boostCooldown = 2_592_000_000L
   const val transferChunkSize = 5000
   const val reindexChunkSize = 1000
+  const val defaultAuctionTime = 4 * 60 * 60 * 1000L
+  const val defaultStartingBid = 1000
+  const val defaultBidIncrement = 100
 
   const val publicNotificationWebhook =
     "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"

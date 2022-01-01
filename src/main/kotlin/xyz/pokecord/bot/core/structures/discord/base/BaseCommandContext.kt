@@ -7,11 +7,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.managers.database.models.Guild
-import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
-import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
+import xyz.pokecord.bot.core.structures.discord.ContextEmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
@@ -27,7 +25,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   protected var userData: User? = null
 
   override val sentryBreadcrumbs = mutableListOf<Pair<Breadcrumb, Any?>>()
-  override val embedTemplates by lazy { EmbedTemplates(this) }
+  override val embedTemplates by lazy { ContextEmbedTemplates(this) }
   override val translator by lazy { Translator(this) }
 
   override fun shouldProcess(): Boolean {
@@ -55,6 +53,14 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
       userData!!.tag = author.asTag
     }
     return userData!!
+  }
+
+  override suspend fun getTradeState(): Trade? {
+    return bot.database.tradeRepository.getTrade(author.id)
+  }
+
+  override suspend fun getTraderState(): TraderData? {
+    return bot.database.tradeRepository.getTraderData(author.id)
   }
 
   override suspend fun getGuildData(forceFetch: Boolean): Guild? {

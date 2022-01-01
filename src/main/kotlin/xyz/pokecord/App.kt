@@ -8,13 +8,16 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.modules.auctions.AuctionsModule
 import xyz.pokecord.bot.modules.battle.BattleModule
 import xyz.pokecord.bot.modules.developer.DeveloperModule
 import xyz.pokecord.bot.modules.economy.EconomyModule
 import xyz.pokecord.bot.modules.general.GeneralModule
+import xyz.pokecord.bot.modules.market.MarketModule
 import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.modules.profile.ProfileModule
 import xyz.pokecord.bot.modules.staff.StaffModule
+import xyz.pokecord.bot.modules.trading.TradingModule
 import xyz.pokecord.migration.Migration
 import kotlin.system.exitProcess
 
@@ -53,6 +56,9 @@ object App {
           ProfileModule(bot),
           EconomyModule(bot),
           BattleModule(bot),
+          AuctionsModule(bot),
+          MarketModule(bot),
+          TradingModule(bot),
           StaffModule(bot),
           DeveloperModule(bot),
         )

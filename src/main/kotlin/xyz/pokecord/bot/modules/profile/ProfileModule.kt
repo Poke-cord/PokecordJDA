@@ -10,10 +10,7 @@ class ProfileModule(bot: Bot) : Module(
     StartCommand(),
     BagCommand(),
     ItemCommand(),
-    ItemCommand.GiveItemCommand(),
-    ItemCommand.TakeItemCommand(),
     ProfileCommand(),
-    ProfileCommand.ProfilePokedexCommand(),
     RewardsCommand()
   )
 ) {

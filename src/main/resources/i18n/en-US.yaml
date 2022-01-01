@@ -157,6 +157,7 @@ misc:
     usage: Usage
     weight: Weight
     xp: XP
+    noBids: No Bids
 modules:
   battle:
     commands:
@@ -205,6 +206,273 @@ modules:
           noMove: No Move
           noMoves: No Moves
           unknownMove: Unknown Move
+  auctions:
+    commands:
+      profile:
+        embeds:
+          title: 🏠 {{userTag}} Market Listings
+        errors:
+          noResults: There aren't any available auctions right now, please try again later.
+      list:
+        errors:
+          inTrade: You can't post auctions while in a trade.
+          noPokemonProvided: Please provide the pokémon you would like to list.
+          noPokemonFound: The pokémon you are looking for doesn't seem to exist.
+          startingBidPrice: The starting bid can't be less than 1,000 credits or more than 10,000,000 credits!
+          minimumTime: An auction must be at least 4 hours long.
+        confirmation:
+          description: |-
+            Please confirm you would like to start an auction for your **IV{{pokemonIV}} {{pokemonName}}**.
+            IV: **{{pokemonIV}}**
+            End Time: **{{formattedDate}}**
+            Starting Bid: **{{startingBid}}**
+            Bid Increment: **{{bidIncrement}}**
+          title: Auction Post
+        confirmed:
+          description: |-
+            You have posted your **IV{{pokemonIV}} {{pokemonName}}** on the auction.
+            IV: **{{pokemonIV}}**
+            End Time: **{{formattedDate}}**
+            Starting Bid: **{{startingBid}}**
+            Bid Increment: **{{bidIncrement}}**
+          title: Auction Posted
+      unlist:
+        confirmation:
+          description: "Please confirm you would like to remove an auction for **IV{{pokemonIV}} {{pokemonName}}**."
+          title: Remove An Auction
+        confirmed:
+          description: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the auction and added back to your inventory."
+          title: Auction Removed
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          notYourAuction: You can't unlist an auction that isn't yours.
+          bidsActive: You can't unlist an auction that has bids on it.
+          noPokemonFound: The auctioned pokémon seems to be lost?
+          auctionSold: The auction you are trying to unlist has been sold or ended!
+      bid:
+        bidNotification:
+          description: "**{{bidderTag}}** has bid **{{amount}} credits** on your **IV{{pokemonIV}} {{pokemonName}}** auction!"
+          title: Bid Received
+        outbid:
+          description: "{{bidder}} outbid you on the auction for the **Auction ID{{ID}} Pokémon {{pokemonName}}** by **{{bidDifference}} credits**."
+          title: You have been outbid
+        confirmed:
+          title: Bid Posted
+          description: "Successfully set a bid of **{{bid}}** on **IV{{pokemonIV}} {{pokemonName}}**."
+        confirmation:
+          description: Please confirm you would like to bid **{{bid}} credits** for **IV{{pokemonIV}} {{pokemonName}}**.
+          title: Bid Confirmation
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          selfBid: You can't bid on your own auction!
+          noPokemonFound: The auctioned pokémon seems to be lost?
+          noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
+          notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
+          topBid: You already have the top bid of **{{bid}}**.
+          bidTooLow: |-
+            You must bid at least **{{bid}} credits** on this auction.
+            The bid increment is currently set to **{{bidIncrement}} credits**.
+      info:
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: No auction was found with the ID **{{id}}**.
+          noPokemonFound: The auctioned pokémon seems to be lost?
+        displayInfo:
+          description: |-
+            **Auction ID**: {{auctionId}}
+            **Starting Bid**: {{startingBid}} Credits
+            **Bids Amount**: {{bidCount}} Bids
+            **Time Left**: {{timeLeft}}
+            **Current Bid**: {{currentBid}}
+            **XP**: {{XP}}
+            **Gender**: {{gender}}
+            **Nature**: {{nature}}
+            **HP**: {{hp}}/31
+            **Attack**: {{attack}}/31
+            **Defense**: {{defense}}/31
+            **Sp. Atk**: {{special-attack}}/31
+            **Sp. Def**: {{special-defense}}/31
+            **Speed**: {{speed}}/31
+            **Total IV**: {{ivPercentage}}
+          title: Level {{pokemonLevel}} {{pokemonName}} | {{auctionId}} | Auction Info
+      auctions:
+        embeds:
+          title: 🎪 Auctions
+        errors:
+          noResults: There aren't any available auctions right now, please try again later.
+      notify:
+        toggledOn:
+          title: Toggled On
+          description: You will start receiving DM notifications whenever someone bids on your auctions.
+        toggledOff:
+          title: Toggled Off
+          description: You won't be receiving DM notifications from bids on your auction anymore.
+    tasks:
+      checker:
+        auctionEnded:
+          title: Auction Ended
+          description: Your auctioned **{{pokemon}}** has ended without any bids, your Pokémon has been refunded.
+        auctionSold:
+          title: Auction Sold
+          description: Your auctioned **{{pokemon}}** has sold for **{{amount}} credits**.
+        auctionWon:
+          title: Auction Won
+          description: You won the bidding war on **{{pokemon}}** at **{{amount}} credits**.
+  market:
+    commands:
+      profile:
+        embeds:
+          title: 🎪 {{userTag}} Auctions
+        errors:
+          noResults: There aren't any available auctions right now, please try again later.
+      list:
+        errors:
+          inTrade: You can't create listings while in a trade.
+          noPokemonProvided: Please provide the pokémon you would like to list.
+          noPokemonFound: The pokémon you are looking for doesn't exist!
+          noPriceProvided: Please provide the price you would like to list your pokémon for.
+          startingBidPrice: The price can't be less than 10 credits or more than 10,000,000 credits!
+        confirmation:
+          description: "Please confirm you would like to create a listing of your **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."
+          title: Listing Post
+        confirmed:
+          description: |-
+            You have posted your **IV{{pokemonIV}} {{pokemonName}}** on the market.
+            IV: **{{pokemonIV}}**
+            Price: **{{price}}**
+          title: Listing Posted
+      unlist:
+        confirmation:
+          title: Remove A Listing
+          description: "Please confirm you would like to remove your listing for **IV{{pokemonIV}} {{pokemonName}}**."
+        confirmed:
+          title: Listing Removed
+          description: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the market and added back to your inventory."
+        errors:
+          noListingId: Please provide a valid listing ID.
+          noListingFound: No listing was found with the ID **{{id}}**.
+          notYourListing: You can't unlist a post that isn't yours.
+          bidsActive: You can't unlist an post that has bids on it.
+          noPokemonFound: The listing's pokémon seems to be lost?
+      buy:
+        confirmed:
+          title: Pokémon Purchased
+          description: "Successfully purchased **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."
+        confirmation:
+          description: Please confirm you would like to purchase **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**.
+          title: Purchase Confirmation
+        errors:
+          noListingId: Please provide a valid listing ID.
+          noListingFound: No listing was found with the ID **{{id}}**.
+          selfBuy: You can't purchase your own listing post!
+          noPokemonFound: The listing's pokémon seems to be lost?
+          notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
+      info:
+        errors:
+          noListingId: Please provide a valid listing ID.
+          noListingFound: No listing was found with the ID **{{id}}**.
+          noPokemonFound: The listing's pokémon seems to be lost?
+        displayInfo:
+          description: |-
+            **Listing ID**: {{listingId}}
+            **Price**: {{price}} Credits
+            **XP**: {{XP}}
+            **Gender**: {{gender}}
+            **Nature**: {{nature}}
+            **HP**: {{hp}}/31
+            **Attack**: {{attack}}/31
+            **Defense**: {{defense}}/31
+            **Sp. Atk**: {{special-attack}}/31
+            **Sp. Def**: {{special-defense}}/31
+            **Speed**: {{speed}}/31
+            **Total IV**: {{ivPercentage}}
+          title: Level {{pokemonLevel}} {{pokemonName}} | {{listingId}} | Listing Info
+      market:
+        embeds:
+          title: 🎪 Market
+        errors:
+          noResults: There aren't any available listings right now, please try again later.
+  trading:
+    commands:
+      trade:
+        confirmation:
+          title: Trade Request
+          description: "{{trader}} has requested to trade {{traded}}!\n\nWanna trade with {{trader}}?"
+        tradeStarted:
+          title: Trade Request Accepted
+          description: "{{partner}} accepted {{author}}'s trade request.\n**NOTE: You can only trade 20 Pokémon per session.**"
+        tradeCancelled:
+          title: Trade Request Cancelled
+          description: "Trade request to {{partner}} has been denied or has expired."
+        errors:
+          noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
+          tradingYourself: You can't trade with yourself!
+          partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `p!start` command?"
+          alreadyInTrade: You cannot start another trade until your new one is done..
+          alreadyRequested: You've already sent out a trade request that has not been accepted yet! Please be patient in order to start another trade.
+      status:
+        embeds:
+          tradeEnded:
+            title: Trade Ended
+            description: You have ended the trade.
+          status:
+            title: "{{confirmator}} confirmed the trading session."
+            description: "Trading session between {{author}} & {{partner}}."
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noPartnerFound:
+            title: Partner Not Found
+            description: Your partner seems to not have access to the bot currently, would you like to end the trade?
+      cancel:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+        embeds:
+          cancelTrade:
+            title: Trading Cancelled
+            description: "The trading session between {{author}} and {{partner}} ended because... Well idk why. You tell me."
+      add:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noNumberPokemon: Please provide the index number of the pokémon you would like to add.
+          noNumberCredits: Please provide the amount of credits you would like to add.
+          notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
+          noPokemonFound: "There was no pokémon found with the index value {{index}}."
+          maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
+          notTransferableTitle: Not Transferable
+        embeds:
+          addCredits:
+            title: Credits Added
+            description: "You have successfully added `{{credits}}` credits to your trading session."
+          addPokemon:
+            title: Pokémon Added
+            description: "**{{pokemon}}** has been added to your trading session."
+      remove:
+        errors:
+          notInTrade: You haven't started a trading session yet, please do that first.
+          noNumberPokemon: Please provide the index number of the pokémon you would like to add.
+          noNumberCredits: Please provide the amount of credits you would like to add.
+          notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
+          noPokemonFound: "There was no pokémon found with the index value {{index}}."
+          notTransferable: This pokémon is not in your trading session.
+        embeds:
+          removeCredits:
+            title: Credits Withdrawn
+            description: "You have successfully withdrew `{{credits}}` credits to your trading session."
+          removePokemon:
+            title: Pokémon Withdrawn
+            description: "{{pokemon}} has been withdrawn from your trading session."
+      confirm:
+        errors:
+          emptyTrade: Both you and your partner must at least choose a Pokémon or some credits before confirming the trade.
+        embeds:
+          partConfirmed:
+            title: Pending Trading Confirmation
+            description: The trading session has been confirmed by you. Changes will be applied once your partner confirms.
+          confirmed:
+            title: Trading Session Confirmed
+            description: "The trading session between you and {{partner}} has been confirmed."
   general:
     commands:
       faq:

@@ -21,9 +21,11 @@ class Cache {
   private val maintenanceStatus: RBucketAsync<Boolean?>
   private val currentGifts: RSetCacheAsync<String>
 
+  val auctionMap: RMapCacheAsync<String, String>
   val battleRequestsMap: RMapCacheAsync<String, String>
   val guildMap: RMapCacheAsync<String, String>
   val guildSpawnChannelsMap: RSetMultimapCache<String, String>
+  val listingMap: RMapCacheAsync<String, String>
   val leaderboardMap: RMapCacheAsync<String, String>
   val shardStatusMap: RMapCacheAsync<Int, String>
   val spawnChannelsMap: RMapCacheAsync<String, String>
@@ -73,9 +75,11 @@ class Cache {
     maintenanceStatus = redissonClient.getBucket("maintenanceStatus")
     currentGifts = redissonClient.getSetCache("currentGifts")
 
+    auctionMap = redissonClient.getMapCache("auctions")
     battleRequestsMap = redissonClient.getMapCache("battleRequests")
     guildMap = redissonClient.getMapCache("guild")
     guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
+    listingMap = redissonClient.getMapCache("listings")
     leaderboardMap = redissonClient.getMapCache("leaderboard")
     shardStatusMap = redissonClient.getMapCache("shardStatus")
     spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
@@ -119,6 +123,22 @@ class Cache {
 
   suspend fun setMaintenanceStatus(maintenance: Boolean) {
     maintenanceStatus.setAsync(maintenance).awaitSuspending()
+  }
+
+  fun getAuctionIdLock(): RLock {
+    return redissonClient.getFairLock("auction_id")
+  }
+
+  fun getAuctionLock(auctionId: Int): RLock {
+    return redissonClient.getFairLock("auction-$auctionId")
+  }
+
+  fun getMarketIdLock(): RLock {
+    return redissonClient.getFairLock("market_id")
+  }
+
+  fun getMarketLock(listingId: Int): RLock {
+    return redissonClient.getFairLock("listing-$listingId")
   }
 
   suspend fun clearGiftLocks() {

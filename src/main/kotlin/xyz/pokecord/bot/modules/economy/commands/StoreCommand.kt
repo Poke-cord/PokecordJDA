@@ -19,7 +19,7 @@ class StoreCommand : Command() {
   suspend fun execute(context: ICommandContext) {
     val orderData = module.bot.database.orderRepository.getUnpaidOrder(context.author.id)
     if (orderData != null) {
-      val confirmation = Confirmation(context, 60_000)
+      val confirmation = Confirmation(context, timeout = 60_000)
       val confirmed = confirmation.result(
         context.embedTemplates.confirmation(
           context.translate("modules.economy.commands.store.embed.confirmation.cancelOldOrder")

@@ -107,13 +107,10 @@ class Bot constructor(private val token: String) {
     for (command in module.commands) {
       if (!command.enabled) continue
       if (!command.canRun(context)) continue
-      if (command::class.hasAnnotation<Command.ChildCommand>()) continue
+      if (command.parentCommand != null) continue
       if (command is ParentCommand) {
-        command.childCommands.forEach { childClass ->
-          val childCommand = module.commands.find { it::class == childClass }
-          if (childCommand != null) {
-            if (!childCommand.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, childCommand))
-          }
+        command.childCommands.forEach { childCommand ->
+          if (!childCommand.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, childCommand))
         }
       }
       if (!command.excludeFromHelp) commandEntries.add(getListHelpEmbedLine(context, prefix, command))

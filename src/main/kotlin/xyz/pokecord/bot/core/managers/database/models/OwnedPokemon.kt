@@ -4,6 +4,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
+import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.structures.pokemon.Experience
 import xyz.pokecord.bot.core.structures.pokemon.Nature
 import xyz.pokecord.bot.core.structures.pokemon.Species
@@ -71,6 +72,33 @@ data class OwnedPokemon(
     val specialDefense = getStatValue(Stat.specialDefense, nature, ivs.specialDefense)
     val speed = getStatValue(Stat.speed, nature, ivs.speed)
     PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
+  }
+
+  enum class TransferStates(var errMessage: String) {
+    STICKY("You cannot transfer this pokemon because its sticky."),
+    FAVORITE("You cannot transfer this pokemon because its favorited."),
+    TRADE_SESSION("You cannot transfer this pokemon because its in a trade session."),
+    NO_POKEMON("You cannot transfer this pokemon because its the only one you have."),
+    SELECTED("You cannot transfer this pokemon because you have it selected."),
+    SUCCESS("The pokemon is transferable.")
+  }
+
+  suspend fun transferable(database: Database): TransferStates {
+    if(this.sticky) return TransferStates.STICKY
+    if(this.favorite) return TransferStates.FAVORITE
+
+    val tradeData = database.tradeRepository.getTraderData(this.ownerId)
+    if(tradeData != null) {
+      if(tradeData.pokemon.contains(this._id)) {
+        return TransferStates.TRADE_SESSION
+      }
+    }
+
+    val userData = database.userRepository.getUser(ownerId)
+    if(userData.pokemonCount <= 1) return TransferStates.NO_POKEMON
+    if(userData.selected == this._id) return TransferStates.SELECTED
+
+    return TransferStates.SUCCESS
   }
 
   fun requiredXpToLevelUp(): Int {

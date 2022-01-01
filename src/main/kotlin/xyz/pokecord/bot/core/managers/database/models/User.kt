@@ -29,6 +29,7 @@ data class User(
   var nextIndex: Int = 0,
   var lastVoteAt: Long? = null,
   var lastBoostAt: Long? = null,
+  var bidNotifications: Boolean = false,
   @Contextual val _id: Id<User> = newId(),
   @Transient var _isNew: Boolean = false
 ) {

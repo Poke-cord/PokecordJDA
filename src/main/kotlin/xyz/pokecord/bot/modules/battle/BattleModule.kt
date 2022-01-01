@@ -8,6 +8,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.modules.battle.commands.BattleCommand
 import xyz.pokecord.bot.modules.battle.commands.MovesCommand
+import xyz.pokecord.bot.modules.battle.commands.TeachCommand
 import xyz.pokecord.bot.modules.battle.events.BattleActionEvent
 import xyz.pokecord.bot.modules.battle.events.BattleRequestActionEvent
 import xyz.pokecord.bot.utils.ImageUtils.flipHorizontally
@@ -25,7 +26,7 @@ class BattleModule(bot: Bot) : Module(
   arrayOf(
     BattleCommand,
     MovesCommand,
-    MovesCommand.TeachCommand,
+    TeachCommand,
   ),
   arrayOf(
     BattleActionEvent,
