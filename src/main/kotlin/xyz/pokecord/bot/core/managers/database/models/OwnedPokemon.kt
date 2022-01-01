@@ -41,8 +41,8 @@ data class OwnedPokemon(
     if (gender < -1 || gender > 1) {
       gender = defaultGender(id)
     }
-    if (moves.isEmpty()) {
-      repeat(4) { moves.add(0) }
+    if (moves.size < 4) {
+      repeat(4 - moves.size) { moves.add(0) }
     }
   }
 
@@ -84,19 +84,19 @@ data class OwnedPokemon(
   }
 
   suspend fun transferable(database: Database): TransferStates {
-    if(this.sticky) return TransferStates.STICKY
-    if(this.favorite) return TransferStates.FAVORITE
+    if (this.sticky) return TransferStates.STICKY
+    if (this.favorite) return TransferStates.FAVORITE
 
     val tradeData = database.tradeRepository.getTraderData(this.ownerId)
-    if(tradeData != null) {
-      if(tradeData.pokemon.contains(this._id)) {
+    if (tradeData != null) {
+      if (tradeData.pokemon.contains(this._id)) {
         return TransferStates.TRADE_SESSION
       }
     }
 
     val userData = database.userRepository.getUser(ownerId)
-    if(userData.pokemonCount <= 1) return TransferStates.NO_POKEMON
-    if(userData.selected == this._id) return TransferStates.SELECTED
+    if (userData.pokemonCount <= 1) return TransferStates.NO_POKEMON
+    if (userData.selected == this._id) return TransferStates.SELECTED
 
     return TransferStates.SUCCESS
   }
