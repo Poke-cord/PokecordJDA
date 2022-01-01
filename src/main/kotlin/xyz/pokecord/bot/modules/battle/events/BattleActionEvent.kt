@@ -127,28 +127,33 @@ object BattleActionEvent : Event() {
             }
 
             val selfMoveFirst: Boolean
+            val winner: Battle.Trainer?
             val (moveResult, partnerMoveResult) = when {
               moveData.priority > partnerMoveData.priority -> {
                 selfMoveFirst = true
                 val firstMove = useSelfMove()
+                winner = battle.winner
                 val secondMove = usePartnerMove()
                 Pair(firstMove, secondMove)
               }
               partnerMoveData.priority > moveData.priority -> {
                 selfMoveFirst = false
                 val firstMove = usePartnerMove()
+                winner = battle.winner
                 val secondMove = useSelfMove()
                 Pair(secondMove, firstMove)
               }
               self.pokemonStats.speed > partner.pokemonStats.speed -> {
                 selfMoveFirst = true
                 val firstMove = useSelfMove()
+                winner = battle.winner
                 val secondMove = usePartnerMove()
                 Pair(firstMove, secondMove)
               }
               partner.pokemonStats.speed > self.pokemonStats.speed -> {
                 selfMoveFirst = false
                 val firstMove = usePartnerMove()
+                winner = battle.winner
                 val secondMove = useSelfMove()
                 Pair(secondMove, firstMove)
               }
@@ -156,18 +161,18 @@ object BattleActionEvent : Event() {
                 selfMoveFirst = Random.nextBoolean()
                 if (selfMoveFirst) {
                   val firstMove = useSelfMove()
+                  winner = battle.winner
                   val secondMove = usePartnerMove()
                   Pair(firstMove, secondMove)
                 } else {
                   val firstMove = usePartnerMove()
+                  winner = battle.winner
                   val secondMove = useSelfMove()
                   Pair(secondMove, firstMove)
                 }
               }
             }
-
-            val winner = battle.winner
-            val loser = battle.loser
+            val loser = winner?.let { if (it.id == self.id) partner else self }
             var gainedXp: Int? = null
             if (winner != null && loser != null) {
               val winnerPokemon = if (self.id == winner.id) selfPokemon else partnerPokemon

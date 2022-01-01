@@ -18,10 +18,6 @@ data class Battle(
   val endedAtMillis: Long? = null,
   @Contextual val _id: Id<Battle> = newId()
 ) {
-  val loser: Trainer?
-    get() = if (initiator.pokemonStats.hp <= 0) initiator
-    else if (partner.pokemonStats.hp <= 0) partner
-    else null
   val winner: Trainer?
     get() = if (initiator.pokemonStats.hp <= 0) partner
     else if (partner.pokemonStats.hp <= 0) initiator
