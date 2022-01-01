@@ -347,6 +347,9 @@ modules:
           bidsActive: You can't unlist an post that has bids on it.
           noPokemonFound: The listing's pokémon seems to be lost?
       buy:
+        sold:
+          title: Listing Sold
+          description: "Successfully sold **IV{{ivPercentage}}% ${{pokemonName}}** for **{{price}} credits** to **{{buyer}}**."
         confirmed:
           title: Pokémon Purchased
           description: "Successfully purchased **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."

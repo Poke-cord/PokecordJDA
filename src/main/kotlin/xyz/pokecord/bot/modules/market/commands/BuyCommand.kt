@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.market.commands
 
+import dev.minn.jda.ktx.await
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -87,6 +88,27 @@ object BuyCommand : Command() {
               context.bot.database.marketRepository.markSold(listing, session)
               context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, context.author.id, session)
               session.commitTransactionAndAwait()
+            }
+
+            try {
+              context.jda.getUserById(listing.ownerId)?.let {
+                val channel = it.openPrivateChannel().await()
+                channel.sendMessageEmbeds(
+                  context.embedTemplates.normal(
+                    context.translate(
+                      "modules.market.commands.buy.sold.description",
+                      mapOf(
+                        "ivPercentage" to pokemon.ivPercentage,
+                        "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+                        "price" to listing.price.toString(),
+                        "buyer" to context.author.name
+                      )
+                    ),
+                    context.translate("modules.market.commands.buy.sold.title")
+                  ).build()
+                ).await()
+              }
+            } catch (_: Throwable) {
             }
 
             context.reply(
