@@ -6,13 +6,13 @@ import xyz.pokecord.bot.core.managers.database.models.Battle
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.modules.battle.commands.BattleCommand
 import xyz.pokecord.bot.modules.battle.commands.MovesCommand
 import xyz.pokecord.bot.modules.battle.events.BattleActionEvent
 import xyz.pokecord.bot.modules.battle.events.BattleRequestActionEvent
 import xyz.pokecord.bot.utils.ImageUtils.flipHorizontally
 import xyz.pokecord.bot.utils.ImageUtils.loadImage
+import xyz.pokecord.bot.utils.PokemonStats
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.net.URL
@@ -110,7 +110,11 @@ class BattleModule(bot: Bot) : Module(
     private const val BATTLE_CHOOSE_MOVE_BUTTON_ID = "battle_choose_move"
     private const val BATTLE_END_BUTTON_ID = "battle_end"
 
-    fun getBattleImage(battle: Battle): ByteArray {
+    fun getBattleImage(
+      battle: Battle,
+      initiatorPokemonMaxStats: PokemonStats,
+      partnerPokemonMaxStats: PokemonStats,
+    ): ByteArray {
       val backgroundImage = loadImage("background.png")
       val standImage = loadImage("stand.png")
       val leftHpImage = loadImage("left_hp.png")
@@ -173,7 +177,7 @@ class BattleModule(bot: Bot) : Module(
           hpBarImage,
           image.width / 2 / 2 - hpBarImage.width / 2 + 22,
           114,
-          ((battle.initiator.pokemonStats.hp.toDouble() / Stat.hp.getBaseValue(leftPokemon.id)!!) * 96).roundToInt(),
+          ((battle.initiator.pokemonStats.hp.toDouble() / initiatorPokemonMaxStats.hp) * 96).roundToInt(),
           6,
           null
         )
@@ -181,7 +185,7 @@ class BattleModule(bot: Bot) : Module(
           hpBarImage,
           image.width / 2 + image.width / 2 / 2 - hpBarImage.width / 2 + 52,
           115,
-          ((battle.partner.pokemonStats.hp.toDouble() / Stat.hp.getBaseValue(rightPokemon.id)!!) * 96).roundToInt(),
+          ((battle.partner.pokemonStats.hp.toDouble() / partnerPokemonMaxStats.hp) * 96).roundToInt(),
           6,
           null
         )

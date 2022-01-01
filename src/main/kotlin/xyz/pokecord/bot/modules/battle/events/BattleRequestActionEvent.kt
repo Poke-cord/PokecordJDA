@@ -4,7 +4,6 @@ import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 import xyz.pokecord.bot.core.structures.discord.base.Event
-import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.modules.battle.BattleModule
 import java.time.Instant
 
@@ -65,7 +64,7 @@ object BattleRequestActionEvent : Event() {
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
           }
         )
-          .addFile(BattleModule.getBattleImage(battle), "battle.png")
+          .addFile(BattleModule.getBattleImage(battle, initiatorPokemon.stats, partnerPokemon.stats), "battle.png")
           .addActionRow(
             BattleModule.Buttons.getBattleActionRow(battle._id.toString())
           )

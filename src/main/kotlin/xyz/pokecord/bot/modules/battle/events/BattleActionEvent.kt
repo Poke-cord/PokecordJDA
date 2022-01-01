@@ -199,7 +199,9 @@ object BattleActionEvent : Event() {
               }
             }
 
-            // send move used message
+            val initiatorPokemon = if (self.id == battle.initiator.id) selfPokemon else partnerPokemon
+            val opponentPokemon = if (self.id == battle.initiator.id) partnerPokemon else selfPokemon
+
             event.hook.sendMessageEmbeds(Embed {
               title = "${event.interaction.user.name} VS ${partnerUser.name}"
               description = """
@@ -222,7 +224,7 @@ object BattleActionEvent : Event() {
 
               image = "attachment://battle.png"
             })
-              .addFile(BattleModule.getBattleImage(battle), "battle.png")
+              .addFile(BattleModule.getBattleImage(battle, initiatorPokemon.stats, opponentPokemon.stats), "battle.png")
               .also {
                 if (winner == null) {
                   it.addActionRow(
