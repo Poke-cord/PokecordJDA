@@ -29,7 +29,7 @@ class OrderCommand : Command() {
 //      ).queue()
 //      return
 //    }
-    val effectiveOrder = order ?: PokemonOrder.POKEDEX
+    val effectiveOrder = if (order == null || order == PokemonOrder.DEFAULT) PokemonOrder.POKEDEX else order
     context.reply(
       context.embedTemplates.normal(
         context.translate("modules.pokemon.commands.order.ordering")
