@@ -15,7 +15,7 @@ object TradeConfirmCommand: Command() {
     if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.notInTrade")
+          context.translate("modules.trading.commands.confirm.errors.notInTrade")
         ).build()
       ).queue()
       return
@@ -95,8 +95,8 @@ object TradeConfirmCommand: Command() {
         context.reply(
           context.embedTemplates
             .normal(
-              context.translate("module.trading.commands.confirm.embeds.confirmed.description"),
-              context.translate("module.trading.commands.confirm.embeds.confirmed.title"),
+              context.translate("modules.trading.commands.confirm.embeds.confirmed.description"),
+              context.translate("modules.trading.commands.confirm.embeds.confirmed.title"),
             )
             .addField("Trainer", authorUserData.tag, true)
             .addField("Credits", context.translator.numberFormat(authorTradeData.credits), true)

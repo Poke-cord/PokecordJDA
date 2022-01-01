@@ -466,6 +466,7 @@ modules:
       confirm:
         errors:
           emptyTrade: Both you and your partner must at least choose a Pokémon or some credits before confirming the trade.
+          notInTrade: You haven't started a trading session yet, please do that first.
         embeds:
           partConfirmed:
             title: Pending Trading Confirmation
