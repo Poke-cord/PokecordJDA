@@ -119,13 +119,14 @@ object BattleActionEvent : Event() {
             }
 
             val selfMoveFirst: Boolean
-            val winner: Battle.Trainer?
+            var winner: Battle.Trainer?
             val (moveResult, partnerMoveResult) = when {
               moveData.priority > partnerMoveData.priority -> {
                 selfMoveFirst = true
                 val firstMove = useSelfMove()
                 winner = battle.winner
                 val secondMove = usePartnerMove()
+                if (winner == null) winner = battle.winner
                 Pair(firstMove, secondMove)
               }
               partnerMoveData.priority > moveData.priority -> {
@@ -133,6 +134,7 @@ object BattleActionEvent : Event() {
                 val firstMove = usePartnerMove()
                 winner = battle.winner
                 val secondMove = useSelfMove()
+                if (winner == null) winner = battle.winner
                 Pair(secondMove, firstMove)
               }
               self.pokemonStats.speed > partner.pokemonStats.speed -> {
@@ -140,6 +142,7 @@ object BattleActionEvent : Event() {
                 val firstMove = useSelfMove()
                 winner = battle.winner
                 val secondMove = usePartnerMove()
+                if (winner == null) winner = battle.winner
                 Pair(firstMove, secondMove)
               }
               partner.pokemonStats.speed > self.pokemonStats.speed -> {
@@ -147,6 +150,7 @@ object BattleActionEvent : Event() {
                 val firstMove = usePartnerMove()
                 winner = battle.winner
                 val secondMove = useSelfMove()
+                if (winner == null) winner = battle.winner
                 Pair(secondMove, firstMove)
               }
               else -> {
@@ -155,11 +159,13 @@ object BattleActionEvent : Event() {
                   val firstMove = useSelfMove()
                   winner = battle.winner
                   val secondMove = usePartnerMove()
+                  if (winner == null) winner = battle.winner
                   Pair(firstMove, secondMove)
                 } else {
                   val firstMove = usePartnerMove()
                   winner = battle.winner
                   val secondMove = useSelfMove()
+                  if (winner == null) winner = battle.winner
                   Pair(secondMove, firstMove)
                 }
               }
