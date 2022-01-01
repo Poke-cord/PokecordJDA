@@ -80,6 +80,13 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun incPokemonCount(userData: User, amount: Number, session: ClientSession? = null) {
+    userData.pokemonCount += amount.toInt()
+    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::pokemonCount, amount))
+    else collection.updateOne(session, User::id eq userData.id, inc(User::pokemonCount, amount))
+    setCacheUser(userData)
+  }
+
   suspend fun incGems(userData: User, amount: Int, session: ClientSession? = null) {
     userData.gems += amount
     if (session == null) collection.updateOne(User::id eq userData.id, inc(User::gems, amount))
@@ -99,6 +106,12 @@ class UserRepository(
     if (userData.shinyRate < 1) userData.shinyRate = 1.0
     if (session == null) collection.updateOne(User::id eq userData.id, inc(User::shinyRate, amount))
     else collection.updateOne(session, User::id eq userData.id, inc(User::shinyRate, amount))
+    setCacheUser(userData)
+  }
+
+  suspend fun toggleBidNotifications(userData: User) {
+    userData.bidNotifications = !userData.bidNotifications
+    collection.updateOne(User::id eq userData.id, set(User::bidNotifications setTo userData.bidNotifications))
     setCacheUser(userData)
   }
 
@@ -190,6 +203,23 @@ class UserRepository(
       )
       setCacheUser(userData)
     }
+  }
+
+  suspend fun removeDexCatchEntry(userData: User, pokemon: OwnedPokemon) {
+    val targetList = if (pokemon.shiny) userData.caughtShinies else userData.caughtPokemon
+    if (!targetList.contains(pokemon.id)) {
+      targetList.remove(pokemon.id)
+      collection.updateOne(
+        User::id eq userData.id,
+        pull((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
+      )
+      setCacheUser(userData)
+    }
+  }
+
+  suspend fun tradeCountUpdate(pokemon: OwnedPokemon, userFrom: User, userTo: User) {
+    addDexCatchEntry(userTo, pokemon)
+    removeDexCatchEntry(userFrom, pokemon)
   }
 
   suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, clientSession: ClientSession) {

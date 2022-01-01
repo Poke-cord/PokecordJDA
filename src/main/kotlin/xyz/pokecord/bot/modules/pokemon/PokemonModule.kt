@@ -5,6 +5,8 @@ import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.modules.pokemon.commands.*
 import xyz.pokecord.bot.modules.pokemon.events.SpawnerEvent
 import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent
+import xyz.pokecord.bot.modules.pokemon.gift.GiftCreditCommand
+import xyz.pokecord.bot.modules.pokemon.gift.GiftPokemonCommand
 
 class PokemonModule(bot: Bot) : Module(
   bot,
@@ -19,8 +21,6 @@ class PokemonModule(bot: Bot) : Module(
     SelectCommand(),
     ReleaseCommand(),
     GiftCommand(),
-    GiftCommand.GiftCreditCommand(),
-    GiftCommand.GiftPokemonCommand(),
     MovesetCommand(),
     MoveCommand(),
     PokedexCommand(),

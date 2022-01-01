@@ -15,11 +15,7 @@ class GeneralModule(bot: Bot) : Module(
     FAQCommand(),
     LeaderboardCommand(),
     VoteCommand(),
-    SetCommand(),
-    SetCommand.SetPrefixCommand(),
-    SetCommand.SetPrivateCommand(),
-    SetCommand.SetSpawnChannelCommand(),
-    SetCommand.SilenceCommand()
+    SetCommand()
   ),
   arrayOf(
     ReadyEvent(),

@@ -19,27 +19,33 @@ class Database(cache: Cache) {
   private val client: CoroutineClient
   val database: CoroutineDatabase
 
+  private val auctionCollection: CoroutineCollection<Auction>
   private val configCollection: CoroutineCollection<Config>
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>
+  private val marketCollection: CoroutineCollection<Listing>
   private val orderCollection: CoroutineCollection<Order>
   private val ownedPokemonCollection: CoroutineCollection<OwnedPokemon>
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
   private val userCollection: CoroutineCollection<User>
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
+  private val tradeCollection: CoroutineCollection<Trade>
 
   val giftCollection: CoroutineCollection<Gift>
   val transferLogCollection: CoroutineCollection<TransferLog>
 
+  val auctionRepository: AuctionsRepository
   val configRepository: ConfigRepository
   val faqRepository: FAQRepository
   val guildRepository: GuildRepository
+  val marketRepository: MarketRepository
   val orderRepository: OrderRepository
   val pokemonRepository: PokemonRepository
   val rewardRepository: RewardRepository
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
+  val tradeRepository: TradeRepository
 
   init {
     val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main")
@@ -57,35 +63,44 @@ class Database(cache: Cache) {
       }
     }
 
+    auctionCollection = database.getCollection()
     configCollection = database.getCollection()
     faqCollection = database.getCollection()
     guildCollection = database.getCollection()
     inventoryItemsCollection = database.getCollection()
+    marketCollection = database.getCollection()
     orderCollection = database.getCollection()
     ownedPokemonCollection = database.getCollection()
     spawnChannelCollection = database.getCollection()
     userCollection = database.getCollection()
     voteRewardsCollection = database.getCollection()
+    tradeCollection = database.getCollection()
 
     giftCollection = database.getCollection()
     transferLogCollection = database.getCollection()
 
+    auctionRepository = AuctionsRepository(this, auctionCollection, cache.auctionMap)
     configRepository = ConfigRepository(this, configCollection)
     faqRepository = FAQRepository(this, faqCollection)
     guildRepository = GuildRepository(this, guildCollection, cache.guildMap)
+
+    marketRepository = MarketRepository(this, marketCollection, cache.listingMap)
     orderRepository = OrderRepository(this, orderCollection)
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
       SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)
     userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap, cache.leaderboardMap)
+    tradeRepository = TradeRepository(this, tradeCollection)
 
     CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher()).launch { createIndexes() }
   }
 
   private suspend fun createIndexes() {
+    auctionRepository.createIndexes()
     faqRepository.createIndexes()
     guildRepository.createIndexes()
+    marketRepository.createIndexes()
     orderRepository.createIndexes()
     pokemonRepository.createIndexes()
     rewardRepository.createIndexes()

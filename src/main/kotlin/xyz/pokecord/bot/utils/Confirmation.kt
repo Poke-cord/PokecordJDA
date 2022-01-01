@@ -15,7 +15,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 
-class Confirmation(private val context: ICommandContext, val timeout: Long = 30_000) {
+class Confirmation(private val context: ICommandContext, val authorId: String, val timeout: Long = 30_000) {
   private enum class ConfirmationOptions(val emoji: String, val id: String, val text: String) {
     CHECK("✅", "yes", "Yes"),
     CROSS("❎", "no", "No");
@@ -33,7 +33,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
   var timedOut = false
 
   suspend fun result(embedBuilder: EmbedBuilder): Boolean {
-    context.bot.cache.setRunningCommand(context.author.id, true)
+    context.bot.cache.setRunningCommand(authorId, true)
 
     val footer = embedBuilder.build().footer?.text
     if (footer != null) embedBuilder.setFooter(footer.replace("{{timeout}}", (timeout / 1000).toString()))
@@ -73,7 +73,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
           it.messageId == sentMessage!!.id
         }
 
-        if (event.user.id != context.author.id) {
+        if (event.user.id != authorId) {
           event.replyEmbeds(
             context.embedTemplates.error(
               context.translate("misc.errors.notYourButton")
@@ -82,7 +82,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
             .setEphemeral(true)
             .queue()
         } else {
-          context.bot.cache.setRunningCommand(context.author.id, false)
+          context.bot.cache.setRunningCommand(authorId, false)
           sentMessage?.let {
             if (it.isFromGuild && it.channel is TextChannel && (it.channel as TextChannel).guild.selfMember.hasPermission(
                 it.channel as TextChannel,
@@ -96,7 +96,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
               }
             }
           }
-          if (event.messageId == sentMessage!!.id && event.user.id == context.author.id) {
+          if (event.messageId == sentMessage!!.id && event.user.id == authorId) {
             val option = ConfirmationOptions.getByButtonId(
               event.componentId
             )
@@ -112,6 +112,7 @@ class Confirmation(private val context: ICommandContext, val timeout: Long = 30_
         }
       }
       if (timeoutStatus == null) {
+        timedOut = true
         stop()
         break
       }

@@ -7,13 +7,13 @@ import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.requests.GatewayIntent
+import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaType
 
@@ -59,7 +59,11 @@ abstract class Module(
   fun addCommand(command: Command) {
     val executorFunction =
       command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
-        ?: return
+
+    if (executorFunction == null) {
+      logger.warn("${command::class.java.name} doesn't have a function annotated with ${Command.Executor::class.java.name}")
+      return
+    }
 
     var allConsumed = false
 
@@ -76,24 +80,13 @@ abstract class Module(
       }
     }
     command.module = this
-    if (!command::class.hasAnnotation<Command.ChildCommand>()) {
-      this.commandMap[command.name.lowercase()] = command
-      for (alias in command.aliases) {
-        this.commandMap[alias.lowercase()] = command
-      }
-      if (command is ParentCommand) {
-        val childCommandClasses = command::class.nestedClasses.filter { it.hasAnnotation<Command.ChildCommand>() }
-        for (childCommandClass in childCommandClasses) {
-          val childCommand = command.module.commands.find { it::class == childCommandClass }
-          if (childCommand != null) {
-            childCommand.parentCommand = command
-            command.childCommands.add(childCommand)
-            this.commandMap["${command.name.lowercase()}.${childCommand.name.lowercase()}"] = childCommand
-            for (alias in childCommand.aliases) {
-              this.commandMap["${command.name.lowercase()}.${alias.lowercase()}"] = childCommand
-            }
-          }
-        }
+    command.identifiersForCommandHandler.forEach {
+      commandMap[it] = command
+    }
+    if (command is ParentCommand) {
+      for (childCommand in command.childCommands) {
+        childCommand.parentCommand = command
+        addCommand(childCommand)
       }
     }
   }
@@ -149,5 +142,9 @@ abstract class Module(
 //        }
       }
     }
+  }
+
+  companion object {
+    private val logger = LoggerFactory.getLogger(Module::class.java)
   }
 }

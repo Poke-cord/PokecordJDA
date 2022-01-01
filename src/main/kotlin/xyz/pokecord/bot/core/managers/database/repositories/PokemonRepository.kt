@@ -48,6 +48,10 @@ class PokemonRepository(
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
   }
 
+  suspend fun getPokemonByIds(ids: List<Id<OwnedPokemon>>): List<OwnedPokemon> {
+    return collection.find(OwnedPokemon::_id `in` ids).toList()
+  }
+
   suspend fun getPokemonById(id: Id<OwnedPokemon>): OwnedPokemon? {
     return collection.findOneById(id)
   }
@@ -62,6 +66,17 @@ class PokemonRepository(
 
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
+
+  suspend fun updateOwnerId(pokemonId: Id<OwnedPokemon>, newOwnerId: String, clientSession: ClientSession? = null) {
+    if (clientSession == null) {
+      collection.updateOne(
+        OwnedPokemon::_id eq pokemonId,
+        set(OwnedPokemon::ownerId setTo newOwnerId)
+      )
+    } else {
+      collection.updateOne(clientSession, OwnedPokemon::_id eq pokemonId, set(OwnedPokemon::ownerId setTo newOwnerId))
+    }
+  }
 
   suspend fun claimUnclaimedPokemon(ownerId: String, session: ClientSession? = null): CatchRewardClaimResult {
     val unclaimedMythical = when (session) {
@@ -223,6 +238,17 @@ class PokemonRepository(
     return result.first().count
   }
 
+  suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String, session: ClientSession) {
+    collection.updateOne(
+      session,
+      OwnedPokemon::_id eq pokemon._id,
+      set(
+        OwnedPokemon::ownerId setTo ownerId,
+        OwnedPokemon::favorite setTo false
+      ),
+    )
+  }
+
   suspend fun insertPokemon(pokemon: OwnedPokemon, session: ClientSession? = null): InsertOneResult {
     return (if (session != null) collection.insertOne(session, pokemon)
     else collection.insertOne(pokemon))
@@ -252,7 +278,9 @@ class PokemonRepository(
   suspend fun levelUpAndEvolveIfPossible(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
-    gainedXp: Int? = null
+    gainedXp: Int? = null,
+    beingTradedFor: MutableList<Int>? = null,
+    updateInDb: Boolean = true
   ): Pair<Boolean, Boolean> {
     var leveledUp = false
     var evolved = false
@@ -279,7 +307,10 @@ class PokemonRepository(
           if (evolutionDetails?.knownMoveId != 0) pokemon.moves.contains(evolutionDetails?.knownMoveId) else true
         val isLevelUpOk = if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
         val isMinimumLevelOk = (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
-        val isTradeStateOk = evolutionDetails?.evolutionTriggerId != 2 // TODO: change after implementing trade
+        val isTradeStateOk = if(evolutionDetails?.evolutionTriggerId == 2)
+          if(evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
+          else beingTradedFor != null
+        else true
         val isTriggerItemOk =
           if (evolutionDetails?.evolutionTriggerId == 3) evolutionDetails.triggerItemId == usedItemId else true
 
@@ -320,7 +351,7 @@ class PokemonRepository(
       updatesBson.add(set(OwnedPokemon::id setTo pokemon.id))
     }
 
-    if (leveledUp || evolved || gainedXp != null) {
+    if (updatesBson.isNotEmpty() && updateInDb) {
       collection.updateOne(
         OwnedPokemon::_id eq pokemon._id,
         combine(updatesBson)

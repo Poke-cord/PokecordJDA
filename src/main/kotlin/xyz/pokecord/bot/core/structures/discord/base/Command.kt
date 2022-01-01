@@ -24,10 +24,6 @@ abstract class Command {
     val prefixed: Boolean = false,
   )
 
-  @Target(AnnotationTarget.CLASS)
-  @Retention(AnnotationRetention.RUNTIME)
-  annotation class ChildCommand
-
   enum class RateLimitType {
     Command,
     Args
@@ -38,6 +34,18 @@ abstract class Command {
       if (parentCommand != null) "${module.name}.${parentCommand!!.name}.${name}"
       else "${module.name}.${name}"
     key.removeAccents()
+  }
+  val identifiersForCommandHandler: List<String> by lazy {
+    listOf(
+      name,
+      *aliases
+    ).map {
+      if (parentCommand != null) {
+        parentCommand!!.identifiersForCommandHandler.map { parentIdentifier ->
+          "${parentIdentifier}.${it}".removeAccents().lowercase()
+        }
+      } else listOf(it.removeAccents().lowercase())
+    }.flatten()
   }
   abstract val name: String
 

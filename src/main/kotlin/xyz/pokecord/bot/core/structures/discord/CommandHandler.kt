@@ -228,7 +228,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         System.currentTimeMillis() + command.rateLimit,
         command.rateLimit, TimeUnit.MILLISECONDS
       )
-      if (userData.tag !== context.author.asTag) {
+      if (userData.tag != context.author.asTag) {
         bot.database.userRepository.updateTag(userData, context.author.asTag)
       }
     } catch (e: Throwable) {
@@ -266,13 +266,16 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       }
 
       if (command != null && command.enabled) {
-        if (splitMessage.size >= 1) {
+        var lastCommandString = commandString.lowercase()
+        while (splitMessage.size >= 1) {
+          val childCommandName = splitMessage.first().lowercase()
           val childCommand =
-            command.module.commandMap["${command.name.lowercase()}.${splitMessage.first().lowercase()}"]
+            command?.module?.commandMap?.get("${lastCommandString}.${childCommandName}")
           if (childCommand != null) {
+            lastCommandString = "${lastCommandString}.${childCommandName}"
             command = childCommand
             splitMessage.removeAt(0)
-          }
+          } else break
         }
       }
 
@@ -422,7 +425,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           }
         }
 
-        if (userData.tag !== context.author.asTag) {
+        if (userData.tag != context.author.asTag) {
           bot.database.userRepository.updateTag(userData, context.author.asTag)
         }
 

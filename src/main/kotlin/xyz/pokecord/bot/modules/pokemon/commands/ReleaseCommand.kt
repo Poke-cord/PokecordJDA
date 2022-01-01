@@ -50,7 +50,7 @@ class ReleaseCommand : Command() {
         return
       }
       else -> {
-        val confirmation = Confirmation(context)
+        val confirmation = Confirmation(context, context.author.id)
         val result =
           confirmation.result(
             context.embedTemplates.confirmation(

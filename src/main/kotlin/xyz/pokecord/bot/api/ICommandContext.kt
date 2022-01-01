@@ -9,9 +9,7 @@ import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.requests.RestAction
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.managers.database.models.Guild
-import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
-import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
@@ -40,6 +38,8 @@ interface ICommandContext {
   suspend fun getLanguage(): I18n.Language
   suspend fun getPrefix(): String
   suspend fun getUserData(forceFetch: Boolean = false): User
+  suspend fun getTradeState(): Trade?
+  suspend fun getTraderState(): TraderData?
   suspend fun handleException(
     exception: Throwable,
     module: Module? = null,
