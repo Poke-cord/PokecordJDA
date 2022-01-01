@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.battle.commands
 
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.interactions.components.ActionRow
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.battle.BattleModule
@@ -18,11 +19,26 @@ object BattleCommand : Command() {
 
     val selfCurrentBattle = context.bot.database.battleRepository.getUserCurrentBattle(context.author)
     if (selfCurrentBattle != null) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.alreadyBattling")
-        ).build()
-      ).queue()
+      val initiatorData = context.bot.database.userRepository.getUser(selfCurrentBattle.initiator.id)
+      val partnerData = context.bot.database.userRepository.getUser(selfCurrentBattle.partner.id)
+      val initiatorPokemon = context.bot.database.pokemonRepository.getPokemonById(initiatorData.selected!!)!!
+      val partnerPokemon = context.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
+      context
+        .addAttachment(
+          BattleModule.getBattleImage(selfCurrentBattle, initiatorPokemon.stats, partnerPokemon.stats),
+          "battle.png"
+        )
+        .addActionRows(
+          ActionRow.of(BattleModule.Buttons.getBattleActionRow(selfCurrentBattle._id.toString()))
+        )
+        .reply(
+          context.embedTemplates.error(
+            context.translate("modules.battle.commands.battle.errors.alreadyBattling")
+          )
+            .setImage("attachment://battle.png")
+            .build()
+        )
+        .queue()
       return
     }
 

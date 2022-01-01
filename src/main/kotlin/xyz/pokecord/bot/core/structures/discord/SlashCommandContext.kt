@@ -33,6 +33,7 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
   private var replyDeferred = false
 
   private val actionRows = mutableListOf<ActionRow>()
+  private val attachments = mutableListOf<Pair<ByteArray, String>>()
 
   fun deferReply(): ReplyAction {
     replyDeferred = true
@@ -42,17 +43,27 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
   override fun addActionRows(vararg actionRows: ActionRow) = this.also { this.actionRows.addAll(actionRows) }
   override fun clearActionRows() = this.also { actionRows.clear() }
 
+  override fun addAttachment(data: ByteArray, name: String) = this.also { this.attachments.add(Pair(data, name)) }
+
   override fun reply(content: String, mentionRepliedUser: Boolean): RestAction<*> {
     return when {
-      replyDeferred -> event.hook.editOriginal(content).setActionRows(actionRows)
-      else -> event.reply(content).mentionRepliedUser(mentionRepliedUser).addActionRows(actionRows)
+      replyDeferred -> event.hook.editOriginal(content).setActionRows(actionRows).also {
+        attachments.forEach { attachment -> it.addFile(attachment.first, attachment.second) }
+      }
+      else -> event.reply(content).mentionRepliedUser(mentionRepliedUser).addActionRows(actionRows).also {
+        attachments.forEach { attachment -> it.addFile(attachment.first, attachment.second) }
+      }
     }
   }
 
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean): RestAction<*> {
     return when {
-      replyDeferred -> event.hook.editOriginalEmbeds(embed).setActionRows(actionRows)
-      else -> event.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).addActionRows(actionRows)
+      replyDeferred -> event.hook.editOriginalEmbeds(embed).setActionRows(actionRows).also {
+        attachments.forEach { attachment -> it.addFile(attachment.first, attachment.second) }
+      }
+      else -> event.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).addActionRows(actionRows).also {
+        attachments.forEach { attachment -> it.addFile(attachment.first, attachment.second) }
+      }
     }
   }
 

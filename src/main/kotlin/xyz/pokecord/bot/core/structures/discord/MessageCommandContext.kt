@@ -28,15 +28,26 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
     get() = event.message.timeCreated
 
   private val actionRows = mutableListOf<ActionRow>()
+  private val attachments = mutableListOf<Pair<ByteArray, String>>()
 
   override fun addActionRows(vararg actionRows: ActionRow) = this.also { this.actionRows.addAll(actionRows) }
   override fun clearActionRows() = this.also { actionRows.clear() }
 
+  override fun addAttachment(data: ByteArray, name: String) = this.also { attachments.add(Pair(data, name)) }
+
   override fun reply(content: String, mentionRepliedUser: Boolean) =
-    event.message.reply(content).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
+    event.message.reply(content).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows).also {
+      attachments.forEach { attachment ->
+        it.addFile(attachment.first, attachment.second)
+      }
+    }
 
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean) =
-    event.message.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows)
+    event.message.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows).also {
+      attachments.forEach { attachment ->
+        it.addFile(attachment.first, attachment.second)
+      }
+    }
 
   override suspend fun handleException(
     exception: Throwable,
