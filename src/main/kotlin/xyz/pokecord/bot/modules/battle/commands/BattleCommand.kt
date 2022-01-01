@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.modules.battle.commands
 
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.interactions.components.Button
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.battle.BattleModule
@@ -94,7 +93,7 @@ object BattleCommand : Command() {
       return
     }
 
-    if (pokemon.moves.isEmpty()) {
+    if (pokemon.moves.all { it == 0 }) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.battle.commands.battle.errors.noPokemonMoves")
@@ -103,7 +102,7 @@ object BattleCommand : Command() {
       return
     }
 
-    if (partnerPokemon.moves.isEmpty()) {
+    if (partnerPokemon.moves.all { it == 0 }) {
       context.reply(
         context.embedTemplates.error(
           context.translate(
