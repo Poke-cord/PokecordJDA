@@ -40,8 +40,7 @@ object TradeAddPokemonCommand : Command() {
         context.reply(
           context.embedTemplates.error(
             context.translate(
-              "modules.trading.commands.add.errors.noPokemonFound",
-              "index" to pokemon.toString()
+              "modules.trading.commands.add.errors.noPokemonFound"
             )
           ).build()
         ).queue()

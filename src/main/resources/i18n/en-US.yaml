@@ -438,7 +438,7 @@ modules:
           noNumberPokemon: Please provide the index number of the pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
-          noPokemonFound: "There was no pokémon found with the index value {{index}}."
+          noPokemonFound: "There was no pokémon found with the given index value."
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
           notTransferableTitle: Not Transferable
         embeds:
