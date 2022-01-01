@@ -3,8 +3,9 @@ package xyz.pokecord.bot.modules.trading.commands
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.trading.TradingModule
 
-object TradeConfirmCommand: Command() {
+object TradeConfirmCommand : Command() {
   override val name = "confirm"
 
   @Executor
@@ -21,7 +22,7 @@ object TradeConfirmCommand: Command() {
       return
     }
 
-    if(
+    if (
       tradeState.initiator.credits == 0 &&
       tradeState.initiator.pokemon.isEmpty() &&
       tradeState.receiver.credits == 0 &&
@@ -35,12 +36,15 @@ object TradeConfirmCommand: Command() {
       return
     }
 
-    val partnerTradeState = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
-    if(partnerTradeState.confirmed) {
+    val partnerTradeState =
+      if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
+    if (partnerTradeState.confirmed) {
       context.bot.database.tradeRepository.deleteTrade(tradeState)
 
-      val authorTradeData = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
-      val partnerTradeData = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
+      val authorTradeData =
+        if (tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+      val partnerTradeData =
+        if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
 
       val authorUserData = context.bot.database.userRepository.getUser(authorTradeData.userId)
       val partnerUserData = context.bot.database.userRepository.getUser(partnerTradeData.userId)
@@ -50,60 +54,59 @@ object TradeConfirmCommand: Command() {
       session.use {
         session.startTransaction()
 
-        if(authorTradeData.credits > 0) {
+        if (authorTradeData.credits > 0) {
           context.bot.database.userRepository.incCredits(partnerUserData, authorTradeData.credits, session)
         }
 
-        if(partnerTradeData.credits > 0) {
+        if (partnerTradeData.credits > 0) {
           context.bot.database.userRepository.incCredits(authorUserData, partnerTradeData.credits, session)
         }
 
         val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorTradeData.pokemon)
         val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
-        val authorPokemonText = authorPokemon.map { pokemon ->
-          val initialName = context.translator.pokemonName(pokemon)
-          val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-            pokemon, null, null, partnerPokemon.map { it.id }.toMutableList()
-          )
-
+        val authorPokemonText =
+          TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, true)
+        authorPokemon.map { pokemon ->
           context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id, session)
-          context.bot.database.userRepository.tradeCountUpdate(pokemon, authorUserData, partnerUserData)
-
-          val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-          "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
+          context.bot.database.userRepository.addDexCatchEntry(authorUserData, pokemon, session)
         }
 
-        val partnerPokemonText = partnerPokemon.map { pokemon ->
-          val initialName = context.translator.pokemonName(pokemon)
-          val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-            pokemon, null, null, authorPokemon.map { it.id }.toMutableList()
-          )
-
+        val partnerPokemonText =
+          TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, true)
+        partnerPokemon.map { pokemon ->
           context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id, session)
-          context.bot.database.userRepository.tradeCountUpdate(pokemon, partnerUserData, authorUserData)
-
-          val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-          "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
+          context.bot.database.userRepository.addDexCatchEntry(partnerUserData, pokemon, session)
         }
 
-        context.bot.database.userRepository.incPokemonCount(authorUserData, partnerPokemon.size - authorPokemon.size, session)
-        context.bot.database.userRepository.incPokemonCount(partnerUserData, authorPokemon.size - partnerPokemon.size, session)
+        context.bot.database.userRepository.incPokemonCount(
+          authorUserData,
+          partnerPokemon.size - authorPokemon.size,
+          session
+        )
+        context.bot.database.userRepository.incPokemonCount(
+          partnerUserData,
+          authorPokemon.size - partnerPokemon.size,
+          session
+        )
 
         session.commitTransactionAndAwait()
 
         context.reply(
           context.embedTemplates
             .normal(
-              context.translate("modules.trading.commands.confirm.embeds.confirmed.description"),
+              context.translate(
+                "modules.trading.commands.confirm.embeds.confirmed.description",
+                "partner" to "<@${partnerUserData.id}>"
+              ),
               context.translate("modules.trading.commands.confirm.embeds.confirmed.title"),
             )
             .addField("Trainer", authorUserData.tag, true)
             .addField("Credits", context.translator.numberFormat(authorTradeData.credits), true)
-            .addField("Pokemon", authorPokemonText.joinToString { "\n" }, true)
+            .addField("Pokemon", authorPokemonText.joinToString("\n").ifEmpty { "None" }, true)
             .addField("Trainer", partnerUserData.tag, true)
             .addField("Credits", context.translator.numberFormat(partnerTradeData.credits), true)
-            .addField("Pokemon", partnerPokemonText.joinToString { "\n" }, true)
+            .addField("Pokemon", partnerPokemonText.joinToString("\n").ifEmpty { "None" }, true)
             .build()
         ).queue()
       }

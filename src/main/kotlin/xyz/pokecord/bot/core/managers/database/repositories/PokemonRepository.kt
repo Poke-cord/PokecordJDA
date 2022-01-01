@@ -274,7 +274,7 @@ class PokemonRepository(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
     gainedXp: Int? = null,
-    beingTradedFor: MutableList<Int>? = null,
+    beingTradedFor: List<Int>? = null,
     updateInDb: Boolean = true
   ): Pair<Boolean, Boolean> {
     var leveledUp = false

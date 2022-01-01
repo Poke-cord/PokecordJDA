@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.trading.commands
 import dev.minn.jda.ktx.await
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.trading.TradingModule
 import xyz.pokecord.bot.utils.Confirmation
 
 object TradeStatusCommand: Command() {
@@ -58,25 +59,8 @@ object TradeStatusCommand: Command() {
     val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorTradeData.pokemon)
     val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
-    val authorPokemonText = authorPokemon.map { pokemon ->
-      val initialName = context.translator.pokemonName(pokemon)
-      val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-        pokemon, null, null, partnerPokemon.map { it.id }.toMutableList(), false
-      )
-
-      val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-      "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
-    }
-
-    val partnerPokemonText = partnerPokemon.map { pokemon ->
-      val initialName = context.translator.pokemonName(pokemon)
-      val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-        pokemon, null, null, authorPokemon.map { it.id }.toMutableList(), false
-      )
-
-      val evolutionNameText = if(evolved) "-> ${context.translator.pokemonName(pokemon)}" else ""
-      "${pokemon.index} | ${initialName}${evolutionNameText} - ${pokemon.level} - ${pokemon.ivPercentage}"
-    }
+    val authorPokemonText = TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, false)
+    val partnerPokemonText = TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, false)
 
     val statusTitle =
       if(authorTradeData.confirmed || partnerTradeData.confirmed)

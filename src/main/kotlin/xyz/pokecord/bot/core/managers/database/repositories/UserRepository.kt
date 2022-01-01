@@ -3,9 +3,9 @@ package xyz.pokecord.bot.core.managers.database.repositories
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.Serializable
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
@@ -193,33 +193,19 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun addDexCatchEntry(userData: User, pokemon: OwnedPokemon) {
+  suspend fun addDexCatchEntry(userData: User, pokemon: OwnedPokemon, clientSession: ClientSession? = null) {
     val targetList = if (pokemon.shiny) userData.caughtShinies else userData.caughtPokemon
     if (!targetList.contains(pokemon.id)) {
       targetList.add(pokemon.id)
-      collection.updateOne(
-        User::id eq userData.id,
-        addToSet((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
-      )
+      val filter = User::id eq userData.id
+      val update = addToSet((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
+      if (clientSession == null) {
+        collection.updateOne(filter, update)
+      } else {
+        collection.updateOne(clientSession, filter, update)
+      }
       setCacheUser(userData)
     }
-  }
-
-  suspend fun removeDexCatchEntry(userData: User, pokemon: OwnedPokemon) {
-    val targetList = if (pokemon.shiny) userData.caughtShinies else userData.caughtPokemon
-    if (!targetList.contains(pokemon.id)) {
-      targetList.remove(pokemon.id)
-      collection.updateOne(
-        User::id eq userData.id,
-        pull((if (pokemon.shiny) User::caughtShinies else User::caughtPokemon), pokemon.id)
-      )
-      setCacheUser(userData)
-    }
-  }
-
-  suspend fun tradeCountUpdate(pokemon: OwnedPokemon, userFrom: User, userTo: User) {
-    addDexCatchEntry(userTo, pokemon)
-    removeDexCatchEntry(userFrom, pokemon)
   }
 
   suspend fun giftPokemon(sender: User, receiver: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
