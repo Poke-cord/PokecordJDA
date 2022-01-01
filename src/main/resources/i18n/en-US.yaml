@@ -157,7 +157,14 @@ misc:
     usage: Usage
     weight: Weight
     xp: XP
+    auctionId: Auction ID
+    startingBid: Starting Bid
+    bidCount: Bid Count
+    timeLeft: Time Left
+    currentBid: Current Bid
     noBids: No Bids
+    listingId: Listing ID
+    price: Price
 modules:
   battle:
     commands:
@@ -279,24 +286,7 @@ modules:
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: No auction was found with the ID **{{id}}**.
           noPokemonFound: The auctioned pokémon seems to be lost?
-        displayInfo:
-          description: |-
-            **Auction ID**: {{auctionId}}
-            **Starting Bid**: {{startingBid}} Credits
-            **Bids Amount**: {{bidCount}} Bids
-            **Time Left**: {{timeLeft}}
-            **Current Bid**: {{currentBid}}
-            **XP**: {{XP}}
-            **Gender**: {{gender}}
-            **Nature**: {{nature}}
-            **HP**: {{hp}}/31
-            **Attack**: {{attack}}/31
-            **Defense**: {{defense}}/31
-            **Sp. Atk**: {{special-attack}}/31
-            **Sp. Def**: {{special-defense}}/31
-            **Speed**: {{speed}}/31
-            **Total IV**: {{ivPercentage}}
-          title: Level {{pokemonLevel}} {{pokemonName}} | {{auctionId}} | Auction Info
+        title: Level {{pokemonLevel}} {{pokemonName}} | {{auctionId}} | Auction Info
       auctions:
         embeds:
           title: 🎪 Auctions
@@ -374,21 +364,7 @@ modules:
           noListingId: Please provide a valid listing ID.
           noListingFound: No listing was found with the ID **{{id}}**.
           noPokemonFound: The listing's pokémon seems to be lost?
-        displayInfo:
-          description: |-
-            **Listing ID**: {{listingId}}
-            **Price**: {{price}} Credits
-            **XP**: {{XP}}
-            **Gender**: {{gender}}
-            **Nature**: {{nature}}
-            **HP**: {{hp}}/31
-            **Attack**: {{attack}}/31
-            **Defense**: {{defense}}/31
-            **Sp. Atk**: {{special-attack}}/31
-            **Sp. Def**: {{special-defense}}/31
-            **Speed**: {{speed}}/31
-            **Total IV**: {{ivPercentage}}
-          title: Level {{pokemonLevel}} {{pokemonName}} | {{listingId}} | Listing Info
+        title: Level {{pokemonLevel}} {{pokemonName}} | {{listingId}} | Listing Info
       market:
         embeds:
           title: 🎪 Market

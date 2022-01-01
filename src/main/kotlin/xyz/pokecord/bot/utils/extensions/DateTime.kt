@@ -57,19 +57,19 @@ fun Long.humanizeMs(showMilliseconds: Boolean = false): String {
     str += "${years}y "
   }
   if (months > 0) {
-    str += "${months}mo"
+    str += "${months}mo "
   }
   if (days > 0) {
-    str += "${days}d"
+    str += "${days}d "
   }
   if (hours > 0) {
-    str += "${hours}h"
+    str += "${hours}h "
   }
   if (minutes > 0) {
-    str += "${minutes}m"
+    str += "${minutes}m "
   }
   if (seconds > 0) {
-    str += "${seconds}s"
+    str += "${seconds}s "
   }
 
   if (showMilliseconds) {
