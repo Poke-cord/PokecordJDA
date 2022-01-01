@@ -60,9 +60,9 @@ class MarketRepository(
     cacheMap.putAsync(listing.id.toString(), Json.encodeToString(listing.copy())).awaitSuspending()
   }
 
-  suspend fun markSold(listing: Listing) {
+  suspend fun markSold(listing: Listing, session: ClientSession) {
     listing.sold = true
-    collection.updateOne(Listing::id eq listing.id, set(Listing::sold setTo true))
+    collection.updateOne(session, Listing::id eq listing.id, set(Listing::sold setTo true))
     setCacheListing(listing)
   }
 

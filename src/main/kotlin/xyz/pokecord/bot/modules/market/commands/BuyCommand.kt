@@ -55,7 +55,7 @@ object BuyCommand : Command() {
         }
 
         val userData = context.getUserData()
-        if(listing.price > userData.credits) {
+        if (listing.price > userData.credits) {
           context.reply(
             context.embedTemplates.error(
               context.translate("modules.market.commands.buy.errors.notEnoughCredits")
@@ -78,12 +78,13 @@ object BuyCommand : Command() {
           )
 
           if (confirmed) {
+            val sellerData = context.bot.database.userRepository.getUser(listing.ownerId)
             val session = context.bot.database.startSession()
-
             session.use {
               session.startTransaction()
               context.bot.database.userRepository.incCredits(userData, -listing.price, session)
-              context.bot.database.marketRepository.markSold(listing)
+              context.bot.database.userRepository.incCredits(sellerData, listing.price, session)
+              context.bot.database.marketRepository.markSold(listing, session)
               context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, context.author.id, session)
               session.commitTransactionAndAwait()
             }
