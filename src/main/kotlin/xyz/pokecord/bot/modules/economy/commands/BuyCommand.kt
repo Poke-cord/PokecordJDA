@@ -4,6 +4,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
+import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import kotlin.math.roundToInt
 
 class BuyCommand : Command() {
@@ -29,7 +30,7 @@ class BuyCommand : Command() {
     var effectiveAmount = amount ?: 1
 
     val itemData = ItemData.getByName(itemName) ?: ItemData.getByName("$amount $itemName")?.also { effectiveAmount = 1 }
-    if (itemData == null) {
+    if (itemData == null || !ItemFactory.items.contains(itemData.id)) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.economy.commands.buy.errors.itemNotFound")
