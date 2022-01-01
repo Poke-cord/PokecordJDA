@@ -57,4 +57,8 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
       )
     )
   }
+
+  override fun hasMention(id: String): Boolean {
+    return event.message.getMentions().any { it.id == id }
+  }
 }

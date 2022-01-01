@@ -8,7 +8,8 @@ import xyz.pokecord.bot.utils.Confirmation
 import java.util.concurrent.TimeUnit
 
 object TradeCommand : ParentCommand() {
-  override val childCommands = mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
+  override val childCommands =
+    mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
   override val name = "Trade"
 
   @Executor
@@ -53,8 +54,10 @@ object TradeCommand : ParentCommand() {
       ).queue()
     }
 
-    val mentionMsg = context.channel.sendMessage(partner.asMention).await()
-    mentionMsg.delete().queueAfter(3000, TimeUnit.MILLISECONDS)
+    if (!context.hasMention(partner.id)) {
+      val mentionMsg = context.channel.sendMessage(partner.asMention).await()
+      mentionMsg.delete().queueAfter(3000, TimeUnit.MILLISECONDS)
+    }
 
     val confirmation = Confirmation(context, partner.id)
     val confirmed = confirmation.result(

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.requests.RestAction
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction
@@ -86,5 +87,9 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
       event,
       tmpExtras
     )
+  }
+
+  override fun hasMention(id: String): Boolean {
+    return event.options.any { it.type == OptionType.MENTIONABLE && it.asMentionable.id == id }
   }
 }

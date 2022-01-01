@@ -60,4 +60,5 @@ interface ICommandContext {
   suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String
   suspend fun translate(key: String, vararg data: Pair<String, String>): String
   suspend fun translate(key: String, default: String, vararg data: Pair<String, String>): String
+  fun hasMention(id: String): Boolean
 }
