@@ -66,7 +66,7 @@ object BidCommand : Command() {
               "modules.auctions.commands.bid.errors.noBidAmount",
               mapOf(
                 "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+                "pokemonName" to context.translator.pokemonName(pokemon)
               )
             )
           ).build()
@@ -136,7 +136,7 @@ object BidCommand : Command() {
             mapOf(
               "bid" to bidAmount.toString(),
               "pokemonIV" to pokemon.ivPercentage,
-              "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+              "pokemonName" to context.translator.pokemonName(pokemon)
             )
           ),
           context.translate("modules.auctions.commands.bid.confirmation.title")
@@ -161,7 +161,7 @@ object BidCommand : Command() {
                   mapOf(
                     "bidder" to context.author.asMention,
                     "ID" to auction.id.toString(),
-                    "pokemonName" to context.translator.pokemonDisplayName(pokemon),
+                    "pokemonName" to context.translator.pokemonName(pokemon),
                     "bidDifference" to (highestBid.amount - bidAmount).toString()
                   )
                 ),
@@ -182,7 +182,7 @@ object BidCommand : Command() {
               mapOf(
                 "bid" to bidAmount.toString(),
                 "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+                "pokemonName" to context.translator.pokemonName(pokemon)
               )
             ),
             context.translate("modules.auctions.commands.bid.confirmed.title")
@@ -201,7 +201,7 @@ object BidCommand : Command() {
                   "bidderTag" to context.author.asTag,
                   "amount" to bidAmount.toString(),
                   "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonDisplayName(pokemon)
+                  "pokemonName" to context.translator.pokemonName(pokemon)
                 )
               ),
               context.translate("modules.auctions.commands.bid.bidNotification.title")

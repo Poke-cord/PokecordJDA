@@ -23,9 +23,9 @@ class Translator(val context: BaseCommandContext) {
 
   suspend fun pokemonName(pokemon: OwnedPokemon) = pokemonName(pokemon.data)
   suspend fun pokemonName(pokemon: Pokemon) = pokemonName(pokemon.species)
-  suspend fun pokemonName(species: Species): String? {
+  suspend fun pokemonName(species: Species): String {
     val languageId = context.getLanguage().pokeApiLanguageId ?: I18n.Language.EN_US.pokeApiLanguageId!!
-    return (species.getName(languageId) ?: species.name)?.name
+    return (species.getName(languageId) ?: species.name)?.name!!
   }
 
   suspend fun pokemonGenus(pokemon: Pokemon) = pokemonGenus(pokemon.species)
@@ -76,7 +76,7 @@ class Translator(val context: BaseCommandContext) {
   }
 
   suspend fun prevEvolution(pokemon: Pokemon): String {
-    return (if (pokemon.species.evolvesFromSpeciesId != 0) context.translator.pokemonName(Pokemon.getById(pokemon.species.evolvesFromSpeciesId)!!)!!
+    return (if (pokemon.species.evolvesFromSpeciesId != 0) context.translator.pokemonName(Pokemon.getById(pokemon.species.evolvesFromSpeciesId)!!)
     else context.translate(
       "misc.texts.firstStage"
     ))
