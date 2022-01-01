@@ -13,6 +13,7 @@ data class Listing(
 
   val price: Int = 1000,
   var sold: Boolean = false,
+  var unlisted: Boolean = false,
 
   @Transient var _isNew: Boolean = false
 )
