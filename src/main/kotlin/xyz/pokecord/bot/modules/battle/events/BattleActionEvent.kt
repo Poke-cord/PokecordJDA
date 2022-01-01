@@ -77,6 +77,14 @@ object BattleActionEvent : Event() {
           }).queue()
         }
         is BattleModule.Buttons.BattleAction.ChooseMove -> {
+          if (battle.endedAtMillis != null) {
+            event.replyEmbeds(Embed {
+              title = "Error"
+              color = EmbedTemplates.Color.RED.code
+              description = "This battle has already ended!"
+            }).setEphemeral(true).queue()
+            return
+          }
           val moveId = button.moveId.toIntOrNull() ?: return
           val moveData = MoveData.getById(moveId) ?: return
 
