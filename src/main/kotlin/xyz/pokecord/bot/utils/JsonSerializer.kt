@@ -5,5 +5,6 @@ import kotlinx.serialization.modules.plus
 import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 
 val Json = Json {
+  ignoreUnknownKeys = true
   serializersModule += IdKotlinXSerializationModule
 }
