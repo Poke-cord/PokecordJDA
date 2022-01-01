@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.modules.auctions.AuctionsModule
+import xyz.pokecord.bot.modules.battle.BattleModule
 import xyz.pokecord.bot.modules.developer.DeveloperModule
 import xyz.pokecord.bot.modules.economy.EconomyModule
 import xyz.pokecord.bot.modules.general.GeneralModule
@@ -54,6 +55,7 @@ object App {
           GeneralModule(bot),
           ProfileModule(bot),
           EconomyModule(bot),
+          BattleModule(bot),
           AuctionsModule(bot),
           MarketModule(bot),
           TradingModule(bot),

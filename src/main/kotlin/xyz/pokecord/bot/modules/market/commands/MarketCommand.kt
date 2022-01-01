@@ -1,11 +1,9 @@
 package xyz.pokecord.bot.modules.market.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.utils.TimeFormat
 import org.litote.kmongo.eq
 import org.litote.kmongo.match
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.Listing
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -13,10 +11,11 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
-object MarketCommand: ParentCommand() {
+object MarketCommand : ParentCommand() {
   override val name = "Market"
   override var aliases = arrayOf("markets")
-  override val childCommands: MutableList<Command> = mutableListOf(ListCommand, UnlistCommand, BuyCommand, InfoCommand, ProfileCommand)
+  override val childCommands: MutableList<Command> =
+    mutableListOf(ListCommand, UnlistCommand, BuyCommand, InfoCommand, ProfileCommand)
 
   suspend fun formatListings(
     context: ICommandContext,
@@ -41,7 +40,7 @@ object MarketCommand: ParentCommand() {
     context: ICommandContext,
     @Argument(optional = true) page: Int?,
   ) {
-    if(!context.hasStarted(true)) return
+    if (!context.hasStarted(true)) return
 
     val templateEmbedBuilder =
       EmbedBuilder()

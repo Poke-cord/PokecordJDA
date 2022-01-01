@@ -15,7 +15,11 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 
-class Confirmation(private val context: ICommandContext, val authorId: String, val timeout: Long = 30_000) {
+class Confirmation(
+  private val context: ICommandContext,
+  val authorId: String = context.author.id,
+  val timeout: Long = 30_000
+) {
   private enum class ConfirmationOptions(val emoji: String, val id: String, val text: String) {
     CHECK("✅", "yes", "Yes"),
     CROSS("❎", "no", "No");
@@ -32,9 +36,8 @@ class Confirmation(private val context: ICommandContext, val authorId: String, v
   var sentMessage: Message? = null
   var timedOut = false
 
-  suspend fun result(embedBuilder: EmbedBuilder): Boolean {
-    context.bot.cache.setRunningCommand(authorId, true)
-
+  suspend fun result(embedBuilder: EmbedBuilder, mentionRepliedUser: Boolean = false): Boolean {
+    context.bot.cache.setRunningCommand(context.author.id, true)
     val footer = embedBuilder.build().footer?.text
     if (footer != null) embedBuilder.setFooter(footer.replace("{{timeout}}", (timeout / 1000).toString()))
 
@@ -47,7 +50,7 @@ class Confirmation(private val context: ICommandContext, val authorId: String, v
           Button.secondary(it.id, Emoji.fromUnicode(it.emoji))
 //          Button.secondary(it.id, it.text).withEmoji(Emoji.fromUnicode(it.emoji))
         }
-      )).reply(embedBuilder.build()).await()
+      )).reply(embedBuilder.build(), mentionRepliedUser).await()
 
     context.clearActionRows()
 

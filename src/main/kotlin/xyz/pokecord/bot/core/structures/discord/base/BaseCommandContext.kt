@@ -10,7 +10,6 @@ import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.*
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.ContextEmbedTemplates
-import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.Translator
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Confirmation
@@ -197,7 +196,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun askForTOSAgreement(): Boolean {
-    val confirmation = Confirmation(this, this.author.id)
+    val confirmation = Confirmation(this)
     return confirmation.result(
       embedTemplates.normal(
         translate(

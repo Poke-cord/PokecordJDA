@@ -56,7 +56,7 @@ object TradeCommand : ParentCommand() {
     val mentionMsg = context.channel.sendMessage(partner.asMention).await()
     mentionMsg.delete().queueAfter(3000, TimeUnit.MILLISECONDS)
 
-    val confirmation = Confirmation(context, partner.id, 30_000)
+    val confirmation = Confirmation(context, partner.id)
     val confirmed = confirmation.result(
       context.embedTemplates.confirmation(
         context.translate(

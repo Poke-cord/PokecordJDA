@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 
 open class EmbedTemplates {
   enum class Color(val code: Int) {

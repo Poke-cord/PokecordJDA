@@ -7,6 +7,7 @@ import kotlinx.serialization.Transient
 import org.litote.kmongo.Id
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
+import xyz.pokecord.bot.core.structures.pokemon.Stat
 import kotlin.reflect.KProperty1
 
 @Serializable
@@ -20,6 +21,19 @@ data class PokemonStats(
 ) {
   @Transient
   val total = attack + defense + hp + specialAttack + specialDefense + speed
+
+  companion object {
+    fun getBaseStats(pokemonId: Int): PokemonStats {
+      return PokemonStats(
+        Stat.attack.getBaseValue(pokemonId)!!,
+        Stat.defense.getBaseValue(pokemonId)!!,
+        Stat.hp.getBaseValue(pokemonId)!!,
+        Stat.specialAttack.getBaseValue(pokemonId)!!,
+        Stat.specialDefense.getBaseValue(pokemonId)!!,
+        Stat.speed.getBaseValue(pokemonId)!!,
+      )
+    }
+  }
 }
 
 @Serializable

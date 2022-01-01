@@ -4,20 +4,19 @@ import dev.minn.jda.ktx.await
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Task
-import java.lang.Exception
 
-object AuctionTask: Task() {
+object AuctionTask : Task() {
   override val name = "AuctionChecker"
-  override val interval = 30 * 1000L;
+  override val interval = 30 * 1000L
 
   private val embedTemplates = EmbedTemplates()
 
   override suspend fun execute() {
     val endedAuctions = module.bot.database.auctionRepository.auctionTask(interval, module.bot.shardManager)
-    for(endedAuction in endedAuctions) {
+    for (endedAuction in endedAuctions) {
       val pokemon = module.bot.database.pokemonRepository.getPokemonById(endedAuction.pokemon)
-      if(pokemon != null) {
-        if(endedAuction.bids.isNotEmpty()) {
+      if (pokemon != null) {
+        if (endedAuction.bids.isNotEmpty()) {
           val highestBid = endedAuction.highestBid!!
           val user = module.bot.database.userRepository.getUser(endedAuction.ownerId)
 
@@ -63,7 +62,8 @@ object AuctionTask: Task() {
                 embedTemplates.translate("modules.auctions.tasks.checker.auctionWon.title")
               ).build()
             ).queue()
-          } catch(_: Exception) { }
+          } catch (_: Exception) {
+          }
         } else {
           module.bot.database.pokemonRepository.updateOwnerId(endedAuction.pokemon, endedAuction.ownerId)
 
@@ -81,7 +81,8 @@ object AuctionTask: Task() {
                 embedTemplates.translate("modules.auctions.tasks.checker.auctionEnded.title")
               ).build()
             ).queue()
-          } catch(_: Exception) { }
+          } catch (_: Exception) {
+          }
         }
       }
     }

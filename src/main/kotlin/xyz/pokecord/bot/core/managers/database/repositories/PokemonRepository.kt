@@ -270,11 +270,6 @@ class PokemonRepository(
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
   }
 
-  suspend fun giveXp(pokemon: OwnedPokemon, xp: Int, session: ClientSession? = null) {
-    if (session == null) collection.updateOne(OwnedPokemon::_id eq pokemon._id, inc(OwnedPokemon::xp, xp))
-    else collection.updateOne(session, OwnedPokemon::_id eq pokemon._id, inc(OwnedPokemon::xp, xp))
-  }
-
   suspend fun levelUpAndEvolveIfPossible(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,

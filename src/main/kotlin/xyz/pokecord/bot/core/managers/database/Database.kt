@@ -20,6 +20,7 @@ class Database(cache: Cache) {
   val database: CoroutineDatabase
 
   private val auctionCollection: CoroutineCollection<Auction>
+  private val battleCollection: CoroutineCollection<Battle>
   private val configCollection: CoroutineCollection<Config>
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
@@ -36,6 +37,7 @@ class Database(cache: Cache) {
   val transferLogCollection: CoroutineCollection<TransferLog>
 
   val auctionRepository: AuctionsRepository
+  val battleRepository: BattleRepository
   val configRepository: ConfigRepository
   val faqRepository: FAQRepository
   val guildRepository: GuildRepository
@@ -64,6 +66,7 @@ class Database(cache: Cache) {
     }
 
     auctionCollection = database.getCollection()
+    battleCollection = database.getCollection()
     configCollection = database.getCollection()
     faqCollection = database.getCollection()
     guildCollection = database.getCollection()
@@ -80,6 +83,7 @@ class Database(cache: Cache) {
     transferLogCollection = database.getCollection()
 
     auctionRepository = AuctionsRepository(this, auctionCollection, cache.auctionMap)
+    battleRepository = BattleRepository(this, battleCollection, cache.battleRequestsMap)
     configRepository = ConfigRepository(this, configCollection)
     faqRepository = FAQRepository(this, faqCollection)
     guildRepository = GuildRepository(this, guildCollection, cache.guildMap)
@@ -98,6 +102,7 @@ class Database(cache: Cache) {
 
   private suspend fun createIndexes() {
     auctionRepository.createIndexes()
+    battleRepository.createIndexes()
     faqRepository.createIndexes()
     guildRepository.createIndexes()
     marketRepository.createIndexes()

@@ -62,7 +62,7 @@ object BuyCommand : Command() {
             ).build()
           ).queue()
         } else {
-          val confirmation = Confirmation(context, context.author.id)
+          val confirmation = Confirmation(context)
           val confirmed = confirmation.result(
             context.embedTemplates.confirmation(
               context.translate(

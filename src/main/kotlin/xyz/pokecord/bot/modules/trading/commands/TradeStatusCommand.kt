@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.modules.trading.commands
 
 import dev.minn.jda.ktx.await
-import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Confirmation

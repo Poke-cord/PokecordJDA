@@ -5,7 +5,6 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Bid
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.auctions.tasks.AuctionTask
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.utils.withCoroutineLock
 
@@ -129,7 +128,7 @@ object BidCommand : Command() {
         }
       }
 
-      val confirmation = Confirmation(context, context.author.id)
+      val confirmation = Confirmation(context)
       val confirmed = confirmation.result(
         context.embedTemplates.confirmation(
           context.translate(
@@ -149,7 +148,7 @@ object BidCommand : Command() {
         session.use {
           session.startTransaction()
 
-          if(highestBid != null) {
+          if (highestBid != null) {
             val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
             val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
 
@@ -192,12 +191,14 @@ object BidCommand : Command() {
 
         val owner = context.jda.retrieveUserById(auction.ownerId).await()
         val ownerData = context.bot.database.userRepository.getUser(owner.id)
-        if(owner != null && ownerData.bidNotifications) {
+        if (owner != null && ownerData.bidNotifications) {
           val ownerDmChannel = owner.openPrivateChannel().await()
           ownerDmChannel.sendMessageEmbeds(
             context.embedTemplates.normal(
-              context.translate("modules.auctions.commands.bid.bidNotification.description",
-                mapOf("bidderTag" to context.author.asTag,
+              context.translate(
+                "modules.auctions.commands.bid.bidNotification.description",
+                mapOf(
+                  "bidderTag" to context.author.asTag,
                   "amount" to bidAmount.toString(),
                   "pokemonIV" to pokemon.ivPercentage,
                   "pokemonName" to context.translator.pokemonDisplayName(pokemon)

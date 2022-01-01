@@ -2,7 +2,6 @@ package xyz.pokecord.bot.api
 
 import io.sentry.Breadcrumb
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
