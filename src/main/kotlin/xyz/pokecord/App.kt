@@ -50,15 +50,15 @@ object App {
 
         bot = Bot(token)
         val modules = listOf(
-          AuctionsModule(bot),
           PokemonModule(bot),
           GeneralModule(bot),
           ProfileModule(bot),
           EconomyModule(bot),
+          AuctionsModule(bot),
+          MarketModule(bot),
+          TradingModule(bot),
           StaffModule(bot),
           DeveloperModule(bot),
-          TradingModule(bot),
-          MarketModule(bot)
         )
         modules.forEach {
           bot.modules[it.name.lowercase()] = it
