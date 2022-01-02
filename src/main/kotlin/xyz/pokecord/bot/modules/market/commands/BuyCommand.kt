@@ -71,7 +71,7 @@ object BuyCommand : Command() {
                 mapOf(
                   "price" to listing.price.toString(),
                   "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonName(pokemon)
+                  "pokemonName" to context.translator.pokemonDisplayName(pokemon)
                 )
               ),
               context.translate("modules.market.commands.buy.confirmation.title")
@@ -99,7 +99,7 @@ object BuyCommand : Command() {
                       "modules.market.commands.buy.sold.description",
                       mapOf(
                         "ivPercentage" to pokemon.ivPercentage,
-                        "pokemonName" to context.translator.pokemonName(pokemon),
+                        "pokemonName" to context.translator.pokemonDisplayName(pokemon),
                         "price" to listing.price.toString(),
                         "buyer" to context.author.name
                       )
@@ -118,7 +118,7 @@ object BuyCommand : Command() {
                   mapOf(
                     "price" to listing.price.toString(),
                     "pokemonIV" to pokemon.ivPercentage,
-                    "pokemonName" to context.translator.pokemonName(pokemon)
+                    "pokemonName" to context.translator.pokemonDisplayName(pokemon)
                   )
                 ),
                 context.translate("modules.market.commands.buy.confirmed.title")

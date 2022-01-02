@@ -63,7 +63,7 @@ object InfoCommand : Command() {
                 "modules.market.commands.info.title",
                 mapOf(
                   "pokemonLevel" to listingPokemon.level.toString(),
-                  "pokemonName" to context.translator.pokemonName(listingPokemon),
+                  "pokemonName" to context.translator.pokemonDisplayName(listingPokemon),
                   "listingId" to listing.id.toString()
                 )
               )

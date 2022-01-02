@@ -26,7 +26,7 @@ object AuctionsCommand: ParentCommand() {
       val auctionPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
       if(auctionPokemon != null) {
         val pokemonIv = auctionPokemon.ivPercentage
-        val pokemonName = context.translator.pokemonName(auctionPokemon)
+        val pokemonName = context.translator.pokemonDisplayName(auctionPokemon)
 
         val highestBid = it.highestBid
         val outbid = if(highestBid != null) highestBid.userId != context.author.id else false
