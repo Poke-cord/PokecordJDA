@@ -74,7 +74,7 @@ class MarketRepository(
 
   suspend fun getListings(
     ownerId: String? = null,
-    limit: Int? = 15,
+    limit: Int? = 10,
     skip: Int? = 0,
     aggregation: ArrayList<Bson> = arrayListOf()
   ): List<Listing> {

@@ -1,14 +1,12 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import net.dv8tion.jda.api.utils.MiscUtil
-
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
-import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.dv8tion.jda.api.sharding.ShardManager
+import net.dv8tion.jda.api.utils.MiscUtil
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -88,7 +86,7 @@ class AuctionsRepository(
 
   suspend fun getAuctionList(
     ownerId: String? = null,
-    limit: Int? = 15,
+    limit: Int? = 10,
     skip: Int? = 0,
     aggregation: ArrayList<Bson> = arrayListOf()
   ): List<Auction> {
@@ -128,7 +126,7 @@ class AuctionsRepository(
       if (shardManager.getShardById(targetShard) == null) return@collect
 
       it.timeLeft -= interval
-      if(it.timeLeft <= 0) {
+      if (it.timeLeft <= 0) {
         endedAuctions.add(it)
         endAuction(it)
       } else {
