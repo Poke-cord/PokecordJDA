@@ -78,9 +78,9 @@ class MarketRepository(
     skip: Int? = 0,
     aggregation: MutableList<Bson> = mutableListOf()
   ): List<Listing> {
+    if (ownerId != null) aggregation.add(match(Listing::ownerId eq ownerId))
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
-    if (ownerId != null) aggregation.add(match(Listing::ownerId eq ownerId))
     return collection.aggregate<Listing>(*aggregation.toTypedArray()).toList()
   }
 

@@ -90,9 +90,9 @@ class AuctionsRepository(
     skip: Int? = 0,
     aggregation: MutableList<Bson> = mutableListOf()
   ): List<Auction> {
+    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
-    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<Auction>(*aggregation.toTypedArray())
     return result.toList()
   }
