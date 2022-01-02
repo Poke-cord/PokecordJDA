@@ -67,7 +67,7 @@ object InfoCommand : Command() {
                 "modules.auctions.commands.info.title",
                 mapOf(
                   "pokemonLevel" to auctionPokemon.level.toString(),
-                  "pokemonName" to context.translator.pokemonDisplayName(auctionPokemon),
+                  "pokemonName" to context.translator.pokemonDisplayName(auctionPokemon, false),
                   "auctionId" to auction.id.toString()
                 )
               )
