@@ -152,7 +152,7 @@ object BidCommand : Command() {
             val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
             val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
 
-            context.bot.database.userRepository.incCredits(highestBidUserData, bidAmount, session)
+            context.bot.database.userRepository.incCredits(highestBidUserData, highestBid.amount, session)
 
             highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
               context.embedTemplates.normal(
@@ -162,7 +162,7 @@ object BidCommand : Command() {
                     "bidder" to context.author.asMention,
                     "ID" to auction.id.toString(),
                     "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
-                    "bidDifference" to (highestBid.amount - bidAmount).toString()
+                    "bidDifference" to (bidAmount - highestBid.amount).toString()
                   )
                 ),
                 context.translate("modules.auctions.commands.bid.outbid.title")
