@@ -51,8 +51,8 @@ object MarketCommand : ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val aggregation = mutableListOf(match(Listing::sold eq false))
-    val count = context.bot.database.marketRepository.getListingCount(aggregation = aggregation)
+    val aggregation = listOf(match(Listing::sold eq false))
+    val count = context.bot.database.marketRepository.getListingCount(aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))
@@ -67,7 +67,7 @@ object MarketCommand : ParentCommand() {
         return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.market.commands.market.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
-      val listings = context.bot.database.marketRepository.getListings(skip = pageIndex * 10, aggregation = aggregation)
+      val listings = context.bot.database.marketRepository.getListings(skip = pageIndex * 10, aggregation = aggregation.toMutableList())
       templateEmbedBuilder.clearFields().setFooter(null)
       templateEmbedBuilder.setDescription(formatListings(context, listings))
       templateEmbedBuilder

@@ -12,10 +12,11 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
-object AuctionsCommand: ParentCommand() {
+object AuctionsCommand : ParentCommand() {
   override val name = "Auctions"
   override var aliases = arrayOf("ah", "auction")
-  override val childCommands: MutableList<Command> = mutableListOf(ListCommand, UnlistCommand, BidCommand, InfoCommand, ProfileCommand, NotifyCommand)
+  override val childCommands: MutableList<Command> =
+    mutableListOf(ListCommand, UnlistCommand, BidCommand, InfoCommand, ProfileCommand, NotifyCommand)
 
   suspend fun formatAuctions(
     context: ICommandContext,
@@ -24,18 +25,18 @@ object AuctionsCommand: ParentCommand() {
   ): String {
     val desc = auctions.map {
       val auctionPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
-      if(auctionPokemon != null) {
+      if (auctionPokemon != null) {
         val pokemonIv = auctionPokemon.ivPercentage
         val pokemonName = context.translator.pokemonDisplayName(auctionPokemon, false)
 
         val highestBid = it.highestBid
-        val outbid = if(highestBid != null) highestBid.userId != context.author.id else false
+        val outbid = if (highestBid != null) highestBid.userId != context.author.id else false
         val bidStatus = if (highestBid != null) {
           if (showBids && !outbid) "" else "Top Bid ${context.translator.numberFormat(highestBid.amount)}"
         } else "Starting Bid: ${context.translator.numberFormat(it.startingBid)}"
-        val outbidStatus = if(showBids && outbid) " | Outbid" else ""
+        val outbidStatus = if (showBids && outbid) " | Outbid" else ""
 
-        if(it.timeLeft > 0 && !it.ended) {
+        if (it.timeLeft > 0 && !it.ended) {
           "`${it.id}` IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus |  Ends ${TimeFormat.RELATIVE.after(it.timeLeft)}"
         } else null
       } else null
@@ -49,7 +50,7 @@ object AuctionsCommand: ParentCommand() {
     @Argument(optional = true) bids: String?,
     @Argument(optional = true) page: Int?,
   ) {
-    if(!context.hasStarted(true)) return
+    if (!context.hasStarted(true)) return
 
     val templateEmbedBuilder =
       EmbedBuilder()
@@ -60,8 +61,8 @@ object AuctionsCommand: ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val aggregation = mutableListOf(match(Auction::ended eq false))
-    val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation)
+    val aggregation = listOf(match(Auction::ended eq false))
+    val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
@@ -76,7 +77,10 @@ object AuctionsCommand: ParentCommand() {
         return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
-      val auctionsList = context.bot.database.auctionRepository.getAuctionList(skip = pageIndex * 10, aggregation = aggregation)
+      val auctionsList = context.bot.database.auctionRepository.getAuctionList(
+        skip = pageIndex * 10,
+        aggregation = aggregation.toMutableList()
+      )
       templateEmbedBuilder.clearFields().setFooter(null)
       templateEmbedBuilder.setDescription(
         formatAuctions(
