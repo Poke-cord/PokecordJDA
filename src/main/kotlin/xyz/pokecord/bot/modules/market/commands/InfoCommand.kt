@@ -69,7 +69,7 @@ object InfoCommand : Command() {
               )
             )
             .setColor(pokemon!!.species.color.colorCode)
-            .setImage(pokemon.imageUrl)
+            .setImage(listingPokemon.imageUrl)
             .build()
         ).queue()
       } else {
