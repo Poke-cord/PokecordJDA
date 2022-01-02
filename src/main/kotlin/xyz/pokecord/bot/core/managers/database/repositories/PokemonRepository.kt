@@ -201,7 +201,7 @@ class PokemonRepository(
     limit: Int? = 15,
     skip: Int? = 0,
     searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): List<OwnedPokemon> {
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
@@ -216,7 +216,7 @@ class PokemonRepository(
   suspend fun getPokemonCount(
     ownerId: String,
     searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
     val result = collection.aggregate<CountResult>(
       match(OwnedPokemon::ownerId eq ownerId),
@@ -576,7 +576,7 @@ class PokemonRepository(
 
     val pipeline: Array<Bson>
       get() {
-        val aggregation = arrayListOf<Bson>()
+        val aggregation = mutableListOf<Bson>()
         if (favorites == true) {
           aggregation.add(match(OwnedPokemon::favorite eq true))
         }

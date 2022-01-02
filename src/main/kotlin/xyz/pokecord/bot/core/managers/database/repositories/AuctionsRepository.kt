@@ -88,7 +88,7 @@ class AuctionsRepository(
     ownerId: String? = null,
     limit: Int? = 10,
     skip: Int? = 0,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): List<Auction> {
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
@@ -99,7 +99,7 @@ class AuctionsRepository(
 
   suspend fun getAuctionCount(
     ownerId: String? = null,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
     if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(

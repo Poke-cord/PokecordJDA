@@ -76,7 +76,7 @@ class MarketRepository(
     ownerId: String? = null,
     limit: Int? = 10,
     skip: Int? = 0,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): List<Listing> {
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
@@ -86,7 +86,7 @@ class MarketRepository(
 
   suspend fun getListingCount(
     ownerId: String? = null,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
     if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(

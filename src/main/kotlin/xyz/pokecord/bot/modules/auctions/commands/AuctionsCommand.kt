@@ -60,7 +60,7 @@ object AuctionsCommand: ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val aggregation = arrayListOf(match(Auction::ended eq false))
+    val aggregation = mutableListOf(match(Auction::ended eq false))
     val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation)
     if (count < 1) {
       context.reply(

@@ -4,7 +4,6 @@ import com.mongodb.ConnectionString
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Contextual
@@ -258,7 +257,7 @@ object Migration {
       ).sort(ascending(OwnedPokemon::id, OwnedPokemon::_id))
         .cursor()
 
-    val docs = arrayListOf<OwnedPokemon>()
+    val docs = mutableListOf<OwnedPokemon>()
     cursor.asFlow().map { it.toBsonDocument() }.collect {
       try {
         val pokemon = getPokemonFromDocument(it)

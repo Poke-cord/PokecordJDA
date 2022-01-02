@@ -51,7 +51,7 @@ object MarketCommand : ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val aggregation = arrayListOf(match(Listing::sold eq false))
+    val aggregation = mutableListOf(match(Listing::sold eq false))
     val count = context.bot.database.marketRepository.getListingCount(aggregation = aggregation)
     if (count < 1) {
       context.reply(
