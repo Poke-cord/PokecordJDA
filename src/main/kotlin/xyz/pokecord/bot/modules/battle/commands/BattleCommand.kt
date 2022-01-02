@@ -25,7 +25,13 @@ object BattleCommand : Command() {
       val partnerPokemon = context.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
       context
         .addAttachment(
-          BattleModule.getBattleImage(selfCurrentBattle, initiatorPokemon.stats, partnerPokemon.stats),
+          BattleModule.getBattleImage(
+            selfCurrentBattle,
+            initiatorPokemon.stats,
+            initiatorPokemon.shiny,
+            partnerPokemon.stats,
+            partnerPokemon.shiny
+          ),
           "battle.png"
         )
         .addActionRows(

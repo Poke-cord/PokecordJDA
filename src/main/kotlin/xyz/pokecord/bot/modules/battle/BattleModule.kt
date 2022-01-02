@@ -114,7 +114,9 @@ class BattleModule(bot: Bot) : Module(
     fun getBattleImage(
       battle: Battle,
       initiatorPokemonMaxStats: PokemonStats,
+      initiatorPokemonShiny: Boolean,
       partnerPokemonMaxStats: PokemonStats,
+      partnerPokemonShiny: Boolean
     ): ByteArray {
       val backgroundImage = loadImage("background.png")
       val standImage = loadImage("stand.png")
@@ -122,15 +124,12 @@ class BattleModule(bot: Bot) : Module(
       val rightHpImage = loadImage("right_hp.png")
       val hpBarImage = loadImage("hp_bar.png")
 
-      val leftPokemon = Pokemon.getById(battle.initiator.pokemonId)!!
-      val rightPokemon = Pokemon.getById(battle.partner.pokemonId)!!
-
       val leftPokemonImage =
-        loadImage(URL(leftPokemon.imageUrl))
-          .run { if (leftPokemon.leftFacing) this.flipHorizontally() else this }
+        loadImage(URL(Pokemon.getImageUrl(battle.initiator.pokemonId, initiatorPokemonShiny)))
+          .run { if (Pokemon.leftFacing.contains(battle.initiator.pokemonId)) this.flipHorizontally() else this }
       val rightPokemonImage =
-        loadImage(URL(rightPokemon.imageUrl))
-          .run { if (rightPokemon.rightFacing) this.flipHorizontally() else this }
+        loadImage(URL(Pokemon.getImageUrl(battle.partner.pokemonId, partnerPokemonShiny)))
+          .run { if (Pokemon.rightFacing.contains(battle.partner.pokemonId)) this.flipHorizontally() else this }
 
       val image = BufferedImage(800, 480, BufferedImage.TYPE_INT_ARGB)
       image.graphics.apply {

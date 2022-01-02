@@ -235,7 +235,15 @@ object BattleActionEvent : Event() {
 
               image = "attachment://battle.png"
             })
-              .addFile(BattleModule.getBattleImage(battle, initiatorPokemon.stats, opponentPokemon.stats), "battle.png")
+              .addFile(
+                BattleModule.getBattleImage(
+                  battle,
+                  initiatorPokemon.stats,
+                  initiatorPokemon.shiny,
+                  opponentPokemon.stats,
+                  opponentPokemon.shiny
+                ), "battle.png"
+              )
               .also {
                 if (winner == null) {
                   it.addActionRow(
