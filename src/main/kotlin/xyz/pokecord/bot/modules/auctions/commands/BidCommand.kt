@@ -89,6 +89,7 @@ object BidCommand : Command() {
             context.translate("modules.auctions.commands.bid.errors.notEnoughCredits", "amount" to bidAmount.toString())
           ).build()
         ).queue()
+        return@withCoroutineLock
       } else if (highestBid != null) {
         if (userData.credits < highestBid.amount) {
           context.reply(
