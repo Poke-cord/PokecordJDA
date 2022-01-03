@@ -901,6 +901,7 @@ items:
     embed:
       title: A Machine has been Used
     errors:
+      inBattle: You can't use a machine during a battle!
       invalidSlotSpecified: '**Suggestion**: Try specifying a valid
                     move slot number!'
       noSlotSpecified: '**Suggestion**: Try specifying a move slot number!'
