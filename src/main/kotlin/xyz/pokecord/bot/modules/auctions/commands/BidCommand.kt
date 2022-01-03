@@ -47,6 +47,13 @@ object BidCommand : Command() {
           ).build()
         ).queue()
         return@withCoroutineLock
+      } else if (auction.ended) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.auctions.commands.bid.errors.alreadyEnded")
+          ).build()
+        ).queue()
+        return@withCoroutineLock
       }
 
       val pokemon = context.bot.database.pokemonRepository.getPokemonById(auction.pokemon)

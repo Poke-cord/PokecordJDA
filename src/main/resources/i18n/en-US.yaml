@@ -271,6 +271,7 @@ modules:
           description: Please confirm you would like to bid **{{bid}} credits** for **IV{{pokemonIV}} {{pokemonName}}**.
           title: Bid Confirmation
         errors:
+          alreadyEnded: The auction has already ended.
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: No auction was found with the ID **{{id}}**.
           selfBid: You can't bid on your own auction!
@@ -357,6 +358,7 @@ modules:
           description: Please confirm you would like to purchase **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**.
           title: Purchase Confirmation
         errors:
+          alreadySold: This listing has already been sold.
           noListingId: Please provide a valid listing ID.
           noListingFound: No listing was found with the ID **{{id}}**.
           selfBuy: You can't purchase your own listing post!

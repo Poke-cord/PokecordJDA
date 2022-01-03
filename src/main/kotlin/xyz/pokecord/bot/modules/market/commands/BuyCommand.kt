@@ -43,6 +43,13 @@ object BuyCommand : Command() {
             ).build()
           ).queue()
           return@withCoroutineLock
+        } else if (listing.sold) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.market.commands.buy.errors.alreadySold")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
         }
 
         val pokemon = context.bot.database.pokemonRepository.getPokemonById(listing.pokemon)
