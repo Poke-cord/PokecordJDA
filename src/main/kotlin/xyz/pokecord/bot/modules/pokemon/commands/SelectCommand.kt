@@ -16,6 +16,13 @@ class SelectCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
+    val currentSelfBattle = context.bot.database.battleRepository.getUserCurrentBattle(context.author)
+    if (currentSelfBattle != null) {
+      context.reply(context.embedTemplates.error(context.translate("modules.pokemon.commands.select.errors.inBattle")).build())
+        .queue()
+      return
+    }
+
     val userData = context.getUserData()
     val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)
     if (pokemon == null) {
@@ -24,7 +31,7 @@ class SelectCommand : Command() {
       return
     } else if (pokemon._id == userData.selected) {
       context.reply(
-        context.embedTemplates.error(context.translate("modules.pokemon.commands.select.alreadySelected")).build()
+        context.embedTemplates.error(context.translate("modules.pokemon.commands.select.errors.alreadySelected")).build()
       )
         .queue()
       return

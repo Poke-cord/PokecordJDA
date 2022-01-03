@@ -699,8 +699,10 @@ modules:
           favoritePokemon: '**Suggestion**: Try removing this Pokémon from
                         your favorites before releasing it!'
       select:
-        alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
+        errors:
+          alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
                     have selected currently!'
+          inBattle: You can't select another Pokémon while you are in battle!
         embed:
           description: |-
             **Name**: {{pokemon}}
