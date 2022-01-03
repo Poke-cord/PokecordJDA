@@ -277,7 +277,7 @@ modules:
           selfBid: You can't bid on your own auction!
           noPokemonFound: The auctioned pokémon seems to be lost?
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
-          notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
+          notEnoughCredits: You don't have enough credits to bid **{{amount}} credits**.
           topBid: You already have the top bid of **{{bid}}**.
           bidTooLow: |-
             You must bid at least **{{bid}} credits** on this auction.
@@ -363,7 +363,7 @@ modules:
           noListingFound: No listing was found with the ID **{{id}}**.
           selfBuy: You can't purchase your own listing post!
           noPokemonFound: The listing's pokémon seems to be lost?
-          notEnoughCredits: You don't have enough credits to bid higher than **{{bid}} credits**.
+          notEnoughCredits: You don't have enough credits to buy this listing.
       info:
         errors:
           noListingId: Please provide a valid listing ID.

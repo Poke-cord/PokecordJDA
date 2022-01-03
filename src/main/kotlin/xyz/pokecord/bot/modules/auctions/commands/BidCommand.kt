@@ -83,7 +83,13 @@ object BidCommand : Command() {
 
       val userData = context.getUserData()
       val highestBid = auction.highestBid
-      if (highestBid != null) {
+      if (bidAmount > userData.credits) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.auctions.commands.bid.errors.notEnoughCredits", "amount" to bidAmount.toString())
+          ).build()
+        ).queue()
+      } else if (highestBid != null) {
         if (userData.credits < highestBid.amount) {
           context.reply(
             context.embedTemplates.error(
