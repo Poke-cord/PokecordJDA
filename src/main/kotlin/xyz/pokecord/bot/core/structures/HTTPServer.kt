@@ -334,10 +334,10 @@ class HTTPServer(val bot: Bot) {
 
         get("/_/internal/ready") {
           try {
-            if (bot.shardManager.statuses.all { it.value == JDA.Status.CONNECTED }) {
+            if (bot.shardManager.statuses.isNotEmpty() && bot.shardManager.statuses.all { it.value == JDA.Status.CONNECTED }) {
               return@get call.respond(HttpStatusCode.OK)
             }
-          } catch (e: UninitializedPropertyAccessException) {
+          } catch (_: UninitializedPropertyAccessException) {
           }
           call.respond(HttpStatusCode.ServiceUnavailable)
         }
