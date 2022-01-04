@@ -63,13 +63,13 @@ object InfoCommand : Command() {
                 "modules.market.commands.info.title",
                 mapOf(
                   "pokemonLevel" to listingPokemon.level.toString(),
-                  "pokemonName" to context.translator.pokemonName(listingPokemon),
+                  "pokemonName" to context.translator.pokemonDisplayName(listingPokemon, false),
                   "listingId" to listing.id.toString()
                 )
               )
             )
             .setColor(pokemon!!.species.color.colorCode)
-            .setImage(pokemon.imageUrl)
+            .setImage(listingPokemon.imageUrl)
             .build()
         ).queue()
       } else {

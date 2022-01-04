@@ -103,7 +103,7 @@ class Bot constructor(private val token: String) {
   }
 
   suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder? {
-    val commandEntries: ArrayList<String> = arrayListOf()
+    val commandEntries = mutableListOf<String>()
     for (command in module.commands) {
       if (!command.enabled) continue
       if (!command.canRun(context)) continue
@@ -126,7 +126,7 @@ class Bot constructor(private val token: String) {
 
   suspend fun getHelpEmbed(context: ICommandContext, command: Command): EmbedBuilder? {
     if (!command.enabled || command.excludeFromHelp || !command.canRun(context)) return null
-    val descriptionLines = arrayListOf<String>()
+    val descriptionLines = mutableListOf<String>()
     val commandDescription = getCommandDescription(context, command)
     if (commandDescription.isNotEmpty()) {
       descriptionLines.add("${commandDescription}\n")
@@ -175,7 +175,7 @@ class Bot constructor(private val token: String) {
     commands: List<Command>,
     prefix: String = "p!"
   ): EmbedBuilder? {
-    val commandEntries: ArrayList<String> = arrayListOf()
+    val commandEntries = mutableListOf<String>()
     for (command in commands) {
       if (!command.enabled) continue
       if (!command.canRun(context)) continue

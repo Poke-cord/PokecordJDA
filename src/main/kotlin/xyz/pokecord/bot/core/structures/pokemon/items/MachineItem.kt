@@ -9,6 +9,14 @@ class MachineItem(
   id: Int
 ) : Item(id) {
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
+    val currentSelfBattle = context.bot.database.battleRepository.getUserCurrentBattle(context.author)
+    if (currentSelfBattle != null) {
+      return UsageResult(
+        false,
+        context.embedTemplates.error(context.translate("items.machine.errors.inBattle"))
+      )
+    }
+
     val machine = Machine.getByItemId(id)
       ?: return UsageResult(
         false,

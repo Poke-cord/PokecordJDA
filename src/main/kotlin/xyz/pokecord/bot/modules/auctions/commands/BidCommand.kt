@@ -47,6 +47,13 @@ object BidCommand : Command() {
           ).build()
         ).queue()
         return@withCoroutineLock
+      } else if (auction.ended) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.auctions.commands.bid.errors.alreadyEnded")
+          ).build()
+        ).queue()
+        return@withCoroutineLock
       }
 
       val pokemon = context.bot.database.pokemonRepository.getPokemonById(auction.pokemon)
@@ -66,7 +73,7 @@ object BidCommand : Command() {
               "modules.auctions.commands.bid.errors.noBidAmount",
               mapOf(
                 "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonName(pokemon)
+                "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
               )
             )
           ).build()
@@ -76,7 +83,14 @@ object BidCommand : Command() {
 
       val userData = context.getUserData()
       val highestBid = auction.highestBid
-      if (highestBid != null) {
+      if (bidAmount > userData.credits) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.auctions.commands.bid.errors.notEnoughCredits", "amount" to bidAmount.toString())
+          ).build()
+        ).queue()
+        return@withCoroutineLock
+      } else if (highestBid != null) {
         if (userData.credits < highestBid.amount) {
           context.reply(
             context.embedTemplates.error(
@@ -136,7 +150,7 @@ object BidCommand : Command() {
             mapOf(
               "bid" to bidAmount.toString(),
               "pokemonIV" to pokemon.ivPercentage,
-              "pokemonName" to context.translator.pokemonName(pokemon)
+              "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
             )
           ),
           context.translate("modules.auctions.commands.bid.confirmation.title")
@@ -152,7 +166,7 @@ object BidCommand : Command() {
             val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
             val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
 
-            context.bot.database.userRepository.incCredits(highestBidUserData, bidAmount, session)
+            context.bot.database.userRepository.incCredits(highestBidUserData, highestBid.amount, session)
 
             highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
               context.embedTemplates.normal(
@@ -161,8 +175,8 @@ object BidCommand : Command() {
                   mapOf(
                     "bidder" to context.author.asMention,
                     "ID" to auction.id.toString(),
-                    "pokemonName" to context.translator.pokemonName(pokemon),
-                    "bidDifference" to (highestBid.amount - bidAmount).toString()
+                    "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
+                    "bidDifference" to (bidAmount - highestBid.amount).toString()
                   )
                 ),
                 context.translate("modules.auctions.commands.bid.outbid.title")
@@ -182,7 +196,7 @@ object BidCommand : Command() {
               mapOf(
                 "bid" to bidAmount.toString(),
                 "pokemonIV" to pokemon.ivPercentage,
-                "pokemonName" to context.translator.pokemonName(pokemon)
+                "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
               )
             ),
             context.translate("modules.auctions.commands.bid.confirmed.title")
@@ -201,7 +215,7 @@ object BidCommand : Command() {
                   "bidderTag" to context.author.asTag,
                   "amount" to bidAmount.toString(),
                   "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonName(pokemon)
+                  "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
                 )
               ),
               context.translate("modules.auctions.commands.bid.bidNotification.title")

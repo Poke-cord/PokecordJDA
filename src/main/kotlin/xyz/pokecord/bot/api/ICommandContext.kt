@@ -49,6 +49,7 @@ interface ICommandContext {
   )
 
   fun addActionRows(vararg actionRows: ActionRow): ICommandContext
+  fun addAttachment(data: ByteArray, name: String): ICommandContext
   fun clearActionRows(): ICommandContext
 
   suspend fun askForTOSAgreement(): Boolean

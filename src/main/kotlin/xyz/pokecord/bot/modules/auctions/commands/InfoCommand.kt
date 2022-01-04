@@ -67,13 +67,13 @@ object InfoCommand : Command() {
                 "modules.auctions.commands.info.title",
                 mapOf(
                   "pokemonLevel" to auctionPokemon.level.toString(),
-                  "pokemonName" to context.translator.pokemonName(auctionPokemon),
+                  "pokemonName" to context.translator.pokemonDisplayName(auctionPokemon, false),
                   "auctionId" to auction.id.toString()
                 )
               )
             )
             .setColor(pokemon!!.species.color.colorCode)
-            .setImage(pokemon.imageUrl)
+            .setImage(auctionPokemon.imageUrl)
             .build()
         ).queue()
       } else {

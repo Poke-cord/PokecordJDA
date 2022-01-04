@@ -1,14 +1,12 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import net.dv8tion.jda.api.utils.MiscUtil
-
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
-import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.dv8tion.jda.api.sharding.ShardManager
+import net.dv8tion.jda.api.utils.MiscUtil
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -88,20 +86,20 @@ class AuctionsRepository(
 
   suspend fun getAuctionList(
     ownerId: String? = null,
-    limit: Int? = 15,
+    limit: Int? = 10,
     skip: Int? = 0,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): List<Auction> {
+    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
-    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<Auction>(*aggregation.toTypedArray())
     return result.toList()
   }
 
   suspend fun getAuctionCount(
     ownerId: String? = null,
-    aggregation: ArrayList<Bson> = arrayListOf()
+    aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
     if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(
@@ -128,7 +126,7 @@ class AuctionsRepository(
       if (shardManager.getShardById(targetShard) == null) return@collect
 
       it.timeLeft -= interval
-      if(it.timeLeft <= 0) {
+      if (it.timeLeft <= 0) {
         endedAuctions.add(it)
         endAuction(it)
       } else {

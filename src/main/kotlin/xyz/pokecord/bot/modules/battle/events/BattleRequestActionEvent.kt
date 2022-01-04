@@ -64,7 +64,15 @@ object BattleRequestActionEvent : Event() {
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
           }
         )
-          .addFile(BattleModule.getBattleImage(battle, initiatorPokemon.stats, partnerPokemon.stats), "battle.png")
+          .addFile(
+            BattleModule.getBattleImage(
+              battle,
+              initiatorPokemon.stats,
+              initiatorPokemon.shiny,
+              partnerPokemon.stats,
+              partnerPokemon.shiny
+            ), "battle.png"
+          )
           .addActionRow(
             BattleModule.Buttons.getBattleActionRow(battle._id.toString())
           )

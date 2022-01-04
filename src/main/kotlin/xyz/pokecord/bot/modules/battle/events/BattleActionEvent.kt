@@ -12,7 +12,6 @@ import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.MoveData
-import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.modules.battle.BattleModule
 import java.time.Instant
 import kotlin.random.Random
@@ -47,11 +46,12 @@ object BattleActionEvent : Event() {
             }).queue()
             return
           }
-          val partnerTrainer = if (interactionTrainer == battle.initiator) battle.partner else battle.initiator
-          val partnerUser = event.jda.retrieveUserById(partnerTrainer.id).await()
+          val self = if (interactionTrainer == battle.initiator) battle.initiator else battle.partner
+          val partner = if (interactionTrainer == battle.initiator) battle.partner else battle.initiator
+          val partnerUser = event.jda.retrieveUserById(partner.id).await()
 
-          val userData = module.bot.database.userRepository.getUser(interactionTrainer.id)
-          val partnerData = module.bot.database.userRepository.getUser(partnerTrainer.id)
+          val userData = module.bot.database.userRepository.getUser(self.id)
+          val partnerData = module.bot.database.userRepository.getUser(partner.id)
 
           val pokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
           val partnerPokemon = module.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
@@ -60,16 +60,8 @@ object BattleActionEvent : Event() {
             title = "${event.interaction.user.name} VS ${partnerUser.name}"
             // TODO: use translator somehow
             description = """
-                  ${pokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${
-              Stat.hp.getBaseValue(
-                pokemon.id
-              )
-            }HP**
-                  ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${
-              Stat.hp.getBaseValue(
-                partnerPokemon.id
-              )
-            }HP**
+                  ${pokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${pokemon.stats.hp}HP**
+                  ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
                   
                   **Choose a move to use**
                 """.trimIndent()
@@ -85,6 +77,14 @@ object BattleActionEvent : Event() {
           }).queue()
         }
         is BattleModule.Buttons.BattleAction.ChooseMove -> {
+          if (battle.endedAtMillis != null) {
+            event.replyEmbeds(Embed {
+              title = "Error"
+              color = EmbedTemplates.Color.RED.code
+              description = "This battle has already ended!"
+            }).setEphemeral(true).queue()
+            return
+          }
           val moveId = button.moveId.toIntOrNull() ?: return
           val moveData = MoveData.getById(moveId) ?: return
 
@@ -127,13 +127,14 @@ object BattleActionEvent : Event() {
             }
 
             val selfMoveFirst: Boolean
-            val winner: Battle.Trainer?
+            var winner: Battle.Trainer?
             val (moveResult, partnerMoveResult) = when {
               moveData.priority > partnerMoveData.priority -> {
                 selfMoveFirst = true
                 val firstMove = useSelfMove()
                 winner = battle.winner
                 val secondMove = usePartnerMove()
+                if (winner == null) winner = battle.winner
                 Pair(firstMove, secondMove)
               }
               partnerMoveData.priority > moveData.priority -> {
@@ -141,6 +142,7 @@ object BattleActionEvent : Event() {
                 val firstMove = usePartnerMove()
                 winner = battle.winner
                 val secondMove = useSelfMove()
+                if (winner == null) winner = battle.winner
                 Pair(secondMove, firstMove)
               }
               self.pokemonStats.speed > partner.pokemonStats.speed -> {
@@ -148,6 +150,7 @@ object BattleActionEvent : Event() {
                 val firstMove = useSelfMove()
                 winner = battle.winner
                 val secondMove = usePartnerMove()
+                if (winner == null) winner = battle.winner
                 Pair(firstMove, secondMove)
               }
               partner.pokemonStats.speed > self.pokemonStats.speed -> {
@@ -155,6 +158,7 @@ object BattleActionEvent : Event() {
                 val firstMove = usePartnerMove()
                 winner = battle.winner
                 val secondMove = useSelfMove()
+                if (winner == null) winner = battle.winner
                 Pair(secondMove, firstMove)
               }
               else -> {
@@ -163,11 +167,13 @@ object BattleActionEvent : Event() {
                   val firstMove = useSelfMove()
                   winner = battle.winner
                   val secondMove = usePartnerMove()
+                  if (winner == null) winner = battle.winner
                   Pair(firstMove, secondMove)
                 } else {
                   val firstMove = usePartnerMove()
                   winner = battle.winner
                   val secondMove = useSelfMove()
+                  if (winner == null) winner = battle.winner
                   Pair(secondMove, firstMove)
                 }
               }
@@ -229,7 +235,15 @@ object BattleActionEvent : Event() {
 
               image = "attachment://battle.png"
             })
-              .addFile(BattleModule.getBattleImage(battle, initiatorPokemon.stats, opponentPokemon.stats), "battle.png")
+              .addFile(
+                BattleModule.getBattleImage(
+                  battle,
+                  initiatorPokemon.stats,
+                  initiatorPokemon.shiny,
+                  opponentPokemon.stats,
+                  opponentPokemon.shiny
+                ), "battle.png"
+              )
               .also {
                 if (winner == null) {
                   it.addActionRow(

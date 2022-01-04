@@ -129,7 +129,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
           ?: return
 
       val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
-      val parsedParameters = arrayListOf<Any?>()
+      val parsedParameters = mutableListOf<Any?>()
 
       for (param in parameters) {
         val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
@@ -339,7 +339,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
 
       if (executorFunction != null) {
         val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
-        val parsedParameters = arrayListOf<Any?>()
+        val parsedParameters = mutableListOf<Any?>()
         val argumentParser =
           ArgumentParser(context, splitMessage)
 

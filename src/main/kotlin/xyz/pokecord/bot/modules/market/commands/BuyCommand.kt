@@ -43,6 +43,20 @@ object BuyCommand : Command() {
             ).build()
           ).queue()
           return@withCoroutineLock
+        } else if (listing.sold) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.market.commands.buy.errors.alreadySold")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
+        } else if (listing.unlisted) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.market.commands.buy.errors.unlisted")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
         }
 
         val pokemon = context.bot.database.pokemonRepository.getPokemonById(listing.pokemon)
@@ -71,7 +85,7 @@ object BuyCommand : Command() {
                 mapOf(
                   "price" to listing.price.toString(),
                   "pokemonIV" to pokemon.ivPercentage,
-                  "pokemonName" to context.translator.pokemonName(pokemon)
+                  "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
                 )
               ),
               context.translate("modules.market.commands.buy.confirmation.title")
@@ -99,7 +113,7 @@ object BuyCommand : Command() {
                       "modules.market.commands.buy.sold.description",
                       mapOf(
                         "ivPercentage" to pokemon.ivPercentage,
-                        "pokemonName" to context.translator.pokemonName(pokemon),
+                        "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
                         "price" to listing.price.toString(),
                         "buyer" to context.author.name
                       )
@@ -118,7 +132,7 @@ object BuyCommand : Command() {
                   mapOf(
                     "price" to listing.price.toString(),
                     "pokemonIV" to pokemon.ivPercentage,
-                    "pokemonName" to context.translator.pokemonName(pokemon)
+                    "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
                   )
                 ),
                 context.translate("modules.market.commands.buy.confirmed.title")
