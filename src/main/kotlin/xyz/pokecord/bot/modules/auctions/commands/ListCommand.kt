@@ -64,7 +64,7 @@ object ListCommand : Command() {
     }
 
     val auctionTime = time?.parseTime() ?: Config.defaultAuctionTime
-    if(auctionTime < 4 * 60 * 60 * 1000) {
+    if(auctionTime < Config.minAuctionTime || auctionTime > Config.maxAuctionTime) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.minimumTime"),
