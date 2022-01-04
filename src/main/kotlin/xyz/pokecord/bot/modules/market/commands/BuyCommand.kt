@@ -50,6 +50,13 @@ object BuyCommand : Command() {
             ).build()
           ).queue()
           return@withCoroutineLock
+        } else if (listing.unlisted) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.market.commands.buy.errors.unlisted")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
         }
 
         val pokemon = context.bot.database.pokemonRepository.getPokemonById(listing.pokemon)

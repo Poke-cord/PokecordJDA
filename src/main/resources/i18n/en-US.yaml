@@ -364,6 +364,7 @@ modules:
           selfBuy: You can't purchase your own listing post!
           noPokemonFound: The listing's pokémon seems to be lost?
           notEnoughCredits: You don't have enough credits to buy this listing.
+          unlisted: This listing has been unlisted.
       info:
         errors:
           noListingId: Please provide a valid listing ID.
