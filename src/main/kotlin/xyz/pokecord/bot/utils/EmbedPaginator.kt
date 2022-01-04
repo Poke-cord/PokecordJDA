@@ -116,6 +116,7 @@ class EmbedPaginator(
               .setEphemeral(true)
               .queue()
           } else {
+            endTime = System.currentTimeMillis() + timeout
             var newPageIndex = when (NavigationOptions.getByButtonId(event.componentId)) {
               NavigationOptions.First -> 0
               NavigationOptions.Prev -> if (currentPageIndex == 0) pageCount - 1 else currentPageIndex - 1
