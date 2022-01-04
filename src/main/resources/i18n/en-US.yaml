@@ -587,6 +587,7 @@ modules:
               Your gift has been sent.
             title: A Gift has been Sent
         errors:
+          tradeBattleState: You cannot gift someone while in a trade or battle!
           botReceiver: '**Suggestion**: Try gifting a user, not a bot!'
           selectedPokemon: '**Suggestion**: Try selecting a different
                         Pokémon before gifting!'

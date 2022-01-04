@@ -19,7 +19,14 @@ object GiftCreditCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    // TODO: check battle and trade state
+    if(context.getTradeState() != null || context.getBattleState() != null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.gift.errors.tradeBattleState")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (receiver == null) {
       context.reply(
