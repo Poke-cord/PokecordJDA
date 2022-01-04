@@ -105,8 +105,8 @@ object BuyCommand : Command() {
             }
 
             try {
-              val user = context.jda.retrieveUserById(listing.ownerId).await()
-              val channel = it.openPrivateChannel().await()
+              val seller = context.jda.retrieveUserById(listing.ownerId).await()
+              val channel = seller.openPrivateChannel().await()
               channel.sendMessageEmbeds(
                 context.embedTemplates.normal(
                   context.translate(
