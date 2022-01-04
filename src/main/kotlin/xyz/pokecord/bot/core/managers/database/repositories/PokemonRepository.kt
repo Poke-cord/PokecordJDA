@@ -213,6 +213,24 @@ class PokemonRepository(
     return result.toList()
   }
 
+  suspend fun getPokemonIds(
+    ownerId: String,
+    limit: Int? = 15,
+    skip: Int? = 0,
+    searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
+    aggregation: MutableList<Bson> = mutableListOf()
+  ): List<PokemonWithOnlyObjectId> {
+    if (skip != null) aggregation.add(skip(skip))
+    if (limit != null) aggregation.add(limit(limit))
+    aggregation.add(project(PokemonWithOnlyObjectId::_id))
+    val result = collection.aggregate<PokemonWithOnlyObjectId>(
+      match(OwnedPokemon::ownerId eq ownerId),
+      *searchOptions.pipeline,
+      *aggregation.toTypedArray(),
+    )
+    return result.toList()
+  }
+
   suspend fun getPokemonCount(
     ownerId: String,
     searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
@@ -302,8 +320,8 @@ class PokemonRepository(
           if (evolutionDetails?.knownMoveId != 0) pokemon.moves.contains(evolutionDetails?.knownMoveId) else true
         val isLevelUpOk = if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
         val isMinimumLevelOk = (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
-        val isTradeStateOk = if(evolutionDetails?.evolutionTriggerId == 2)
-          if(evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
+        val isTradeStateOk = if (evolutionDetails?.evolutionTriggerId == 2)
+          if (evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
           else beingTradedFor != null
         else true
         val isTriggerItemOk =
@@ -519,6 +537,16 @@ class PokemonRepository(
     private var searchIds: Set<Int> = setOf()
     private var orderBson: Bson? = null
 
+    val hasOptions
+      get() = (order != null && order != PokemonOrder.DEFAULT)
+          || favorites != null
+          || nature != null
+          || rarity != null
+          || shiny != null
+          || type != null
+          || regex != null
+          || searchQuery != null
+
     init {
       val rarities: MutableList<String> =
         (rarity?.lowercase()?.split(Regex(",( )?"))?.toMutableList() ?: mutableListOf())
@@ -547,7 +575,7 @@ class PokemonRepository(
 
       if (type != null) {
         val types = type.split(",").mapNotNull { Type.getByName(it) }
-        ids = (ids.ifEmpty { allIds }).intersect(Pokemon.getByTypes(types).map { it.id })
+        ids = (ids.ifEmpty { allIds }).intersect(Pokemon.getByTypes(types).map { it.id }.toSet())
       }
 
       (if (regex != null) Pokemon.searchRegex(regex) else if (searchQuery != null) Pokemon.search(searchQuery) else null)
