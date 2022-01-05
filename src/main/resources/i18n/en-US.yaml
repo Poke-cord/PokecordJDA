@@ -226,7 +226,7 @@ modules:
           noPokemonProvided: Please provide the pokémon you would like to list.
           noPokemonFound: The pokémon you are looking for doesn't seem to exist.
           startingBidPrice: The starting bid can't be less than 1,000 credits or more than 10,000,000 credits!
-          minimumTime: An auction must be at least 4 hours long.
+          minimumTime: An auction must last anywhere from **4 hours** to **30 days**.
         confirmation:
           description: |-
             Please confirm you would like to start an auction for your **IV{{pokemonIV}} {{pokemonName}}**.
@@ -590,6 +590,7 @@ modules:
               Your gift has been sent.
             title: A Gift has been Sent
         errors:
+          tradeBattleState: You cannot gift someone while in a trade or battle!
           botReceiver: '**Suggestion**: Try gifting a user, not a bot!'
           selectedPokemon: '**Suggestion**: Try selecting a different
                         Pokémon before gifting!'

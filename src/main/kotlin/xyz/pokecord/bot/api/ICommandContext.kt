@@ -39,6 +39,7 @@ interface ICommandContext {
   suspend fun getUserData(forceFetch: Boolean = false): User
   suspend fun getTradeState(): Trade?
   suspend fun getTraderState(): TraderData?
+  suspend fun getBattleState(): Battle?
   suspend fun handleException(
     exception: Throwable,
     module: Module? = null,
