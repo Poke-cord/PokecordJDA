@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.trading
 
+import com.mongodb.reactivestreams.client.ClientSession
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.Bot
@@ -17,12 +18,13 @@ class TradingModule(bot: Bot) : Module(
       context: ICommandContext,
       pokemon: List<OwnedPokemon>,
       partnerPokemonIds: List<Int>,
-      updateInDb: Boolean
+      updateInDb: Boolean,
+      clientSession: ClientSession? = null
     ): List<String> {
-      return pokemon.map { it ->
+      return pokemon.map {
         val initialName = context.translator.pokemonName(it)
         val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-          it, null, null, partnerPokemonIds, updateInDb
+          it, null, null, partnerPokemonIds, updateInDb, clientSession
         )
 
         val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(it)}" else ""

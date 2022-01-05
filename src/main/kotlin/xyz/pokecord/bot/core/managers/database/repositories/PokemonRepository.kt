@@ -293,7 +293,8 @@ class PokemonRepository(
     usedItemId: Int? = null,
     gainedXp: Int? = null,
     beingTradedFor: List<Int>? = null,
-    updateInDb: Boolean = true
+    updateInDb: Boolean = true,
+    clientSession: ClientSession? = null
   ): Pair<Boolean, Boolean> {
     var leveledUp = false
     var evolved = false
@@ -365,10 +366,18 @@ class PokemonRepository(
     }
 
     if (updatesBson.isNotEmpty() && updateInDb) {
-      collection.updateOne(
-        OwnedPokemon::_id eq pokemon._id,
-        combine(updatesBson)
-      )
+      if (clientSession != null) {
+        collection.updateOne(
+          clientSession,
+          OwnedPokemon::_id eq pokemon._id,
+          combine(updatesBson)
+        )
+      } else {
+        collection.updateOne(
+          OwnedPokemon::_id eq pokemon._id,
+          combine(updatesBson)
+        )
+      }
     }
 
     return Pair(leveledUp, evolved)
