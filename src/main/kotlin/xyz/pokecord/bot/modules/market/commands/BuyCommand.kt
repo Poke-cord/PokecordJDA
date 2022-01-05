@@ -105,23 +105,22 @@ object BuyCommand : Command() {
             }
 
             try {
-              context.jda.getUserById(listing.ownerId)?.let {
-                val channel = it.openPrivateChannel().await()
-                channel.sendMessageEmbeds(
-                  context.embedTemplates.normal(
-                    context.translate(
-                      "modules.market.commands.buy.sold.description",
-                      mapOf(
-                        "ivPercentage" to pokemon.ivPercentage,
-                        "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
-                        "price" to listing.price.toString(),
-                        "buyer" to context.author.name
-                      )
-                    ),
-                    context.translate("modules.market.commands.buy.sold.title")
-                  ).build()
-                ).await()
-              }
+              val seller = context.jda.retrieveUserById(listing.ownerId).await()
+              val channel = seller.openPrivateChannel().await()
+              channel.sendMessageEmbeds(
+                context.embedTemplates.normal(
+                  context.translate(
+                    "modules.market.commands.buy.sold.description",
+                    mapOf(
+                      "ivPercentage" to pokemon.ivPercentage,
+                      "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
+                      "price" to listing.price.toString(),
+                      "buyer" to context.author.name
+                    )
+                  ),
+                  context.translate("modules.market.commands.buy.sold.title")
+                ).build()
+              ).await()
             } catch (_: Throwable) {
             }
 
