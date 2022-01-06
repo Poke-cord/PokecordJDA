@@ -25,37 +25,27 @@ class StoreCommand : Command() {
           context.translate("modules.economy.commands.store.embed.confirmation.cancelOldOrder")
         )
       )
-      when {
-        confirmation.timedOut -> {
-          confirmation.sentMessage!!.editMessageEmbeds(
-            context.embedTemplates.error(
-              context.translate("modules.economy.commands.store.errors.cancelOldOrder.noAction")
-            ).build()
-          ).queue()
-        }
-        confirmed -> {
-          confirmation.sentMessage!!.editMessageEmbeds(
-            context.embedTemplates.error(
-              context.translate("modules.economy.commands.store.errors.cancelOldOrder.orderCancelled")
-            ).build()
-          ).queue()
-          module.bot.database.orderRepository.deleteOrder(orderData)
-        }
-        else -> {
-          val itemName = context.translate("store.packages.${orderData.packageId}.items.${orderData.itemId}")
+      if (confirmed) {
+        confirmation.sentMessage!!.editMessageEmbeds(
+          context.embedTemplates.error(
+            context.translate("modules.economy.commands.store.errors.cancelOldOrder.orderCancelled")
+          ).build()
+        ).queue()
+        module.bot.database.orderRepository.deleteOrder(orderData)
+      } else {
+        val itemName = context.translate("store.packages.${orderData.packageId}.items.${orderData.itemId}")
 
-          confirmation.sentMessage!!.editMessageEmbeds(
-            context.embedTemplates.normal(
-              context.translate(
-                "modules.economy.commands.store.embed.oldOrderDescription",
-                mapOf(
-                  "item" to itemName,
-                  "link" to module.bot.payPal.getCheckoutLink(orderData.orderId)
-                )
+        confirmation.sentMessage!!.editMessageEmbeds(
+          context.embedTemplates.normal(
+            context.translate(
+              "modules.economy.commands.store.embed.oldOrderDescription",
+              mapOf(
+                "item" to itemName,
+                "link" to module.bot.payPal.getCheckoutLink(orderData.orderId)
               )
-            ).build()
-          ).queue()
-        }
+            )
+          ).build()
+        ).queue()
       }
       return
     }
