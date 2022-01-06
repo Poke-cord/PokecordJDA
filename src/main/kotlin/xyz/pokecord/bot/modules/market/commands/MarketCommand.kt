@@ -28,9 +28,7 @@ object MarketCommand : ParentCommand() {
       if (listingPokemon != null) {
         val pokemonIv = listingPokemon.ivPercentage
         val pokemonName = context.translator.pokemonDisplayName(listingPokemon, false)
-        if (!it.sold) {
-          "`${it.id}` IV **$pokemonIv $pokemonName** | **${it.price}** Credits"
-        } else null
+        "`${it.id}` IV **$pokemonIv $pokemonName** | **${it.price}** Credits"
       } else null
     }
 
