@@ -104,7 +104,7 @@ object ListCommand : Command() {
             ),
             session
           )
-          context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "market-pokemon-holder", session)
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon, "market-pokemon-holder", session)
           session.commitTransactionAndAwait()
         }
       }

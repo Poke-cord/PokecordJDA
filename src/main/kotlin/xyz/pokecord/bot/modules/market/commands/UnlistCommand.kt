@@ -66,7 +66,7 @@ object UnlistCommand : Command() {
 
           session.use {
             session.startTransaction()
-            context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, context.author.id)
+            context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id)
             context.bot.database.marketRepository.markUnlisted(listing, session) // Still deciding
             session.commitTransactionAndAwait()
           }

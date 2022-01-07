@@ -67,14 +67,23 @@ class PokemonRepository(
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
 
-  suspend fun updateOwnerId(pokemonId: Id<OwnedPokemon>, newOwnerId: String, clientSession: ClientSession? = null) {
+  suspend fun updateOwnerId(pokemon: OwnedPokemon, newOwnerId: String, clientSession: ClientSession? = null) {
+    val oldOwnerId = pokemon.ownerId
+    pokemon.favorite = false
+    pokemon.ownerId = newOwnerId
+    val filter = OwnedPokemon::_id eq pokemon._id
+    val update = combine(
+      set(
+        OwnedPokemon::ownerId setTo newOwnerId,
+        OwnedPokemon::favorite setTo false
+      ),
+      if (pokemon.trainerId == null) set(OwnedPokemon::trainerId setTo oldOwnerId)
+      else EMPTY_BSON
+    )
     if (clientSession == null) {
-      collection.updateOne(
-        OwnedPokemon::_id eq pokemonId,
-        set(OwnedPokemon::ownerId setTo newOwnerId)
-      )
+      collection.updateOne(filter, update)
     } else {
-      collection.updateOne(clientSession, OwnedPokemon::_id eq pokemonId, set(OwnedPokemon::ownerId setTo newOwnerId))
+      collection.updateOne(clientSession, filter, update)
     }
   }
 
@@ -254,17 +263,6 @@ class PokemonRepository(
     ).toList()
     if (result.isEmpty()) return 0
     return result.first().count
-  }
-
-  suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String, session: ClientSession) {
-    collection.updateOne(
-      session,
-      OwnedPokemon::_id eq pokemon._id,
-      set(
-        OwnedPokemon::ownerId setTo ownerId,
-        OwnedPokemon::favorite setTo false
-      ),
-    )
   }
 
   suspend fun insertPokemon(pokemon: OwnedPokemon, session: ClientSession? = null): InsertOneResult {
