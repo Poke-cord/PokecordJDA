@@ -53,6 +53,7 @@ object TradeAddPokemonCommand : Command() {
               context.translate("modules.trading.commands.add.errors.maxPokemonCount")
             ).build()
           ).queue()
+          return
         }
 
         val transfer = selectedPokemon.transferable(context.bot.database)
