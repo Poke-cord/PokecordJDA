@@ -23,12 +23,13 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.api.Discord
 import xyz.pokecord.bot.utils.api.PayPal
+import xyz.pokecord.bot.utils.api.TopGG
 import java.util.concurrent.Executors
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberFunctions
 
-class Bot constructor(private val token: String) {
+class Bot constructor(private val token: String, private val topggToken: String? = null) {
   lateinit var shardManager: ShardManager
   lateinit var commandHandler: CommandHandler
 
@@ -40,6 +41,7 @@ class Bot constructor(private val token: String) {
 
   val payPal by lazy { PayPal(database) }
   val discordRestClient by lazy { Discord(token) }
+  val topggClient by lazy { topggToken?.let { TopGG(it) } }
   val backgroundCoroutineScope =
     CoroutineScope(Executors.newFixedThreadPool(2).asCoroutineDispatcher() + SupervisorJob())
 

@@ -34,10 +34,14 @@ object App {
     } else {
       try {
         val token = System.getenv("BOT_TOKEN")
+        val topggToken = System.getenv("TOPGG_TOKEN")
         val encryptionKey = System.getenv("ENCRYPTION_KEY")
         if (token.isNullOrBlank()) {
           logger.error("Token was not provided. Exiting...")
           exitProcess(1)
+        }
+        if (topggToken.isNullOrBlank()) {
+          logger.warn("Top.gg token was not provided. Stat posting will be disabled.")
         }
         if (encryptionKey.isNullOrBlank()) {
           logger.error("Encryption key was not provided. Exiting...")
@@ -49,7 +53,7 @@ object App {
         val sharderPort = System.getenv("SHARDER_PORT")?.toIntOrNull()
         val shardCapacity = System.getenv("SHARD_CAPACITY")?.toIntOrNull() ?: 1
 
-        bot = Bot(token)
+        bot = Bot(token, topggToken)
         val modules = listOf(
           PokemonModule(bot),
           GeneralModule(bot),
