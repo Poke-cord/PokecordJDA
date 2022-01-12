@@ -24,13 +24,13 @@ class TopGG(
       )
     }
     defaultRequest {
-      header("Authorization", if (token.startsWith("Bot ")) token else "Bot $token")
+      header("Authorization", token)
       userAgent("DiscordBot (https://pokecord.xyz, ${Config.version})")
     }
   }
 
   suspend fun postServerCount(botId: String, serverCounts: List<Int>) {
-    httpClient.post<HttpResponse>("${baseUrl}/bots/${botId}/stats") {
+    httpClient.post<HttpResponse>(  "${baseUrl}/bots/${botId}/stats") {
       body = buildJsonObject {
         putJsonArray("shards") {
           serverCounts.forEach {
@@ -38,6 +38,7 @@ class TopGG(
           }
         }
       }
+      contentType(ContentType.Application.Json)
     }
   }
 
