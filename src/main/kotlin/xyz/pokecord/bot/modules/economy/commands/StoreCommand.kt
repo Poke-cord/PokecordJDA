@@ -82,6 +82,8 @@ class StoreCommand : Command() {
       private var pkg: Package? = null
 
       override suspend fun onButtonClick(button: ButtonData, context: ICommandContext, event: ButtonClickEvent) {
+        event.deferReply()
+
         if (packageButtons.contains(button)) {
           pkg = Package.packages.find { it.id == button.id }!!
 
