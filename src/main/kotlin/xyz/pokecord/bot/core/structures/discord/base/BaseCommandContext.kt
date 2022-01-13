@@ -63,6 +63,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     return bot.database.tradeRepository.getTraderData(author.id)
   }
 
+  override suspend fun getBattleState(): Battle? {
+    return bot.database.battleRepository.getUserCurrentBattle(author)
+  }
+
   override suspend fun getGuildData(forceFetch: Boolean): Guild? {
     if (!isFromGuild) return null
     if (guildData == null || forceFetch) {

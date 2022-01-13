@@ -50,6 +50,13 @@ object BuyCommand : Command() {
             ).build()
           ).queue()
           return@withCoroutineLock
+        } else if (listing.unlisted) {
+          context.reply(
+            context.embedTemplates.error(
+              context.translate("modules.market.commands.buy.errors.unlisted")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
         }
 
         val pokemon = context.bot.database.pokemonRepository.getPokemonById(listing.pokemon)
@@ -93,28 +100,27 @@ object BuyCommand : Command() {
               context.bot.database.userRepository.incCredits(userData, -listing.price, session)
               context.bot.database.userRepository.incCredits(sellerData, listing.price, session)
               context.bot.database.marketRepository.markSold(listing, session)
-              context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, context.author.id, session)
+              context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id, session)
               session.commitTransactionAndAwait()
             }
 
             try {
-              context.jda.getUserById(listing.ownerId)?.let {
-                val channel = it.openPrivateChannel().await()
-                channel.sendMessageEmbeds(
-                  context.embedTemplates.normal(
-                    context.translate(
-                      "modules.market.commands.buy.sold.description",
-                      mapOf(
-                        "ivPercentage" to pokemon.ivPercentage,
-                        "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
-                        "price" to listing.price.toString(),
-                        "buyer" to context.author.name
-                      )
-                    ),
-                    context.translate("modules.market.commands.buy.sold.title")
-                  ).build()
-                ).await()
-              }
+              val seller = context.jda.retrieveUserById(listing.ownerId).await()
+              val channel = seller.openPrivateChannel().await()
+              channel.sendMessageEmbeds(
+                context.embedTemplates.normal(
+                  context.translate(
+                    "modules.market.commands.buy.sold.description",
+                    mapOf(
+                      "ivPercentage" to pokemon.ivPercentage,
+                      "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
+                      "price" to listing.price.toString(),
+                      "buyer" to context.author.name
+                    )
+                  ),
+                  context.translate("modules.market.commands.buy.sold.title")
+                ).build()
+              ).await()
             } catch (_: Throwable) {
             }
 

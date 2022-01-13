@@ -66,16 +66,16 @@ object TradeConfirmCommand : Command() {
         val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
         val authorPokemonText =
-          TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, true)
+          TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, true, session)
         authorPokemon.map { pokemon ->
-          context.bot.database.pokemonRepository.tradeTransfer(pokemon, partnerUserData.id, session)
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon, partnerUserData.id, session)
           context.bot.database.userRepository.addDexCatchEntry(authorUserData, pokemon, session)
         }
 
         val partnerPokemonText =
-          TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, true)
+          TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, true, session)
         partnerPokemon.map { pokemon ->
-          context.bot.database.pokemonRepository.tradeTransfer(pokemon, authorUserData.id, session)
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon, authorUserData.id, session)
           context.bot.database.userRepository.addDexCatchEntry(partnerUserData, pokemon, session)
         }
 

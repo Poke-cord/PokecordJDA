@@ -2,10 +2,12 @@ package xyz.pokecord.bot.modules.auctions.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.utils.TimeFormat
+import org.litote.kmongo.`in`
 import org.litote.kmongo.eq
 import org.litote.kmongo.match
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Auction
+import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
@@ -35,10 +37,7 @@ object AuctionsCommand : ParentCommand() {
           if (showBids && !outbid) "" else "Top Bid ${context.translator.numberFormat(highestBid.amount)}"
         } else "Starting Bid: ${context.translator.numberFormat(it.startingBid)}"
         val outbidStatus = if (showBids && outbid) " | Outbid" else ""
-
-        if (it.timeLeft > 0 && !it.ended) {
-          "`${it.id}` IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus |  Ends ${TimeFormat.RELATIVE.after(it.timeLeft)}"
-        } else null
+        "`${it.id}` IV **$pokemonIv $pokemonName**$outbidStatus | $bidStatus |  Ends ${TimeFormat.RELATIVE.after(it.timeLeft)}"
       } else null
     }
     return desc.filterNotNull().joinToString("\n")
@@ -48,7 +47,23 @@ object AuctionsCommand : ParentCommand() {
   suspend fun execute(
     context: ICommandContext,
     @Argument(optional = true) bids: String?,
+    @Argument(aliases = ["sh"], prefixed = true, optional = true) shiny: Boolean?,
+    @Argument(aliases = ["n"], prefixed = true, optional = true) nature: String?,
+    @Argument(
+      aliases = ["r"],
+      prefixed = true,
+      optional = true
+    ) rarity: String?,
+    @Argument(aliases = ["t"], prefixed = true, optional = true) type: String?,
+    @Argument(aliases = ["re"], prefixed = true, optional = true) regex: Regex?,
     @Argument(optional = true) page: Int?,
+    @Argument(
+      aliases = ["s"],
+      name = "search",
+      consumeRest = true,
+      prefixed = true,
+      optional = true
+    ) searchQuery: String?,
   ) {
     if (!context.hasStarted(true)) return
 
@@ -61,7 +76,32 @@ object AuctionsCommand : ParentCommand() {
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
-    val aggregation = listOf(match(Auction::ended eq false))
+    val searchOptions =
+      PokemonRepository.PokemonSearchOptions(
+        order = null,
+        favorites = null,
+        nature,
+        rarity,
+        shiny,
+        type,
+        regex,
+        searchQuery
+      ) // order = null because it's not supported yet and favorites = null because they only really apply to specific user's collections
+
+    val filters = mutableListOf(
+      Auction::ended eq false
+    )
+
+    val matchingPokemon =
+      if (searchOptions.hasOptions) {
+        module.bot.database.pokemonRepository.getPokemonIds("auction-pokemon-holder", searchOptions = searchOptions)
+          .map { it._id }
+      } else null
+    if (matchingPokemon != null) {
+      filters.add(Auction::pokemon `in` matchingPokemon)
+    }
+
+    val aggregation = listOf(match(*filters.toTypedArray()))
     val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(

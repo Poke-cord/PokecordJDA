@@ -19,7 +19,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Pokemon as PokemonData
 data class OwnedPokemon(
   var id: Int,
   var index: Int,
-  val ownerId: String,
+  var ownerId: String,
   val shiny: Boolean,
   val trainerId: String? = null,
   var level: Int = defaultLevel(),

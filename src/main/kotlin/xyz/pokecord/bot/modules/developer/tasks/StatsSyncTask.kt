@@ -9,7 +9,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Task
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
-class RedisSyncTask : Task() {
+class StatsSyncTask : Task() {
   override val interval = 15_000L
   override val name = "RedisSync"
 
@@ -24,6 +24,10 @@ class RedisSyncTask : Task() {
   private val userCount = Gauge
     .build("bot_misc_user_count", "User Count")
     .register(PrometheusService.registry)
+
+  private val botId by lazy {
+    module.bot.shardManager.shards.first().selfUser.id
+  }
 
   override suspend fun execute() {
     // Shard Status
@@ -51,14 +55,23 @@ class RedisSyncTask : Task() {
       }
     }
 
+    val shardStatus = module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending().map { json ->
+      Json.decodeFromString<ShardStatus>(json)
+    }
+
     // Prometheus Stats
-    guildCount.set(
-      module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
-        .map { json ->
-          Json.decodeFromString<ShardStatus>(json)
-        }.sumOf { it.guildCacheSize }.toDouble()
-    )
+    guildCount.set(shardStatus.sumOf { it.guildCacheSize }.toDouble())
     pokemonCount.set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
     userCount.set(module.bot.database.userRepository.getEstimatedUserCount().toDouble())
+
+    // Top.gg Stats
+    module.bot.topggClient?.let { topgg ->
+      topgg.postServerCount(
+        botId,
+        shardStatus.map {
+          it.guildCacheSize.toInt()
+        }
+      )
+    }
   }
 }

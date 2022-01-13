@@ -67,14 +67,23 @@ class PokemonRepository(
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
 
-  suspend fun updateOwnerId(pokemonId: Id<OwnedPokemon>, newOwnerId: String, clientSession: ClientSession? = null) {
+  suspend fun updateOwnerId(pokemon: OwnedPokemon, newOwnerId: String, clientSession: ClientSession? = null) {
+    val oldOwnerId = pokemon.ownerId
+    pokemon.favorite = false
+    pokemon.ownerId = newOwnerId
+    val filter = OwnedPokemon::_id eq pokemon._id
+    val update = combine(
+      set(
+        OwnedPokemon::ownerId setTo newOwnerId,
+        OwnedPokemon::favorite setTo false
+      ),
+      if (pokemon.trainerId == null) set(OwnedPokemon::trainerId setTo oldOwnerId)
+      else EMPTY_BSON
+    )
     if (clientSession == null) {
-      collection.updateOne(
-        OwnedPokemon::_id eq pokemonId,
-        set(OwnedPokemon::ownerId setTo newOwnerId)
-      )
+      collection.updateOne(filter, update)
     } else {
-      collection.updateOne(clientSession, OwnedPokemon::_id eq pokemonId, set(OwnedPokemon::ownerId setTo newOwnerId))
+      collection.updateOne(clientSession, filter, update)
     }
   }
 
@@ -213,6 +222,24 @@ class PokemonRepository(
     return result.toList()
   }
 
+  suspend fun getPokemonIds(
+    ownerId: String,
+    limit: Int? = 15,
+    skip: Int? = 0,
+    searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
+    aggregation: MutableList<Bson> = mutableListOf()
+  ): List<PokemonWithOnlyObjectId> {
+    if (skip != null) aggregation.add(skip(skip))
+    if (limit != null) aggregation.add(limit(limit))
+    aggregation.add(project(PokemonWithOnlyObjectId::_id))
+    val result = collection.aggregate<PokemonWithOnlyObjectId>(
+      match(OwnedPokemon::ownerId eq ownerId),
+      *searchOptions.pipeline,
+      *aggregation.toTypedArray(),
+    )
+    return result.toList()
+  }
+
   suspend fun getPokemonCount(
     ownerId: String,
     searchOptions: PokemonSearchOptions = PokemonSearchOptions(),
@@ -236,17 +263,6 @@ class PokemonRepository(
     ).toList()
     if (result.isEmpty()) return 0
     return result.first().count
-  }
-
-  suspend fun tradeTransfer(pokemon: OwnedPokemon, ownerId: String, session: ClientSession) {
-    collection.updateOne(
-      session,
-      OwnedPokemon::_id eq pokemon._id,
-      set(
-        OwnedPokemon::ownerId setTo ownerId,
-        OwnedPokemon::favorite setTo false
-      ),
-    )
   }
 
   suspend fun insertPokemon(pokemon: OwnedPokemon, session: ClientSession? = null): InsertOneResult {
@@ -275,7 +291,8 @@ class PokemonRepository(
     usedItemId: Int? = null,
     gainedXp: Int? = null,
     beingTradedFor: List<Int>? = null,
-    updateInDb: Boolean = true
+    updateInDb: Boolean = true,
+    clientSession: ClientSession? = null
   ): Pair<Boolean, Boolean> {
     var leveledUp = false
     var evolved = false
@@ -302,8 +319,8 @@ class PokemonRepository(
           if (evolutionDetails?.knownMoveId != 0) pokemon.moves.contains(evolutionDetails?.knownMoveId) else true
         val isLevelUpOk = if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
         val isMinimumLevelOk = (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
-        val isTradeStateOk = if(evolutionDetails?.evolutionTriggerId == 2)
-          if(evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
+        val isTradeStateOk = if (evolutionDetails?.evolutionTriggerId == 2)
+          if (evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
           else beingTradedFor != null
         else true
         val isTriggerItemOk =
@@ -347,10 +364,18 @@ class PokemonRepository(
     }
 
     if (updatesBson.isNotEmpty() && updateInDb) {
-      collection.updateOne(
-        OwnedPokemon::_id eq pokemon._id,
-        combine(updatesBson)
-      )
+      if (clientSession != null) {
+        collection.updateOne(
+          clientSession,
+          OwnedPokemon::_id eq pokemon._id,
+          combine(updatesBson)
+        )
+      } else {
+        collection.updateOne(
+          OwnedPokemon::_id eq pokemon._id,
+          combine(updatesBson)
+        )
+      }
     }
 
     return Pair(leveledUp, evolved)
@@ -519,6 +544,16 @@ class PokemonRepository(
     private var searchIds: Set<Int> = setOf()
     private var orderBson: Bson? = null
 
+    val hasOptions
+      get() = (order != null && order != PokemonOrder.DEFAULT)
+          || favorites != null
+          || nature != null
+          || rarity != null
+          || shiny != null
+          || type != null
+          || regex != null
+          || searchQuery != null
+
     init {
       val rarities: MutableList<String> =
         (rarity?.lowercase()?.split(Regex(",( )?"))?.toMutableList() ?: mutableListOf())
@@ -547,7 +582,7 @@ class PokemonRepository(
 
       if (type != null) {
         val types = type.split(",").mapNotNull { Type.getByName(it) }
-        ids = (ids.ifEmpty { allIds }).intersect(Pokemon.getByTypes(types).map { it.id })
+        ids = (ids.ifEmpty { allIds }).intersect(Pokemon.getByTypes(types).map { it.id }.toSet())
       }
 
       (if (regex != null) Pokemon.searchRegex(regex) else if (searchQuery != null) Pokemon.search(searchQuery) else null)

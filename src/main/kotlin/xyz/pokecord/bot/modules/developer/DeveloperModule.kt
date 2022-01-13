@@ -2,11 +2,8 @@ package xyz.pokecord.bot.modules.developer
 
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
-import xyz.pokecord.bot.modules.developer.commands.EvalCommand
-import xyz.pokecord.bot.modules.developer.commands.MockCommand
-import xyz.pokecord.bot.modules.developer.commands.ParseEntitiesCommand
-import xyz.pokecord.bot.modules.developer.commands.ShowCommand
-import xyz.pokecord.bot.modules.developer.tasks.RedisSyncTask
+import xyz.pokecord.bot.modules.developer.commands.*
+import xyz.pokecord.bot.modules.developer.tasks.StatsSyncTask
 
 class DeveloperModule(bot: Bot) : Module(
   bot,
@@ -14,10 +11,10 @@ class DeveloperModule(bot: Bot) : Module(
     EvalCommand(),
     ShowCommand(),
     ParseEntitiesCommand(),
-    MockCommand(),
+    MockCommand()
   ),
   tasks = arrayOf(
-    RedisSyncTask()
+    StatsSyncTask()
   )
 ) {
   override val name = "Developer"

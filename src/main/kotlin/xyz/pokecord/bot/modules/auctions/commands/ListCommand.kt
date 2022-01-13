@@ -64,7 +64,7 @@ object ListCommand : Command() {
     }
 
     val auctionTime = time?.parseTime() ?: Config.defaultAuctionTime
-    if(auctionTime < 4 * 60 * 60 * 1000) {
+    if(auctionTime < Config.minAuctionTime || auctionTime > Config.maxAuctionTime) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.list.errors.minimumTime"),
@@ -114,7 +114,7 @@ object ListCommand : Command() {
             _isNew = true
           )
           context.bot.database.auctionRepository.createAuction(auction, session)
-          context.bot.database.pokemonRepository.updateOwnerId(pokemon._id, "auction-pokemon-holder", session)
+          context.bot.database.pokemonRepository.updateOwnerId(pokemon, "auction-pokemon-holder", session)
           session.commitTransactionAndAwait()
 
           context.reply(
