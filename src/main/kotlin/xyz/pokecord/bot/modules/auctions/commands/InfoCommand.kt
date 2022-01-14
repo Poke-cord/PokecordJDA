@@ -39,10 +39,16 @@ object InfoCommand : Command() {
 
         val infoSection = """
         **${context.translate("misc.texts.auctionId")}**: ${auction.id}
-        **${context.translate("misc.texts.startingBid")}**: ${auction.startingBid}
+        **${context.translate("misc.texts.startingBid")}**: ${context.translator.numberFormat(auction.startingBid)}
         **${context.translate("misc.texts.bidCount")}**: ${auction.bids.size}
         **${context.translate("misc.texts.timeLeft")}**: ${auction.timeLeft.humanizeMs()}
-        **${context.translate("misc.texts.currentBid")}**: ${auction.highestBid?.amount ?: context.translate("misc.texts.noBids")}
+        **${context.translate("misc.texts.currentBid")}**: ${
+          auction.highestBid?.amount?.let {
+            context.translator.numberFormat(
+              it
+            )
+          } ?: context.translate("misc.texts.noBids")
+        }
         
         **${context.translate("misc.texts.xp")}**: ${if (auctionPokemon.level >= 100) "Max" else "${auctionPokemon.xp}/${auctionPokemon.requiredXpToLevelUp()}"}
         **${context.translate("misc.texts.gender")}**: ${context.translator.gender(auctionPokemon)}

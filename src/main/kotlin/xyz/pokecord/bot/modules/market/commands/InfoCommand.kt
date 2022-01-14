@@ -38,7 +38,7 @@ object InfoCommand : Command() {
 
         val infoSection = """
         **${context.translate("misc.texts.listingId")}**: ${listing.id}
-        **${context.translate("misc.texts.price")}**: ${listing.price}
+        **${context.translate("misc.texts.price")}**: ${context.translator.numberFormat(listing.price)}
         
         **${context.translate("misc.texts.xp")}**: ${if (listingPokemon.level >= 100) "Max" else "${listingPokemon.xp}/${listingPokemon.requiredXpToLevelUp()}"}
         **${context.translate("misc.texts.gender")}**: ${context.translator.gender(listingPokemon)}
