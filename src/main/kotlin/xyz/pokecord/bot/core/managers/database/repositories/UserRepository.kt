@@ -396,7 +396,7 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun postReindex(userData: User, pokemonCount: Int, clientSession: ClientSession) {
+  suspend fun updatePokemonCount(userData: User, pokemonCount: Int, clientSession: ClientSession) {
     userData.pokemonCount = pokemonCount
     userData.nextIndex = pokemonCount
     collection.updateOne(

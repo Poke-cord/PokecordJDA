@@ -11,6 +11,7 @@ import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.aggregate
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Auction
@@ -62,9 +63,9 @@ class AuctionsRepository(
     return auction
   }
 
-  suspend fun endAuction(auction: Auction) {
+  suspend fun endAuction(auction: Auction, session: ClientSession) {
     auction.ended = true
-    collection.updateOne(Auction::id eq auction.id, set(Auction::ended setTo true))
+    collection.updateOne(session, Auction::id eq auction.id, set(Auction::ended setTo true))
     setCacheAuction(auction)
   }
 
@@ -121,17 +122,22 @@ class AuctionsRepository(
   suspend fun auctionTask(interval: Long, shardManager: ShardManager): MutableList<Auction> {
     val endedAuctions: MutableList<Auction> = mutableListOf()
 
-    collection.find(Auction::ended eq false).toFlow().collect {
-      val targetShard = MiscUtil.getShardForGuild(it.ownerId, shardManager.shardsTotal)
-      if (shardManager.getShardById(targetShard) == null) return@collect
+    val session = database.startSession()
+    session.use {
+      session.startTransaction()
+      collection.find(session, Auction::ended eq false).toFlow().collect {
+        val targetShard = MiscUtil.getShardForGuild(it.ownerId, shardManager.shardsTotal)
+        if (shardManager.getShardById(targetShard) == null) return@collect
 
-      it.timeLeft -= interval
-      if (it.timeLeft <= 0) {
-        endedAuctions.add(it)
-        endAuction(it)
-      } else {
-        decTimeLeft(it, interval)
+        it.timeLeft -= interval
+        if (it.timeLeft <= 0) {
+          endedAuctions.add(it)
+          endAuction(it, session)
+        } else {
+          decTimeLeft(it, interval)
+        }
       }
+      session.commitTransactionAndAwait()
     }
 
     return endedAuctions

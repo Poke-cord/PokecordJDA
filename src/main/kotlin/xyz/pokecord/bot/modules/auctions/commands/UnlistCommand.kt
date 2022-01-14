@@ -80,8 +80,10 @@ object UnlistCommand : Command() {
 
           session.use {
             session.startTransaction()
-            context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id)
-            context.bot.database.auctionRepository.endAuction(auction)
+            val userData = context.bot.database.userRepository.getUser(context.author.id)
+            context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id, session)
+            context.bot.database.auctionRepository.endAuction(auction, session)
+            context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
             session.commitTransactionAndAwait()
           }
 

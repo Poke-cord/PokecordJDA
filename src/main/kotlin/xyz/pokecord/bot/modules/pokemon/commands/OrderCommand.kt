@@ -37,7 +37,7 @@ class OrderCommand : Command() {
     ).queue()
     context.bot.backgroundCoroutineScope.launch {
       module.bot.database.pokemonRepository.reindexPokemon(context.author.id, effectiveOrder) { session, pokemonCount ->
-        module.bot.database.userRepository.postReindex(userData, pokemonCount, session)
+        module.bot.database.userRepository.updatePokemonCount(userData, pokemonCount, session)
       }
       context.reply(
         context.embedTemplates.normal(

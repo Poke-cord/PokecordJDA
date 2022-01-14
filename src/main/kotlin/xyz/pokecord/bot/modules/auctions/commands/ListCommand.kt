@@ -115,6 +115,7 @@ object ListCommand : Command() {
           )
           context.bot.database.auctionRepository.createAuction(auction, session)
           context.bot.database.pokemonRepository.updateOwnerId(pokemon, "auction-pokemon-holder", session)
+          context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount - 1, session)
           session.commitTransactionAndAwait()
 
           context.reply(

@@ -23,8 +23,10 @@ object AuctionTask : Task() {
           val session = module.bot.database.startSession()
           session.use {
             session.startTransaction()
-            module.bot.database.pokemonRepository.updateOwnerId(pokemon, highestBid.userId)
-            module.bot.database.userRepository.incCredits(user, highestBid.amount)
+            val userData = module.bot.database.userRepository.getUser(highestBid.userId)
+            module.bot.database.pokemonRepository.updateOwnerId(pokemon, highestBid.userId, session)
+            module.bot.database.userRepository.incCredits(user, highestBid.amount, session)
+            module.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
             session.commitTransactionAndAwait()
           }
 
@@ -65,7 +67,14 @@ object AuctionTask : Task() {
           } catch (_: Exception) {
           }
         } else {
-          module.bot.database.pokemonRepository.updateOwnerId(pokemon, endedAuction.ownerId)
+          val session = module.bot.database.startSession()
+          session.use {
+            session.startTransaction()
+            val userData = module.bot.database.userRepository.getUser(endedAuction.ownerId)
+            module.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
+            module.bot.database.pokemonRepository.updateOwnerId(pokemon, endedAuction.ownerId, session)
+            session.commitTransactionAndAwait()
+          }
 
           try {
             val jdaOwnerChannel = module.bot.shardManager

@@ -104,6 +104,7 @@ object ListCommand : Command() {
             ),
             session
           )
+          context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount - 1, session)
           context.bot.database.pokemonRepository.updateOwnerId(pokemon, "market-pokemon-holder", session)
           session.commitTransactionAndAwait()
         }

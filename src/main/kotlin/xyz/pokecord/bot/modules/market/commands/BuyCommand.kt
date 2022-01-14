@@ -98,6 +98,7 @@ object BuyCommand : Command() {
             session.use {
               session.startTransaction()
               context.bot.database.userRepository.incCredits(userData, -listing.price, session)
+              context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
               context.bot.database.userRepository.incCredits(sellerData, listing.price, session)
               context.bot.database.marketRepository.markSold(listing, session)
               context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id, session)
