@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import com.mongodb.reactivestreams.client.ClientSession
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import xyz.pokecord.bot.core.managers.database.Database
@@ -54,8 +55,9 @@ class TradeRepository(
     )
   }
 
-  suspend fun incCredits(trade: Trade, traderId: String, amount: Int) {
+  suspend fun incCredits(trade: Trade, traderId: String, amount: Int, session: ClientSession) {
     collection.updateOne(
+      session,
       Trade::_id eq trade._id,
       inc((if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::credits, amount)
     )

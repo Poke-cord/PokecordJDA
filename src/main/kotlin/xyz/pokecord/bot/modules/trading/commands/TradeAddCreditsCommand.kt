@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.trading.commands
 
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
@@ -43,8 +44,13 @@ object TradeAddCreditsCommand : Command() {
       return
     }
 
-    context.bot.database.userRepository.incCredits(userData, -amount)
-    context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount)
+    val session = context.bot.database.startSession()
+    session.use {
+      session.startTransaction()
+      context.bot.database.userRepository.incCredits(userData, -amount, session)
+      context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount, session)
+      session.commitTransactionAndAwait()
+    }
 
     context.reply(
       context.embedTemplates.normal(
