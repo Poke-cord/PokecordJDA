@@ -55,4 +55,8 @@ class GuildRepository(
     collection.updateOne(User::id eq guildData.id, set(User::progressPrivate setTo guildData.levelUpMessagesSilenced))
     setCacheGuild(guildData)
   }
+
+  suspend fun clearCache() {
+    cacheMap.deleteAsync().awaitSuspending()
+  }
 }

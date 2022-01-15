@@ -411,6 +411,10 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun clearCache() {
+    cacheMap.deleteAsync().awaitSuspending()
+  }
+
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
 //    jsonObject {
 //      json("$group") {

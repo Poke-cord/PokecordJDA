@@ -77,9 +77,11 @@ class StatsSyncTask : Task() {
       )
     }
 
-    // Clear leaderboard cache
+    // Clear users, guild and leaderboard cache every hour
     if (lastCacheClearAt + 3_600_000L < now) {
       module.bot.database.userRepository.clearLeaderboardCache()
+      module.bot.database.userRepository.clearCache()
+      module.bot.database.guildRepository.clearCache()
       lastCacheClearAt = now
     }
   }
