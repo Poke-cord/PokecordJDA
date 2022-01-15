@@ -13,6 +13,8 @@ class StatsSyncTask : Task() {
   override val interval = 15_000L
   override val name = "RedisSync"
 
+  private var lastCacheClearAt = 0L
+
   private val guildCount = Gauge
     .build("bot_misc_guild_count", "Guild Count")
     .register(PrometheusService.registry)
@@ -31,6 +33,7 @@ class StatsSyncTask : Task() {
 
   override suspend fun execute() {
     // Shard Status
+    val now = System.currentTimeMillis()
     module.bot.shardManager.shards.forEach { jda ->
       val shardInfo = jda.shardInfo
       val shardStatus = ShardStatus(
@@ -39,7 +42,7 @@ class StatsSyncTask : Task() {
         module.bot.hostname,
         jda.gatewayPing,
         jda.guildCache.size(),
-        System.currentTimeMillis()
+        now
       )
       module.bot.cache.shardStatusMap.putAsync(
         shardInfo.shardId,
@@ -72,6 +75,12 @@ class StatsSyncTask : Task() {
           it.guildCacheSize.toInt()
         }
       )
+    }
+
+    // Clear leaderboard cache
+    if (lastCacheClearAt + 3_600_000L < now) {
+      module.bot.database.userRepository.clearLeaderboardCache()
+      lastCacheClearAt = now
     }
   }
 }

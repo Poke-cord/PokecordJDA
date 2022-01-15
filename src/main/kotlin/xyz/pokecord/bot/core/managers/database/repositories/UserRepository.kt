@@ -345,6 +345,10 @@ class UserRepository(
     }
   }
 
+  suspend fun clearLeaderboardCache(){
+    leaderboardCacheMap.deleteAsync().awaitSuspending()
+  }
+
   suspend fun setAgreedToTerms(userData: User, agreed: Boolean = true) {
     userData.agreedToTerms = agreed
     collection.updateOne(User::id eq userData.id, set(User::agreedToTerms setTo userData.agreedToTerms))
