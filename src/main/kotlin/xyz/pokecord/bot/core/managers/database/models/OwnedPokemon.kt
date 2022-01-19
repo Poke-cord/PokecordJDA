@@ -78,7 +78,7 @@ data class OwnedPokemon(
     STICKY("You cannot transfer this pokemon because its sticky."),
     FAVORITE("You cannot transfer this pokemon because its favorited."),
     TRADE_SESSION("You cannot transfer this pokemon because its in a trade session."),
-    NO_POKEMON("You cannot transfer this pokemon because its the only one you have."),
+    NO_POKEMON("You cannot transfer this pokemon because its the only one you have.\nThink this is wrong? Try using the `order` command."),
     SELECTED("You cannot transfer this pokemon because you have it selected."),
     SUCCESS("The pokemon is transferable.")
   }
