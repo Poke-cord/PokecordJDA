@@ -52,7 +52,7 @@ class MachineItem(
         ?: return UsageResult(
           false,
           context.embedTemplates.error(
-            context.translate("items.errors.invalidTarget")
+            context.translate("items.machine.errors.invalidTarget")
           )
         )
 

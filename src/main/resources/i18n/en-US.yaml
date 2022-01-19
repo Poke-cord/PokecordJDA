@@ -902,6 +902,8 @@ items:
     embed:
       title: A Machine has been Used
     errors:
+      invalidTarget: '**Suggestion**: Try using another machine or using
+                        the specified machine on a different Pokémon!'
       inBattle: You can't use a machine during a battle!
       invalidSlotSpecified: '**Suggestion**: Try specifying a valid
                     move slot number!'
