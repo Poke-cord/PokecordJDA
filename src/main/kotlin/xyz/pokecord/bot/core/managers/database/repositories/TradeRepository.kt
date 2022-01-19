@@ -4,7 +4,9 @@ import com.mongodb.reactivestreams.client.ClientSession
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import xyz.pokecord.bot.core.managers.database.Database
-import xyz.pokecord.bot.core.managers.database.models.*
+import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
+import xyz.pokecord.bot.core.managers.database.models.Trade
+import xyz.pokecord.bot.core.managers.database.models.TraderData
 
 class TradeRepository(
   database: Database,
@@ -20,6 +22,7 @@ class TradeRepository(
 
   suspend fun getTrade(userId: String): Trade? {
     return collection.findOne(
+      Trade::ended eq false,
       or(
         Trade::initiator / TraderData::userId eq userId,
         Trade::receiver / TraderData::userId eq userId
@@ -29,14 +32,15 @@ class TradeRepository(
 
   suspend fun getTraderData(userId: String): TraderData? {
     val trade = collection.findOne(
+      Trade::ended eq false,
       or(
         Trade::initiator / TraderData::userId eq userId,
         Trade::receiver / TraderData::userId eq userId
       )
     )
 
-    return if(trade != null) {
-      if(trade.initiator.userId == userId) {
+    return if (trade != null) {
+      if (trade.initiator.userId == userId) {
         trade.initiator
       } else {
         trade.receiver
@@ -44,8 +48,12 @@ class TradeRepository(
     } else null
   }
 
-  suspend fun deleteTrade(trade: Trade) {
-    collection.deleteOne(Trade::_id eq trade._id)
+  suspend fun endTrade(trade: Trade) {
+    collection.updateOne(
+      Trade::_id eq trade._id, set(
+        Trade::ended setTo true
+      )
+    )
   }
 
   suspend fun confirm(trade: Trade, traderId: String) {
@@ -66,14 +74,20 @@ class TradeRepository(
   suspend fun addPokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
     collection.updateOne(
       Trade::_id eq trade._id,
-      push((if(trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon, pokemonId)
+      push(
+        (if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon,
+        pokemonId
+      )
     )
   }
 
   suspend fun removePokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
     collection.updateOne(
       Trade::_id eq trade._id,
-      pull((if(trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon, pokemonId)
+      pull(
+        (if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon,
+        pokemonId
+      )
     )
   }
 }

@@ -39,7 +39,7 @@ object TradeConfirmCommand : Command() {
     val partnerTradeState =
       if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
     if (partnerTradeState.confirmed) {
-      context.bot.database.tradeRepository.deleteTrade(tradeState)
+      context.bot.database.tradeRepository.endTrade(tradeState)
 
       val authorTradeData =
         if (tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver

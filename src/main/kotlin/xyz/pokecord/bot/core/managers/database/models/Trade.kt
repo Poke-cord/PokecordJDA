@@ -11,7 +11,7 @@ data class TraderData(
   val partnerId: String,
   var confirmed: Boolean = false,
   var credits: Int = 0,
-  var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf()
+  var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf(),
 )
 
 @Serializable
@@ -20,4 +20,5 @@ data class Trade(
   val receiver: TraderData,
 
   @Contextual val _id: Id<Trade> = newId(),
+  var ended: Boolean = false
 )
