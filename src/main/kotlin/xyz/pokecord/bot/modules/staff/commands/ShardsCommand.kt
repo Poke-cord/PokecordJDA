@@ -13,6 +13,8 @@ import kotlin.math.ceil
 object ShardsCommand : StaffCommand() {
   override val name = "Shards"
 
+  private const val ALIVE_TIMEOUT_MS = 300_000
+
   @Executor
   suspend fun execute(
     context: ICommandContext,
@@ -22,8 +24,7 @@ object ShardsCommand : StaffCommand() {
     val shardStatusSet = module.bot.cache.shardStatusMap.readAllValuesAsync().awaitSuspending()
       .map { json -> Json.decodeFromString<ShardStatus>(json) }.sortedBy { it.id }
 
-    val now = System.currentTimeMillis()
-    val possiblyDeadHosts = shardStatusSet.filter { now - it.updatedAt >= ALIVE_TIMEOUT_MS }.map { it.hostname }
+    val possiblyDeadHosts = shardStatusSet.filter { System.currentTimeMillis() - it.updatedAt >= ALIVE_TIMEOUT_MS }.map { it.hostname }
     val guildCount = shardStatusSet.sumOf { it.guildCacheSize }
 
     EmbedPaginator(context, ceil(shardStatusSet.size / 10.0).toInt(), {
@@ -41,9 +42,5 @@ object ShardsCommand : StaffCommand() {
         "Shard Status"
       )
     }, paginatorIndex).start()
-  }
-
-  companion object {
-    const val ALIVE_TIMEOUT_MS = 300_000
   }
 }
