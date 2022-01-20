@@ -8,7 +8,7 @@ import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
-class StaffSyncTask : Task() {
+object StaffSyncTask : Task() {
   override val interval = 300_000L
   override val name = "StaffSync"
 

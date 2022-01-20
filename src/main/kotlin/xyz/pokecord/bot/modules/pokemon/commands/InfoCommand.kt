@@ -10,7 +10,7 @@ import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.asTrainerId
 import java.time.Instant
 
-class InfoCommand : Command() {
+object InfoCommand : Command() {
   override val name = "Info"
 
   override var aliases = arrayOf("i")

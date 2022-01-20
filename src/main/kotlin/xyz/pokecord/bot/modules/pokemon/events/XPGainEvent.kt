@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import kotlin.math.min
 
-class XPGainEvent : Event() {
+object XPGainEvent : Event() {
   override val name = "XPGain"
 
   private val envFlag = System.getenv("XP_GAIN") != null

@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import kotlin.math.roundToInt
 
-class BuyCommand : Command() {
+object BuyCommand : Command() {
   override val name = "Buy"
 
   @Executor

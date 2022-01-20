@@ -5,7 +5,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.PokemonOrder
 
-class OrderCommand : Command() {
+object OrderCommand : Command() {
   override val name = "order"
 
   @Executor

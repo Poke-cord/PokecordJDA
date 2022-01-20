@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
-class ShopCommand : Command() {
+object ShopCommand : Command() {
   override val name = "Shop"
 
   @Executor

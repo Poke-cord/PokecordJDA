@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Species
 
-class StartCommand : Command() {
+object StartCommand : Command() {
   override val name = "Start"
 
   private val groupedPokemon: Map<String, List<Species>>

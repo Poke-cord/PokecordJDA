@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
 
-class HelpCommand : Command() {
+object HelpCommand : Command() {
   override val name = "Help"
 
   override var aliases = arrayOf("h")

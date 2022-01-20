@@ -9,24 +9,24 @@ import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent
 class PokemonModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    CatchCommand(),
-    PickCommand(),
-    PokemonCommand(),
-    InfoCommand(),
-    FavoriteCommand(),
-    HintCommand(),
-    NicknameCommand(),
-    SelectCommand(),
-    ReleaseCommand(),
-    GiftCommand(),
-    MovesetCommand(),
-    MoveCommand(),
-    PokedexCommand(),
-    OrderCommand()
+    CatchCommand,
+    PickCommand,
+    PokemonCommand,
+    InfoCommand,
+    FavoriteCommand,
+    HintCommand,
+    NicknameCommand,
+    SelectCommand,
+    ReleaseCommand,
+    GiftCommand,
+    MovesetCommand,
+    MoveCommand,
+    PokedexCommand,
+    OrderCommand
   ),
   arrayOf(
-    SpawnerEvent(),
-    XPGainEvent()
+    SpawnerEvent,
+    XPGainEvent
   )
 ) {
   override val name = "Pokémon"

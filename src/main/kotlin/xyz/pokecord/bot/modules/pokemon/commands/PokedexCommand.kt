@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 
-class PokedexCommand : Command() {
+object PokedexCommand : Command() {
   override val name = "Pokedex"
 
   override var aliases = arrayOf("d", "dex")

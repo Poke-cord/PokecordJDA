@@ -3,7 +3,7 @@ package xyz.pokecord.bot.modules.staff.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.staff.StaffCommand
 
-class MaintenanceCommand : StaffCommand() {
+object MaintenanceCommand : StaffCommand() {
   override val name = "Maintenance"
 
   @Executor

@@ -10,12 +10,12 @@ import xyz.pokecord.bot.modules.staff.tasks.StaffSyncTask
 class StaffModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    MaintenanceCommand(),
-    ShardsCommand(),
-    BlacklistCommand()
+    MaintenanceCommand,
+    ShardsCommand,
+    BlacklistCommand
   ),
   tasks = arrayOf(
-    StaffSyncTask()
+    StaffSyncTask
   )
 ) {
   override val name = "Staff"

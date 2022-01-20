@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
-class PickCommand : Command() {
+object PickCommand : Command() {
   override val name = "Pick"
 
   override var rateLimit = 5000L

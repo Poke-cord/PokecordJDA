@@ -8,7 +8,7 @@ import javax.script.Compilable
 import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
-class EvalCommand : DeveloperCommand() {
+object EvalCommand : DeveloperCommand() {
   override val name = "Eval"
   override var timeout = TimeUnit.MINUTES.toMillis(15)
 

@@ -4,7 +4,7 @@ import dev.minn.jda.ktx.await
 import xyz.pokecord.bot.core.structures.discord.base.BaseCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-class PingCommand : Command() {
+object PingCommand : Command() {
   override val name = "Ping"
 
   @Executor

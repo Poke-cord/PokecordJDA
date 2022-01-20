@@ -13,7 +13,7 @@ import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.SlashCommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
-class MockCommand : DeveloperCommand() {
+object MockCommand : DeveloperCommand() {
   override val name = "Mock"
 
   @Executor

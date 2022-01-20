@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Moveset
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 
-class MovesetCommand : Command() {
+object MovesetCommand : Command() {
   override val name = "Moveset"
 
   @Executor

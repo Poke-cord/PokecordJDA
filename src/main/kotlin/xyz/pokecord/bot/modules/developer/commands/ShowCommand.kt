@@ -3,7 +3,7 @@ package xyz.pokecord.bot.modules.developer.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
-class ShowCommand : DeveloperCommand() {
+object ShowCommand : DeveloperCommand() {
   override val name = "Show"
 
   @Executor

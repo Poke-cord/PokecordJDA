@@ -3,7 +3,7 @@ package xyz.pokecord.bot.modules.general.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-class LeaderboardCommand : Command() {
+object LeaderboardCommand : Command() {
   override val name = "Leaderboard"
 
   override var aliases = arrayOf("lb")

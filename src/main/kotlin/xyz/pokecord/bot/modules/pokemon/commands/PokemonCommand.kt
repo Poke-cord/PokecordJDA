@@ -10,7 +10,7 @@ import xyz.pokecord.bot.utils.EmbedPaginator
 import xyz.pokecord.bot.utils.PokemonOrder
 import kotlin.math.ceil
 
-class PokemonCommand : Command() {
+object PokemonCommand : Command() {
   override val name = "Pokemon"
   override var aliases = arrayOf("p")
 

@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.entities.*
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
-class ParseEntitiesCommand : DeveloperCommand() {
+object ParseEntitiesCommand : DeveloperCommand() {
   override val name = "Parse-Entities"
 
   override var aliases = arrayOf("pe")

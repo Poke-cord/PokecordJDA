@@ -6,7 +6,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.Confirmation
 
-class HintCommand : Command() {
+object HintCommand : Command() {
   override val name = "Hint"
 
   @Executor

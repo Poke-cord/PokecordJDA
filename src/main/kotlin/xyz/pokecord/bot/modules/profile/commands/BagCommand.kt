@@ -6,7 +6,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 
-class BagCommand : Command() {
+object BagCommand : Command() {
   override val name = "Bag"
 
   override var aliases = arrayOf("backpack", "bp", "inventory", "bal")

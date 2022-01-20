@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-class FavoriteCommand : Command() {
+object FavoriteCommand : Command() {
   override val name = "Favorite"
 
   override var aliases = arrayOf("f", "fav", "favourite")

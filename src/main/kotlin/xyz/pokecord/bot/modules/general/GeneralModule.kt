@@ -9,17 +9,17 @@ import xyz.pokecord.bot.modules.general.events.ReadyEvent
 class GeneralModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    HelpCommand(),
-    PingCommand(),
-    InviteCommand(),
-    FAQCommand(),
-    LeaderboardCommand(),
-    VoteCommand(),
-    SetCommand()
+    HelpCommand,
+    PingCommand,
+    InviteCommand,
+    FAQCommand,
+    LeaderboardCommand,
+    VoteCommand,
+    SetCommand
   ),
   arrayOf(
-    ReadyEvent(),
-    BoostEvent()
+    ReadyEvent,
+    BoostEvent
   )
 ) {
   override val name = "General"

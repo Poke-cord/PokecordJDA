@@ -6,7 +6,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
-class FAQCommand : Command() {
+object FAQCommand : Command() {
   override val name = "FAQ"
 
   @Executor

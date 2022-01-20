@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-class SelectCommand : Command() {
+object SelectCommand : Command() {
   override val name = "Select"
 
   override var aliases = arrayOf("s")

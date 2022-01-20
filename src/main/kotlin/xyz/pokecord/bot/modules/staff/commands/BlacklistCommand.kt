@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.modules.staff.StaffCommand
 
-class BlacklistCommand : StaffCommand() {
+object BlacklistCommand : StaffCommand() {
   override val name = "Blacklist"
 
   @Executor

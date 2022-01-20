@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 import xyz.pokecord.bot.modules.profile.commands.item.GiveItemCommand
 import xyz.pokecord.bot.modules.profile.commands.item.TakeItemCommand
 
-class ItemCommand : ParentCommand() {
+object ItemCommand : ParentCommand() {
   override val childCommands = mutableListOf(GiveItemCommand, TakeItemCommand)
   override val name = "Item"
 

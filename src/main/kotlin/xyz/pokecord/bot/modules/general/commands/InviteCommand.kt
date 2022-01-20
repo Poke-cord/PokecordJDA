@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-class InviteCommand : Command() {
+object InviteCommand : Command() {
   override val name = "Invite"
 
   override var aliases = arrayOf("inv")

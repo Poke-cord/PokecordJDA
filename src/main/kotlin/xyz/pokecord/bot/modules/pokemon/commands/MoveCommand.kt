@@ -4,7 +4,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.MoveData
 
-class MoveCommand : Command() {
+object MoveCommand : Command() {
   override val name = "Move"
 
   @Executor

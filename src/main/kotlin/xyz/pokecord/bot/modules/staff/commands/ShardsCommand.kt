@@ -10,7 +10,7 @@ import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import xyz.pokecord.bot.utils.extensions.humanizeMs
 import kotlin.math.ceil
 
-class ShardsCommand : StaffCommand() {
+object ShardsCommand : StaffCommand() {
   override val name = "Shards"
 
   @Executor

@@ -9,7 +9,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Task
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
-class RedisSyncTask : Task() {
+object RedisSyncTask : Task() {
   override val interval = 15_000L
   override val name = "RedisSync"
 

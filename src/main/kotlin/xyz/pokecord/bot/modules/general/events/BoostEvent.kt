@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
 import xyz.pokecord.bot.utils.Config
 import kotlin.random.Random
 
-class BoostEvent: Event() {
+object BoostEvent: Event() {
   override val name = "BoostRewards"
 
   @Handler

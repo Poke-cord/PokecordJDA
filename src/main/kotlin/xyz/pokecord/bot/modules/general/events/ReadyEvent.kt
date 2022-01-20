@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Event
+import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.extensions.asOptionType
@@ -16,7 +17,7 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberFunctions
 
-class ReadyEvent : Event() {
+object ReadyEvent : Event() {
   override val name = "Ready"
 
   private suspend fun prepareSlashCommands(jda: JDA) {

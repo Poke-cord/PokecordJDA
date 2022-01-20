@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class VoteCommand : Command() {
+object VoteCommand : Command() {
   override val name = "Vote"
 
   @Executor

@@ -8,13 +8,13 @@ import xyz.pokecord.bot.modules.developer.tasks.RedisSyncTask
 class DeveloperModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    EvalCommand(),
-    ShowCommand(),
-    ParseEntitiesCommand(),
-    MockCommand()
+    EvalCommand,
+    ShowCommand,
+    ParseEntitiesCommand,
+    MockCommand
   ),
   tasks = arrayOf(
-    RedisSyncTask()
+    RedisSyncTask
   )
 ) {
   override val name = "Developer"

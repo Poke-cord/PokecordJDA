@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
-class CatchCommand : Command() {
+object CatchCommand : Command() {
   override val name = "Catch"
 
   override var aliases = arrayOf("c")

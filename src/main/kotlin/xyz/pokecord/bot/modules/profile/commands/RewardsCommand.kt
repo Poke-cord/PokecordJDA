@@ -5,7 +5,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-class RewardsCommand : Command() {
+object RewardsCommand : Command() {
   override val name = "rewards"
 
   private val catchValues = arrayOf("catch", "pokemon", "c", "p")

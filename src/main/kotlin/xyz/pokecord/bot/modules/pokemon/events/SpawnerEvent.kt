@@ -13,7 +13,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import kotlin.random.Random
 
-class SpawnerEvent : Event() {
+object SpawnerEvent : Event() {
   override val name = "Spawner"
 
   private val logger = LoggerFactory.getLogger(this::class.java)

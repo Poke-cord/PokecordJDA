@@ -9,7 +9,7 @@ import xyz.pokecord.bot.core.structures.store.packages.Package
 import xyz.pokecord.bot.utils.ButtonMenu
 import xyz.pokecord.bot.utils.Confirmation
 
-class StoreCommand : Command() {
+object StoreCommand : Command() {
   override val name = "Store"
 
   override var aliases = arrayOf("donate", "donation")

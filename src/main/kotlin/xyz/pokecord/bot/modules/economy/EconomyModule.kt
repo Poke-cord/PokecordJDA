@@ -9,9 +9,9 @@ import xyz.pokecord.bot.modules.economy.commands.StoreCommand
 class EconomyModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    BuyCommand(),
-    ShopCommand(),
-    StoreCommand()
+    BuyCommand,
+    ShopCommand,
+    StoreCommand
   )
 ) {
   override val name = "Economy"

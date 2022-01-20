@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-class NicknameCommand : Command() {
+object NicknameCommand : Command() {
   override val name = "Nickname"
 
   override var aliases = arrayOf("n")

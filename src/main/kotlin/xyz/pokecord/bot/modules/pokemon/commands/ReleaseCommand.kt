@@ -6,7 +6,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-class ReleaseCommand : Command() {
+object ReleaseCommand : Command() {
   override val name = "Release"
 
   override var aliases = arrayOf("r")

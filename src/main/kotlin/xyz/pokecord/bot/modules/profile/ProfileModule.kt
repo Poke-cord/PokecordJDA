@@ -7,11 +7,11 @@ import xyz.pokecord.bot.modules.profile.commands.*
 class ProfileModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    StartCommand(),
-    BagCommand(),
-    ItemCommand(),
-    ProfileCommand(),
-    RewardsCommand()
+    StartCommand,
+    BagCommand,
+    ItemCommand,
+    ProfileCommand,
+    RewardsCommand
   )
 ) {
   override val name = "Profile"

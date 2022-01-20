@@ -6,7 +6,7 @@ import xyz.pokecord.bot.modules.general.commands.set.SetPrivateCommand
 import xyz.pokecord.bot.modules.general.commands.set.SetSilenceCommand
 import xyz.pokecord.bot.modules.general.commands.set.SetSpawnChannelCommand
 
-class SetCommand : ParentCommand() {
+object SetCommand : ParentCommand() {
   override val childCommands =
     mutableListOf(SetPrefixCommand, SetPrivateCommand, SetSilenceCommand, SetSpawnChannelCommand)
   override val name = "Set"
