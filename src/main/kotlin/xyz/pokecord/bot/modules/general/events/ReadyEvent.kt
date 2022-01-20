@@ -24,7 +24,12 @@ object ReadyEvent : Event() {
   private fun prepareSubcommandData(command: Command): SubcommandData? {
     if (command is DeveloperCommand) return null // TODO: add check for mod commands
     val commandDescription = I18n.translate(null, command.descriptionI18nKey, "")
-    if (commandDescription == "") return null
+    if (commandDescription == "") {
+      println("[WARNING] The subcommand " + command.parentCommand!!.name + " " + command.name + " does not have a description!")
+      return null
+    }
+
+    println(command.name)
     val commandData = SubcommandData(
       command.name.lowercase(),
       commandDescription
@@ -39,7 +44,7 @@ object ReadyEvent : Event() {
       val commandArgumentAnnotation = param.findAnnotation<Command.Argument>() ?: continue
       commandData.addOption(
         param.asOptionType,
-        commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents(),
+        commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents().lowercase(),
         commandArgumentAnnotation.description,
         !commandArgumentAnnotation.optional
       )
@@ -57,11 +62,6 @@ object ReadyEvent : Event() {
       commandDescription
     )
 
-    val executorFunction =
-      command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }!!
-
-    val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
-
     if(command is ParentCommand) {
       for (subcommand in command.childCommands) {
         val subcommandData = prepareSubcommandData(subcommand)
@@ -69,11 +69,16 @@ object ReadyEvent : Event() {
       }
     }
 
+    val executorFunction =
+      command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }!!
+
+    val parameters = executorFunction.parameters.filter { it.kind == KParameter.Kind.VALUE }
+
     for (param in parameters) {
       val commandArgumentAnnotation = param.findAnnotation<Command.Argument>() ?: continue
       commandData.addOption(
         param.asOptionType,
-        commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents(),
+        commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents().lowercase(),
         commandArgumentAnnotation.description,
         !commandArgumentAnnotation.optional
       )

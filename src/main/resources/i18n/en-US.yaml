@@ -20,7 +20,7 @@ misc:
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
       catch: You see em. You caught'em. You gotta catch’em all.
-      favorite: Want to favorite a friend? Or just un-favorite it? Favorite a Pokémon and it will be in your favorites.
+      favorite: Want to favorite a friend? Or just un-favorite it? Add Pokémon to your favorites.
       hint: Not so bright? Wumpus isn’t either. Trigger your memory and buy a hint with credits.
       info: In a hurry? Get nitty gritty statistics on the go.
       move: Ever wonder what a move does? Here's an encyclopedia of information crammed into one command!
@@ -34,7 +34,9 @@ misc:
       select: Want to choose another friend? Select a Pokémon and it will be with you.
     profile:
       bag: For all you hoarders out there. Use this command to view your collection of items.
-      item: It's like eating a chocolate bar. Use an item in your backpack.
+      "item.use": It's like eating a chocolate bar. Use an item in your backpack.
+      "item.give": Give an item to your pokémon.
+      "item.take": Take an item from your pokémon.
       profile: It's just... your profile.
       rewards: You shall receive the rewards you deserve as a trainer out in the wild.
       start: The beginners guide to life. Just kidding. Guide to your Pokémon adventure.

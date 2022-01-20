@@ -10,9 +10,7 @@ object TakeItemCommand : Command() {
   override var aliases = arrayOf("t")
 
   @Executor
-  suspend fun execute(
-    context: MessageCommandContext
-  ) {
+  suspend fun execute(context: MessageCommandContext) {
     if (!context.hasStarted(true)) return
 
     val userData = context.getUserData()
