@@ -24,7 +24,7 @@ object BuyCommand : Command() {
         ).build()
       ).queue()
     } else {
-      context.bot.cache.getMarketLock(listingId).withCoroutineLock {
+      context.bot.cache.getMarketLock(listingId).withCoroutineLock(30) {
         val listing = context.bot.database.marketRepository.getListing(listingId)
         if (listing == null) {
           context.reply(

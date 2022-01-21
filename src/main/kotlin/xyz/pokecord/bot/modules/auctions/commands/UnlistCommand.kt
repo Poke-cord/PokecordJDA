@@ -26,7 +26,7 @@ object UnlistCommand : Command() {
       return
     }
 
-    context.bot.cache.getAuctionLock(auctionId).withCoroutineLock {
+    context.bot.cache.getAuctionLock(auctionId).withCoroutineLock(30) {
       val auction = context.bot.database.auctionRepository.getAuction(auctionId)
       if (auction == null) {
         context.reply(

@@ -23,11 +23,11 @@ class RCoroutineLock(
 
 private suspend fun RLockAsync.coroutineLock(
   leaseTime: Long? = null,
-  unit: TimeUnit? = null
+  unit: TimeUnit = TimeUnit.SECONDS
 ): RCoroutineLock {
   val rand = secureRandom.nextLong()
   val coroutineLock = RCoroutineLock(this, rand)
-  if (leaseTime != null && unit != null) {
+  if (leaseTime != null) {
     lockAsync(leaseTime, unit).awaitSuspending()
   } else {
     lockAsync(rand).awaitSuspending()
@@ -37,7 +37,7 @@ private suspend fun RLockAsync.coroutineLock(
 
 suspend fun RLockAsync.withCoroutineLock(
   leaseTime: Long? = null,
-  unit: TimeUnit? = null,
+  unit: TimeUnit = TimeUnit.SECONDS,
   block: suspend () -> Unit
 ) {
   val lock = coroutineLock(leaseTime, unit)

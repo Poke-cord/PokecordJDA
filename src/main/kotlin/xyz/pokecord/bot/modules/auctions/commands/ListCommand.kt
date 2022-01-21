@@ -99,7 +99,7 @@ object ListCommand : Command() {
     )
 
     if (confirmed) {
-      context.bot.cache.getAuctionIdLock().withCoroutineLock {
+      context.bot.cache.getAuctionIdLock().withCoroutineLock(30) {
         val session = context.bot.database.startSession()
         session.use {
           session.startTransaction()

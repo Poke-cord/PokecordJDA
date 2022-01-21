@@ -89,7 +89,7 @@ object ListCommand : Command() {
     )
 
     if (confirmed) {
-      context.bot.cache.getMarketIdLock().withCoroutineLock {
+      context.bot.cache.getMarketIdLock().withCoroutineLock(30) {
         val session = context.bot.database.startSession()
         session.use {
           session.startTransaction()
