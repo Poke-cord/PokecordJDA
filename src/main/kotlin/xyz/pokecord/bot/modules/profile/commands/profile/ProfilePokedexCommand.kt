@@ -13,9 +13,7 @@ object ProfilePokedexCommand : Command() {
   override var aliases = arrayOf("dex", "d")
 
   @Executor
-  suspend fun execute(
-    context: ICommandContext
-  ) {
+  suspend fun execute(context: ICommandContext) {
     if (!context.hasStarted(true)) return
 
     val userData = context.getUserData()

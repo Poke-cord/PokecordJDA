@@ -14,9 +14,7 @@ object StartCommand : Command() {
     val pokemon = Pokemon.starters.mapNotNull { id ->
       return@mapNotNull Pokemon.getById(id)?.species
     }
-    groupedPokemon = pokemon.groupBy {
-      it.romanGenerationId
-    }
+    groupedPokemon = pokemon.groupBy { it.romanGenerationId }
   }
 
   @Executor

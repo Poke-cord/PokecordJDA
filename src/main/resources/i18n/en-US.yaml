@@ -38,6 +38,7 @@ misc:
       "item.give": Give an item to your pokémon.
       "item.take": Take an item from your pokémon.
       profile: It's just... your profile.
+      "profile.pokedex": "It's just... your profile."
       rewards: You shall receive the rewards you deserve as a trainer out in the wild.
       start: The beginners guide to life. Just kidding. Guide to your Pokémon adventure.
   checks:
