@@ -68,7 +68,7 @@ class MarketRepository(
 
   suspend fun markUnlisted(listing: Listing, session: ClientSession) {
     listing.unlisted = true
-    collection.updateOne(session, Listing::id eq listing.id, set(Listing::sold setTo true))
+    collection.updateOne(session, Listing::id eq listing.id, set(Listing::unlisted setTo true))
     setCacheListing(listing)
   }
 
