@@ -49,6 +49,7 @@ object TradeAddCreditsCommand : Command() {
       session.startTransaction()
       context.bot.database.userRepository.incCredits(userData, -amount, session)
       context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount, session)
+      context.bot.database.tradeRepository.clearConfirmState(tradeState, session)
       session.commitTransactionAndAwait()
     }
 

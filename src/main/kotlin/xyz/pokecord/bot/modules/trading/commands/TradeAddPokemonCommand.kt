@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.trading.commands
 
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -67,7 +68,13 @@ object TradeAddPokemonCommand : Command() {
           return
         }
 
-        context.bot.database.tradeRepository.addPokemon(tradeState, context.author.id, selectedPokemon._id)
+        val session = context.bot.database.startSession()
+        session.use {
+          session.startTransaction()
+          context.bot.database.tradeRepository.addPokemon(tradeState, context.author.id, selectedPokemon._id, session)
+          context.bot.database.tradeRepository.clearConfirmState(tradeState, session)
+          session.commitTransactionAndAwait()
+        }
 
         context.reply(
           context.embedTemplates.normal(

@@ -52,6 +52,7 @@ object TradeRemoveCreditsCommand: Command() {
       session.startTransaction()
       context.bot.database.userRepository.incCredits(context.getUserData(), amount, session)
       context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, -amount, session)
+      context.bot.database.tradeRepository.clearConfirmState(tradeState, session)
       session.commitTransactionAndAwait()
     }
 

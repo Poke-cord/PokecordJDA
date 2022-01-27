@@ -63,6 +63,17 @@ class TradeRepository(
     )
   }
 
+  suspend fun clearConfirmState(trade: Trade, session: ClientSession) {
+    collection.updateOne(
+      session,
+      Trade::_id eq trade._id,
+      set(
+        Trade::initiator / TraderData::confirmed setTo false,
+        Trade::receiver / TraderData::confirmed setTo false,
+      )
+    )
+  }
+
   suspend fun incCredits(trade: Trade, traderId: String, amount: Int, session: ClientSession) {
     collection.updateOne(
       session,
@@ -71,8 +82,9 @@ class TradeRepository(
     )
   }
 
-  suspend fun addPokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
+  suspend fun addPokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>, session: ClientSession) {
     collection.updateOne(
+      session,
       Trade::_id eq trade._id,
       push(
         (if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon,
@@ -81,8 +93,9 @@ class TradeRepository(
     )
   }
 
-  suspend fun removePokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>) {
+  suspend fun removePokemon(trade: Trade, traderId: String, pokemonId: Id<OwnedPokemon>, session: ClientSession) {
     collection.updateOne(
+      session,
       Trade::_id eq trade._id,
       pull(
         (if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::pokemon,
