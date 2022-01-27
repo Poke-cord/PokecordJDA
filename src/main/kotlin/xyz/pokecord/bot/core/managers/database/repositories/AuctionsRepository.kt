@@ -134,7 +134,7 @@ class AuctionsRepository(
           endedAuctions.add(it)
           endAuction(it, session)
         } else {
-          decTimeLeft(it, interval)
+          decTimeLeft(it, interval, session)
         }
       }
       session.commitTransactionAndAwait()
