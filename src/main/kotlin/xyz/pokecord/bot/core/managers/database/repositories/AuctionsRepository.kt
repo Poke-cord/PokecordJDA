@@ -131,8 +131,8 @@ class AuctionsRepository(
 
         it.timeLeft -= interval
         if (it.timeLeft <= 0) {
-          endedAuctions.add(it)
           endAuction(it, session)
+          endedAuctions.add(it)
         } else {
           decTimeLeft(it, interval, session)
         }
