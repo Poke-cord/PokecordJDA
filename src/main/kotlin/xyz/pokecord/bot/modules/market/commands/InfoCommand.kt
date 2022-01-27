@@ -25,7 +25,7 @@ object InfoCommand : Command() {
     }
 
     val listing = context.bot.database.marketRepository.getListing(listingId)
-    if (listing == null) {
+    if (listing == null || listing.sold || listing.unlisted) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.market.commands.info.errors.noListingFound", "id" to listingId.toString())
