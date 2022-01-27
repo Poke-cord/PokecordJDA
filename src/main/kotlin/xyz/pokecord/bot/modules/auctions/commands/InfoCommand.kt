@@ -26,7 +26,7 @@ object InfoCommand : Command() {
     }
 
     val auction = context.bot.database.auctionRepository.getAuction(auctionId)
-    if (auction == null) {
+    if (auction == null || auction.ended) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.auctions.commands.info.errors.noAuctionFound", "id" to auctionId.toString())
