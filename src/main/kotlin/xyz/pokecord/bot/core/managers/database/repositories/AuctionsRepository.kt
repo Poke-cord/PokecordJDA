@@ -5,7 +5,6 @@ import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import net.dv8tion.jda.api.sharding.ShardManager
 import net.dv8tion.jda.api.utils.MiscUtil
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
@@ -16,9 +15,11 @@ import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.Bid
+import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.utils.CountResult
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import xyz.pokecord.utils.withCoroutineLock
 
 class AuctionsRepository(
   database: Database,
@@ -119,22 +120,24 @@ class AuctionsRepository(
     }
   }
 
-  suspend fun auctionTask(interval: Long, shardManager: ShardManager): MutableList<Auction> {
+  suspend fun auctionTask(interval: Long, bot: Bot): MutableList<Auction> {
     val endedAuctions: MutableList<Auction> = mutableListOf()
 
     val session = database.startSession()
     session.use {
       session.startTransaction()
       collection.find(session, Auction::ended eq false).toFlow().collect {
-        val targetShard = MiscUtil.getShardForGuild(it.ownerId, shardManager.shardsTotal)
-        if (shardManager.getShardById(targetShard) == null) return@collect
+        val targetShard = MiscUtil.getShardForGuild(it.ownerId, bot.shardManager.shardsTotal)
+        if (bot.shardManager.getShardById(targetShard) == null) return@collect
 
-        it.timeLeft -= interval
-        if (it.timeLeft <= 0) {
-          endAuction(it, session)
-          endedAuctions.add(it)
-        } else {
-          decTimeLeft(it, interval, session)
+        bot.cache.getAuctionLock(it.id).withCoroutineLock(30) {
+          it.timeLeft -= interval
+          if (it.timeLeft <= 0) {
+            endAuction(it, session)
+            endedAuctions.add(it)
+          } else {
+            decTimeLeft(it, interval, session)
+          }
         }
       }
       session.commitTransactionAndAwait()
