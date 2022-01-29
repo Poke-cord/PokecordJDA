@@ -76,4 +76,10 @@ object Config {
       val ids = values().map { it.id }
     }
   }
+
+  object StatVoiceChannels {
+    const val guilds = "720611061140684871"
+    const val users = "720611164752445531"
+    const val monthlyVotes = "731057601877377054"
+  }
 }

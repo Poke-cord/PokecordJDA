@@ -6,6 +6,7 @@ import kotlinx.serialization.encodeToString
 import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.discord.base.Task
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
@@ -62,10 +63,13 @@ class StatsSyncTask : Task() {
       Json.decodeFromString<ShardStatus>(json)
     }
 
+    val guildsCount = shardStatus.sumOf { it.guildCacheSize }
+    val usersCount = module.bot.database.userRepository.getEstimatedUserCount()
+
     // Prometheus Stats
-    guildCount.set(shardStatus.sumOf { it.guildCacheSize }.toDouble())
+    guildCount.set(guildsCount.toDouble())
     pokemonCount.set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
-    userCount.set(module.bot.database.userRepository.getEstimatedUserCount().toDouble())
+    userCount.set(usersCount.toDouble())
 
     // Top.gg Stats
     module.bot.topggClient?.let { topgg ->
@@ -83,6 +87,24 @@ class StatsSyncTask : Task() {
       module.bot.database.userRepository.clearCache()
       module.bot.database.guildRepository.clearCache()
       lastCacheClearAt = now
+    }
+
+    // Stat Voice Channels
+    val mainGuild = module.bot.shardManager.getGuildById(Config.mainServer)
+    if (mainGuild != null) {
+      val guildsChannel = mainGuild.getVoiceChannelById(Config.StatVoiceChannels.guilds)
+      val usersChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.users)
+      val monthlyVotesChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.monthlyVotes)
+
+      usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")
+      guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")
+
+      val votes = module.bot.topggClient?.getMonthlyVotes(botId)
+      if (votes != null) {
+        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: $votes")
+      } else {
+        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: Unavailable")
+      }
     }
   }
 }

@@ -7,9 +7,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.serialization.json.add
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.*
 import xyz.pokecord.bot.utils.Config
 
 class TopGG(
@@ -30,7 +28,7 @@ class TopGG(
   }
 
   suspend fun postServerCount(botId: String, serverCounts: List<Int>) {
-    httpClient.post<HttpResponse>(  "${baseUrl}/bots/${botId}/stats") {
+    httpClient.post<HttpResponse>("${baseUrl}/bots/${botId}/stats") {
       body = buildJsonObject {
         putJsonArray("shards") {
           serverCounts.forEach {
@@ -40,6 +38,11 @@ class TopGG(
       }
       contentType(ContentType.Application.Json)
     }
+  }
+
+  suspend fun getMonthlyVotes(botId: String): Int? {
+    return httpClient.get<JsonObject>("${baseUrl}/bots/${botId}/stats")
+      .getOrDefault("monthlyPoints", JsonPrimitive(0)).jsonPrimitive.intOrNull
   }
 
   companion object {
