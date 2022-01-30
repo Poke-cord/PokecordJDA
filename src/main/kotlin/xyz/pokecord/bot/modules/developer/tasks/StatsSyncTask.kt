@@ -99,12 +99,8 @@ class StatsSyncTask : Task() {
       usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")?.queue()
       guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")?.queue()
 
-      val votes = module.bot.topggClient?.getMonthlyVotes(botId)
-      if (votes != null) {
-        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: $votes")?.queue()
-      } else {
-        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: Unavailable")?.queue()
-      }
+      val votes = module.bot.topggClient?.getMonthlyVotes(botId)?.toString() ?: "Unavailable"
+      monthlyVotesChannel?.manager?.setName("\uD83D\uDD25 Monthly Votes: $votes")?.queue()
     }
   }
 }
