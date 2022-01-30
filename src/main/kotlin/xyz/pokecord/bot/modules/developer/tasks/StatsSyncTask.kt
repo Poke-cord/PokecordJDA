@@ -96,14 +96,14 @@ class StatsSyncTask : Task() {
       val usersChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.users)
       val monthlyVotesChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.monthlyVotes)
 
-      usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")
-      guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")
+      usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")?.queue()
+      guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")?.queue()
 
       val votes = module.bot.topggClient?.getMonthlyVotes(botId)
       if (votes != null) {
-        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: $votes")
+        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: $votes")?.queue()
       } else {
-        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: Unavailable")
+        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25Monthly Votes: Unavailable")?.queue()
       }
     }
   }
