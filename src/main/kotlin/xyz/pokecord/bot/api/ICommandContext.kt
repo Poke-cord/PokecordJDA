@@ -17,6 +17,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import xyz.pokecord.bot.utils.PokemonResolvable
 import java.time.OffsetDateTime
+import javax.annotation.CheckReturnValue
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 import net.dv8tion.jda.api.entities.User as JDAUser
 
@@ -55,7 +56,9 @@ interface ICommandContext {
   suspend fun askForTOSAgreement(): Boolean
   suspend fun isStaff(): Boolean
   suspend fun hasStarted(sendMessage: Boolean = false): Boolean
+  @CheckReturnValue
   fun reply(content: String, mentionRepliedUser: Boolean = false): RestAction<*>
+  @CheckReturnValue
   fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean = false): RestAction<*>
   suspend fun resolvePokemon(jdaUser: JDAUser, userData: User, pokemonResolvable: PokemonResolvable?): OwnedPokemon?
   fun shouldProcess(): Boolean

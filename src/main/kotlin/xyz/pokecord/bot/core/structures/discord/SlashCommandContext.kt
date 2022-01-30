@@ -15,6 +15,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import java.time.OffsetDateTime
+import javax.annotation.CheckReturnValue
 
 class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : BaseCommandContext(bot) {
   override val author: User
@@ -45,6 +46,8 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
 
   override fun addAttachment(data: ByteArray, name: String) = this.also { this.attachments.add(Pair(data, name)) }
 
+  @Suppress("CheckReturnValue")
+  @CheckReturnValue
   override fun reply(content: String, mentionRepliedUser: Boolean): RestAction<*> {
     return when {
       replyDeferred -> event.hook.editOriginal(content).setActionRows(actionRows).also {
@@ -56,6 +59,8 @@ class SlashCommandContext(bot: Bot, override val event: SlashCommandEvent) : Bas
     }
   }
 
+  @Suppress("CheckReturnValue")
+  @CheckReturnValue
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean): RestAction<*> {
     return when {
       replyDeferred -> event.hook.editOriginalEmbeds(embed).setActionRows(actionRows).also {

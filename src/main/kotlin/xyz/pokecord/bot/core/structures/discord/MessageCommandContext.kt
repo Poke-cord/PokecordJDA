@@ -10,6 +10,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.core.structures.discord.base.Module
 import java.time.OffsetDateTime
+import javax.annotation.CheckReturnValue
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 import net.dv8tion.jda.api.entities.User as JDAUser
 
@@ -35,6 +36,8 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
 
   override fun addAttachment(data: ByteArray, name: String) = this.also { attachments.add(Pair(data, name)) }
 
+  @Suppress("CheckReturnValue")
+  @CheckReturnValue
   override fun reply(content: String, mentionRepliedUser: Boolean) =
     event.message.reply(content).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows).also {
       attachments.forEach { attachment ->
@@ -42,6 +45,8 @@ class MessageCommandContext(bot: Bot, override val event: MessageReceivedEvent) 
       }
     }
 
+  @Suppress("CheckReturnValue")
+  @CheckReturnValue
   override fun reply(embed: MessageEmbed, mentionRepliedUser: Boolean) =
     event.message.replyEmbeds(embed).mentionRepliedUser(mentionRepliedUser).setActionRows(actionRows).also {
       attachments.forEach { attachment ->
