@@ -141,8 +141,14 @@ class Cache {
     return redissonClient.getFairLock("listing-$listingId")
   }
 
-  suspend fun clearGiftLocks() {
+  suspend fun clearLocks() {
     currentGifts.deleteAsync().awaitSuspending()
+    // Auction
+    redissonClient.keys.deleteAsync("auction_id").awaitSuspending()
+    redissonClient.keys.deleteByPatternAsync("auction-*").awaitSuspending()
+    // Market
+    redissonClient.keys.deleteAsync("market_id").awaitSuspending()
+    redissonClient.keys.deleteByPatternAsync("listing-*").awaitSuspending()
   }
 
   suspend fun withGiftLock(senderId: String, receiverId: String, block: suspend () -> Unit) {

@@ -70,7 +70,7 @@ class ReadyEvent : Event() {
     // Delete existing shard status when shard 0 logs in
     if (event.jda.shardInfo.shardId == 0) {
       module.bot.cache.shardStatusMap.deleteAsync().awaitSuspending()
-      module.bot.cache.clearGiftLocks()
+      module.bot.cache.clearLocks()
     }
 
     module.bot.logger.info("Logged in as ${event.jda.selfUser.asTag} (shard ${event.jda.shardInfo.shardId})!")
