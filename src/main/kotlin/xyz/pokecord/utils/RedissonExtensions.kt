@@ -28,7 +28,7 @@ private suspend fun RLockAsync.coroutineLock(
   val rand = secureRandom.nextLong()
   val coroutineLock = RCoroutineLock(this, rand)
   if (leaseTime != null) {
-    lockAsync(leaseTime, unit).awaitSuspending()
+    lockAsync(leaseTime, unit, rand).awaitSuspending()
   } else {
     lockAsync(rand).awaitSuspending()
   }
