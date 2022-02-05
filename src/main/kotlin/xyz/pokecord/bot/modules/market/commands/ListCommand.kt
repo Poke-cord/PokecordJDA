@@ -49,7 +49,7 @@ object ListCommand : Command() {
       return
     }
 
-    if(price == null) {
+    if (price == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.market.commands.list.errors.noPriceProvided")
@@ -89,11 +89,14 @@ object ListCommand : Command() {
     )
 
     if (confirmed) {
+      context.bot.logger.info("Trying to acquire market ID lock")
       context.bot.cache.getMarketIdLock().withCoroutineLock(30) {
+        context.bot.logger.info("Market ID lock acquired")
         val session = context.bot.database.startSession()
         session.use {
           session.startTransaction()
           val latestMarketId = context.bot.database.marketRepository.getLatestListing(session)?.id ?: 0
+          context.bot.logger.info("Market ID for listing: ${latestMarketId + 1}")
           context.bot.database.marketRepository.createListing(
             Listing(
               latestMarketId + 1,
@@ -106,7 +109,9 @@ object ListCommand : Command() {
           )
           context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount - 1, session)
           context.bot.database.pokemonRepository.updateOwnerId(pokemon, "market-pokemon-holder", session)
+          context.bot.logger.info("Operations completed")
           session.commitTransactionAndAwait()
+          context.bot.logger.info("Operations committed")
         }
       }
 
