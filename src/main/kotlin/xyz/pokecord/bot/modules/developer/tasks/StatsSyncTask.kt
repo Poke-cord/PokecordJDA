@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.developer.tasks
 import io.prometheus.client.Gauge
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import net.dv8tion.jda.api.utils.MiscUtil
 import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.discord.base.Task
@@ -15,6 +16,7 @@ class StatsSyncTask : Task() {
   override val name = "RedisSync"
 
   private var lastCacheClearAt = 0L
+  private var lastChannelUpdateAt = 0L
 
   private val guildCount = Gauge
     .build("bot_misc_guild_count", "Guild Count")
@@ -31,6 +33,7 @@ class StatsSyncTask : Task() {
   private val botId by lazy {
     module.bot.shardManager.shards.first().selfUser.id
   }
+
 
   override suspend fun execute() {
     // Shard Status
@@ -89,18 +92,27 @@ class StatsSyncTask : Task() {
       lastCacheClearAt = now
     }
 
-    // Stat Voice Channels
-    val mainGuild = module.bot.shardManager.getGuildById(Config.mainServer)
-    if (mainGuild != null) {
-      val guildsChannel = mainGuild.getVoiceChannelById(Config.StatVoiceChannels.guilds)
-      val usersChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.users)
-      val monthlyVotesChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.monthlyVotes)
+    // Update Stat Voice Channels every 5 minutes
+    if (lastChannelUpdateAt + 300_000L < now) {
+      val mainGuild = module.bot.shardManager.getGuildById(Config.mainServer)
+      if (mainGuild != null && module.bot.shardManager.shards.any {
+          it.shardInfo.shardId == MiscUtil.getShardForGuild(
+            Config.mainServer,
+            module.bot.shardManager.shardsTotal
+          )
+        }
+      ) {
+        val guildsChannel = mainGuild.getVoiceChannelById(Config.StatVoiceChannels.guilds)
+        val usersChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.users)
+        val monthlyVotesChannel = module.bot.shardManager.getVoiceChannelById(Config.StatVoiceChannels.monthlyVotes)
 
-      usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")?.queue()
-      guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")?.queue()
+        usersChannel?.manager?.setName("\uD83D\uDC65 Players: $usersCount")?.queue()
+        guildsChannel?.manager?.setName("\uD83D\uDCCA Servers: $guildsCount")?.queue()
 
-      val votes = module.bot.topggClient?.getMonthlyVotes(botId)?.toString() ?: "Unavailable"
-      monthlyVotesChannel?.manager?.setName("\uD83D\uDD25 Monthly Votes: $votes")?.queue()
+        val votes = module.bot.topggClient?.getMonthlyVotes(botId)?.toString() ?: "Unavailable"
+        monthlyVotesChannel?.manager?.setName("\uD83D\uDD25 Monthly Votes: $votes")?.queue()
+      }
+      lastChannelUpdateAt = now
     }
   }
 }
