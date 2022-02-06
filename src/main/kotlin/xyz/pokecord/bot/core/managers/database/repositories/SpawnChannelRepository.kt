@@ -9,53 +9,69 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.replaceOne
 import org.litote.kmongo.set
 import org.litote.kmongo.setTo
-import org.redisson.api.RMapCacheAsync
-import org.redisson.api.RSetMultimapCache
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.SpawnChannel
 import xyz.pokecord.bot.utils.Json
-import xyz.pokecord.bot.utils.extensions.awaitSuspending
 
 class SpawnChannelRepository(
   database: Database,
   private val collection: CoroutineCollection<SpawnChannel>,
-  private val cacheMap: RMapCacheAsync<String, String>,
-  private val guildSpawnChannelCacheMap: RSetMultimapCache<String, String>
+//  private val cacheMap: RMapCacheAsync<String, String>,
+//  private val guildSpawnChannelCacheMap: RSetMultimapCache<String, String>
 ) : Repository(database) {
+  private val cacheMap = mutableMapOf<String, String>()
+  private val guildSpawnChannelCacheMap = mutableMapOf<String, MutableSet<String>>()
+
   override suspend fun createIndexes() {
     collection.createIndex(Indexes.ascending("guildId"))
   }
 
   private suspend fun getCacheSpawnChannel(id: String): SpawnChannel? {
-    val json = cacheMap.getAsync(id).awaitSuspending()
-      ?: return null
+//    val json = cacheMap.getAsync(id).awaitSuspending()
+//      ?: return null
+    val json = cacheMap[id] ?: return null
     return Json.decodeFromString(json)
   }
 
   private suspend fun setCacheSpawnChannel(spawnChannel: SpawnChannel) {
-    cacheMap.putAsync(spawnChannel.id, Json.encodeToString(spawnChannel)).awaitSuspending()
-    guildSpawnChannelCacheMap.putAsync(spawnChannel.guildId, spawnChannel.id).awaitSuspending()
+    cacheMap[spawnChannel.id] = Json.encodeToString(spawnChannel)
+    guildSpawnChannelCacheMap.getOrDefault(spawnChannel.guildId, mutableSetOf()).add(spawnChannel.id)
+//    cacheMap.putAsync(spawnChannel.id, Json.encodeToString(spawnChannel)).awaitSuspending()
+//    guildSpawnChannelCacheMap.putAsync(spawnChannel.guildId, spawnChannel.id).awaitSuspending()
   }
 
   private suspend fun removeCacheSpawnChannel(spawnChannel: SpawnChannel) {
-    cacheMap.removeAsync(spawnChannel.id).awaitSuspending()
-    guildSpawnChannelCacheMap.removeAsync(spawnChannel.guildId, spawnChannel.id).awaitSuspending()
+    cacheMap.remove(spawnChannel.id)
+    guildSpawnChannelCacheMap[spawnChannel.guildId]?.remove(spawnChannel.id)
+//    cacheMap.removeAsync(spawnChannel.id).awaitSuspending()
+//    guildSpawnChannelCacheMap.removeAsync(spawnChannel.guildId, spawnChannel.id).awaitSuspending()
   }
 
   private suspend fun getCacheSpawnChannels(guildId: String): List<SpawnChannel>? {
-    val spawnChannelIds = guildSpawnChannelCacheMap.getAllAsync(guildId).awaitSuspending().toSet()
-    val map = cacheMap.getAllAsync(spawnChannelIds).awaitSuspending() ?: return null
-    return map.values.map {
+    val spawnChannelIds = guildSpawnChannelCacheMap.getOrDefault(guildId, mutableSetOf())
+    val map = spawnChannelIds.mapNotNull { cacheMap[it] }
+    return map.map {
       Json.decodeFromString(it)
     }
+//  val spawnChannelIds = guildSpawnChannelCacheMap.getAllAsync(guildId).awaitSuspending().toSet()
+//    val map = cacheMap.getAllAsync(spawnChannelIds).awaitSuspending() ?: return null
+//    return map.values.map {
+//      Json.decodeFromString(it)
+//    }
   }
 
   private suspend fun setCacheSpawnChannels(guildId: String, spawnChannels: List<SpawnChannel>) {
     val spawnChannelIds = spawnChannels.map { it.id }.toSet()
-    if (spawnChannelIds.isNotEmpty()) guildSpawnChannelCacheMap.putAllAsync(guildId, spawnChannelIds).awaitSuspending()
-    cacheMap.putAllAsync(
+    if (spawnChannelIds.isNotEmpty()) guildSpawnChannelCacheMap.getOrDefault(guildId, mutableSetOf())
+      .addAll(spawnChannelIds)
+    cacheMap.putAll(
       spawnChannels.associate { it.id to Json.encodeToString(it) }
-    ).awaitSuspending()
+    )
+//    val spawnChannelIds = spawnChannels.map { it.id }.toSet()
+//    if (spawnChannelIds.isNotEmpty()) guildSpawnChannelCacheMap.putAllAsync(guildId, spawnChannelIds).awaitSuspending()
+//    cacheMap.putAllAsync(
+//      spawnChannels.associate { it.id to Json.encodeToString(it) }
+//    ).awaitSuspending()
   }
 
   suspend fun getSpawnChannel(id: String): SpawnChannel? {

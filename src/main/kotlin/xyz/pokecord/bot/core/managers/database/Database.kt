@@ -93,7 +93,12 @@ class Database(cache: Cache) {
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
-      SpawnChannelRepository(this, spawnChannelCollection, cache.spawnChannelsMap, cache.guildSpawnChannelsMap)
+      SpawnChannelRepository(
+        this,
+        spawnChannelCollection,
+//        cache.spawnChannelsMap,
+//        cache.guildSpawnChannelsMap
+      )
     userRepository = UserRepository(this, userCollection, inventoryItemsCollection, cache.userMap, cache.leaderboardMap)
     tradeRepository = TradeRepository(this, tradeCollection)
 

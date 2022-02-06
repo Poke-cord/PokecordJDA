@@ -24,11 +24,11 @@ class Cache {
   val auctionMap: RMapCacheAsync<String, String>
   val battleRequestsMap: RMapCacheAsync<String, String>
   val guildMap: RMapCacheAsync<String, String>
-  val guildSpawnChannelsMap: RSetMultimapCache<String, String>
+//  val guildSpawnChannelsMap: RSetMultimapCache<String, String>
   val listingMap: RMapCacheAsync<String, String>
   val leaderboardMap: RMapCacheAsync<String, String>
   val shardStatusMap: RMapCacheAsync<Int, String>
-  val spawnChannelsMap: RMapCacheAsync<String, String>
+//  val spawnChannelsMap: RMapCacheAsync<String, String>
   val userMap: RMapCacheAsync<String, String>
   val staffMemberIds: RSetCacheAsync<String>
   val staffMembersSet: RSetCacheAsync<String>
@@ -78,11 +78,11 @@ class Cache {
     auctionMap = redissonClient.getMapCache("auctions")
     battleRequestsMap = redissonClient.getMapCache("battleRequests")
     guildMap = redissonClient.getMapCache("guild")
-    guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
+//    guildSpawnChannelsMap = redissonClient.getSetMultimapCache("guildSpawnChannels")
     listingMap = redissonClient.getMapCache("listings")
     leaderboardMap = redissonClient.getMapCache("leaderboard")
     shardStatusMap = redissonClient.getMapCache("shardStatus")
-    spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
+//    spawnChannelsMap = redissonClient.getMapCache("spawnChannels")
     userMap = redissonClient.getMapCache("user")
     staffMemberIds = redissonClient.getSetCache("staffMemberIds")
     staffMembersSet = redissonClient.getSetCache("staffMembers")
