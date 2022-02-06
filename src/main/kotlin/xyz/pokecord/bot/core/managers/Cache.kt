@@ -149,6 +149,8 @@ class Cache {
     // Market
     redissonClient.keys.deleteAsync("market_id").awaitSuspending()
     redissonClient.keys.deleteByPatternAsync("listing-*").awaitSuspending()
+    // Redisson stuff
+    redissonClient.keys.deleteByPatternAsync("redisson*").awaitSuspending()
   }
 
   suspend fun withGiftLock(senderId: String, receiverId: String, block: suspend () -> Unit) {
