@@ -302,6 +302,12 @@ class UserRepository(
     setCacheUser(userData)
   }
 
+  suspend fun toggleGifts(userData: User) {
+    userData.giftsEnabled = !userData.giftsEnabled
+    collection.updateOne(User::id eq userData.id, set(User::giftsEnabled setTo userData.giftsEnabled))
+    setCacheUser(userData)
+  }
+
   suspend fun getCreditLeaderboard(selfUserId: String, limit: Int = 10): List<User> {
     val cachedString = leaderboardCacheMap.getAsync("credit").awaitSuspending()
     return if (cachedString != null) {

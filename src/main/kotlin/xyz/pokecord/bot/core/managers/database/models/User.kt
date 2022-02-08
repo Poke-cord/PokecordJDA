@@ -30,6 +30,7 @@ data class User(
   var lastVoteAt: Long? = null,
   var lastBoostAt: Long? = null,
   var bidNotifications: Boolean = false,
+  var giftsEnabled: Boolean = true,
   @Contextual val _id: Id<User> = newId(),
   @Transient var _isNew: Boolean = false
 ) {

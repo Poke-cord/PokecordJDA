@@ -539,6 +539,10 @@ modules:
             Your favorites have been updated.
         removed: A Favorite has been Removed
       gift:
+        toggle:
+          title: Gift Receiving
+          enabled: You will be able to receive gifts from other players!
+          disabled: You will not be able to receive gifts from other players!
         embeds:
           cancelled:
             description: Gifting cancelled by user.
