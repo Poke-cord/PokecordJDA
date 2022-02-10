@@ -65,7 +65,7 @@ object TradeStatusCommand: Command() {
     val statusTitle =
       if(authorTradeData.confirmed || partnerTradeData.confirmed)
         context.translate(
-          "module.trading.commands.status.embeds.status.title",
+          "modules.trading.commands.status.embeds.status.title",
           "confirmator" to if(authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
         )
       else null
