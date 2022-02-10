@@ -67,7 +67,7 @@ object BattleActionEvent : Event() {
                 """.trimIndent()
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
-          }).addActionRow(pokemon.moves.mapNotNull {
+          }).addActionRow(pokemon.moves.toSet().mapNotNull {
             if (it == 0) return@mapNotNull null
 
             Button.primary(
@@ -245,6 +245,7 @@ object BattleActionEvent : Event() {
                 ), "battle.png"
               )
               .also {
+                @Suppress("CheckReturnValue")
                 if (winner == null) {
                   it.addActionRow(
                     BattleModule.Buttons.getBattleActionRow(battle._id.toString())
