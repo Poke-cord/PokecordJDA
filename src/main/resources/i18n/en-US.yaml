@@ -605,6 +605,7 @@ modules:
           notEnoughCredits: '**Suggestion**: Try gifting an amount of credits
                         you have!'
           selfReceiver: '**Suggestion**: Try gifting another user!'
+          giftsDisabled: 'The receiver is not currently accepting gifts!'
       hint:
         confirmation:
           embed:

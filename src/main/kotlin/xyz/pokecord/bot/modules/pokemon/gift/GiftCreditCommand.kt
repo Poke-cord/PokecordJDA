@@ -4,6 +4,7 @@ import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
 import xyz.pokecord.bot.utils.Confirmation
 
 object GiftCreditCommand : Command() {
@@ -68,6 +69,8 @@ object GiftCreditCommand : Command() {
       ).queue()
       return
     }
+
+    if (!GiftCommand.receivingGifts(context, receiverData)) return
 
     if (amount == null || amount <= 0) {
       context.reply(

@@ -18,7 +18,7 @@ class PokemonModule(bot: Bot) : Module(
     NicknameCommand(),
     SelectCommand(),
     ReleaseCommand(),
-    GiftCommand(),
+    GiftCommand,
     MovesetCommand(),
     MoveCommand(),
     PokedexCommand(),

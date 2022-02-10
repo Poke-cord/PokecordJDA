@@ -6,6 +6,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 
@@ -73,6 +74,8 @@ object GiftPokemonCommand : Command() {
       ).queue()
       return
     }
+
+    if (!GiftCommand.receivingGifts(context, receiverData)) return
 
     var userData = context.getUserData()
     when (val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)) {
