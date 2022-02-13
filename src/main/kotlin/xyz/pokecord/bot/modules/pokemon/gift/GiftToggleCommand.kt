@@ -14,7 +14,7 @@ object GiftToggleCommand : Command() {
     module.bot.database.userRepository.toggleGifts(userData)
     context.reply(
       context.embedTemplates.normal(
-        context.translate(if (userData.giftsEnabled) "modules.general.commands.gift.toggle.enabled" else "modules.general.commands.gift.toggle.disabled"),
+        context.translate(if (userData.giftsEnabled) "modules.pokemon.commands.gift.toggle.enabled" else "modules.pokemon.commands.gift.toggle.disabled"),
         context.translate("modules.pokemon.commands.gift.toggle.title")
       ).build()
     ).queue()
