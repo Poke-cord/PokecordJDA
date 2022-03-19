@@ -70,7 +70,7 @@ data class Pokemon(
     val maxId: Int
       get() {
         if (cachedMaxId == null) {
-          cachedMaxId = items.maxOfOrNull { it.id } ?: 807
+          cachedMaxId = items.maxOfOrNull { it.id } ?: 898
         }
         return cachedMaxId!!
       }
@@ -731,6 +731,67 @@ data class Pokemon(
       804,
       805,
       807,
+      809,
+      811,
+      812,
+      813,
+      816,
+      817,
+      818,
+      822,
+      824,
+      826,
+      828,
+      829,
+      830,
+      833,
+      834,
+      836,
+      837,
+      839,
+      840,
+      841,
+      842,
+      843,
+      846,
+      847,
+      848,
+      851,
+      852,
+      853,
+      855,
+      856,
+      857,
+      858,
+      859,
+      860,
+      861,
+      865,
+      866,
+      867,
+      868,
+      869,
+      870,
+      871,
+      874,
+      875,
+      879,
+      880,
+      881,
+      882,
+      883,
+      884,
+      885,
+      886,
+      887,
+      889,
+      890,
+      891,
+      892,
+      894,
+      896,
+      897,
+      898,
     )
 
     val rightFacing = listOf(
@@ -886,6 +947,35 @@ data class Pokemon(
       797,
       798,
       806,
+      808,
+      810,
+      814,
+      815,
+      819,
+      820,
+      821,
+      823,
+      825,
+      827,
+      831,
+      832,
+      835,
+      838,
+      844,
+      845,
+      849,
+      850,
+      854,
+      862,
+      863,
+      864,
+      872,
+      873,
+      876,
+      878,
+      888,
+      893,
+      895,
     )
 
     val legendaries = listOf(
@@ -937,7 +1027,17 @@ data class Pokemon(
       790,
       791,
       792,
-      800
+      800,
+      888,
+      889,
+      890,
+      891,
+      892,
+      894,
+      895,
+      896,
+      897,
+      898
     )
     val mythicals = listOf(
       151,
@@ -958,7 +1058,10 @@ data class Pokemon(
       721,
       801,
       802,
-      807
+      807,
+      808,
+      809,
+      893
     )
     val starters = listOf(
       1,
@@ -981,7 +1084,10 @@ data class Pokemon(
       656,
       722,
       725,
-      728
+      728,
+      810,
+      813,
+      816
     )
     val ultraBeasts = listOf(
       793,
@@ -996,7 +1102,7 @@ data class Pokemon(
       805,
       806,
     )
-    val pseudoLegendaries = listOf(149, 248, 373, 376, 445, 635, 706, 784)
+    val pseudoLegendaries = listOf(149, 248, 373, 376, 445, 635, 706, 784, 887)
 
     init {
       val stream = Pokemon::class.java.getResourceAsStream("/data/pokemon.json")
@@ -1005,7 +1111,7 @@ data class Pokemon(
         exitProcess(0)
       }
       val json = stream.readAllBytes().decodeToString()
-      items = Json.decodeFromString<List<Pokemon>>(json).filter { it.id <= 807 }
+      items = Json.decodeFromString<List<Pokemon>>(json).filter { it.id <= 898 }
       val typesStream = Pokemon::class.java.getResourceAsStream("/data/pokemon_types.json")
       if (typesStream == null) {
         println("Pokemon types data not found. Exiting...")

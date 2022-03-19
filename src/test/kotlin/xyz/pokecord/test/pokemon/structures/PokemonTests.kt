@@ -28,7 +28,7 @@ class PokemonTests : DescribeSpec({
 
       // Moves data test
       // Basic moves data test
-      bulbasaur.moves.size shouldBe 84
+      bulbasaur.moves.size shouldBe 91
       val razorLeaf = bulbasaur.moves.find { it.moveData.name == "Razor Leaf" }!!
       razorLeaf.moveData.accuracy shouldBe 95
       razorLeaf.moveData.contestEffectId shouldBe 2
@@ -48,8 +48,8 @@ class PokemonTests : DescribeSpec({
       razorLeaf.moveData.identifier shouldBe "razor-leaf"
       razorLeaf.moveMethodId shouldBe 1
       razorLeaf.order shouldBe 0
-      razorLeaf.requiredLevel shouldBe 19
-      razorLeaf.versionGroupId shouldBe 18
+      razorLeaf.requiredLevel shouldBe 12
+      razorLeaf.versionGroupId shouldBe 20
 
       // Move meta data test
       razorLeaf.moveMeta.ailmentChance shouldBe 0
@@ -93,7 +93,7 @@ class PokemonTests : DescribeSpec({
       // Species data test
       // Basic species data test
       bulbasaur.species.name?.genus shouldBe "Seed Pokémon"
-      bulbasaur.species.baseHappiness shouldBe 70
+      bulbasaur.species.baseHappiness shouldBe 50
       bulbasaur.species.captureRate shouldBe 45
       bulbasaur.species.colorId shouldBe 5
       bulbasaur.species.evolutionChainId shouldBe 1
@@ -121,7 +121,7 @@ class PokemonTests : DescribeSpec({
       val zeraora = Pokemon.getByName("zeraora")!!
 
       // Basic data test
-      zeraora.baseExp shouldBe 270
+      zeraora.baseExp shouldBe 300
       zeraora.species.color.colorCode shouldBe 16776960
       zeraora.formName shouldBe null
       zeraora.height shouldBe 15
@@ -129,7 +129,7 @@ class PokemonTests : DescribeSpec({
       zeraora.identifier shouldBe "zeraora"
       zeraora.isDefault shouldBe true
       zeraora.name shouldBe "Zeraora"
-      zeraora.order shouldBe 964
+      zeraora.order shouldBe 988
       zeraora.speciesId shouldBe 807
       zeraora.weight shouldBe 445
 
@@ -138,7 +138,7 @@ class PokemonTests : DescribeSpec({
 
       // Moves data test
       // Basic moves data test
-      zeraora.moves.size shouldBe 49
+      zeraora.moves.size shouldBe 90
       val plasmaFists = zeraora.moves.find { it.moveData.name == "Plasma Fists" }!!
       plasmaFists.moveData.accuracy shouldBe 100
       plasmaFists.moveData.contestEffectId shouldBe 0
@@ -157,8 +157,8 @@ class PokemonTests : DescribeSpec({
       plasmaFists.id shouldBe 721
       plasmaFists.moveMethodId shouldBe 1
       plasmaFists.order shouldBe 0
-      plasmaFists.requiredLevel shouldBe 43
-      plasmaFists.versionGroupId shouldBe 18
+      plasmaFists.requiredLevel shouldBe 88
+      plasmaFists.versionGroupId shouldBe 20
 
       // Move meta data test
       plasmaFists.moveMeta.ailmentChance shouldBe 0
