@@ -529,6 +529,14 @@ class PokemonRepository(
     }
   }
 
+  suspend fun updateNature(pokemon: OwnedPokemon, newNature: String) {
+    pokemon.nature = newNature
+    collection.updateOne(
+      OwnedPokemon::_id eq pokemon._id,
+      set(OwnedPokemon::nature setTo newNature)
+    )
+  }
+
   data class PokemonSearchOptions(
     val order: PokemonOrder? = PokemonOrder.DEFAULT,
     val favorites: Boolean? = null,

@@ -23,7 +23,7 @@ data class OwnedPokemon(
   val shiny: Boolean,
   val trainerId: String? = null,
   var level: Int = defaultLevel(),
-  val nature: String = defaultNature(),
+  var nature: String = defaultNature(),
   var ivs: PokemonStats = defaultIV(),
   var xp: Int = 0,
   var gender: Int = 2, // hack for default gender, see the init block below

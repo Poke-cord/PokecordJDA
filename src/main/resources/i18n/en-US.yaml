@@ -914,6 +914,14 @@ items:
                     move slot number!'
       noSlotSpecified: '**Suggestion**: Try specifying a move slot number!'
       unknownMachine: An Unknown Machine has been Used
+  mints:
+    embed:
+      title: A Nature Mint has been Used
+      description: Your **{{pokemon}}** now has the nature **{{nature}}**!
+    errors:
+      invalidTarget: '**Suggestion**: Try using another nature mint or using
+                        the specified nature mint on a different Pokémon!'
+      inBattle: You can't use a nature mint during a battle!
   glimmeringCandy:
     embed:
       title: Glimmering Candy Used!

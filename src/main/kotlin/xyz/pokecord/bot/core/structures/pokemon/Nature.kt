@@ -52,6 +52,11 @@ data class Nature(
       return getById(id)
     }
 
+    fun getByIdentifier(name: String): Nature? {
+      val id = items.find { it.identifier.equals(name, true) }?.id ?: return null
+      return getById(id)
+    }
+
     fun random() = items.random().name?.name
   }
 }
