@@ -21,11 +21,11 @@ object ItemFactory {
       }
     )
 
-    items.putAll(
-      ItemData.getByCategoryId(NatureMintItem.categoryId).map {
-        it.id to NatureMintItem(it.id)
-      }
-    )
+//    items.putAll(
+//      ItemData.getByCategoryId(NatureMintItem.categoryId).map {
+//        it.id to NatureMintItem(it.id)
+//      }
+//    )
 
     items[RareCandyItem.id] = RareCandyItem
 
