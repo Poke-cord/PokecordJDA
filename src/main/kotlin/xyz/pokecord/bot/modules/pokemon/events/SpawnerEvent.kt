@@ -30,13 +30,13 @@ class SpawnerEvent : Event() {
   }
 
   private fun getNextSpawn(): Int {
-    var pokemonId = Random.nextInt(1, 808)
+    var pokemonId = Random.nextInt(1, Pokemon.maxId + 1)
     when {
       Pokemon.legendaries.contains(pokemonId) -> {
-        if (Random.nextDouble() * 100 > 6.36) pokemonId = Random.nextInt(1, 808)
+        if (Random.nextDouble() * 100 > 6.36) pokemonId = Random.nextInt(1, Pokemon.maxId + 1)
       }
       Pokemon.mythicals.contains(pokemonId) -> {
-        if (Random.nextDouble() * 100 > 2.34) pokemonId = Random.nextInt(1, 808)
+        if (Random.nextDouble() * 100 > 2.34) pokemonId = Random.nextInt(1, Pokemon.maxId + 1)
       }
     }
     return pokemonId
