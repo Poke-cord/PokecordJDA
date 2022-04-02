@@ -773,7 +773,7 @@ modules:
           errors:
             alreadyHolding: '**Suggestion**: Try taking the current item
                             before giving it another!'
-            redeem: '**Suggestion**: Try giving another item to your Pokémon!'
+            canNotBeGiven: '**Suggestion**: Try giving another item to your Pokémon!'
         take:
           embed:
             description: |-

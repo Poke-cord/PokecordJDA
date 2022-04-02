@@ -14,7 +14,7 @@ class RedeemItem(
   private val disallowedPokemonIds: List<Int> = listOf(),
   private val minIvPercentage: Int = 0,
   private val maxIvPercentage: Int = 100
-) : Item(id) {
+) : Item(id, false) {
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val pokemonName = args.joinToString(" ")

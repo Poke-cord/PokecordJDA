@@ -4,7 +4,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 
 // Credit Conversion Token
-object CCTItem : Item(10010001) {
+object CCTItem : Item(10010001, false) {
   const val categoryId = 1001
 
   private const val usageCost = 100_000

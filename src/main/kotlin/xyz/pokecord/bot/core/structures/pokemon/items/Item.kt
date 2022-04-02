@@ -5,7 +5,8 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 
 abstract class Item(
-  val id: Int
+  val id: Int,
+  val canBeHeld: Boolean = true,
 ) {
   data class UsageResult(
     val consumeItem: Boolean,

@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Nature
 
 class NatureMintItem(
   id: Int
-) : Item(id) {
+) : Item(id, false) {
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val targetNature = Nature.getByIdentifier(data.identifier.removeSuffix("-mint"))!!
 

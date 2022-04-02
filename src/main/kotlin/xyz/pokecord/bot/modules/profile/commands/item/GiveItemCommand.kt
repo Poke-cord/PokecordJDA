@@ -3,7 +3,7 @@ package xyz.pokecord.bot.modules.profile.commands.item
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
-import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
+import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 
 object GiveItemCommand : Command() {
   override val name = "give"
@@ -56,10 +56,11 @@ object GiveItemCommand : Command() {
       return
     }
 
-    if (itemData.categoryId == RedeemItem.categoryId) {
+    val item = ItemFactory.items[itemData.id]!!
+    if (!item.canBeHeld) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.profile.commands.item.give.errors.redeem")
+          context.translate("modules.profile.commands.item.give.errors.canNotBeGiven")
         ).build()
       ).queue()
       return

@@ -2,7 +2,7 @@ package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
 
-object RareCandyItem : Item(50) {
+object RareCandyItem : Item(50, false) {
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val userData = context.getUserData()
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
