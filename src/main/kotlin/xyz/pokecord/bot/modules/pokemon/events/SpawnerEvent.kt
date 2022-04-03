@@ -48,6 +48,8 @@ class SpawnerEvent : Event() {
       if (!context.shouldProcess()) return
       if (!envFlag || context.bot.maintenance) return
       if (context.event.channelType != ChannelType.TEXT) return
+      val userData = context.getUserData()
+      if (userData.blacklisted) return
       val prefix = context.getPrefix()
       if (context.event.message.contentRaw.startsWith(prefix, true)) return
       val spawnChannels = context.bot.database.spawnChannelRepository.getSpawnChannels(context.guild!!.id)

@@ -29,6 +29,7 @@ class XPGainEvent : Event() {
     if (context.event.message.contentRaw.startsWith(prefix, true)) return
 
     val userData = context.getUserData()
+    if (userData.blacklisted) return
     if (userData.selected == null) return
 
     val lastMessageAt = lastCountedMessageMap.getOrDefault(context.author.id, null)
