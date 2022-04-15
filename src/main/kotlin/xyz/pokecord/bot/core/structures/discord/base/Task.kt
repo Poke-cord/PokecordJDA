@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.core.structures.discord.base
 
+import io.sentry.Sentry
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -28,6 +29,7 @@ abstract class Task : CoroutineScope {
           executeMethod()
         } catch (e: Throwable) {
           e.printStackTrace()
+          Sentry.captureException(e)
         }
         lastRunAt = System.currentTimeMillis()
         delay(interval)
