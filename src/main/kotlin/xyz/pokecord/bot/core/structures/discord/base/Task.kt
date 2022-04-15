@@ -29,6 +29,7 @@ abstract class Task : CoroutineScope {
         } catch (e: Throwable) {
           e.printStackTrace()
         }
+        lastRunAt = System.currentTimeMillis()
         delay(interval)
       }
     }
