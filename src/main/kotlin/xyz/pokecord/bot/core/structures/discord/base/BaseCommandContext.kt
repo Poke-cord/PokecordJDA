@@ -50,7 +50,6 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   override suspend fun getUserData(forceFetch: Boolean): User {
     if (userData == null || forceFetch) {
       userData = bot.database.userRepository.getUser(author)
-      userData!!.tag = author.asTag
     }
     return userData!!
   }
