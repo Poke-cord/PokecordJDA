@@ -25,7 +25,7 @@ object TradeAddCreditsCommand : Command() {
       return
     }
 
-    if (amount == null) {
+    if (amount == null || amount < 0) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.trading.commands.add.errors.noNumberCredits")
