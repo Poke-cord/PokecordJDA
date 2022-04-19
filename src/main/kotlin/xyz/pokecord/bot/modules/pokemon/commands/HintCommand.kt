@@ -38,6 +38,16 @@ class HintCommand : Command() {
       return
     }
 
+    val userData = context.getUserData()
+    if (userData.credits < 10) {
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate("modules.pokemon.commands.hint.errors.notEnoughCredits")
+        ).build()
+      ).queue()
+      return
+    }
+
     val confirmation = Confirmation(context)
     val result =
       confirmation.result(
@@ -73,7 +83,7 @@ class HintCommand : Command() {
             context.translate("modules.pokemon.commands.hint.dm.embed.title")
           ).build()
         ).await()
-        module.bot.database.userRepository.incCredits(context.getUserData(), -10)
+        module.bot.database.userRepository.incCredits(userData, -10)
         context.reply(
           context.embedTemplates.normal(
             context.translate("modules.pokemon.commands.hint.embed.description"),
