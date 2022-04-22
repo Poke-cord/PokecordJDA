@@ -86,7 +86,11 @@ object MarketCommand : ParentCommand() {
 
     val matchingPokemon =
       if (searchOptions.hasOptions) {
-        module.bot.database.pokemonRepository.getPokemonIds("market-pokemon-holder", searchOptions = searchOptions)
+        module.bot.database.pokemonRepository.getPokemonIds(
+          "market-pokemon-holder",
+          limit = null,
+          searchOptions = searchOptions
+        )
           .map { it._id }
       } else null
     if (matchingPokemon != null) {

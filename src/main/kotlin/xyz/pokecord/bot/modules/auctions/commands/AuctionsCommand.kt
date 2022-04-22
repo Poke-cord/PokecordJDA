@@ -94,7 +94,7 @@ object AuctionsCommand : ParentCommand() {
 
     val matchingPokemon =
       if (searchOptions.hasOptions) {
-        module.bot.database.pokemonRepository.getPokemonIds("auction-pokemon-holder", searchOptions = searchOptions)
+        module.bot.database.pokemonRepository.getPokemonIds("auction-pokemon-holder", limit = null, searchOptions = searchOptions)
           .map { it._id }
       } else null
     if (matchingPokemon != null) {

@@ -11,7 +11,6 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.aggregate
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
-import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.managers.database.models.Listing
 import xyz.pokecord.bot.utils.CountResult
 import xyz.pokecord.bot.utils.Json
@@ -63,7 +62,11 @@ class MarketRepository(
   suspend fun markSold(listing: Listing, buyerId: String, session: ClientSession) {
     listing.sold = true
     listing.soldTo = buyerId
-    collection.updateOne(session, Listing::id eq listing.id, set(Listing::sold setTo true, Listing::soldTo setTo buyerId))
+    collection.updateOne(
+      session,
+      Listing::id eq listing.id,
+      set(Listing::sold setTo true, Listing::soldTo setTo buyerId)
+    )
     setCacheListing(listing)
   }
 
@@ -89,7 +92,7 @@ class MarketRepository(
     ownerId: String? = null,
     aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
-    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
+    if (ownerId != null) aggregation.add(match(Listing::ownerId eq ownerId))
     val result = collection.aggregate<CountResult>(
       *aggregation.toTypedArray(),
       Aggregates.count("count")
