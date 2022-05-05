@@ -4,6 +4,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder
 import dev.minn.jda.ktx.EmbedBuilder
 import dev.minn.jda.ktx.await
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -141,6 +142,21 @@ class HTTPServer(val bot: Bot) {
         json(Json {
           ignoreUnknownKeys = true
         })
+      }
+
+      val basicAuthUsername = System.getenv("BASIC_AUTH_USERNAME")
+      val basicAuthPassword = System.getenv("BASIC_AUTH_PASSWORD")
+      if (basicAuthUsername != null && basicAuthPassword != null) {
+        install(Authentication) {
+          basic("private-api") {
+            realm = "Private API"
+            validate { credentials ->
+              if (credentials.name == basicAuthUsername && credentials.password == basicAuthPassword) {
+                UserIdPrincipal(credentials.name)
+              } else null
+            }
+          }
+        }
       }
 
       routing {
@@ -328,6 +344,69 @@ class HTTPServer(val bot: Bot) {
               }
             } catch (e: Throwable) {
               e.printStackTrace()
+            }
+          }
+        }
+
+        authenticate("private-api") {
+          get("/api/users/{userId?}/purchase-history") {
+            val userId = call.parameters["userId"]
+            if (userId == null) {
+              call.respond(HttpStatusCode.BadRequest)
+            } else {
+              val orders = bot.database.orderRepository.getOrdersByUser(userId)
+              call.respond(orders)
+            }
+          }
+
+          get("/api/users/{userId?}/reset-credits") {
+            val userId = call.parameters["userId"]
+            if (userId == null) {
+              call.respond(HttpStatusCode.BadRequest)
+            } else {
+              val userData = bot.database.userRepository.getUser(userId)
+              bot.database.userRepository.incCredits(userData, -userData.credits + 1000)
+              call.respond(HttpStatusCode.OK)
+            }
+          }
+
+          get("/api/users/{userId?}/blacklisted") {
+            val userId = call.parameters["userId"]
+            if (userId == null) {
+              call.respond(HttpStatusCode.BadRequest)
+            } else {
+              val userData = bot.database.userRepository.getUser(userId)
+              call.respond(HttpStatusCode.OK, userData.blacklisted)
+            }
+          }
+
+          get("/api/users/{userId?}/blacklist") {
+            val userId = call.parameters["userId"]
+            if (userId == null) {
+              call.respond(HttpStatusCode.BadRequest)
+            } else {
+              val userData = bot.database.userRepository.getUser(userId)
+              if (userData.blacklisted) {
+                call.respond(HttpStatusCode.NotModified)
+              } else {
+                bot.database.userRepository.setBlacklisted(userData, true)
+                call.respond(HttpStatusCode.OK)
+              }
+            }
+          }
+
+          get("/api/users/{userId?}/whitelist") {
+            val userId = call.parameters["userId"]
+            if (userId == null) {
+              call.respond(HttpStatusCode.BadRequest)
+            } else {
+              val userData = bot.database.userRepository.getUser(userId)
+              if (!userData.blacklisted) {
+                call.respond(HttpStatusCode.NotModified)
+              } else {
+                bot.database.userRepository.setBlacklisted(userData, false)
+                call.respond(HttpStatusCode.OK)
+              }
             }
           }
         }

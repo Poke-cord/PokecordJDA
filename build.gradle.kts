@@ -75,6 +75,7 @@ dependencies {
 
   implementation("io.ktor:ktor-server-core:$ktorVersion")
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
+  implementation("io.ktor:ktor-auth:$ktorVersion")
 
   implementation("io.ktor:ktor-serialization:$ktorVersion")
 

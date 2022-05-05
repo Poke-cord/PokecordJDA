@@ -32,6 +32,10 @@ class OrderRepository(
     return orderCollection.findOne(Order::orderId eq orderId)
   }
 
+  suspend fun getOrdersByUser(userId: String): List<Order> {
+    return orderCollection.find(Order::userId eq userId).toList()
+  }
+
   suspend fun deleteOrder(orderData: Order) {
     orderCollection.deleteOne(Order::_id eq orderData._id)
   }
