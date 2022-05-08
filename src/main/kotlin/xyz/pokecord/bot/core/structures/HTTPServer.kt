@@ -20,6 +20,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import net.dv8tion.jda.api.JDA
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
+import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.Order
 import xyz.pokecord.bot.core.structures.discord.Bot
@@ -139,9 +140,12 @@ class HTTPServer(val bot: Bot) {
     val port = System.getenv("HTTP_PORT")?.toIntOrNull() ?: 9999
     embeddedServer(Jetty, port = port) {
       install(ContentNegotiation) {
-        json(Json {
-          ignoreUnknownKeys = true
-        })
+        json(
+          Json {
+            ignoreUnknownKeys = true
+            serializersModule = IdKotlinXSerializationModule
+          }
+        )
       }
 
       val basicAuthUsername = System.getenv("BASIC_AUTH_USERNAME")
