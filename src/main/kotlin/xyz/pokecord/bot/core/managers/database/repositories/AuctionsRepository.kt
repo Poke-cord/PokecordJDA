@@ -70,19 +70,19 @@ class AuctionsRepository(
     setCacheAuction(auction)
   }
 
-  suspend fun insertBid(auction: Auction, bid: Bid) {
+  suspend fun insertBid(auction: Auction, bid: Bid, session: ClientSession) {
     auction.bids.add(bid)
     collection.updateOne(
+      session,
       Auction::id eq auction.id,
       push(Auction::bids, bid)
     )
     setCacheAuction(auction)
   }
 
-  suspend fun decTimeLeft(auction: Auction, amount: Long, session: ClientSession? = null) {
-    auction.timeLeft -= amount
-    if (session == null) collection.updateOne(Auction::id eq auction.id, inc(Auction::timeLeft, -amount))
-    else collection.updateOne(session, Auction::id eq auction.id, inc(Auction::timeLeft, -amount))
+  suspend fun incTimeLeft(auction: Auction, amount: Long, session: ClientSession) {
+    auction.timeLeft += amount
+    collection.updateOne(session, Auction::id eq auction.id, inc(Auction::timeLeft, amount))
     setCacheAuction(auction)
   }
 
@@ -136,7 +136,7 @@ class AuctionsRepository(
             endAuction(it, session)
             endedAuctions.add(it)
           } else {
-            decTimeLeft(it, interval, session)
+            incTimeLeft(it, -interval, session)
           }
         }
       }

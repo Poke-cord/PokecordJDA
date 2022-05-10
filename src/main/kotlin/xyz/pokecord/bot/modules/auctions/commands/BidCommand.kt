@@ -185,7 +185,8 @@ object BidCommand : Command() {
           }
 
           context.bot.database.userRepository.incCredits(userData, -bidAmount, session)
-          context.bot.database.auctionRepository.insertBid(auction, Bid(context.author.id, bidAmount))
+          context.bot.database.auctionRepository.insertBid(auction, Bid(context.author.id, bidAmount), session)
+          context.bot.database.auctionRepository.incTimeLeft(auction, 60, session)
           session.commitTransactionAndAwait()
         }
 
