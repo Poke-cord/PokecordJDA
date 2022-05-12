@@ -116,6 +116,19 @@ data class ItemData(
           0
         )
       )
+      // Nature Candy
+      items.add(
+        ItemData(
+          NatureCandyItem.id,
+          "nature-candy",
+          "Nature Candy",
+          NatureCandyItem.categoryId,
+          7,
+          0,
+          0,
+          usesTokens = true
+        )
+      )
     }
 
     private fun applyCustomModifications() {
@@ -124,6 +137,12 @@ data class ItemData(
           50 -> {
             itemData.usesTokens = true
             itemData.cost = 1
+          }
+        }
+
+        when (itemData.categoryId) {
+          NatureMintItem.categoryId -> {
+            itemData.cost = 0
           }
         }
       }
