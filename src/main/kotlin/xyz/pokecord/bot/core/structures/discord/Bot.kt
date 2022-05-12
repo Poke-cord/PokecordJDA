@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.api.sharding.ShardManager
+import org.redisson.api.RLock
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.api.ICommandContext
@@ -55,6 +56,8 @@ class Bot constructor(private val token: String, private val topggToken: String?
 
   val httpServer by lazy { HTTPServer(this) }
 
+  private val heldUserLocks = mutableListOf<RLock>()
+
   fun toggleMaintenance() {
     maintenance = !maintenance
     updatePresence()
@@ -87,6 +90,10 @@ class Bot constructor(private val token: String, private val topggToken: String?
       shardManager = shardManagerBuilder.build()
     }
     started = true
+
+    Runtime.getRuntime().addShutdownHook(
+      Thread(::shutdown)
+    )
   }
 
   private suspend fun getListHelpEmbedLine(
@@ -232,12 +239,30 @@ class Bot constructor(private val token: String, private val topggToken: String?
     }
   }
 
-  // TODO: use it somewhere maybe
-  @Suppress("UNUSED")
-  fun shutdown() {
+  fun addUserLock(lock: RLock) {
+    heldUserLocks.add(lock)
+  }
+
+  fun removeUserLock(lock: RLock) {
+    heldUserLocks.remove(lock)
+  }
+
+  private fun shutdown() {
+    logger.info("Shutting down...")
+    heldUserLocks.forEach {
+      println(it.name)
+      it.forceUnlock()
+    }
+    heldUserLocks.clear()
+    logger.info("Cleared user locks.")
+
     backgroundCoroutineScope.cancel()
+    logger.info("Cancelled background coroutine scope.")
+
     cache.shutdown()
     database.close()
+    logger.info("Closed cache and database.")
+
     if (this::shardManager.isInitialized) {
       shardManager.shutdown()
     }

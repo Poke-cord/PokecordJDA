@@ -20,6 +20,7 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
+import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
 import xyz.pokecord.bot.core.structures.pokemon.Nature
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
@@ -423,12 +424,15 @@ class PokemonRepository(
   }
 
   suspend fun reindexPokemon(
+    bot: Bot,
     ownerId: String,
     order: PokemonOrder,
     extraOps: suspend (session: ClientSession, pokemonCount: Int) -> Unit = { _, _ -> }
   ) {
     val sortProperty = order.getSortProperty()
-    cache.getUserLock(ownerId).withCoroutineLock {
+    val userLock = cache.getUserLock(ownerId)
+    bot.addUserLock(userLock)
+    userLock.withCoroutineLock {
       var done = 0
       val session = database.startSession()
       session.use {
@@ -469,6 +473,7 @@ class PokemonRepository(
         it.commitTransactionAndAwait()
       }
     }
+    bot.removeUserLock(userLock)
   }
 
   suspend fun getEstimatedPokemonCount(): Long {
