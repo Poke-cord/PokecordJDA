@@ -64,7 +64,8 @@ class BattleRepository(
     val battle = Battle(
       Battle.Trainer(battleRequest.initiatorId, initiatorPokemonId, initiatorPokemonStats),
       Battle.Trainer(battleRequest.partnerId, partnerPokemonId, partnerPokemonStats),
-      battleRequest.initiatedChannelId
+      battleRequest.initiatedChannelId,
+      battleRequest.wager
     )
     collection.insertOne(battle)
     return battle
