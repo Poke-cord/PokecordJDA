@@ -19,6 +19,8 @@ import kotlin.random.Random
 object BattleActionEvent : Event() {
   override val name = "BattleAction"
 
+  val embedTemplates = EmbedTemplates()
+
   @Handler
   suspend fun onButtonClick(event: ButtonClickEvent) {
     try {
@@ -38,12 +40,11 @@ object BattleActionEvent : Event() {
             if (battle.initiator.id == event.interaction.user.id) battle.initiator else if (battle.partner.id == event.interaction.user.id) battle.partner else null
 
           if (interactionTrainer == null) {
-            // TODO: use embed templates here
-            event.hook.sendMessageEmbeds(Embed {
-              title = "Error"
-              color = EmbedTemplates.Color.RED.code
-              description = "You are not in this battle!"
-            }).queue()
+            event.hook.sendMessageEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate("modules.battle.events.action.useMove.errors.wrongBattle")
+              ).build()
+            ).queue()
             return
           }
           val self = if (interactionTrainer == battle.initiator) battle.initiator else battle.partner
@@ -56,20 +57,32 @@ object BattleActionEvent : Event() {
           val pokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
           val partnerPokemon = module.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
 
-          event.hook.sendMessageEmbeds(Embed {
-            title = "${event.interaction.user.name} VS ${partnerUser.name}"
-            // TODO: use translator somehow
-            description = """
-                  ${pokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${pokemon.stats.hp}HP**
-                  ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
-                  
-                  **Choose a move to use**
-                """.trimIndent()
-            image = "attachment://battle.png"
-            timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
-          }).addActionRow(pokemon.moves.toSet().mapNotNull {
+          event.hook.sendMessageEmbeds(
+              embedTemplates.normal(
+                embedTemplates.translate(
+                  "modules.battle.events.action.useMove.description",
+                  mapOf(
+                    "pokemonName" to pokemon.displayName,
+                    "partnerPokemonName" to partnerPokemon.displayName,
+                    "currentInitiatorHP" to battle.initiator.pokemonStats.hp.toString(),
+                    "currentPartnerHP" to battle.partner.pokemonStats.hp.toString(),
+                    "pokemonHP" to pokemon.stats.hp.toString(),
+                    "partnerPokemonHP" to partnerPokemon.stats.hp.toString()
+                  )
+                ),
+                embedTemplates.translate(
+                  "modules.battle.events.action.useMove.title",
+                  mapOf(
+                    "initiatorName" to event.interaction.user.name,
+                    "partnerName" to partnerUser.name
+                  )
+                ),
+              )
+              .setImage("attachment://battle.png")
+              .setTimestamp(Instant.ofEpochMilli(battle.startedAtMillis))
+              .build()
+          ).addActionRow(pokemon.moves.toSet().mapNotNull {
             if (it == 0) return@mapNotNull null
-
             Button.primary(
               BattleModule.Buttons.BattleAction.ChooseMove(battleId, it.toString()).toString(),
               MoveData.getById(it)!!.name
@@ -213,9 +226,26 @@ object BattleActionEvent : Event() {
             val initiatorPokemon = if (self.id == battle.initiator.id) selfPokemon else partnerPokemon
             val opponentPokemon = if (self.id == battle.initiator.id) partnerPokemon else selfPokemon
 
-            event.hook.sendMessageEmbeds(Embed {
-              title = "${event.interaction.user.name} VS ${partnerUser.name}"
-              description = """
+            event.hook.sendMessageEmbeds(
+              embedTemplates.normal(
+                embedTemplates.translate(
+                  "modules.battle.events.action.choseMove.complete.description",
+                  mapOf(
+
+                  )
+                ),
+                embedTemplates.translate(
+                  "modules.battle.events.action.choseMove.complete.title",
+                  mapOf(
+                    "initiatorName" to event.interaction.user.name,
+                    "partnerName" to partnerUser.name,
+                  )
+                )
+              )
+                .setImage("attachment://battle.png")
+                .build()
+              /*
+              """
                 ${selfPokemon.displayName}: **${self.pokemonStats.hp}/${selfPokemon.stats.hp}HP**
                 ${partnerPokemon.displayName}: **${partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
                 
@@ -232,9 +262,8 @@ object BattleActionEvent : Event() {
                 else ""
               }
                 """.trimIndent()
-
-              image = "attachment://battle.png"
-            })
+            */
+            )
               .addFile(
                 BattleModule.getBattleImage(
                   battle,
@@ -254,32 +283,39 @@ object BattleActionEvent : Event() {
               }
               .queue()
           } else {
-            event.hook.sendMessageEmbeds(Embed {
-              title = "Move Chosen"
-              description = "Move will be used when the other player chooses a move."
-            }).queue()
+            event.hook.sendMessageEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate("modules.battle.events.action.choseMove.errors.moveChosen")
+              ).build()
+            ).queue()
           }
         }
         is BattleModule.Buttons.BattleAction.EndBattle -> {
           if (battle.endedAtMillis != null) {
-            event.replyEmbeds(Embed {
-              title = "Battle Ended"
-              description = "This battle has already ended."
-            }).setEphemeral(true).queue()
+            event.replyEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate("modules.battle.events.action.endBattle.errors.alreadyEnded")
+              ).build()
+            ).setEphemeral(true).queue()
           } else {
             val minRequiredTime = battle.startedAtMillis + BattleModule.BATTLE_TIMEOUT_MILLIS
             if (System.currentTimeMillis() < minRequiredTime) {
-              event.replyEmbeds(Embed {
-                title = "Failed to End Battle"
-                description =
-                  "This battle cannot be ended yet. You can end the battle ${TimeFormat.RELATIVE.format(minRequiredTime)}."
-              }).setEphemeral(true).queue()
+              event.replyEmbeds(
+                embedTemplates.error(
+                  embedTemplates.translate(
+                    "modules.battle.events.action.endBattle.errors.timeError",
+                  "time" to TimeFormat.RELATIVE.format(minRequiredTime)
+                  )
+                ).build()
+              ).setEphemeral(true).queue()
             } else {
               module.bot.database.battleRepository.endBattle(battle)
-              event.replyEmbeds(Embed {
-                title = "Battle Ended"
-                description = "This battle has been ended."
-              }).queue()
+              event.replyEmbeds(
+                embedTemplates.normal(
+                  embedTemplates.translate("modules.battle.events.action.endBattle.ended.description"),
+                  embedTemplates.translate("modules.battle.events.action.endBattle.ended.title")
+                ).build()
+              ).queue()
             }
           }
         }

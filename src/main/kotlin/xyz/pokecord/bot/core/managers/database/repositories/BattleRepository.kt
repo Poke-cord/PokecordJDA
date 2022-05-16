@@ -126,6 +126,8 @@ class BattleRepository(
   }
 
   suspend fun endBattle(battle: Battle) {
+    // update credits for the winner
+
     collection.updateOneById(
       battle._id,
       set(

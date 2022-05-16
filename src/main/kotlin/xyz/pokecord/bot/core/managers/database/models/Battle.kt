@@ -14,6 +14,7 @@ data class Battle(
   val initiator: Trainer,
   val partner: Trainer,
   val channelId: String,
+  val wager: Int?,
   val startedAtMillis: Long = System.currentTimeMillis(),
   val endedAtMillis: Long? = null,
   @Contextual val _id: Id<Battle> = newId()

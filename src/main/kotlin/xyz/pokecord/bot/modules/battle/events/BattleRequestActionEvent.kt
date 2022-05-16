@@ -83,13 +83,6 @@ object BattleRequestActionEvent : Event() {
         event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(
           embedTemplates.normal(
             embedTemplates.translate(
-              "modules.battle.events.request.accepted.title",
-              mapOf(
-                "initiator" to initiator.name,
-                "partner" to partner.name
-              )
-            ),
-            embedTemplates.translate(
               "modules.battle.events.request.accepted.description",
               mapOf(
                 "initiatorPokemon" to initiatorPokemon.displayName,
@@ -98,6 +91,13 @@ object BattleRequestActionEvent : Event() {
                 "currentPartnerHP" to battle.partner.pokemonStats.hp.toString(),
                 "initiatorPokemonHP" to initiatorPokemon.stats.hp.toString(),
                 "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+              )
+            ),
+            embedTemplates.translate(
+              "modules.battle.events.request.accepted.title",
+              mapOf(
+                "initiator" to initiator.name,
+                "partner" to partner.name
               )
             ),
           )

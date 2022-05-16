@@ -168,6 +168,29 @@ misc:
 modules:
   battle:
     events:
+      action:
+        choseMove:
+          errors:
+            moveChosen: Move will be used when the other player chooses a move.
+          complete:
+            title: {{initiatorName}} VS {{partnerName}}
+            description:
+        endBattle:
+          errors:
+            alreadyEnded: This battle has already ended.
+            timeError: This battle cannot be ended yet. You can end the battle {{time}}.
+          ended:
+            title: Battle Ended
+            description: This battle has finally come to an end.
+        useMove:
+          errors:
+            wrongBattle: You are not in this battle!
+          title: {{initiatorName}} VS {{partnerName}}
+          description: |-
+            {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
+            {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
+
+            **Choose a move to use**
       request:
         accepted:
           errors:
