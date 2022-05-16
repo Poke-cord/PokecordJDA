@@ -3,9 +3,14 @@ package xyz.pokecord.bot.modules.battle.events
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
+import net.dv8tion.jda.api.utils.MiscUtil
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
+import org.litote.kmongo.eq
+import xyz.pokecord.bot.core.managers.database.models.Auction
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.modules.battle.BattleModule
+import xyz.pokecord.utils.withCoroutineLock
 import java.time.Instant
 
 object BattleRequestActionEvent : Event() {
@@ -54,15 +59,25 @@ object BattleRequestActionEvent : Event() {
         )
 
         if(battleRequest.wager !== null) {
-          if(initiatorData.credits < battleRequest.wager) {
-
+          if(initiatorData.credits < battleRequest.wager || partnerData.credits < battleRequest.wager) {
+            event.hook.sendMessageEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate(
+                  "modules.battle.events.request.accepted.errors.notEnoughCredits",
+                  "user" to if(initiatorData.credits < battleRequest.wager) initiator.asMention else partner.asMention
+                )
+              ).build()
+            ).queue()
+            return
           }
-          if(partnerData.credits < battleRequest.wager) {
 
+          val session = module.bot.database.startSession()
+          session.use {
+            session.startTransaction()
+            module.bot.database.userRepository.incCredits(initiatorData, -battleRequest.wager, session)
+            module.bot.database.userRepository.incCredits(partnerData, -battleRequest.wager, session)
+            session.commitTransactionAndAwait()
           }
-          // take credits away from user 1
-          // take credits away from user 2
-          // if either of them don't have enough credits, end process
         }
 
         event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(

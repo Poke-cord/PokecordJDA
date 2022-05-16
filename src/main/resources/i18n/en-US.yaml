@@ -170,6 +170,8 @@ modules:
     events:
       request:
         accepted:
+          errors:
+            notEnoughCredits: "{{user}} does not have enough credits to wager."
           title: "{{initiator}} VS {{partner}}"
           description: |-
             {{initiatorPokemon}}: **{{currentInitiatorHP}}/{{initiatorPokemonHP}}HP**
@@ -183,6 +185,7 @@ modules:
           alreadyBattling: "You are currently in a battle, you must complete it first to start a new one!"
           partnerAlreadyBattling: "{{partner}} is currently in a battle, they must complete it before you can challenge them to a new one!"
           partnerPokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
+          notEnoughCredits: You don't have enough credits to wager **{{wager}}**.
           pokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: Your selected Pokémon doesn't have any moves.

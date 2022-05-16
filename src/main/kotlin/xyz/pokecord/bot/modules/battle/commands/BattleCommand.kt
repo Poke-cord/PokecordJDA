@@ -93,11 +93,21 @@ object BattleCommand : Command() {
       return
     }
 
-    // TODO: prevent people from multiple starting multiple requests, lock maybe? or maybe the single-command-execution check is enough?
-
     val userData = context.getUserData()
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     val partnerPokemon = context.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)
+
+    if(wager !== null && userData.credits < wager) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate(
+            "modules.battle.commands.battle.errors.notEnoughCredits",
+            "wager" to wager.toString()
+          )
+        ).build()
+      ).queue()
+      return
+    }
 
     if (pokemon == null) {
       context.reply(
