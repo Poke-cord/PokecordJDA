@@ -167,6 +167,16 @@ misc:
     price: Price
 modules:
   battle:
+    events:
+      request:
+        accepted:
+          title: "{{initiator}} VS {{partner}}"
+          description: |-
+            {{initiatorPokemon}}: **{{currentInitiatorHP}}/{{initiatorPokemonHP}}HP**
+            {{partnerPokemon}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
+        rejected:
+          title: Battle Request Rejected
+          description: The battle request has been rejected.
     commands:
       battle:
         errors:
@@ -182,7 +192,11 @@ modules:
         embeds:
           battleRequest:
             title: Battle Request
-            description: |-
+            wagerDesc: |-
+              {{initiator}} has requested to battle {{partner}} for a **{{wager}}** credit wager!
+
+              Wanna battle with {{initiator}}?
+            noWagerDesc: |-
               {{initiator}} has requested to battle {{partner}}!
 
               Wanna battle with {{initiator}}?

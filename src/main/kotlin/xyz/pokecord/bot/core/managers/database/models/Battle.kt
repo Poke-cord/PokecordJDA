@@ -81,6 +81,7 @@ data class Battle(
     val initiatorId: String,
     val partnerId: String,
     val initiatedChannelId: String,
+    val wager: Int?,
     val initiatedAtMillis: Long = System.currentTimeMillis()
   ) {
     val uniqueId

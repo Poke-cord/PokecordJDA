@@ -3,12 +3,15 @@ package xyz.pokecord.bot.modules.battle.events
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
+import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Event
 import xyz.pokecord.bot.modules.battle.BattleModule
 import java.time.Instant
 
 object BattleRequestActionEvent : Event() {
   override val name = "BattleRequestAction"
+
+  val embedTemplates = EmbedTemplates()
 
   @Handler
   suspend fun onButtonClick(event: ButtonClickEvent) {
@@ -49,20 +52,43 @@ object BattleRequestActionEvent : Event() {
           partnerPokemon.id,
           partnerPokemon.stats
         )
-        // TODO: use context-less EmbedTemplates here when it's available after merge
-        event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(
-          Embed {
-            title = "${initiator.name} VS ${partner.name}"
-            // TODO: use translator somehow
-            description = """
-              ${initiatorPokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${
-              initiatorPokemon.stats.hp
-            }HP**
-              ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
-            """.trimIndent()
-            image = "attachment://battle.png"
-            timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
+
+        if(battleRequest.wager !== null) {
+          if(initiatorData.credits < battleRequest.wager) {
+
           }
+          if(partnerData.credits < battleRequest.wager) {
+
+          }
+          // take credits away from user 1
+          // take credits away from user 2
+          // if either of them don't have enough credits, end process
+        }
+
+        event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(
+          embedTemplates.normal(
+            embedTemplates.translate(
+              "modules.battle.events.request.accepted.title",
+              mapOf(
+                "initiator" to initiator.name,
+                "partner" to partner.name
+              )
+            ),
+            embedTemplates.translate(
+              "modules.battle.events.request.accepted.description",
+              mapOf(
+                "initiatorPokemon" to initiatorPokemon.displayName,
+                "partnerPokemon" to partnerPokemon.displayName,
+                "currentInitiatorHP" to battle.initiator.pokemonStats.hp.toString(),
+                "currentPartnerHP" to battle.partner.pokemonStats.hp.toString(),
+                "initiatorPokemonHP" to initiatorPokemon.stats.hp.toString(),
+                "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+              )
+            ),
+          )
+            .setImage("attachment://battle.png")
+            .setTimestamp(Instant.ofEpochMilli(battle.startedAtMillis))
+            .build()
         )
           .addFile(
             BattleModule.getBattleImage(
@@ -80,10 +106,10 @@ object BattleRequestActionEvent : Event() {
       } else {
         module.bot.database.battleRepository.rejectBattleRequest(battleRequest)
         event.replyEmbeds(
-          Embed {
-            title = "Battle Request Rejected"
-            description = "The battle request has been rejected."
-          }
+          embedTemplates.normal(
+            embedTemplates.translate("modules.battle.events.request.rejected.description"),
+            embedTemplates.translate("modules.battle.events.request.rejected.title")
+          ).build()
         ).setEphemeral(true).queue()
       }
     } catch (_: IndexOutOfBoundsException) {

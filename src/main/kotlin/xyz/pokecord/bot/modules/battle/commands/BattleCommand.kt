@@ -13,7 +13,8 @@ object BattleCommand : Command() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument partner: User?
+    @Argument partner: User?,
+    @Argument wager: Int?
   ) {
     if (!context.hasStarted(true)) return
 
@@ -139,22 +140,41 @@ object BattleCommand : Command() {
     val battleRequest = context.bot.database.battleRepository.initiateBattleRequest(
       context.author.id,
       partner.id,
-      context.channel.id
+      context.channel.id,
+      wager
     )
 
-    context.channel.sendMessageEmbeds(
-      context.embedTemplates.normal(
-        context.translate(
-          "modules.battle.commands.battle.embeds.battleRequest.description",
-          mapOf(
-            "initiator" to context.author.asMention,
-            "partner" to partner.asMention,
-          )
-        ),
-        context.translate("modules.battle.commands.battle.embeds.battleRequest.title")
-      ).build()
-    ).setActionRow(
-      BattleModule.Buttons.getBattleRequestActionRow(battleRequest)
-    ).queue()
+    if(wager == null) {
+      context.channel.sendMessageEmbeds(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.battle.commands.battle.embeds.battleRequest.noWagerDesc",
+            mapOf(
+              "initiator" to context.author.asMention,
+              "partner" to partner.asMention,
+            )
+          ),
+          context.translate("modules.battle.commands.battle.embeds.battleRequest.title")
+        ).build()
+      ).setActionRow(
+        BattleModule.Buttons.getBattleRequestActionRow(battleRequest)
+      ).queue()
+    } else {
+      context.channel.sendMessageEmbeds(
+        context.embedTemplates.normal(
+          context.translate(
+            "modules.battle.commands.battle.embeds.battleRequest.wagerDesc",
+            mapOf(
+              "initiator" to context.author.asMention,
+              "partner" to partner.asMention,
+              "wager" to wager.toString()
+            )
+          ),
+          context.translate("modules.battle.commands.battle.embeds.battleRequest.title")
+        ).build()
+      ).setActionRow(
+        BattleModule.Buttons.getBattleRequestActionRow(battleRequest)
+      ).queue()
+    }
   }
 }

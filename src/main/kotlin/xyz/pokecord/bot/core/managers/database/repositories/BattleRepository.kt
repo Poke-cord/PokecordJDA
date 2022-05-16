@@ -38,9 +38,9 @@ class BattleRepository(
   }
 
   suspend fun initiateBattleRequest(
-    initiatorId: String, partnerId: String, initiatedChannelId: String
+    initiatorId: String, partnerId: String, initiatedChannelId: String, wager: Int?
   ): Battle.Request {
-    val battleRequest = Battle.Request(initiatorId, partnerId, initiatedChannelId)
+    val battleRequest = Battle.Request(initiatorId, partnerId, initiatedChannelId, wager)
     battleRequestCacheMap.putAsync(battleRequest.uniqueId, Json.encodeToString(battleRequest), 30, TimeUnit.SECONDS)
       .awaitSuspending()
     return battleRequest
