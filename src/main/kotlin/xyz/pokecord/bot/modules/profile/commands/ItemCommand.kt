@@ -14,11 +14,11 @@ class ItemCommand : ParentCommand() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument(name = "item", consumeRest = true) itemName: String?
+    @Argument(name = "item", consumeRest = true) itemname: String?
   ) {
     if (!context.hasStarted(true)) return
 
-    if (itemName == null) {
+    if (itemname == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.profile.commands.item.errors.noItemName")
@@ -27,7 +27,7 @@ class ItemCommand : ParentCommand() {
       return
     }
 
-    val itemData = ItemData.getByName(itemName)
+    val itemData = ItemData.getByName(itemname)
     if (itemData == null) {
       context.reply(
         context.embedTemplates.error(
@@ -68,21 +68,21 @@ class ItemCommand : ParentCommand() {
     }
 
     val nameArgLength = when {
-      itemName.startsWith(
+      itemname.startsWith(
         itemData.name,
         true
       ) -> itemData.name.length
-      itemName.startsWith(
+      itemname.startsWith(
         itemData.identifier,
         true
       ) -> itemData.identifier.length
-      itemName
+      itemname
         .replace(' ', '-')
         .startsWith(itemData.identifier) -> itemData.identifier.length
-      else -> throw IllegalStateException("What the hell did the user supply?? $itemName")
+      else -> throw IllegalStateException("What the hell did the user supply?? $itemname")
     }
 
-    val args = itemName.drop(nameArgLength).trim().split(" ")
+    val args = itemname.drop(nameArgLength).trim().split(" ")
     val (consumed, response) = item.use(context, args)
     if (consumed) {
       module.bot.database.userRepository.consumeInventoryItem(inventoryItem)

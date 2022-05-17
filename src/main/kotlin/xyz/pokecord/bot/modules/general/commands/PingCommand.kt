@@ -8,9 +8,7 @@ class PingCommand : Command() {
   override val name = "Ping"
 
   @Executor
-  suspend fun execute(
-    context: BaseCommandContext
-  ) {
+  suspend fun execute(context: BaseCommandContext) {
     context.reply(
       context.embedTemplates.normal(
         context.translate(

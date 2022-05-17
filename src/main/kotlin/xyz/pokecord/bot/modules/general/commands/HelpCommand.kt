@@ -12,10 +12,11 @@ class HelpCommand : Command() {
   private suspend fun getCommands(
     context: ICommandContext,
     page: Int?,
-    commandOrModuleName: String,
+    commandOrModuleName: String?,
     commandName: String?
   ) {
     val commands = this.module.bot.modules.mapNotNull {
+      if(commandOrModuleName == null) return@mapNotNull null
       it.value.commandMap["${commandOrModuleName.lowercase()}.${commandName?.lowercase()}"]
         ?: it.value.commandMap[commandOrModuleName.lowercase()]
     }

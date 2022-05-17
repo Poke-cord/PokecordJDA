@@ -14,11 +14,11 @@ class BuyCommand : Command() {
   suspend fun execute(
     context: ICommandContext,
     @Argument(optional = true) amount: Int?,
-    @Argument(consumeRest = true) itemName: String?,
+    @Argument(consumeRest = true) itemname: String?,
   ) {
     if (!context.hasStarted(true)) return
 
-    if (itemName == null) {
+    if (itemname == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.economy.commands.buy.errors.noItemName")
@@ -29,7 +29,7 @@ class BuyCommand : Command() {
 
     var effectiveAmount = amount ?: 1
 
-    val itemData = ItemData.getByName(itemName) ?: ItemData.getByName("$amount $itemName")?.also { effectiveAmount = 1 }
+    val itemData = ItemData.getByName(itemname) ?: ItemData.getByName("$amount $itemname")?.also { effectiveAmount = 1 }
     if (itemData == null || !ItemFactory.items.contains(itemData.id)) {
       context.reply(
         context.embedTemplates.error(

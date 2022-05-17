@@ -13,11 +13,11 @@ object GiveItemCommand : Command() {
   @Executor
   suspend fun execute(
     context: MessageCommandContext,
-    @Argument(name = "item", consumeRest = true) itemName: String?
+    @Argument(name = "item", consumeRest = true) itemname: String?
   ) {
     if (!context.hasStarted(true)) return
 
-    if (itemName == null) {
+    if (itemname == null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.profile.commands.item.errors.noItemName")
@@ -26,7 +26,7 @@ object GiveItemCommand : Command() {
       return
     }
 
-    val itemData = ItemData.getByName(itemName)
+    val itemData = ItemData.getByName(itemname)
     if (itemData == null) {
       context.reply(
         context.embedTemplates.error(

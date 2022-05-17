@@ -12,9 +12,7 @@ class VoteCommand : Command() {
   override val name = "Vote"
 
   @Executor
-  suspend fun execute(
-    context: ICommandContext
-  ) {
+  suspend fun execute(context: ICommandContext) {
     val lastVoteAt = context.getUserData().lastVoteAt
     val nextVoteTime =
       if (lastVoteAt == null || lastVoteAt + TimeUnit.HOURS.toMillis(12) < System.currentTimeMillis()) context.translate(

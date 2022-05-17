@@ -14,7 +14,7 @@ class RewardsCommand : Command() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument(name = "catch/all", optional = true) action: String?
+    @Argument(name = "catch-all", optional = true) action: String?
   ) {
     if (!context.hasStarted(true)) return
 

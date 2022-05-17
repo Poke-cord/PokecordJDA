@@ -10,9 +10,7 @@ class InviteCommand : Command() {
   override var aliases = arrayOf("inv")
 
   @Executor
-  suspend fun execute(
-    context: ICommandContext
-  ) {
+  suspend fun execute(context: ICommandContext) {
     val embedAuthorText = context.translate(
       "modules.general.commands.invite.embed.author.text",
       mapOf("botUsername" to context.jda.selfUser.name)

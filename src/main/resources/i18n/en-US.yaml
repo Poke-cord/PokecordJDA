@@ -20,7 +20,7 @@ misc:
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
       catch: You see em. You caught'em. You gotta catch’em all.
-      favorite: Want to favorite a friend? Or just un-favorite it? Favorite a Pokémon and it will be in your favorites.
+      favorite: Want to favorite or un-favorite a friend? Favorite a Pokémon and it will be in your favorites.
       hint: Not so bright? Wumpus isn’t either. Trigger your memory and buy a hint with credits.
       info: In a hurry? Get nitty gritty statistics on the go.
       move: Ever wonder what a move does? Here's an encyclopedia of information crammed into one command!
@@ -173,7 +173,7 @@ modules:
           errors:
             moveChosen: Move will be used when the other player chooses a move.
           complete:
-            title: {{initiatorName}} VS {{partnerName}}
+            title: "{{initiatorName}} VS {{partnerName}}"
             description:
         endBattle:
           errors:
@@ -185,7 +185,7 @@ modules:
         useMove:
           errors:
             wrongBattle: You are not in this battle!
-          title: {{initiatorName}} VS {{partnerName}}
+          title: "{{initiatorName}} VS {{partnerName}}"
           description: |-
             {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
             {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
