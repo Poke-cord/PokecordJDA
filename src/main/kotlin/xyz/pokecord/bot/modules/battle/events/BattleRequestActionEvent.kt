@@ -33,10 +33,9 @@ object BattleRequestActionEvent : Event() {
 
       if (event.user.id != battleRequest.partnerId) {
         event.replyEmbeds(
-          Embed {
-            title = "You can't respond to this battle request"
-            description = "You can only respond to a battle request that is meant for you."
-          }
+          embedTemplates.error(
+            embedTemplates.translate("modules.battle.events.request.errors.wrongUser")
+          ).build()
         ).setEphemeral(true).queue()
         return
       }

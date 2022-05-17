@@ -12,6 +12,7 @@ import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.extensions.asOptionType
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
 import xyz.pokecord.bot.utils.extensions.removeAccents
+import java.lang.IllegalArgumentException
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberFunctions
@@ -38,12 +39,16 @@ class ReadyEvent : Event() {
 
           for (param in parameters) {
             val commandArgumentAnnotation = param.findAnnotation<Command.Argument>() ?: continue
-            commandData.addOption(
-              param.asOptionType,
-              commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents(),
-              commandArgumentAnnotation.description,
-              !commandArgumentAnnotation.optional
-            )
+            try {
+              commandData.addOption(
+                param.asOptionType,
+                commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents(),
+                commandArgumentAnnotation.description,
+                !commandArgumentAnnotation.optional
+              )
+            } catch(err: IllegalArgumentException) {
+              println(command.name + " " + param.name)
+            }
           }
           commandData
         }
@@ -65,7 +70,7 @@ class ReadyEvent : Event() {
 
   @Handler
   suspend fun onReady(event: ReadyEvent) {
-    prepareSlashCommands(event.jda)
+    // prepareSlashCommands(event.jda)
 
     // Delete existing shard status when shard 0 logs in
     if (event.jda.shardInfo.shardId == 0) {

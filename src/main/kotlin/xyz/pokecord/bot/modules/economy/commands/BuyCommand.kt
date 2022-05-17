@@ -14,7 +14,7 @@ class BuyCommand : Command() {
   suspend fun execute(
     context: ICommandContext,
     @Argument(optional = true) amount: Int?,
-    @Argument(consumeRest = true) itemname: String?,
+    @Argument(optional = true, consumeRest = true) itemname: String?,
   ) {
     if (!context.hasStarted(true)) return
 

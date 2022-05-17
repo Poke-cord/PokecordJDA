@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.battle.events
 
-import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 import net.dv8tion.jda.api.interactions.components.Button
@@ -91,11 +90,11 @@ object BattleActionEvent : Event() {
         }
         is BattleModule.Buttons.BattleAction.ChooseMove -> {
           if (battle.endedAtMillis != null) {
-            event.replyEmbeds(Embed {
-              title = "Error"
-              color = EmbedTemplates.Color.RED.code
-              description = "This battle has already ended!"
-            }).setEphemeral(true).queue()
+            event.replyEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate("modules.battle.events.action.choseMove.errors.battleEnded")
+              ).build()
+            ).setEphemeral(true).queue()
             return
           }
           val moveId = button.moveId.toIntOrNull() ?: return
@@ -103,11 +102,11 @@ object BattleActionEvent : Event() {
 
           val (self, partner) = battle.getTrainers(event.user.id)
           if (self.pendingMove != null) {
-            event.replyEmbeds(Embed {
-              title = "Error"
-              color = EmbedTemplates.Color.RED.code
-              description = "You already have a move pending!"
-            }).setEphemeral(true).queue()
+            event.replyEmbeds(
+              embedTemplates.error(
+                embedTemplates.translate("modules.battle.events.action.choseMove.errors.movePending")
+              ).build()
+            ).setEphemeral(true).queue()
             return
           }
 
@@ -228,12 +227,37 @@ object BattleActionEvent : Event() {
 
             event.hook.sendMessageEmbeds(
               embedTemplates.normal(
-                embedTemplates.translate(
-                  "modules.battle.events.action.choseMove.complete.description",
-                  mapOf(
-
+                if(winner == null)
+                  embedTemplates.translate(
+                    "modules.battle.events.action.choseMove.complete.description",
+                    mapOf(
+                      "pokemonName" to selfPokemon.displayName,
+                      "partnerPokemonName" to opponentPokemon.displayName,
+                      "currentInitiatorHP" to self.pokemonStats.hp.toString(),
+                      "pokemonHP" to initiatorPokemon.stats.hp.toString(),
+                      "currentPartnerHP" to partner.pokemonStats.hp.toString(),
+                      "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+                      "resultText" to getMoveResultTexts()
+                    )
                   )
-                ),
+                else
+                  embedTemplates.translate(
+                    "modules.battle.events.action.choseMove.complete.endedDescription",
+                    mapOf(
+                      "pokemonName" to selfPokemon.displayName,
+                      "partnerPokemonName" to opponentPokemon.displayName,
+                      "currentInitiatorHP" to self.pokemonStats.hp.toString(),
+                      "pokemonHP" to initiatorPokemon.stats.hp.toString(),
+                      "currentPartnerHP" to partner.pokemonStats.hp.toString(),
+                      "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+                      "resultText" to getMoveResultTexts(),
+                      "winnerName" to (if (winner.id == self.id) event.user.name else partnerUser.name),
+                      "loserName" to (if (winner.id == self.id) partnerUser.name else event.user.name),
+                      "winnerPokemonName" to (if (winner.id == self.id) selfPokemon else partnerPokemon).displayName,
+                      "loserPokemonName" to (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName,
+                      "gainedXp" to gainedXp.toString(),
+                    )
+                  ),
                 embedTemplates.translate(
                   "modules.battle.events.action.choseMove.complete.title",
                   mapOf(
@@ -242,27 +266,8 @@ object BattleActionEvent : Event() {
                   )
                 )
               )
-                .setImage("attachment://battle.png")
-                .build()
-              /*
-              """
-                ${selfPokemon.displayName}: **${self.pokemonStats.hp}/${selfPokemon.stats.hp}HP**
-                ${partnerPokemon.displayName}: **${partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
-                
-                ${getMoveResultTexts()}
-                ${
-                if (winner != null) """
-                    **${if (winner.id == self.id) event.user.name else partnerUser.name}** won the battle, **${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName}** gained **${gainedXp}** XP!                    
-                    **${
-                  if (winner.id == self.id) partnerUser.name else event.user.name
-                }** lost the battle, **${
-                  (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName
-                }** fainted!
-                  """.trimIndent()
-                else ""
-              }
-                """.trimIndent()
-            */
+              .setImage("attachment://battle.png")
+              .build()
             )
               .addFile(
                 BattleModule.getBattleImage(

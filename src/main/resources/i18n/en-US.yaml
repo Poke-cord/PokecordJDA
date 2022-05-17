@@ -172,9 +172,22 @@ modules:
         choseMove:
           errors:
             moveChosen: Move will be used when the other player chooses a move.
+            battleEnded: This battle has already ended!
+            movePending: You already have a move pending!
           complete:
             title: "{{initiatorName}} VS {{partnerName}}"
-            description:
+            description: |-
+              {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
+              {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
+
+              {{resultTest}}
+            endedDescription: |-
+              {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
+              {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
+
+              {{resultTest}}
+              **{{winnerName}}** won the battle, **{{winnerPokemonName}}** gained **{{gainedXp}}** XP!
+              **{{loserName}}** lost the battle, **{{loserPokemonName}}** fainted!
         endBattle:
           errors:
             alreadyEnded: This battle has already ended.
@@ -192,6 +205,8 @@ modules:
 
             **Choose a move to use**
       request:
+        errors:
+          wrongUser: You can only respond to a battle request that is meant for you.
         accepted:
           errors:
             notEnoughCredits: "{{user}} does not have enough credits to wager."
