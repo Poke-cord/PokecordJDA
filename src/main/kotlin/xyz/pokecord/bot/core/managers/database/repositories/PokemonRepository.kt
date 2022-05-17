@@ -29,6 +29,7 @@ import xyz.pokecord.bot.utils.CountResult
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
 import xyz.pokecord.utils.withCoroutineLock
+import java.util.concurrent.TimeUnit
 
 class PokemonRepository(
   database: Database,
@@ -428,7 +429,7 @@ class PokemonRepository(
     extraOps: suspend (session: ClientSession, pokemonCount: Int) -> Unit = { _, _ -> }
   ) {
     val sortProperty = order.getSortProperty()
-    cache.getUserLock(ownerId).withCoroutineLock {
+    cache.getUserLock(ownerId).withCoroutineLock(5, TimeUnit.MINUTES) {
       var done = 0
       val session = database.startSession()
       session.use {
