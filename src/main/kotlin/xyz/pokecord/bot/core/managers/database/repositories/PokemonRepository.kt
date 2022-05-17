@@ -312,6 +312,8 @@ class PokemonRepository(
 
     if (pokemon.id != 790 && pokemon.heldItemId != 206) {
       val evolution = pokemon.data.nextEvolutions.map { EvolutionChain.details(it) }.find { evolutionDetails ->
+        if (evolutionDetails?.evolvedSpeciesId == 292) return@find false // don't evolve into Shedinja
+
         val isGenderOk =
           if (evolutionDetails?.genderId != 0) if (evolutionDetails?.genderId == 1) pokemon.gender == 0 else if (evolutionDetails?.genderId == 2) pokemon.gender == 1 else true else true
         val isHeldItemOk =
