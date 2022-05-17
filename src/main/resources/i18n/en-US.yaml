@@ -171,23 +171,34 @@ modules:
       action:
         choseMove:
           errors:
-            moveChosen: Move will be used when the other player chooses a move.
             battleEnded: This battle has already ended!
             movePending: You already have a move pending!
+          moveChosen:
+            title: Move Chosen
+            description: Move will be used when the other player chooses a move.
           complete:
             title: "{{initiatorName}} VS {{partnerName}}"
             description: |-
               {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
               {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
 
-              {{resultTest}}
+              {{resultText}}
             endedDescription: |-
               {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
               {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
 
-              {{resultTest}}
-              **{{winnerName}}** won the battle, **{{winnerPokemonName}}** gained **{{gainedXp}}** XP!
-              **{{loserName}}** lost the battle, **{{loserPokemonName}}** fainted!
+              {{resultText}}
+
+              **{{winnerName}}** won the *casual* battle, **{{winnerPokemonName}}** gained **{{gainedXp}}** XP!
+              **{{loserName}}** lost the *casual* battle, **{{loserPokemonName}}** fainted!
+            endedWagerDescription: |-
+              {{pokemonName}}: **{{currentInitiatorHP}}/{{pokemonHP}}HP**
+              {{partnerPokemonName}}: **{{currentPartnerHP}}/{{partnerPokemonHP}}HP**
+
+              {{resultText}}
+
+              **{{winnerName}}** won the *competitive* battle, **{{winnerPokemonName}}** gained **{{gainedXp}}** XP and **{{gainedCredits}}** credits!
+              **{{loserName}}** lost the *competitive* battle, **{{loserPokemonName}}** fainted and lost **{{wager}}** credits!
         endBattle:
           errors:
             alreadyEnded: This battle has already ended.
@@ -223,6 +234,7 @@ modules:
           alreadyBattling: "You are currently in a battle, you must complete it first to start a new one!"
           partnerAlreadyBattling: "{{partner}} is currently in a battle, they must complete it before you can challenge them to a new one!"
           partnerPokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
+          wagerLimits: You must wager anywhere between 1,000 and 100,000 credits inclusive.
           notEnoughCredits: You don't have enough credits to wager **{{wager}}**.
           pokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"

@@ -97,16 +97,25 @@ object BattleCommand : Command() {
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     val partnerPokemon = context.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)
 
-    if(wager !== null && userData.credits < wager) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate(
-            "modules.battle.commands.battle.errors.notEnoughCredits",
-            "wager" to wager.toString()
-          )
-        ).build()
-      ).queue()
-      return
+    if(wager !== null) {
+      if(wager < 1000 || wager > 100000) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.battle.commands.battle.errors.wagerLimits")
+          ).build()
+        ).queue()
+        return
+      } else if(userData.credits < wager) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate(
+              "modules.battle.commands.battle.errors.notEnoughCredits",
+              "wager" to wager.toString()
+            )
+          ).build()
+        ).queue()
+        return
+      }
     }
 
     if (pokemon == null) {

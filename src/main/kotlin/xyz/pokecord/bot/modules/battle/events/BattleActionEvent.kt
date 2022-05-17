@@ -66,7 +66,7 @@ object BattleActionEvent : Event() {
                     "currentInitiatorHP" to battle.initiator.pokemonStats.hp.toString(),
                     "currentPartnerHP" to battle.partner.pokemonStats.hp.toString(),
                     "pokemonHP" to pokemon.stats.hp.toString(),
-                    "partnerPokemonHP" to partnerPokemon.stats.hp.toString()
+                    "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
                   )
                 ),
                 embedTemplates.translate(
@@ -192,6 +192,7 @@ object BattleActionEvent : Event() {
             }
             val loser = winner?.let { if (it.id == self.id) partner else self }
             var gainedXp: Int? = null
+            var gainedCredits: Int? = null
             if (winner != null && loser != null) {
               val winnerPokemon = if (self.id == winner.id) selfPokemon else partnerPokemon
               val loserPokemon = if (self.id == loser.id) selfPokemon else partnerPokemon
@@ -205,6 +206,15 @@ object BattleActionEvent : Event() {
               if (gainedXp > 0) {
                 module.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(winnerPokemon, gainedXp = gainedXp)
               }
+
+              if(battle.wager !== null)
+                gainedCredits = Battle.gainedCredits(battle.wager)
+              if(gainedCredits !== null)
+                module.bot.database.userRepository.incCredits(
+                  (if(self.id == winner.id) userData else partnerData),
+                  gainedCredits
+                )
+
               module.bot.database.battleRepository.endBattle(battle)
             }
 
@@ -237,27 +247,49 @@ object BattleActionEvent : Event() {
                       "pokemonHP" to initiatorPokemon.stats.hp.toString(),
                       "currentPartnerHP" to partner.pokemonStats.hp.toString(),
                       "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
-                      "resultText" to getMoveResultTexts()
+                      "resultText" to getMoveResultTexts(),
                     )
                   )
                 else
-                  embedTemplates.translate(
-                    "modules.battle.events.action.choseMove.complete.endedDescription",
-                    mapOf(
-                      "pokemonName" to selfPokemon.displayName,
-                      "partnerPokemonName" to opponentPokemon.displayName,
-                      "currentInitiatorHP" to self.pokemonStats.hp.toString(),
-                      "pokemonHP" to initiatorPokemon.stats.hp.toString(),
-                      "currentPartnerHP" to partner.pokemonStats.hp.toString(),
-                      "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
-                      "resultText" to getMoveResultTexts(),
-                      "winnerName" to (if (winner.id == self.id) event.user.name else partnerUser.name),
-                      "loserName" to (if (winner.id == self.id) partnerUser.name else event.user.name),
-                      "winnerPokemonName" to (if (winner.id == self.id) selfPokemon else partnerPokemon).displayName,
-                      "loserPokemonName" to (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName,
-                      "gainedXp" to gainedXp.toString(),
+                  if(gainedCredits !== null)
+                    embedTemplates.translate(
+                      "modules.battle.events.action.choseMove.complete.endedWagerDescription",
+                      mapOf(
+                        "pokemonName" to selfPokemon.displayName,
+                        "partnerPokemonName" to opponentPokemon.displayName,
+                        "currentInitiatorHP" to self.pokemonStats.hp.toString(),
+                        "pokemonHP" to initiatorPokemon.stats.hp.toString(),
+                        "currentPartnerHP" to partner.pokemonStats.hp.toString(),
+                        "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+                        "resultText" to getMoveResultTexts(),
+                        "winnerName" to (if (winner.id == self.id) event.user.name else partnerUser.name),
+                        "loserName" to (if (winner.id == self.id) partnerUser.name else event.user.name),
+                        "winnerPokemonName" to (if (winner.id == self.id) selfPokemon else partnerPokemon).displayName,
+                        "loserPokemonName" to (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName,
+                        "gainedXp" to gainedXp.toString(),
+                        "gainedCredits" to gainedCredits.toString(),
+                        "wager" to battle.wager.toString(),
+                      )
                     )
-                  ),
+                  else
+                    embedTemplates.translate(
+                      "modules.battle.events.action.choseMove.complete.endedDescription",
+                      mapOf(
+                        "pokemonName" to selfPokemon.displayName,
+                        "partnerPokemonName" to opponentPokemon.displayName,
+                        "currentInitiatorHP" to self.pokemonStats.hp.toString(),
+                        "pokemonHP" to initiatorPokemon.stats.hp.toString(),
+                        "currentPartnerHP" to partner.pokemonStats.hp.toString(),
+                        "partnerPokemonHP" to partnerPokemon.stats.hp.toString(),
+                        "resultText" to getMoveResultTexts(),
+                        "winnerName" to (if (winner.id == self.id) event.user.name else partnerUser.name),
+                        "loserName" to (if (winner.id == self.id) partnerUser.name else event.user.name),
+                        "winnerPokemonName" to (if (winner.id == self.id) selfPokemon else partnerPokemon).displayName,
+                        "loserPokemonName" to (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName,
+                        "gainedXp" to gainedXp.toString(),
+                        "gainedCredits" to gainedCredits.toString()
+                      )
+                    ),
                 embedTemplates.translate(
                   "modules.battle.events.action.choseMove.complete.title",
                   mapOf(
@@ -289,8 +321,9 @@ object BattleActionEvent : Event() {
               .queue()
           } else {
             event.hook.sendMessageEmbeds(
-              embedTemplates.error(
-                embedTemplates.translate("modules.battle.events.action.choseMove.errors.moveChosen")
+              embedTemplates.normal(
+                embedTemplates.translate("modules.battle.events.action.choseMove.moveChosen.description"),
+                embedTemplates.translate("modules.battle.events.action.choseMove.moveChosen.title")
               ).build()
             ).queue()
           }
