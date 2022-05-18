@@ -36,7 +36,6 @@ data class ItemData(
       items = Json.decodeFromString(json)
 
       addAllCustomItems()
-      applyCustomModifications()
 
       items = items.filter { !disabledItemIds.contains(it.id) && !disabledCategoryIds.contains(it.categoryId) }
         .toMutableList()
@@ -116,17 +115,6 @@ data class ItemData(
           0
         )
       )
-    }
-
-    private fun applyCustomModifications() {
-      items.forEach { itemData ->
-        when (itemData.id) {
-          50 -> {
-            itemData.usesTokens = true
-            itemData.cost = 1
-          }
-        }
-      }
     }
   }
 }
