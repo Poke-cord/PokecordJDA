@@ -160,7 +160,7 @@ data class OwnedPokemon(
       )
     }
 
-    private fun defaultLevel() = Random.nextInt(1, 41)
+    private fun defaultLevel() = Random.nextInt(1, 6)
 
     private fun defaultNature() = Nature.random() ?: "Brave"
   }
