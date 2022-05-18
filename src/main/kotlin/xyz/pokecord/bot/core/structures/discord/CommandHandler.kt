@@ -346,14 +346,15 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         for (param in parameters) {
           val commandArgumentAnnotation = param.findAnnotation<Command.Argument>()
           if (commandArgumentAnnotation != null) {
+            val optional = commandArgumentAnnotation.optional
+            val argName =
+              commandArgumentAnnotation.name.ifEmpty { param.name!! }
+
             if (splitMessage.isEmpty()) {
               parsedParameters.add(null)
             } else {
               val consumeRest = commandArgumentAnnotation.consumeRest
               val isPrefixed = commandArgumentAnnotation.prefixed
-              val optional = commandArgumentAnnotation.optional
-              val argName =
-                commandArgumentAnnotation.name.ifEmpty { param.name!! }
               val argAliases = commandArgumentAnnotation.aliases
               argumentParser.provideArgumentInfo(
                 consumeRest,
@@ -403,6 +404,21 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
                   throw UnsupportedCommandArgumentException(param.name.toString())
                 }
               }
+            }
+            if (parsedParameters.last() == null && !optional) {
+              context.reply(
+                context.embedTemplates.error(
+                  context.translate(
+                    "misc.texts.missing_command_arg.description",
+                    "argName" to argName,
+                    "argDescription" to context.translate(
+                      command.getArgumentKey(argName)
+                    )
+                  ),
+                  context.translate("misc.texts.missing_command_arg.title")
+                ).build()
+              ).queue()
+              return
             }
           } else {
             when {

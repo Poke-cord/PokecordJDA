@@ -102,11 +102,11 @@ object I18n {
     var string = locales[lang.identifier]?.get(lowerCaseKey)
     if (string == null && lang != defaultLanguage) string =
       locales[defaultLanguage.identifier]?.get(lowerCaseKey)
-    if (string == null) return default ?: lowerCaseKey
+    if (string == null) return default ?: key
     for (dataKey in data.keys) {
       string = string?.replace("{{$dataKey}}", data[dataKey] ?: "")
     }
-    return string ?: default ?: lowerCaseKey
+    return string ?: default ?: key
   }
 
   enum class Language(val identifier: String, val pokeApiLanguageId: Int? = null) {

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.LoggerFactory
+import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.MessageCommandContext
 import xyz.pokecord.bot.utils.extensions.isMessageCommandContext
@@ -57,6 +58,8 @@ abstract class Module(
 
   @Suppress("COULD_BE_PRIVATE")
   fun addCommand(command: Command) {
+    command.module = this
+
     val executorFunction =
       command.javaClass.kotlin.memberFunctions.find { it.annotations.any { annotation -> annotation is Command.Executor } }
 
@@ -73,13 +76,19 @@ abstract class Module(
         if (allConsumed) {
           throw IllegalArgumentException("Command arguments cannot appear after another command argument that has consumeRest = true.")
         }
-        if (!param.type.isMarkedNullable) {
-          throw IllegalArgumentException("All command arguments must be nullable.")
+        if (!commandArgumentAnnotation.optional && !param.type.isMarkedNullable) {
+          throw IllegalArgumentException("Required command arguments must be nullable.")
+        }
+        val argName =
+          commandArgumentAnnotation.name.ifEmpty { param.name!! }
+        val argDescription = I18n.translate(null, command.getArgumentKey(argName))
+        if (argDescription == command.getArgumentKey(argName)) {
+          logger.warn("Missing description for command argument: ${command.getArgumentKey(argName)}")
+          return
         }
         if (commandArgumentAnnotation.consumeRest) allConsumed = true
       }
     }
-    command.module = this
     command.identifiersForCommandHandler.forEach {
       commandMap[it] = command
     }

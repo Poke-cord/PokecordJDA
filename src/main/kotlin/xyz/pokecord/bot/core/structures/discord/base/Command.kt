@@ -18,7 +18,6 @@ abstract class Command {
   annotation class Argument(
     val consumeRest: Boolean = false,
     val name: String = "",
-    val description: String = "\u200E",
     val aliases: Array<String> = [],
     val optional: Boolean = false,
     val prefixed: Boolean = false,
@@ -94,6 +93,10 @@ abstract class Command {
       }
     }
     return@lazy ""
+  }
+
+  fun getArgumentKey(argumentName: String): String {
+    return "misc.command_arguments.${identifier}.${argumentName}"
   }
 
   open suspend fun canRun(context: ICommandContext): Boolean {

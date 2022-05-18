@@ -25,7 +25,11 @@ class ReadyEvent : Event() {
         module.commands.mapNotNull { command ->
           if (command is DeveloperCommand) return@mapNotNull null // TODO: add check for mod commands
           val commandDescription = I18n.translate(null, command.descriptionI18nKey, "")
-          if (commandDescription == "") return@mapNotNull null
+          if (commandDescription.isEmpty()) {
+            module.bot.logger.warn("The command ${command.name} does not have a description!")
+            return@mapNotNull null
+          }
+
           val commandData = CommandData(
             command.name.lowercase(),
             commandDescription
@@ -38,10 +42,21 @@ class ReadyEvent : Event() {
 
           for (param in parameters) {
             val commandArgumentAnnotation = param.findAnnotation<Command.Argument>() ?: continue
+
+            val argumentName = commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents().lowercase()
+            val argumentDescription = I18n.translate(
+              null,
+              command.getArgumentKey(argumentName)
+            )
+            if (argumentDescription == command.getArgumentKey(argumentName)) {
+              // returns the key if the string doesn't exist
+              module.bot.logger.warn("The command ${command.name} does not have a description for the argument $argumentName!")
+              return@mapNotNull null
+            }
             commandData.addOption(
               param.asOptionType,
               commandArgumentAnnotation.name.ifEmpty { param.name!! }.removeAccents(),
-              commandArgumentAnnotation.description,
+              argumentDescription,
               !commandArgumentAnnotation.optional
             )
           }
