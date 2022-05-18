@@ -44,7 +44,7 @@ object ProfileCommand : Command() {
     val aggregation = listOf(match(Auction::ended eq false))
 
     val count =
-      context.bot.database.auctionRepository.getAuctionCount(targetUser.id, aggregation = aggregation.toMutableList())
+      context.bot.database.auctionRepository.getAuctionCount(targetUser.id, showBids, aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.profile.errors.noResults"))
@@ -61,6 +61,7 @@ object ProfileCommand : Command() {
       }
       val auctionsList = context.bot.database.auctionRepository.getAuctionList(
         targetUser.id,
+        showBids,
         skip = pageIndex * 10,
         aggregation = aggregation.toMutableList()
       )
