@@ -19,7 +19,7 @@ misc:
       "set.spawn": Set server spawn channels.
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
-      catch: You see em. You caught'em. You gotta catch’em all.
+      catch: Catch 'em all! Or someone else will.
       favorite: Want to favorite a friend? Or just un-favorite it? Favorite a Pokémon and it will be in your favorites.
       hint: Not so bright? Wumpus isn’t either. Trigger your memory and buy a hint with credits.
       info: In a hurry? Get nitty gritty statistics on the go.
@@ -71,10 +71,10 @@ misc:
       title: A User Enabled Private Progress
     rules:
       description: |-
-        Welcome to {{botUsername}}, {{user}}!
-        Please read and agree to our [Terms Of Service]({{tosUrl}}) in order to continue.
+        Hey {{user}}! Welcome to the world of {{botUsername}}.
+        Read and agree to our [terms of service]({{tosUrl}}) to continue.
 
-        By clicking ✅ you agree to our [Terms of Service]({{tosUrl}})
+        By accessing the ✅ below and {{botUsername}} itself, you will abide by our [Terms]({{tosUrl}}).
   errors:
     embeds:
       commandExecutionFailed:
