@@ -1,7 +1,7 @@
 misc:
   command_descriptions:
     developer:
-      eval: Evaluates some JavaScript/Kotlin code.
+      eval: Evaluate JavaScript/Kotlin code.
     economy:
       buy: Attempts to buy the specified item from the shop.
       shop: Shows the available items in the shop.
@@ -72,17 +72,22 @@ misc:
     rules:
       description: |-
         Hey {{user}}! Welcome to the world of {{botUsername}}.
-        Read and agree to our [terms of service]({{tosUrl}}) to continue.
 
-        By accessing the ✅ below and {{botUsername}} itself, you will abide by our [Terms]({{tosUrl}}).
+        Read and agree to our [Terms of Service]({{tosUrl}}) to continue.
+        **By accessing {{botUsername}}, you will abide by our Terms.**
+
+        > Seeing this again? We've updated our Terms.
   errors:
     embeds:
       commandExecutionFailed:
-        description: Failed to execute the {{command}} command. Please report this issue [to us](https://discord.gg/poke) if it keeps happening.
-        title: Command Execution Failed
+        description: Failed to execute the {{command}} command. Report this error [here]({{inviteUrl}}) if it recurs.
+        title: Command Execution Failure
       commandRateLimitReached:
-        description: Looks like you're using commands too fast, try to calm down a little.
-        title: Calm down
+        description: |-
+          Look at you go! Wait.. we can't see you.
+          
+          > You're using commands too fast.
+        title: Chill Out
     notYourButton: The button you tried using isn't from a message that's a reply to you, please use buttons that belongs to your command responses.
     invalidAmount: '**Suggestion**: Try entering a valid amount!'
     notASpawnChannel: '**Suggestion**: Try using the command in a spawn channel
@@ -111,7 +116,7 @@ misc:
     command: Command
     command_aliases: Aliases
     commands: Commands
-    commandTimedOut: Command execution timed out, please try again later.
+    commandTimedOut: Command execution timed out. Report this error [here]({{inviteUrl}}) if it recurs.
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
@@ -170,10 +175,18 @@ modules:
     commands:
       battle:
         errors:
-          alreadyBattling: "You are currently in a battle, you must complete it first to start a new one!"
-          partnerAlreadyBattling: "{{partner}} is currently in a battle, they must complete it before you can challenge them to a new one!"
-          partnerPokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
-          pokemonNotFound: "Something went wrong. Pokémon not found. Please report this issue."
+          alreadyBattling: |-
+            A little too ambitious!
+            > Finish your current duel first.
+          partnerAlreadyBattling: |-
+            {{partner}}'s in combat!
+            > Wait for their duel to finish.
+          partnerPokemonNotFound: |-
+            Pokémon not found.
+            > Report this error [here]({{inviteUrl}}).
+          pokemonNotFound: |- 
+            Pokémon not found.
+            > Report this error [here]({{inviteUrl}}).
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: Your selected Pokémon doesn't have any moves.
           noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
