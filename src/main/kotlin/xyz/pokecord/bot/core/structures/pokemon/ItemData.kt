@@ -74,6 +74,22 @@ data class ItemData(
         }
       )
 
+      // Effort value
+      items.addAll(
+        EVItem.EVItems.values().map {
+          ItemData(
+            it.id,
+            it.identifier,
+            it.itemName,
+            EVItem.categoryId,
+            it.cost,
+            it.flingPower,
+            it.flingEffectId,
+            it.useGems
+          )
+        }
+      )
+
       // Redeems
       items.addAll(
         RedeemItem.Redeems.values().map {

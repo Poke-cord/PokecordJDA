@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.pokemon.commands
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 
@@ -21,9 +22,21 @@ class ReleaseCommand : Command() {
     val userData = context.getUserData()
 
     if (pokemonResolvable == null) {
-      context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
-        .queue()
+      context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "modules.pokemon.commands.release.embeds.center.embed.description",
+              mapOf(
+              "prefix" to context.getPrefix()
+              )
+            ),
+            context.translate("modules.pokemon.commands.release.embeds.center.embed.title")
+          ).build()
+        ).queue()
       return
+//      context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
+//        .queue()
+//      return
     }
 
     val pokemon = context.resolvePokemon(context.author, userData, pokemonResolvable)
@@ -83,10 +96,21 @@ class ReleaseCommand : Command() {
         }
 
         val session = module.bot.database.startSession()
+        val rewards = arrayListOf<String>()
         session.use { clientSession ->
           clientSession.startTransaction()
+
+          if (pokemon.level >= 100) {
+
+            val randomEV: EVItem.EVItems = EVItem.getRandom();
+            rewards.add(randomEV.itemName);
+
+            module.bot.database.userRepository.addInventoryItem(context.author.id, randomEV.id, 1, session)
+          }
+
           module.bot.database.pokemonRepository.releasePokemon(pokemon, clientSession)
           module.bot.database.userRepository.releasePokemon(userData, pokemon, clientSession)
+
           clientSession.commitTransactionAndAwait()
         }
 
@@ -97,7 +121,8 @@ class ReleaseCommand : Command() {
               mapOf(
                 "level" to pokemon.level.toString(),
                 "pokemon" to context.translator.pokemonDisplayName(pokemon),
-                "ivPercentage" to pokemon.ivPercentage
+                "ivPercentage" to pokemon.ivPercentage,
+                "rewards" to rewards.joinToString()
               )
             ),
             context.translate("modules.pokemon.commands.release.embeds.released.title")

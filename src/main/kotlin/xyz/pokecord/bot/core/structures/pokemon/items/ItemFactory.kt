@@ -7,6 +7,7 @@ object ItemFactory {
 
   init {
     items.putAll(CreditsItem.creditsMap)
+    items.putAll(EVItem.evsMap)
     items.putAll(RedeemItem.redeemMap)
 
     items.putAll(

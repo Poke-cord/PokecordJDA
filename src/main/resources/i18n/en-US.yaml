@@ -683,6 +683,12 @@ modules:
           title: "{{user}}'s Pokémon"
       release:
         embeds:
+          center:
+            embed:
+              description: |-
+                **Actions**:
+                `{{prefix}}release <pokemon number(s)>` - Exchange a level 100 Pokémon for EV items
+              title: Release Center
           confirmation:
             embed:
               description: |-
@@ -697,6 +703,7 @@ modules:
               **Name**: {{pokemon}}
               **Level**: {{level}}
               **IV Percent**: {{ivPercentage}}
+              **Rewards**: {{rewards}}
             title: A Pokémon has been Released
           cancelled:
             description: Releasing cancelled by user.
