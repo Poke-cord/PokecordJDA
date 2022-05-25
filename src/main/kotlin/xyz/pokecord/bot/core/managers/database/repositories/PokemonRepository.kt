@@ -20,14 +20,9 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
-import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
-import xyz.pokecord.bot.core.structures.pokemon.Nature
-import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Type
-import xyz.pokecord.bot.utils.Config
-import xyz.pokecord.bot.utils.CountResult
-import xyz.pokecord.bot.utils.PokemonOrder
-import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
+import xyz.pokecord.bot.core.structures.pokemon.*
+import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
+import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
 import java.util.concurrent.TimeUnit
 
@@ -285,6 +280,18 @@ class PokemonRepository(
   suspend fun releasePokemon(pokemon: OwnedPokemon, session: ClientSession) {
     releasedPokemonCollection.insertOne(session, pokemon)
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
+  }
+
+  suspend fun addEffort(pokemon: OwnedPokemon, incomingEV: EVItem.EVItems) {
+
+    pokemon.evs.hp += incomingEV.stat.hp
+    pokemon.evs.attack += incomingEV.stat.attack
+    pokemon.evs.defense += incomingEV.stat.defense
+    pokemon.evs.specialDefense += incomingEV.stat.specialDefense
+    pokemon.evs.specialAttack += incomingEV.stat.specialAttack
+    pokemon.evs.speed += incomingEV.stat.speed
+
+    collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::evs setTo pokemon.evs))
   }
 
   suspend fun levelUpAndEvolveIfPossible(

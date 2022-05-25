@@ -25,6 +25,7 @@ data class OwnedPokemon(
   var level: Int = defaultLevel(),
   var nature: String = defaultNature(),
   var ivs: PokemonStats = defaultIV(),
+  var evs: PokemonStats = defaultEV(),
   var xp: Int = 0,
   var gender: Int = 2, // hack for default gender, see the init block below
   val heldItemId: Int = 0,
@@ -65,12 +66,12 @@ data class OwnedPokemon(
 
   val stats: PokemonStats by lazy {
     val nature = Nature.getByName(nature)!!
-    val hp = getStatValue(Stat.hp, nature, ivs.hp)
-    val attack = getStatValue(Stat.attack, nature, ivs.attack)
-    val defense = getStatValue(Stat.defense, nature, ivs.defense)
-    val specialAttack = getStatValue(Stat.specialAttack, nature, ivs.specialAttack)
-    val specialDefense = getStatValue(Stat.specialDefense, nature, ivs.specialDefense)
-    val speed = getStatValue(Stat.speed, nature, ivs.speed)
+    val hp = getStatValue(Stat.hp, nature, ivs.hp, evs.hp)
+    val attack = getStatValue(Stat.attack, nature, ivs.attack, evs.attack)
+    val defense = getStatValue(Stat.defense, nature, ivs.defense, evs.defense)
+    val specialAttack = getStatValue(Stat.specialAttack, nature, ivs.specialAttack, evs.specialAttack)
+    val specialDefense = getStatValue(Stat.specialDefense, nature, ivs.specialDefense, evs.specialDefense)
+    val speed = getStatValue(Stat.speed, nature, ivs.speed, evs.speed)
     PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
   }
 
@@ -111,8 +112,8 @@ data class OwnedPokemon(
     return nextLevelExperienceEntry.experience - currentLevelExperienceEntry.experience
   }
 
-  private fun getStatValue(stat: Stat, nature: Nature, iv: Int, ev: Int = stat.getBaseEffortValue(id)!!) =
-    getStatValue(id, level, stat, nature, iv, ev)
+  private fun getStatValue(stat: Stat, nature: Nature, iv: Int, additionalEv: Int, ev: Int = (stat.getBaseEffortValue(id)!!)) =
+    getStatValue(id, level, stat, nature, iv, ev, additionalEv)
 
   companion object {
     fun getStatValue(
@@ -121,19 +122,20 @@ data class OwnedPokemon(
       stat: Stat,
       nature: Nature,
       iv: Int,
-      ev: Int = stat.getBaseEffortValue(id)!!
+      ev: Int = (stat.getBaseEffortValue(id)!!),
+      additionalEv: Int
     ): Int {
       val base = stat.getBaseValue(id)!!
 
       val statVal = if (stat.identifier == "hp") {
         if (id == 292) 1
         else floor(
-          floor((floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) +
+          floor((floor((2 * base + iv + (ev + additionalEv) / 4).toDouble()) * level) / 100) +
               level +
               10
         ).roundToInt()
       } else {
-        (floor(floor(floor((2 * base + iv + ev / 4).toDouble()) * level) / 100) + 5).roundToInt()
+        (floor(floor(floor((2 * base + iv + (ev + additionalEv) / 4).toDouble()) * level) / 100) + 5).roundToInt()
       }
       var multiplier = 1.0
 
@@ -157,6 +159,17 @@ data class OwnedPokemon(
         Random.nextInt(0, 32),
         Random.nextInt(0, 32),
         Random.nextInt(0, 32)
+      )
+    }
+
+    fun defaultEV(): PokemonStats {
+      return PokemonStats(
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
       )
     }
 

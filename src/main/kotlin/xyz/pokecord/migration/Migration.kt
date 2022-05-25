@@ -91,6 +91,7 @@ object Migration {
       if (bsonDocument.isString("ownerId")) bsonDocument.getString("ownerId").value else throw Exception("Non-string ownerId found for pokemon ${objectId.toHexString()}")
 
     val ivs = if (bsonDocument.isDocument("ivs")) bsonDocument.getDocument("ivs") else null
+    val evs = if (bsonDocument.isDocument("evs")) bsonDocument.getDocument("evs") else null
 
     val pokemonStats =
       if (ivs == null) {
@@ -123,6 +124,35 @@ object Migration {
         PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
       }
 
+      val evStats =
+        if (evs == null) {
+          PokemonStats(
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          )
+        } else {
+          val attack =
+            if (evs.isNumber("attack")) evs.getNumber("attack").intValue() else 0
+          val defense =
+            if (evs.isNumber("defense")) evs.getNumber("defense").intValue() else 0
+          val hp =
+            if (evs.isNumber("hp")) evs.getNumber("hp").intValue() else 0
+          val specialAttack =
+            if (evs.isNumber("special-attack")) evs.getNumber("special-attack")
+              .intValue() else 0
+          val specialDefense =
+            if (evs.isNumber("special-defense")) evs.getNumber("special-defense")
+              .intValue() else 0
+          val speed =
+            if (evs.isNumber("speed")) evs.getNumber("speed").intValue() else 0
+
+          PokemonStats(attack, defense, hp, specialAttack, specialDefense, speed)
+        }
+
     return OwnedPokemon(
       id,
       0,
@@ -132,6 +162,7 @@ object Migration {
       level,
       nature,
       pokemonStats,
+      evStats,
       xp,
       gender,
       heldItemId,

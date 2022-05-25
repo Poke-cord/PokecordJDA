@@ -149,6 +149,12 @@ misc:
     starterPokemon: Starter Pokémon
     status: Status
     suggestedMoves: Suggested Moves
+    hp: HP
+    attack: Atk
+    defense: Def
+    specialAttack: Sp Atk
+    specialDefense: Sp Def 
+    speed: Spe
     totalIv: Total IV
     trainerID: Trainer ID
     type: Type
@@ -967,6 +973,12 @@ items:
 
         Congratulations {{user}}!
       title: A {{redeem}} has been Used
+  ev:
+    error:
+      alreadyMaxEv: Your **{{pokemon}}** is already at the max of total 510 effort points in total!
+    embed:
+      title: Vitamin {{vitamin}} Used!
+      description: Your **{{pokemon}}'s** {{statName}} is now up with 10 EVs
   unusable:
     description: '**Suggestion**: Try using `{{prefix}}give` or use another
                       item!'
