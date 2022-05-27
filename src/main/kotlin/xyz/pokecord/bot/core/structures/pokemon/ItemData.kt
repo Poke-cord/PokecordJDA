@@ -3,6 +3,7 @@ package xyz.pokecord.bot.core.structures.pokemon
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
+import org.litote.kmongo.util.idValue
 import xyz.pokecord.bot.core.structures.pokemon.items.*
 import xyz.pokecord.bot.utils.Json
 import kotlin.system.exitProcess
@@ -36,6 +37,7 @@ data class ItemData(
       items = Json.decodeFromString(json)
 
       addAllCustomItems()
+      applyCustomModifications()
 
       items = items.filter { !disabledItemIds.contains(it.id) && !disabledCategoryIds.contains(it.categoryId) }
         .toMutableList()
@@ -131,6 +133,15 @@ data class ItemData(
           0
         )
       )
+    }
+
+    private fun applyCustomModifications() {
+      items.forEach { itemData ->
+          val item: EVItem.EVItems? = EVItem.EVItems.values().find { it.id == itemData.id }
+          if (item != null) {
+            itemData.cost = 0
+          }
+      }
     }
   }
 }

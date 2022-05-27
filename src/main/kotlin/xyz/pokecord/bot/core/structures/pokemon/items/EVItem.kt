@@ -11,7 +11,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
       ?: return UsageResult(false, context.embedTemplates.start())
 
-    // Meet the requirement of in total 510 effort points in total per Pokémon
+    // Meet the requirement of total 510 effort points in total per Pokémon
     if (pokemon.evs.total >= 510) {
       return UsageResult(
         false,
@@ -33,7 +33,8 @@ class EVItem(id: Int, val type: String) : Item(id) {
           "items.ev.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
-            "statName" to evItemData.statName
+            "statName" to evItemData.statName,
+            "points" to points.toString()
           )
         ),
         context.translate(
@@ -53,26 +54,29 @@ class EVItem(id: Int, val type: String) : Item(id) {
     val itemName: String,
     val stat: PokemonStats,
     val statName: String,
-    val cost: Int = 0,
+    var cost: Int = 0,
     val flingPower: Int = 0,
     val flingEffectId: Int = 0,
     val useGems: Boolean = false,
   ) {
-    HPUp(10200000, "hp-up", "HP Up", PokemonStats(0, 0, 10,
+    HPUp(45, "hp-up", "HP Up", PokemonStats(0, 0, points,
       0, 0, 0), "HP"),
-    Protein(10200001, "protein", "Protein", PokemonStats(10, 0, 0,
+    Protein(46, "protein", "Protein", PokemonStats(
+      points, 0, 0,
       0, 0, 0), "Attack"),
-    Iron(10200010, "iron", "Iron", PokemonStats(0, 10, 0,
+    Iron(47, "iron", "Iron", PokemonStats(0, points, 0,
       0, 0, 0), "Defense"),
-    Calcium(10200011, "calcium", "Calcium", PokemonStats(0, 0, 0,
-      10, 0, 0), "Special Attack"),
-    Zinc(10200100, "zinc", "Zinc", PokemonStats(0, 0, 0,
-      0, 10, 0), "Special Defense"),
-    Carbos(10200101, "carbos", "Carbos", PokemonStats(0, 0, 0,
-      0, 0, 10), "Speed")
+    Calcium(49, "calcium", "Calcium", PokemonStats(0, 0, 0,
+      points, 0, 0), "Special Attack"),
+    Zinc(52, "zinc", "Zinc", PokemonStats(0, 0, 0,
+      0, points, 0), "Special Defense"),
+    Carbos(48, "carbos", "Carbos", PokemonStats(0, 0, 0,
+      0, 0, points), "Speed")
   }
 
   companion object {
+    const val points: Int = 1
+
     private fun EVItem.asPair(): Pair<Int, EVItem> {
       return id to this
     }

@@ -978,7 +978,7 @@ items:
       alreadyMaxEv: Your **{{pokemon}}** is already at the max of total 510 effort points in total!
     embed:
       title: Vitamin {{vitamin}} Used!
-      description: Your **{{pokemon}}'s** {{statName}} is now up with 10 EVs
+      description: Your **{{pokemon}}'s** {{statName}} is now up with {{points}} EVs
   unusable:
     description: '**Suggestion**: Try using `{{prefix}}give` or use another
                       item!'
