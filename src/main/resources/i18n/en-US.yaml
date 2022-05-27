@@ -80,29 +80,38 @@ misc:
   errors:
     embeds:
       commandExecutionFailed:
-        description: Failed to execute the {{command}} command. Report this error [here]({{inviteUrl}}) if it recurs.
+        description: Failed to execute the {{command}} command. Report this error [here](https://discord.gg/poke) if it recurs.
         title: Command Execution Failure
       commandRateLimitReached:
         description: |-
           Look at you go! Wait.. we can't see you.
-          
-          > You're using commands too fast.
+          > **You're using commands too fast.**
         title: Chill Out
-    notYourButton: The button you tried using isn't from a message that's a reply to you, please use buttons that belongs to your command responses.
-    invalidAmount: '**Suggestion**: Try entering a valid amount!'
-    notASpawnChannel: '**Suggestion**: Try using the command in a spawn channel
-            or set this channel as a spawn channel!'
-    nothingSpawned: '**Suggestion**: Try waiting for a Pokémon to spawn!'
-    pokemonNotFound: '**Suggestion**: Try searching your collection for something
-            you have!'
-    userHasNotStarted: '{{user}} has not started playing yet. Ask them to try `{{prefix}}start` first!'
+    notYourButton: |-
+      You pressed someone else's button. It didn't work.
+      > **Use buttons that belong to your own commands.**
+    invalidAmount: |-
+      You entered an invalid amount.
+      > **Enter a valid amount.**
+    notASpawnChannel: |-
+      That command doesn't work here, at least not yet.
+      > **Use this command in a spawn channel or create a new spawn.**
+    nothingSpawned: |-
+      You're here! But Pokémon are not.
+      > **Wait for a Pokémon to spawn.**
+    pokemonNotFound: |-
+      Pokecord went on an adventure and came back with nothing.
+      > **Could not find your search query. Search for something else.**
+    userHasNotStarted: |-
+      Pokecord is recruiting new users, like {{user}}!
+      > **Use `{{prefix}}start` to get started.**
   presence:
     maintenance:
       activity: Maintenance Break | {{version}}
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: '{{prefix}}help | {{version}} | pokecord.xyz'
+      activity: '{{prefix}}help | {{version}}'
       status: ONLINE
       type: DEFAULT
   texts:
@@ -116,7 +125,7 @@ misc:
     command: Command
     command_aliases: Aliases
     commands: Commands
-    commandTimedOut: Command execution timed out. Report this error [here]({{inviteUrl}}) if it recurs.
+    commandTimedOut: Command execution timed out. Report this error [here](https://discord.gg/poke) if it recurs.
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
@@ -143,13 +152,13 @@ misc:
     nature: Nature
     nextEvolution: Next Evolution(s)
     noEvolution: No Evolution
-    originalTrainerID: Original Trainer ID
+    originalTrainerID: OG Trainer ID
     physical: Physical
     power: Power
     pp: PP
     prevEvolution: Prev Evolution
     priority: Priority
-    serverOnlyCommand: '**Suggestion**: Try using this command in a server!'
+    serverOnlyCommand: Server command only. Navigate to a server to continue.
     special: Special
     starterPokemon: Starter Pokémon
     status: Status
@@ -177,49 +186,72 @@ modules:
         errors:
           alreadyBattling: |-
             A little too ambitious!
-            > Finish your current duel first.
+            > **Finish your current duel first.**
           partnerAlreadyBattling: |-
             {{partner}}'s in combat!
-            > Wait for their duel to finish.
+            > **Wait for their duel to finish.**
           partnerPokemonNotFound: |-
             Pokémon not found.
-            > Report this error [here]({{inviteUrl}}).
+            > Report this error [here](https://discord.gg/poke).
           pokemonNotFound: |- 
             Pokémon not found.
-            > Report this error [here]({{inviteUrl}}).
+            > Report this error [here](https://discord.gg/poke).
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
-          noPokemonMoves: Your selected Pokémon doesn't have any moves.
+          noPokemonMoves: |-
+            Doing nothing is not an option in battles.
+            > **Teach your Pokémon moves.**
           noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
-          partnerHasNotStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the p!start command?"
-          selfBattle: Why are you trying to fight yourself? Please tag another user to fight with.
+          partnerHasNotStarted: |-
+            Pokecord is recruiting new users, like {{partner}}!
+            > **Use `{{prefix}}start` to get started.**
+          selfBattle: |-
+            You battled yourself. Wait, you can't. 
+            > **Select another user to battle with.**
         embeds:
           battleRequest:
             title: Battle Request
             description: |-
-              {{initiator}} has requested to battle {{partner}}!
+              Sound trumpets! {{partner}} has been challenged by {{initiator}}! To either victory, or else a grave.
 
-              Wanna battle with {{initiator}}?
+              Doth thee accept my challenge, {{partner}}?
+            footer: Adapted from Shakespeare's Henry VI Part 3.
       moves:
         embed:
           title: "Level {{level}} {{pokemon}} | Pokémon Info"
         errors:
-          pokemonNotFound: Specified Pokémon was not found.
+          pokemonNotFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Specified Pokémon was not found. Search for something else.**
         teach:
           embed:
-            title: Move Taught
-            description: "**{{move}}** has been taught to **{{pokemon}}**(Slot **#{{slot}}**)!"
+            title: A Move has been Taught
+            description: |-
+              **Move**: {{move}}
+              **Pokémon**: {{pokemon}}
+              **Slot Number**: {{slot}}
+              
+              Congratulations!
           errors:
-            inBattle: You're currently in a battle, please wait until it has ended to teach your Pokémon new moves.
-            cancelled: Move teaching cancelled.
-            moveNotFound: Specified move was not found.
+            inBattle: |-
+              A little too ambitious!
+              > **Finish your current duel first.**
+            cancelled: Move teaching has been cancelled.
+            moveNotFound: |-
+              Pokecord went on an adventure and came back with nothing.
+              > **Specified move was not found. Search for another move.**
             moveNotSpecified: Please specify a move to teach.
             slotNotSpecified: You must specify a slot to teach a move to.
-            slotOutOfRange: You must specify a slot between 1 and 4.
-          replaceConfirmation:
-            title: Confirm Replacing Move
+            slotOutOfRange: |-
+              Pokecord reached for your slot number. Too bad it can't move far.
+              > **Specify a slot number between 1 and 4.**
+                  replaceConfirmation:
+            title: A Move Replacement is Pending
             description: |-
-              This will replace the move in **Slot #{{slot}} ({{move}})**.
-              **React to this message with a ✅ within the next 30 seconds to confirm.**
+              **Current Move**: {{move}}
+              **Slot Number**: {{slot}}
+              Specified move will replace the current move in slot {{slot}}.
+              
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         texts:
           availableMoves: Available Moves
           learnedMoves: Learned Moves
@@ -230,12 +262,16 @@ modules:
     commands:
       profile:
         embeds:
-          title: 🎪 {{userTag}} Auctions
+          title: "🎪 {{userTag}}'s Auctions"
         errors:
-          noResults: There aren't any available auctions right now, please try again later.
+          noResults: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **You have no current auctions. Create one to get started.**
       list:
         errors:
-          inTrade: You can't post auctions while in a trade.
+          inTrade: |-
+            A little too ambitious!
+            > **Finish your current trade first.**
           noPokemonProvided: Please provide the pokémon you would like to list.
           noPokemonFound: The pokémon you are looking for doesn't seem to exist.
           startingBidPrice: The starting bid can't be less than 1,000 credits or more than 10,000,000 credits!
