@@ -44,10 +44,9 @@ class InfoCommand : Command() {
     }
 
     val infoSection = """
-        **${context.translate("misc.texts.gender")}**: ${context.translator.gender(pokemon)}
-        **${context.translate("misc.texts.nature")}**: ${context.translator.nature(pokemon.nature)}
         **${context.translate("misc.texts.xp")}**: ${if (pokemon.level >= 100) "Max" else "${pokemon.xp}/${pokemon.requiredXpToLevelUp()}"}
-        ${if (pokemon.heldItemId != 0) "**${context.translate("misc.texts.heldItem")}**: ${(ItemData.getById(pokemon.heldItemId)?.name ?: pokemon.heldItemId)}" else ""}
+        **${context.translate("misc.texts.gender")}**: ${context.translator.gender(pokemon)} ${if (pokemon.heldItemId != 0) "\n**${context.translate("misc.texts.heldItem")}**: ${(ItemData.getById(pokemon.heldItemId)?.name ?: pokemon.heldItemId)}" else ""}
+        **${context.translate("misc.texts.nature")}**: ${context.translator.nature(pokemon.nature)}
         """.trimIndent()
 
     val statSection = """
@@ -74,7 +73,7 @@ class InfoCommand : Command() {
 
     context.reply(
       context.embedTemplates.normal(
-        infoSection + trainerSection + "\n\n" + statSection + "\n",
+        infoSection + "\n\n" + trainerSection + "\n\n" + statSection + "\n",
         context.translate(
           "modules.pokemon.commands.info.embed.title",
           mapOf(

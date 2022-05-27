@@ -96,16 +96,26 @@ class ReleaseCommand : Command() {
         }
 
         val session = module.bot.database.startSession()
-        val rewards = arrayListOf<String>()
+//        val rewards = arrayListOf<String>()
+
+        val rewardsMap = mutableMapOf<EVItem.EVItems, Int>()
+        var rewardsMess: String = ""
+
         session.use { clientSession ->
           clientSession.startTransaction()
 
-          if (pokemon.level >= 100) {
-
+          val evAmount = (if (pokemon.level % 2 == 0) pokemon.level else pokemon.level - 1) / 2
+          for(i in 0 until evAmount) {
             val randomEV: EVItem.EVItems = EVItem.getRandom();
-            rewards.add(randomEV.itemName);
+//            rewards.add(randomEV.itemName);
+            rewardsMap.putIfAbsent(randomEV, 0)
+            rewardsMap[randomEV] = rewardsMap[randomEV]!!.plus(1)
+          }
 
-            module.bot.database.userRepository.addInventoryItem(context.author.id, randomEV.id, 1, session)
+          for ((key, value) in rewardsMap) {
+            module.bot.database.userRepository.addInventoryItem(context.author.id, key.id, value, session)
+
+            rewardsMess += "$value ${key.itemName}, "
           }
 
           module.bot.database.pokemonRepository.releasePokemon(pokemon, clientSession)
@@ -122,7 +132,7 @@ class ReleaseCommand : Command() {
                 "level" to pokemon.level.toString(),
                 "pokemon" to context.translator.pokemonDisplayName(pokemon),
                 "ivPercentage" to pokemon.ivPercentage,
-                "rewards" to rewards.joinToString()
+                "rewards" to rewardsMess.dropLast(2)
               )
             ),
             context.translate("modules.pokemon.commands.release.embeds.released.title")
