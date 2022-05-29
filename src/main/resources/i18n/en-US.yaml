@@ -45,10 +45,10 @@ misc:
           using Pokémon commands!
         title: A User Must Start
   confirmation:
-    timeoutText: React within {{timeout}} seconds to confirm or cancel your action.
+    timeoutText: React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
   embeds:
     error:
-      footer: Not sure what to do? Try joining our support server.
+      footer: Questions? Join our official server at discord.gg/poke.
       title: Something went wrong...
     evolved:
       description: |-
@@ -80,7 +80,9 @@ misc:
   errors:
     embeds:
       commandExecutionFailed:
-        description: Failed to execute the {{command}} command. Report this error [here](https://discord.gg/poke) if it recurs.
+        description: |-
+          Failed to execute the {{command}} command. 
+          > **Report this error [here](https://discord.gg/poke) if it recurs.**
         title: Command Execution Failure
       commandRateLimitReached:
         description: |-
@@ -111,7 +113,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: '{{prefix}}help | {{version}}'
+      activity: "{{prefix}}help | {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -125,7 +127,9 @@ misc:
     command: Command
     command_aliases: Aliases
     commands: Commands
-    commandTimedOut: Command execution timed out. Report this error [here](https://discord.gg/poke) if it recurs.
+    commandTimedOut: |-
+      Too powerful! Command execution timed out. 
+      > **Report this error [here](https://discord.gg/poke) if it recurs.**
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
@@ -158,7 +162,9 @@ misc:
     pp: PP
     prevEvolution: Prev Evolution
     priority: Priority
-    serverOnlyCommand: Server command only. Navigate to a server to continue.
+    serverOnlyCommand: |-
+      Server command only. 
+      > **Navigate to a server to continue.**
     special: Special
     starterPokemon: Starter Pokémon
     status: Status
@@ -192,10 +198,10 @@ modules:
             > **Wait for their duel to finish.**
           partnerPokemonNotFound: |-
             Pokémon not found.
-            > Report this error [here](https://discord.gg/poke).
+            > **Report this error [here](https://discord.gg/poke).**
           pokemonNotFound: |- 
             Pokémon not found.
-            > Report this error [here](https://discord.gg/poke).
+            > **Report this error [here](https://discord.gg/poke).**
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: |-
             Doing nothing is not an option in battles.
@@ -217,7 +223,7 @@ modules:
             footer: Adapted from Shakespeare's Henry VI Part 3.
       moves:
         embed:
-          title: "Level {{level}} {{pokemon}} | Pokémon Info"
+          title: "Pokémon Moves | Level {{level}} {{pokemon}} "
         errors:
           pokemonNotFound: |-
             Pokecord went on an adventure and came back with nothing.
@@ -242,7 +248,7 @@ modules:
             moveNotSpecified: Please specify a move to teach.
             slotNotSpecified: You must specify a slot to teach a move to.
             slotOutOfRange: |-
-              Pokecord reached for your slot number. Too bad it can't move far.
+              Pokecord reached for your slot number. Too bad it can't reach far.
               > **Specify a slot number between 1 and 4.**
                   replaceConfirmation:
             title: A Move Replacement is Pending
@@ -262,7 +268,7 @@ modules:
     commands:
       profile:
         embeds:
-          title: "🎪 {{userTag}}'s Auctions"
+          title: "🎪 | {{userTag}}'s Auctions"
         errors:
           noResults: |-
             Pokecord went on an adventure and came back with nothing.
@@ -274,157 +280,275 @@ modules:
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the pokémon you would like to list.
           noPokemonFound: The pokémon you are looking for doesn't seem to exist.
-          startingBidPrice: The starting bid can't be less than 1,000 credits or more than 10,000,000 credits!
-          minimumTime: An auction must last anywhere from **4 hours** to **30 days**.
+          startingBidPrice: |-
+            Pokecord reached for your price. Too bad it can't reach far.
+            > **Specify a starting bid between 1,000 and 10 million credits.**
+          minimumTime: |-
+            Pokecord reached for your auction time. Too bad it can't reach far.
+            > **Specify a time between 4 hours and 30 days.**
         confirmation:
           description: |-
-            Please confirm you would like to start an auction for your **IV{{pokemonIV}} {{pokemonName}}**.
-            IV: **{{pokemonIV}}**
-            End Time: **{{formattedDate}}**
-            Starting Bid: **{{startingBid}}**
-            Bid Increment: **{{bidIncrement}}**
-          title: Auction Post
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **End Time**: {{formattedDate}}
+            
+            **Starting Bid**: {{startingBid}}
+            **Bid Increment**: {{bidIncrement}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: An Auction Post is Pending
         confirmed:
           description: |-
-            You have posted your **IV{{pokemonIV}} {{pokemonName}}** on the auction.
-            IV: **{{pokemonIV}}**
-            End Time: **{{formattedDate}}**
-            Starting Bid: **{{startingBid}}**
-            Bid Increment: **{{bidIncrement}}**
-          title: Auction Posted
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **End Time**: {{formattedDate}}
+            
+            **Starting Bid**: {{startingBid}}
+            **Bid Increment**: {{bidIncrement}}
+            
+            Your auction has been posted.
+          title: An Auction has been Posted
       unlist:
         confirmation:
-          description: "Please confirm you would like to remove an auction for **IV{{pokemonIV}} {{pokemonName}}**."
-          title: Remove An Auction
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: An Auction is Pending Removal
         confirmed:
-          description: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the auction and added back to your inventory."
-          title: Auction Removed
+          description: |-
+            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
+            
+            Your Pokémon has been returned to your collection.
+          title: An Auction has been Removed
         errors:
           noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: No auction was found with the ID **{{id}}**.
-          notYourAuction: You can't unlist an auction that isn't yours.
-          bidsActive: You can't unlist an auction that has bids on it.
-          noPokemonFound: The auctioned pokémon seems to be lost?
-          auctionSold: The auction you are trying to unlist has been sold or ended!
+          noAuctionFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find auction {{id}}. Search for another auction.**
+          notYourAuction: |-
+            You tried to unlisted someone else's auction. It didn't work. 
+            > **Unlist your own auctions.**
+          bidsActive: |-
+            Too much finance! Pokecord can't figure it out.
+            > **Unlist auctions that have no bids.**
+          noPokemonFound: |-
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
+          auctionSold: |-
+            The auction you are trying to unlist has been sold or ended!
       bid:
         bidNotification:
-          description: "**{{bidderTag}}** has bid **{{amount}} credits** on your **IV{{pokemonIV}} {{pokemonName}}** auction!"
-          title: Bid Received
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            
+            **Bidder**: {{bidderTag}}
+            **Amount**: {{amount}} credits
+          title: You Received a Bid
         outbid:
-          description: "{{bidder}} outbid you on the auction for the **Auction ID{{ID}} Pokémon {{pokemonName}}** by **{{bidDifference}} credits**."
-          title: You have been outbid
+          description: |-
+            **Auction ID**: {{ID}}
+            **Auction Item**: {{pokemonName}}
+            
+            **Bidder**: {{bidder}}
+            **Bid Difference**: {{bidDifference}} credits
+          title: You have been Outbid
         confirmed:
-          title: Bid Posted
-          description: "Successfully set a bid of **{{bid}}** on **IV{{pokemonIV}} {{pokemonName}}**."
+          title: A Bid has been Sent
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **Amount**: {{bid}}
         confirmation:
-          description: Please confirm you would like to bid **{{bid}} credits** for **IV{{pokemonIV}} {{pokemonName}}**.
-          title: Bid Confirmation
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **Amount**: {{bid}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: A Bid is Pending
         errors:
-          alreadyEnded: The auction has already ended.
+          alreadyEnded: |-
+            Pokecord couldn't find a time machine.
+            > **Specified auction has ended.**
           noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: No auction was found with the ID **{{id}}**.
-          selfBid: You can't bid on your own auction!
-          noPokemonFound: The auctioned pokémon seems to be lost?
+          noAuctionFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find auction {{id}}. Search for another auction.**
+          selfBid: |-
+            You bid on your own auction. Wait, you can't.
+            > **Bid on another user's auction.**
+          noPokemonFound: |- 
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
-          notEnoughCredits: You don't have enough credits to bid **{{amount}} credits**.
-          topBid: You already have the top bid of **{{bid}}**.
+          notEnoughCredits: |-
+            Got spare credits somewhere else?
+            > **Gain more credits to bid {{amount}} credits.**
+          topBid: |-
+            A little too ambitious!
+            > **You already have the top bid of {{bid}} credits.**
           bidTooLow: |-
             You must bid at least **{{bid}} credits** on this auction.
             The bid increment is currently set to **{{bidIncrement}} credits**.
       info:
         errors:
           noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: No auction was found with the ID **{{id}}**.
-          noPokemonFound: The auctioned pokémon seems to be lost?
-        title: Level {{pokemonLevel}} {{pokemonName}} | {{auctionId}} | Auction Info
+          noAuctionFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find auction {{id}}. Search for another auction.**
+          noPokemonFound: |- 
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
+        title: Auction {{auctionID}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
-          title: 🎪 Auctions
+          title: "🎪 | Auction House"
         errors:
-          noResults: There aren't any available auctions right now, please try again later.
+          noResults: |-
+            You're here! But auctions are not.
+            > **Wait for an auction to start.**
       notify:
         toggledOn:
-          title: Toggled On
-          description: You will start receiving DM notifications whenever someone bids on your auctions.
+          title: Activity has been Toggled On
+          description: You will receive DM notifications for auction activity.
         toggledOff:
-          title: Toggled Off
-          description: You won't be receiving DM notifications from bids on your auction anymore.
+          title: Activity has been Toggled Off
+          description: You will stop receiving DM notifications for auction activity.
     tasks:
       checker:
         auctionEnded:
-          title: Auction Ended
-          description: Your auctioned **{{pokemon}}** has ended without any bids, your Pokémon has been refunded.
+          title: Your Auction has Ended
+          description: |-
+            **Auction Item**: {{pokemon}}
+            
+            Your auction ended with no bids. Your {{pokemon}} has been returned to your collection.
         auctionSold:
-          title: Auction Sold
-          description: Your auctioned **{{pokemon}}** has sold for **{{amount}} credits**.
+          title: Your Auction has been Sold
+          description: |-
+            **Auction Item**: {{pokemon}}
+            **Final Bid**: {{amount}}
+            
+            Your auction has now ended.
         auctionWon:
-          title: Auction Won
-          description: You won the bidding war on **{{pokemon}}** at **{{amount}} credits**.
+          title: You have Won an Auction
+          description: |-
+            **Auction Item**: {{pokemon}}
+            **Your Bid**: {{amount}}
+            
+            The credits have been added to your balance.
   market:
     commands:
       profile:
         embeds:
-          title: 🏠 {{userTag}} Market Listings
+          title: "🏘️ | {{userTag}}'s Marketplace Listings"
         errors:
-          noResults: There aren't any available auctions right now, please try again later.
+          noResults: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **You have no current listings. Create one to get started.**
       list:
         errors:
-          inTrade: You can't create listings while in a trade.
+          inTrade: |-
+            A little too ambitious!
+            > **Finish your current trade first.**
           noPokemonProvided: Please provide the pokémon you would like to list.
-          noPokemonFound: The pokémon you are looking for doesn't exist!
+          noPokemonFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find your search query. Search for something else.**
           noPriceProvided: Please provide the price you would like to list your pokémon for.
-          startingBidPrice: The price can't be less than 10 credits or more than 10,000,000 credits!
+          startingBidPrice: |-
+            Pokecord reached for your price. Too bad it can't reach far.
+            > **Specify a starting bid between 1,000 and 10 million credits.**
         confirmation:
-          description: "Please confirm you would like to create a listing of your **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."
-          title: Listing Post
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: A Listing Post is Pending
         confirmed:
           description: |-
-            You have posted your **IV{{pokemonIV}} {{pokemonName}}** on the market.
-            IV: **{{pokemonIV}}**
-            Price: **{{price}}**
-          title: Listing Posted
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            Your listing has been posted.
+          title: A Listing has been Posted
       unlist:
         confirmation:
-          title: Remove A Listing
-          description: "Please confirm you would like to remove your listing for **IV{{pokemonIV}} {{pokemonName}}**."
+          title: A Listing is Pending Removal
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         confirmed:
-          title: Listing Removed
-          description: "Your **IV{{pokemonIV}} {{pokemonName}}** has been taken off the market and added back to your inventory."
+          title: A Listing has been Removed
+          description: |-
+            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
+            
+            Your Pokémon has been returned to your collection.
         errors:
           noListingId: Please provide a valid listing ID.
-          noListingFound: No listing was found with the ID **{{id}}**.
-          notYourListing: You can't unlist a post that isn't yours.
+          noListingFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find listing {{id}}. Search for another listing.**
+          notYourListing: |-
+            You tried to unlisted someone else's listing. It didn't work. 
+            > **Unlist your own listings.**
           bidsActive: You can't unlist an post that has bids on it.
-          noPokemonFound: The listing's pokémon seems to be lost?
+          noPokemonFound: |- 
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
       buy:
         sold:
-          title: Listing Sold
-          description: "Successfully sold **IV{{ivPercentage}}% ${{pokemonName}}** for **{{price}} credits** to **{{buyer}}**."
+          title: A Listing has been Sold
+          description: |-
+            **Listing Item**: {{ivPercentage}}% {{pokemon}}
+            **Buyer**: {{buyer}}
+            **Price**: {{price}} credits
+            
+            The credits have been added to your balance.
         confirmed:
-          title: Pokémon Purchased
-          description: "Successfully purchased **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**."
+          title: A Listing has been Purchased
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemon}}
+            **Price**: {{price}} credits
+            
+            The Pokémon has been added to your collection.
         confirmation:
-          description: Please confirm you would like to purchase **IV{{pokemonIV}} {{pokemonName}}** for **{{price}} credits**.
-          title: Purchase Confirmation
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: A Listing is Pending Purchase
         errors:
-          alreadySold: This listing has already been sold.
+          alreadySold: |-
+            Pokecord couldn't find a time machine.
+            > **Specified listing has been sold.**
           noListingId: Please provide a valid listing ID.
-          noListingFound: No listing was found with the ID **{{id}}**.
-          selfBuy: You can't purchase your own listing post!
+          noListingFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find listing {{id}}. Search for another listing.**
+          selfBuy: |-
+            You purchased on your own listing. Wait, you can't.
+            > **Purchase another user's listing.**
           noPokemonFound: The listing's pokémon seems to be lost?
           notEnoughCredits: You don't have enough credits to buy this listing.
           unlisted: This listing has been unlisted.
       info:
         errors:
           noListingId: Please provide a valid listing ID.
-          noListingFound: No listing was found with the ID **{{id}}**.
-          noPokemonFound: The listing's pokémon seems to be lost?
-        title: Level {{pokemonLevel}} {{pokemonName}} | {{listingId}} | Listing Info
+          noListingFound: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Could not find listing {{id}}. Search for another listing.**
+          noPokemonFound: |- 
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
+        title: Listing {{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
-          title: 🎪 Market
+          title: "🏘️ | Marketplace"
         errors:
-          noResults: There aren't any available listings right now, please try again later.
+          noResults: |-
+            You're here! But listings are not.
+            > **Wait for an listing to be posted.**
   trading:
     commands:
       trade:
@@ -432,8 +556,8 @@ modules:
           title: Trade Request
           description: "{{trader}} has requested to trade {{traded}}!\n\nWanna trade with {{trader}}?"
         tradeStarted:
-          title: Trade Request Accepted
-          description: "{{partner}} accepted {{author}}'s trade request.\n**NOTE: You can only trade 20 Pokémon per session.**"
+          title: Trade Accepted
+          description: "{{partner}} accepted {{author}}'s trade request.\n> **You can only trade 20 Pokémon per session.**"
         tradeCancelled:
           title: Trade Request Cancelled
           description: "Trade request to {{partner}} has been denied or has expired."
@@ -546,11 +670,11 @@ modules:
             **Channel Mention**: {{channelMention}}
             **Channel ID**: {{channelId}}
           list:
-            title: Spawn Channel Details
+            title: Spawn Details have been Requested
           noChannelsSet: No spawn channels set.
           title:
-            added: A Spawn Channel was Added
-            removed: A Spawn Channel was Removed
+            added: A Spawn has been Added
+            removed: A Spawn has been Removed
       vote:
         now: now
         embed:
