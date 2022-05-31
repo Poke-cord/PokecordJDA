@@ -45,7 +45,7 @@ misc:
           using Pokémon commands!
         title: A User Must Start
   confirmation:
-    timeoutText: React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+    timeoutText: "React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel."
   embeds:
     error:
       footer: Questions? Join our official server at discord.gg/poke.
