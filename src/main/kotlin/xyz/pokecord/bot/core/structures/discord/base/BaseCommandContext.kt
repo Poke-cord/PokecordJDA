@@ -215,9 +215,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun isStaff(): Boolean {
-    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
-      author.id
-    ).awaitSuspending())
+//    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
+//      author.id
+//    ).awaitSuspending())
+    return Config.devs.contains(author.id) || bot.cache.staffMemberIds.containsAsync(author.id).awaitSuspending()
   }
 
   companion object {
