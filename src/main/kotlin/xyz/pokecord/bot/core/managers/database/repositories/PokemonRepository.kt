@@ -4,7 +4,6 @@ import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.InsertOneResult
-import com.mongodb.client.result.UpdateResult
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.json.*
 import org.bson.BsonDocument
@@ -484,52 +483,49 @@ class PokemonRepository(
     filter: Bson,
     update: Bson,
     updateOptions: UpdateOptions = UpdateOptions()
-  ): UpdateResult {
-    val session = database.startSession()
-    return session.use { clientSession ->
-      clientSession.startTransaction()
-      val insertedId = database.transferLogCollection.insertOne(
-        clientSession,
-        TransferLog(
-          filter.json,
-          update.json,
-          context.author.id,
-          context.channel.id,
-          performedInGuild = context.guild?.id
-        )
-      ).insertedId!!.asObjectId().value.toId<TransferLog>()
+  ) {
+    val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(filter)
+      .projection(OwnedPokemon::_id from OwnedPokemon::_id)
+      .limit(Config.transferChunkSize)
+      .toList()
+      .map { it._id }
 
-      var done = 0
-      do {
-        val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
-          .projection(OwnedPokemon::_id from OwnedPokemon::_id)
-          .skip(done)
-          .limit(Config.transferChunkSize)
-          .toList()
-          .map { it._id }
-        done += matchedIds.size
+    val insertedId = database.transferLogCollection.insertOne(
+      TransferLog(
+        filter.json,
+        update.json,
+        context.author.id,
+        context.channel.id,
+        performedInGuild = context.guild?.id
+      )
+    ).insertedId!!.asObjectId().value.toId<TransferLog>()
+
+    val chunks = matchedIds
+      .chunked(Config.transferChunkSize)
+
+    for (chunk in chunks) {
+      val session = database.startSession()
+      session.use {
+        it.startTransaction()
+        collection.updateMany(it, OwnedPokemon::_id `in` chunk, update, updateOptions)
         database.transferLogCollection.updateOne(
-          clientSession,
+          it,
           TransferLog::_id eq insertedId,
           combine(
-            pushEach(TransferLog::matchedIds, matchedIds),
+            pushEach(TransferLog::matchedIds, chunk),
             set(TransferLog::status setTo TransferLog.Status.STARTED)
           )
         )
-        if (matchedIds.size < Config.transferChunkSize) break
-      } while (true)
-
-      val updateResult = collection.updateMany(filter, update, updateOptions)
-      database.transferLogCollection.updateOne(
-        clientSession,
-        TransferLog::_id eq insertedId,
-        combine(
-          set(TransferLog::status setTo TransferLog.Status.COMPLETE)
-        )
-      )
-      clientSession.commitTransactionAndAwait()
-      updateResult
+        it.commitTransactionAndAwait()
+      }
     }
+
+    database.transferLogCollection.updateOne(
+      TransferLog::_id eq insertedId,
+      combine(
+        set(TransferLog::status setTo TransferLog.Status.COMPLETE)
+      )
+    )
   }
 
   suspend fun updateNature(pokemon: OwnedPokemon, newNature: String) {

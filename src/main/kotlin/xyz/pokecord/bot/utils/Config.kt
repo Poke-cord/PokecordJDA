@@ -18,7 +18,7 @@ object Config {
   const val testingServer = "757972619986337823"
 
   const val boostCooldown = 2_592_000_000L
-  const val transferChunkSize = 5000
+  const val transferChunkSize = 1000
   const val reindexChunkSize = 1000
   const val defaultAuctionTime = 4 * 60 * 60 * 1000L
   const val defaultStartingBid = 1000
