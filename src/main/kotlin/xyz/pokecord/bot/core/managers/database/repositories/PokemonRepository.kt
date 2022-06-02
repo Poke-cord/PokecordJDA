@@ -4,6 +4,7 @@ import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Indexes
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.InsertOneResult
+import com.mongodb.client.result.UpdateResult
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.json.*
 import org.bson.BsonDocument
@@ -483,10 +484,10 @@ class PokemonRepository(
     filter: Bson,
     update: Bson,
     updateOptions: UpdateOptions = UpdateOptions()
-  ) {
+  ): UpdateResult {
+    var result = UpdateResult.unacknowledged()
     val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(filter)
       .projection(OwnedPokemon::_id from OwnedPokemon::_id)
-      .limit(Config.transferChunkSize)
       .toList()
       .map { it._id }
 
@@ -507,7 +508,7 @@ class PokemonRepository(
       val session = database.startSession()
       session.use {
         it.startTransaction()
-        collection.updateMany(it, OwnedPokemon::_id `in` chunk, update, updateOptions)
+        val updateResult = collection.updateMany(it, OwnedPokemon::_id `in` chunk, update, updateOptions)
         database.transferLogCollection.updateOne(
           it,
           TransferLog::_id eq insertedId,
@@ -517,6 +518,17 @@ class PokemonRepository(
           )
         )
         it.commitTransactionAndAwait()
+        if (updateResult.wasAcknowledged()) {
+          result = if (result.wasAcknowledged()) {
+            UpdateResult.acknowledged(
+              result.matchedCount + updateResult.matchedCount,
+              result.modifiedCount + updateResult.modifiedCount,
+              null
+            )
+          } else {
+            UpdateResult.acknowledged(updateResult.matchedCount, updateResult.modifiedCount, null)
+          }
+        }
       }
     }
 
@@ -526,6 +538,8 @@ class PokemonRepository(
         set(TransferLog::status setTo TransferLog.Status.COMPLETE)
       )
     )
+
+    return result
   }
 
   suspend fun updateNature(pokemon: OwnedPokemon, newNature: String) {
