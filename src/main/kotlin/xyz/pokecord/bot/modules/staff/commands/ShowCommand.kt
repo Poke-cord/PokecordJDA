@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.developer.commands
+package xyz.pokecord.bot.modules.staff.commands
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.modules.developer.DeveloperCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 
-class ShowCommand : DeveloperCommand() {
+class ShowCommand : StaffCommand() {
   override val name = "Show"
 
   @Executor
