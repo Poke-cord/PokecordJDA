@@ -250,7 +250,7 @@ modules:
             slotOutOfRange: |-
               Pokecord reached for your slot number. Too bad it can't reach far.
               > **Specify a slot number between 1 and 4.**
-                  replaceConfirmation:
+          replaceConfirmation:
             title: A Move Replacement is Pending
             description: |-
               **Current Move**: {{move}}
@@ -334,7 +334,8 @@ modules:
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
           auctionSold: |-
-            The auction you are trying to unlist has been sold or ended!
+            Pokecord went on an adventure and came back with nothing.
+            > **Auction was sold or has ended. Unlist another auction.**
       bid:
         bidNotification:
           description: |-
@@ -379,7 +380,7 @@ modules:
             > **Report this error [here](https://discord.gg/poke).**
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
           notEnoughCredits: |-
-            Got spare credits somewhere else?
+            Got spare credits lying around?
             > **Gain more credits to bid {{amount}} credits.**
           topBid: |-
             A little too ambitious!
@@ -396,13 +397,13 @@ modules:
           noPokemonFound: |- 
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
-        title: Auction {{auctionID}} | Level {{pokemonLevel}} {{pokemonName}}
+        title: Auction {{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
           title: "🎪 | Auction House"
         errors:
           noResults: |-
-            You're here! But auctions are not.
+            You're here! But the auction you searched is not.
             > **Wait for an auction to start.**
       notify:
         toggledOn:
@@ -491,7 +492,9 @@ modules:
           notYourListing: |-
             You tried to unlisted someone else's listing. It didn't work. 
             > **Unlist your own listings.**
-          bidsActive: You can't unlist an post that has bids on it.
+          bidsActive: |-
+            Too much finance! Pokecord can't figure it out.
+            > **Unlist listings that haven't been purchased.**
           noPokemonFound: |- 
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
@@ -499,7 +502,7 @@ modules:
         sold:
           title: A Listing has been Sold
           description: |-
-            **Listing Item**: {{ivPercentage}}% {{pokemon}}
+            **Listing Item**: {{ivPercentage}} {{pokemonName}}
             **Buyer**: {{buyer}}
             **Price**: {{price}} credits
             
@@ -507,7 +510,7 @@ modules:
         confirmed:
           title: A Listing has been Purchased
           description: |-
-            **Listing Item**: {{pokemonIV}} {{pokemon}}
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
             **Price**: {{price}} credits
             
             The Pokémon has been added to your collection.
@@ -527,11 +530,17 @@ modules:
             Pokecord went on an adventure and came back with nothing.
             > **Could not find listing {{id}}. Search for another listing.**
           selfBuy: |-
-            You purchased on your own listing. Wait, you can't.
+            You purchased your own listing. Wait, you can't.
             > **Purchase another user's listing.**
-          noPokemonFound: The listing's pokémon seems to be lost?
-          notEnoughCredits: You don't have enough credits to buy this listing.
-          unlisted: This listing has been unlisted.
+          noPokemonFound: |- 
+            Pokémon not found.
+            > **Report this error [here](https://discord.gg/poke).**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase this listing.**
+          unlisted: |-
+            Pokecord went on an adventure and came back with nothing.
+            > **Listing has been unlisted. Search for another listing.**
       info:
         errors:
           noListingId: Please provide a valid listing ID.
@@ -547,8 +556,8 @@ modules:
           title: "🏘️ | Marketplace"
         errors:
           noResults: |-
-            You're here! But listings are not.
-            > **Wait for an listing to be posted.**
+            You're here! But the listing you searched is not.
+            > **Wait for a listing to be posted.**
   trading:
     commands:
       trade:
