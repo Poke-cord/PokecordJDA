@@ -475,7 +475,6 @@ modules:
           title: A Listing is Pending Removal
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
-            **Price**: {{price}} credits
             
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         confirmed:
