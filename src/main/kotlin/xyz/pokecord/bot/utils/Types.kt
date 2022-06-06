@@ -49,6 +49,7 @@ data class CountResult(val count: Int)
 sealed class PokemonResolvable(val data: Any?) {
   class Latest : PokemonResolvable("latest")
   class Int(data: kotlin.Int?) : PokemonResolvable(data)
+  class Ivs(data: kotlin.Int?) : PokemonResolvable(data)
 }
 
 enum class PokemonOrder(vararg val aliases: String) {

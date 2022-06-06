@@ -20,7 +20,7 @@ misc:
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
       catch: You see em. You caught'em. You gotta catch’em all.
-      favorite: Want to favorite a friend? Or just un-favorite it? Favorite a Pokémon and it will be in your favorites.
+      favorite: Want to favorite a friend? Or just un-favorite it?
       hint: Not so bright? Wumpus isn’t either. Trigger your memory and buy a hint with credits.
       info: In a hurry? Get nitty gritty statistics on the go.
       move: Ever wonder what a move does? Here's an encyclopedia of information crammed into one command!
@@ -398,7 +398,7 @@ modules:
           noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
           tradingYourself: You can't trade with yourself!
           partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `p!start` command?"
-          alreadyInTrade: You cannot start another trade until your new one is done..
+          alreadyInTrade: You cannot start a trade until your trade / release session is done..
           alreadyRequested: You've already sent out a trade request that has not been accepted yet! Please be patient in order to start another trade.
       status:
         embeds:
@@ -692,25 +692,40 @@ modules:
           center:
             embed:
               description: |-
-                **Actions**:
-                `{{prefix}}release <pokemon number(s)>` - Exchange a level 100 Pokémon for EV items
+                **Try using**:
+                `{{prefix}}release add <pokemon number(s)>`
+
+                **Ex.**
+                `{{prefix}}release add 11, 22, 33`
+                `{{prefix}}release add 1-20`
               title: Release Center
+            releaseStarted:
+              title: Release Session Started
+              description: "**NOTE: You can only release 50 Pokémon per session.**"
+            releaseCancelled:
+              title: Trade Request Cancelled
+              description: "Trade request to {{partner}} has been denied or has expired."
+            removePokemon:
+              title: Pokémon Withdrawn
+              description: "{{pokemon}} has been withdrawn from your trading session."
           confirmation:
             embed:
               description: |-
-                **Name**: {{pokemon}}
-                **Level**: {{level}}
-                **IV Percent**: {{ivPercentage}}
+                {{pokemon}}
 
                 React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
               title: A Pokémon Release is Pending
+            embedNoConfirm:
+              description: |-
+                {{pokemon}}
+              title: A Pokémon Release is Pending
+            errors:
+              emptyRelease: You must at least choose one Pokémon before confirming the release.
           released:
             description: |-
-              **Name**: {{pokemon}}
-              **Level**: {{level}}
-              **IV Percent**: {{ivPercentage}}
+              **Names**: {{pokemon}}
               **Rewards**: {{rewards}}
-            title: A Pokémon has been Released
+            title: Pokémons have been Released
           cancelled:
             description: Releasing cancelled by user.
             title: Releasing Cancelled
@@ -719,6 +734,10 @@ modules:
                         before releasing it!'
           favoritePokemon: '**Suggestion**: Try removing this Pokémon from
                         your favorites before releasing it!'
+          notInRelease: You haven't started a release session yet, please do that first.
+          noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
+          alreadyInRelease: You cannot start release session until your new release / trading one is done..
+          notInRange: The selected release range is too big or invalid. Try selecting a smaller one. 
       select:
         errors:
           alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t

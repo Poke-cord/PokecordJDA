@@ -56,6 +56,10 @@ class PokemonRepository(
     return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::index eq index)
   }
 
+  suspend fun getPokemonByTotalIv(ownerId: String, totalIv: Int): OwnedPokemon? {
+    return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::totalIv eq totalIv)
+  }
+
   suspend fun getLatestPokemon(ownerId: String): OwnedPokemon? {
     return collection.find(OwnedPokemon::ownerId eq ownerId).sort(descending(OwnedPokemon::timestamp)).limit(1).first()
   }

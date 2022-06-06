@@ -126,6 +126,9 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     if (pokemonResolvable is PokemonResolvable.Latest) {
       return bot.database.pokemonRepository.getLatestPokemon(jdaUser.id)
     }
+    if (pokemonResolvable is PokemonResolvable.Ivs) {
+      return bot.database.pokemonRepository.getPokemonByTotalIv(jdaUser.id, (pokemonResolvable.data as Int))
+    }
     return null
   }
 
