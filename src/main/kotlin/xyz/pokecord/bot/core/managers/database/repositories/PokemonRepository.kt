@@ -321,9 +321,9 @@ class PokemonRepository(
       requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
     }
 
-    if (pokemon.id != 790 && pokemon.heldItemId != 206) {
+    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) {
       val evolution = pokemon.data.nextEvolutions.map { EvolutionChain.details(it) }.find { evolutionDetails ->
-        if (evolutionDetails?.evolvedSpeciesId == 292) return@find false // don't evolve into Shedinja
+        if (evolutionDetails?.evolvedSpeciesId in Pokemon.dontEvolveInto) return@find false
 
         val isGenderOk =
           if (evolutionDetails?.genderId != 0) if (evolutionDetails?.genderId == 1) pokemon.gender == 0 else if (evolutionDetails?.genderId == 2) pokemon.gender == 1 else true else true
@@ -496,51 +496,61 @@ class PokemonRepository(
     update: Bson,
     updateOptions: UpdateOptions = UpdateOptions()
   ): UpdateResult {
-    val session = database.startSession()
-    return session.use { clientSession ->
-      clientSession.startTransaction()
-      val insertedId = database.transferLogCollection.insertOne(
-        clientSession,
-        TransferLog(
-          filter.json,
-          update.json,
-          context.author.id,
-          context.channel.id,
-          performedInGuild = context.guild?.id
-        )
-      ).insertedId!!.asObjectId().value.toId<TransferLog>()
+    var result = UpdateResult.unacknowledged()
+    val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(filter)
+      .projection(OwnedPokemon::_id from OwnedPokemon::_id)
+      .toList()
+      .map { it._id }
 
-      var done = 0
-      do {
-        val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
-          .projection(OwnedPokemon::_id from OwnedPokemon::_id)
-          .skip(done)
-          .limit(Config.transferChunkSize)
-          .toList()
-          .map { it._id }
-        done += matchedIds.size
+    val insertedId = database.transferLogCollection.insertOne(
+      TransferLog(
+        filter.json,
+        update.json,
+        context.author.id,
+        context.channel.id,
+        performedInGuild = context.guild?.id
+      )
+    ).insertedId!!.asObjectId().value.toId<TransferLog>()
+
+    val chunks = matchedIds
+      .chunked(Config.transferChunkSize)
+
+    for (chunk in chunks) {
+      val session = database.startSession()
+      session.use {
+        it.startTransaction()
+        val updateResult = collection.updateMany(it, OwnedPokemon::_id `in` chunk, update, updateOptions)
         database.transferLogCollection.updateOne(
-          clientSession,
+          it,
           TransferLog::_id eq insertedId,
           combine(
-            pushEach(TransferLog::matchedIds, matchedIds),
+            pushEach(TransferLog::matchedIds, chunk),
             set(TransferLog::status setTo TransferLog.Status.STARTED)
           )
         )
-        if (matchedIds.size < Config.transferChunkSize) break
-      } while (true)
-
-      val updateResult = collection.updateMany(filter, update, updateOptions)
-      database.transferLogCollection.updateOne(
-        clientSession,
-        TransferLog::_id eq insertedId,
-        combine(
-          set(TransferLog::status setTo TransferLog.Status.COMPLETE)
-        )
-      )
-      clientSession.commitTransactionAndAwait()
-      updateResult
+        it.commitTransactionAndAwait()
+        if (updateResult.wasAcknowledged()) {
+          result = if (result.wasAcknowledged()) {
+            UpdateResult.acknowledged(
+              result.matchedCount + updateResult.matchedCount,
+              result.modifiedCount + updateResult.modifiedCount,
+              null
+            )
+          } else {
+            UpdateResult.acknowledged(updateResult.matchedCount, updateResult.modifiedCount, null)
+          }
+        }
+      }
     }
+
+    database.transferLogCollection.updateOne(
+      TransferLog::_id eq insertedId,
+      combine(
+        set(TransferLog::status setTo TransferLog.Status.COMPLETE)
+      )
+    )
+
+    return result
   }
 
   suspend fun updateNature(pokemon: OwnedPokemon, newNature: String) {

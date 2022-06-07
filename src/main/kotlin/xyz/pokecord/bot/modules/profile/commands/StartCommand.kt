@@ -36,7 +36,7 @@ class StartCommand : Command() {
             val names = it.value.mapNotNull { pokemon -> context.translator.pokemonName(pokemon) }
             addField("**$generation ${it.key}**", names.joinToString(" | "), false)
           }
-          setImage("https://cdn.discordapp.com/attachments/720316657511301131/743996499951878154/340.png")
+          setImage("https://cdn.discordapp.com/attachments/771568547158949948/979295636555960340/unknown.png")
         }.build()
       ).queue()
     }

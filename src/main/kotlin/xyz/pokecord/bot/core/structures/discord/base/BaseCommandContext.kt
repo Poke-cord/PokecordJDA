@@ -210,7 +210,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           mapOf(
             "botUsername" to jda.selfUser.name,
             "user" to author.asMention,
-            "tosUrl" to "https://pokecord.xyz/rules"
+            "tosUrl" to "https://pokecord.fandom.com/wiki/Terms_of_Service"
           )
         )
       )
@@ -218,9 +218,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun isStaff(): Boolean {
-    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
-      author.id
-    ).awaitSuspending())
+//    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
+//      author.id
+//    ).awaitSuspending())
+    return Config.devs.contains(author.id) || bot.cache.staffMemberIds.containsAsync(author.id).awaitSuspending()
   }
 
   companion object {
