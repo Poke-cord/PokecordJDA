@@ -3,7 +3,6 @@ package xyz.pokecord.bot.modules.staff.commands
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import net.dv8tion.jda.api.entities.User
 import org.bson.types.ObjectId
 import org.litote.kmongo.Id
 import org.litote.kmongo.div
@@ -22,22 +21,25 @@ object LogsCommand : StaffCommand() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument user: User?
+    @Argument userId: String?
   ) {
-    if (user == null) {
-      context.reply(context.embedTemplates.error("gib user pls").build()).queue()
+    if (userId == null) {
+      context.reply(context.embedTemplates.error("gib user id pls").build()).queue()
       return
     }
 
-    val logRetriever = LogRetriever(user.id, module.bot.database)
-    val auctionLogs = logRetriever.getAuctionLogs()
-    val giftLogs = logRetriever.getGiftLogs()
-    val marketLogs = logRetriever.getMarketLogs()
-    val tradeLogs = logRetriever.getTradeLogs()
-    println(auctionLogs)
-    println(giftLogs)
-    println(marketLogs)
-    println(tradeLogs)
+    val logRetriever = LogRetriever(userId, module.bot.database)
+    val auctionLogs = logRetriever.getAuctionLogs().ifEmpty { "None" }
+    val giftLogs = logRetriever.getGiftLogs().ifEmpty { "None" }
+    val marketLogs = logRetriever.getMarketLogs().ifEmpty { "None" }
+    val tradeLogs = logRetriever.getTradeLogs().ifEmpty { "None" }
+    context
+      .addAttachment(auctionLogs.toByteArray(), "auction.txt")
+      .addAttachment(giftLogs.toByteArray(), "gift.txt")
+      .addAttachment(marketLogs.toByteArray(), "market.txt")
+      .addAttachment(tradeLogs.toByteArray(), "trade.txt")
+      .reply("Here are the logs for ${userId}!")
+      .queue()
   }
 
   class LogRetriever(
