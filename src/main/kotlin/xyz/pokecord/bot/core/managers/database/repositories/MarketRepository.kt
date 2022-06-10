@@ -62,10 +62,15 @@ class MarketRepository(
   suspend fun markSold(listing: Listing, buyerId: String, session: ClientSession) {
     listing.sold = true
     listing.soldTo = buyerId
+    listing.soldAt = System.currentTimeMillis()
     collection.updateOne(
       session,
       Listing::id eq listing.id,
-      set(Listing::sold setTo true, Listing::soldTo setTo buyerId)
+      set(
+        Listing::sold setTo true,
+        Listing::soldTo setTo buyerId,
+        Listing::soldAt setTo listing.soldAt
+      )
     )
     setCacheListing(listing)
   }
