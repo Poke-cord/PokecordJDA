@@ -69,7 +69,11 @@ object LogsCommand : StaffCommand() {
     }
 
     private fun <T> Id<T>.toISODate(): String {
-      return sdf.format(ObjectId(this.toString()).date)
+      return ObjectId(this.toString()).timestamp.toLong().toISODate()
+    }
+
+    private fun Long.toISODate(): String {
+      return sdf.format(Date(this))
     }
 
     suspend fun getAuctionLogs(): String {
@@ -141,7 +145,7 @@ object LogsCommand : StaffCommand() {
         val buyer = it.soldTo?.let { buyerId -> getUser(buyerId) }
         val pokemon = getPokemon(it.pokemon)
 
-        "[${it.id}] - From $owner to $buyer - $pokemon for ${it.price}"
+        "[${it.id}] - From $owner to $buyer - $pokemon for ${it.price} at ${it.soldAt?.toISODate()}"
       }
         .toList()
         .joinToString("\n\n")
