@@ -5,8 +5,8 @@ import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.litote.kmongo.eq
-import org.litote.kmongo.replaceOne
 import org.litote.kmongo.set
 import org.litote.kmongo.setTo
 import xyz.pokecord.bot.core.managers.database.Database
@@ -104,16 +104,14 @@ class SpawnChannelRepository(
 
   suspend fun setSpawnChannels(guildId: String, spawnChannels: List<SpawnChannel>) {
     setCacheSpawnChannels(guildId, spawnChannels)
-    if (spawnChannels.isNotEmpty()) {
-      collection.bulkWrite(
-        *spawnChannels.map {
-          replaceOne(SpawnChannel::id eq it.id, it)
-        }.toTypedArray()
-      )
-    } else {
-      collection.deleteMany(
-        SpawnChannel::guildId eq guildId
-      )
+    val session = database.startSession()
+    session.use {
+      it.startTransaction()
+      collection.deleteMany(it, SpawnChannel::guildId eq guildId)
+      if (spawnChannels.isNotEmpty()) {
+        collection.insertMany(it, spawnChannels)
+      }
+      it.commitTransactionAndAwait()
     }
   }
 
