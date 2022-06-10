@@ -19,21 +19,21 @@ class Database(cache: Cache) {
   private val client: CoroutineClient
   val database: CoroutineDatabase
 
-  private val auctionCollection: CoroutineCollection<Auction>
   private val battleCollection: CoroutineCollection<Battle>
   private val configCollection: CoroutineCollection<Config>
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>
-  private val marketCollection: CoroutineCollection<Listing>
   private val orderCollection: CoroutineCollection<Order>
   private val ownedPokemonCollection: CoroutineCollection<OwnedPokemon>
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
   private val userCollection: CoroutineCollection<User>
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
-  private val tradeCollection: CoroutineCollection<Trade>
 
+  val auctionCollection: CoroutineCollection<Auction>
   val giftCollection: CoroutineCollection<Gift>
+  val marketCollection: CoroutineCollection<Listing>
+  val tradeCollection: CoroutineCollection<Trade>
   val transferLogCollection: CoroutineCollection<TransferLog>
 
   val auctionRepository: AuctionsRepository

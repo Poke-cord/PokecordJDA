@@ -4,12 +4,14 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.litote.kmongo.Id
+import org.litote.kmongo.newId
 import xyz.pokecord.bot.utils.Config
 
 @Serializable
 data class Bid(
   val userId: String,
-  val amount: Int
+  val amount: Int,
+  val _id: @Contextual Id<Bid> = newId()
 )
 
 @Serializable
