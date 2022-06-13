@@ -69,7 +69,7 @@ object LogsCommand : StaffCommand() {
     }
 
     private fun <T> Id<T>.toISODate(): String {
-      return ObjectId(this.toString()).timestamp.toLong().toISODate()
+      return (ObjectId(this.toString()).timestamp.toLong() * 1000).toISODate() // ObjectId timestamp gives us seconds so we multiply by 1000 to get the milliseconds
     }
 
     private fun Long.toISODate(): String {
