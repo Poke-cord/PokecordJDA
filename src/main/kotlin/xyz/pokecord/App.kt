@@ -6,6 +6,7 @@ import io.sentry.Sentry
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
+import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.modules.auctions.AuctionsModule
@@ -71,6 +72,7 @@ object App {
         }
         val shardManagerBuilder = DefaultShardManagerBuilder
           .createLight(token)
+          .enableCache(CacheFlag.MEMBER_OVERRIDES)
           .injectKTX()
           .setStatus(OnlineStatus.DO_NOT_DISTURB)
           .setActivity(Activity.playing("Initializing..."))
