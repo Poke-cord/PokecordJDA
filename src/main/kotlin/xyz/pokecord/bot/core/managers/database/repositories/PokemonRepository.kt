@@ -6,8 +6,6 @@ import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.UpdateResult
 import com.mongodb.reactivestreams.client.ClientSession
-import kotlinx.serialization.json.*
-import org.bson.BsonDocument
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -43,8 +41,8 @@ class PokemonRepository(
     collection.createIndex(Indexes.ascending("level"))
     collection.createIndex(Indexes.ascending("totalIv"))
     collection.createIndex(Indexes.ascending("ownerId"))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("id"), Indexes.ascending("_id")))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("_id")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("id")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("nickname")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("ownerId")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
   }
@@ -633,6 +631,51 @@ class PokemonRepository(
     val pipeline: Array<Bson>
       get() {
         val aggregation = mutableListOf<Bson>()
+        if (ids.isNotEmpty()) {
+          aggregation.add(match(OwnedPokemon::id `in` ids.asIterable()))
+        }
+        if (regex != null || searchQuery != null) {
+          aggregation.add(
+            match(
+              or(
+                OwnedPokemon::id `in` searchIds,
+                OwnedPokemon::nickname.regex(
+                  (regex ?: searchQuery!!).toString(),
+                  if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
+                ),
+              )
+            )
+          )
+
+//          aggregation.add(
+//            BsonDocument.parse(
+//              buildJsonObject {
+//                putJsonObject("\$match") {
+//                  putJsonArray("\$or") {
+//                    addJsonObject {
+//                      putJsonObject(OwnedPokemon::nickname.name) {
+//                        put("\$regex", (regex ?: searchQuery!!).toString())
+//                        put(
+//                          "\$options",
+//                          if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
+//                        )
+//                      }
+//                    }
+//                    addJsonObject {
+//                      putJsonObject(OwnedPokemon::id.name) {
+//                        putJsonArray("\$in") {
+//                          searchIds.forEach {
+//                            add(it)
+//                          }
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//              }.toString()
+//            )
+//          )
+        }
         if (favorites == true) {
           aggregation.add(match(OwnedPokemon::favorite eq true))
         }
@@ -644,39 +687,6 @@ class PokemonRepository(
           if (natureObj != null) {
             aggregation.add(match(OwnedPokemon::nature eq natureObj.name!!.name))
           }
-        }
-        if (ids.isNotEmpty()) {
-          aggregation.add(match(OwnedPokemon::id `in` ids.asIterable()))
-        }
-        if (regex != null || searchQuery != null) {
-          aggregation.add(
-            BsonDocument.parse(
-              buildJsonObject {
-                putJsonObject("\$match") {
-                  putJsonArray("\$or") {
-                    addJsonObject {
-                      putJsonObject(OwnedPokemon::nickname.name) {
-                        put("\$regex", (regex ?: searchQuery!!).toString())
-                        put(
-                          "\$options",
-                          if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
-                        )
-                      }
-                    }
-                    addJsonObject {
-                      putJsonObject(OwnedPokemon::id.name) {
-                        putJsonArray("\$in") {
-                          searchIds.forEach {
-                            add(it)
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }.toString()
-            )
-          )
         }
         if (!noSorting) aggregation.add(orderBson ?: sort(ascending(OwnedPokemon::index)))
         return aggregation.toTypedArray()
