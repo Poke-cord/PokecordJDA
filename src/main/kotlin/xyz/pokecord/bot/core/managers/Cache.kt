@@ -161,8 +161,8 @@ class Cache {
       else delay(100)
     }
 
-    currentGifts.addAsync(senderId).awaitSuspending()
-    currentGifts.addAsync(receiverId).awaitSuspending()
+    currentGifts.addAsync(senderId, 5, TimeUnit.MINUTES).awaitSuspending()
+    currentGifts.addAsync(receiverId, 5, TimeUnit.MINUTES).awaitSuspending()
     block()
     currentGifts.removeAsync(senderId).awaitSuspending()
     currentGifts.removeAsync(receiverId).awaitSuspending()
