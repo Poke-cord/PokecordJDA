@@ -63,6 +63,13 @@ class TradeRepository(
     )
   }
 
+  suspend fun setRelease(trade: Trade, traderId: String) {
+    collection.updateOne(
+      Trade::_id eq trade._id,
+      set((if (trade.initiator.userId == traderId) Trade::initiator else Trade::receiver) / TraderData::releaseTrade setTo true)
+    )
+  }
+
   suspend fun clearConfirmState(trade: Trade, session: ClientSession) {
     collection.updateOne(
       session,

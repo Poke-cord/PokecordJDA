@@ -22,6 +22,14 @@ object TradeCancelCommand: Command() {
       ).queue()
       return
     }
+    if(tradeState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.commands.status.errors.inRelease")
+        ).build()
+      ).queue()
+      return
+    }
 
     val initiator = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
     val partner = if(tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator

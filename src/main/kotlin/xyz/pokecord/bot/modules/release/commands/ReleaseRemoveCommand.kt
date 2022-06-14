@@ -25,6 +25,14 @@ object ReleaseRemoveCommand : Command() {
       ).queue()
       return
     }
+    if(!releaseState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.release.errors.inTrade")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (pokemon == null) {
       context.reply(

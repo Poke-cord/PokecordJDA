@@ -22,6 +22,14 @@ object ReleaseStatusCommand : Command() {
       ).queue()
       return
     }
+    if(!releaseState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.release.errors.inTrade")
+        ).build()
+      ).queue()
+      return
+    }
 
     val authorReleaseData = releaseState.initiator
 

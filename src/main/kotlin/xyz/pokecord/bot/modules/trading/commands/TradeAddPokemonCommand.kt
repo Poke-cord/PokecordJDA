@@ -34,6 +34,15 @@ object TradeAddPokemonCommand : Command() {
         return
       }
 
+      if(tradeState.initiator.releaseTrade) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.trading.commands.status.errors.inRelease")
+          ).build()
+        ).queue()
+        return
+      }
+
       val userData = context.getUserData()
       val selectedPokemon = context.resolvePokemon(context.author, userData, pokemon)
 

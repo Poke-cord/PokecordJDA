@@ -24,6 +24,14 @@ object TradeAddCreditsCommand : Command() {
       ).queue()
       return
     }
+    if(tradeState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.commands.status.errors.inRelease")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (amount == null || amount < 0) {
       context.reply(

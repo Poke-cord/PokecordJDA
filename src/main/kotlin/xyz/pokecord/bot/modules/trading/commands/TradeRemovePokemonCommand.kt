@@ -26,6 +26,14 @@ object TradeRemovePokemonCommand : Command() {
       ).queue()
       return
     }
+    if(tradeState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.commands.status.errors.inRelease")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (pokemon == null) {
       context.reply(

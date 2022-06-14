@@ -25,6 +25,14 @@ object ReleaseConfirmCommand : Command() {
       ).queue()
       return
     }
+    if(!releaseState.initiator.releaseTrade) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.pokemon.commands.release.errors.inTrade")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (
       releaseState.initiator.pokemon.isEmpty()
@@ -78,7 +86,6 @@ object ReleaseConfirmCommand : Command() {
     session.use { clientSession ->
       clientSession.startTransaction()
 
-      var pokemonsMess = ""
       var rewardsMess = ""
 
       val rewardsMap = mutableMapOf<EVItem.EVItems, Int>()
@@ -94,8 +101,6 @@ object ReleaseConfirmCommand : Command() {
 
         module.bot.database.pokemonRepository.releasePokemon(pokemon, clientSession)
         module.bot.database.userRepository.releasePokemon(authorUserData, pokemon, clientSession)
-
-        pokemonsMess += (context.translator.pokemonDisplayName(pokemon) + ", ")
       }
 
       for ((key, value) in rewardsMap) {
@@ -109,7 +114,7 @@ object ReleaseConfirmCommand : Command() {
           context.translate(
             "modules.pokemon.commands.release.embeds.released.description",
             mapOf(
-              "pokemon" to pokemonsMess.dropLast(2),
+              "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" },
               "rewards" to rewardsMess.dropLast(2)
             )
           ),

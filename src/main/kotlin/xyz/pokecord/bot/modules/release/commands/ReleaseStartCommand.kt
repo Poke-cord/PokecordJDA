@@ -24,6 +24,11 @@ object ReleaseStartCommand : Command() {
 
     context.bot.database.tradeRepository.createTrade(context.author.id, context.author.id)
 
+    val trade = context.getTradeState()
+    if (trade != null) {
+      context.bot.database.tradeRepository.setRelease(trade, context.author.id)
+    }
+
     context.reply(
       context.embedTemplates.normal(
         context.translate("modules.pokemon.commands.release.embeds.center.releaseStarted.description",),

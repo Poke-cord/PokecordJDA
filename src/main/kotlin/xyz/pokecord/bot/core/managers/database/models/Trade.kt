@@ -10,6 +10,7 @@ data class TraderData(
   val userId: String,
   val partnerId: String,
   var confirmed: Boolean = false,
+  var releaseTrade: Boolean = false,
   var credits: Int = 0,
   var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf(),
 )
