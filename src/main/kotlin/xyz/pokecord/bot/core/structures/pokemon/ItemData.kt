@@ -120,6 +120,7 @@ data class ItemData(
           usesTokens = true
         )
       )
+      
       // Credit Conversion Token
       items.add(
         ItemData(
@@ -130,6 +131,20 @@ data class ItemData(
           0,
           0,
           0
+        )
+      )
+      
+      // Nature Candy
+      items.add(
+        ItemData(
+          NatureCandyItem.id,
+          "nature-candy",
+          "Nature Candy",
+          NatureCandyItem.categoryId,
+          7,
+          0,
+          0,
+          usesTokens = true
         )
       )
     }
