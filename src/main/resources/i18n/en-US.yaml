@@ -45,7 +45,7 @@ misc:
           using Pokémon commands!
         title: A User Must Start
   confirmation:
-    timeoutText: "React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel."
+    timeoutText: Reactions will automatically time out in 30 seconds.
   embeds:
     error:
       footer: Questions? Join our official server at discord.gg/poke.
@@ -197,7 +197,7 @@ modules:
       battle:
         errors:
           alreadyBattling: |-
-            A little too ambitious!
+            Two you? No. Two duels? Also no.
             > **Finish your current duel first.**
           partnerAlreadyBattling: |-
             {{partner}}'s in combat!
@@ -245,7 +245,7 @@ modules:
               Congratulations!
           errors:
             inBattle: |-
-              A little too ambitious!
+              Two you? No. Two things at once? Also no.
               > **Finish your current duel first.**
             cancelled: Move teaching has been cancelled.
             moveNotFound: |-
@@ -282,7 +282,7 @@ modules:
       list:
         errors:
           inTrade: |-
-            A little too ambitious!
+            Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the pokémon you would like to list.
           noPokemonFound: The pokémon you are looking for doesn't seem to exist.
@@ -389,7 +389,7 @@ modules:
             Got spare credits lying around?
             > **Gain more credits to bid {{amount}} credits.**
           topBid: |-
-            A little too ambitious!
+            Two you? No. Two top bids? Also no.
             > **You already have the top bid of {{bid}} credits.**
           bidTooLow: |-
             You must bid at least **{{bid}} credits** on this auction.
@@ -452,7 +452,7 @@ modules:
       list:
         errors:
           inTrade: |-
-            A little too ambitious!
+            Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the pokémon you would like to list.
           noPokemonFound: |-
@@ -877,51 +877,64 @@ modules:
                 **Try using**:
                 `{{prefix}}release add <pokemon number(s)>`
 
-                **Ex.**
+                **E.g.**
                 `{{prefix}}release add 11, 22, 33`
                 `{{prefix}}release add 1-20`
-              title: Release Center
+              title: Release Add Usage
             releaseStarted:
-              title: Release Session Started
-              description: "**NOTE: You can only release 50 Pokémon per session.**"
-            releaseCancelled:
-              title: Trade Request Cancelled
-              description: "Trade request to {{partner}} has been denied or has expired."
+              title: A Release Session has Started
+              description: "Release session has been initiated.\n> **You can only release 50 Pokémon per session.**"
             removePokemon:
-              title: Pokémon Withdrawn
-              description: "{{pokemon}} has been withdrawn from your trading session."
+              title: A Pokémon has been Removed
+              description: |-
+                **Name**: {{pokemon}}
+                
+                Pokémon were removed from release.
           confirmation:
             embed:
               description: |-
                 {{pokemon}}
 
                 React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-              title: A Pokémon Release is Pending
+              title: Pokémon Releasing is Pending
             embedNoConfirm:
               description: |-
                 {{pokemon}}
-              title: A Pokémon Release is Pending
+              title: Pokémon have been Added
             errors:
-              emptyRelease: You must at least choose one Pokémon before confirming the release.
+              emptyRelease: |-
+                You released nothing. Wait, you can't.
+                > **Add Pokémon to your release session before releasing.**
           released:
             description: |-
+              **Pokémon**:
               {{pokemon}}
               
-              **Rewards**: {{rewards}}
+              **Rewards**: 
+              {{rewards}}
             title: Pokémons have been Released
           cancelled:
-            description: Releasing cancelled by user.
-            title: Releasing Cancelled
+            description: |-
+              Success!
+              > **The release session was cancelled.**
+            title: Release Session has been Cancelled
         errors:
           selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
                         before releasing it!'
           favoritePokemon: '**Suggestion**: Try removing this Pokémon from
                         your favorites before releasing it!'
-          notInRelease: You haven't started a release session yet, please do that first.
-          inTrade: You should finish your trade session first before releasing.
-          noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
-          alreadyInRelease: You cannot start release session until your new release / trading one is done..
-          notInRange: The selected release range is too big or invalid. Try selecting a smaller one. 
+          notInRelease: |-
+            Priorities!
+            > **Start a release session first.**
+          inTrade: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current trade first.**
+          alreadyInRelease: |-
+            Two you? No. Two release sessions? Also no.
+            > **Finish your current release session first.**
+          notInRange: |-
+            Pokecord reached for your Pokémon. Too bad it can't reach far.
+            > **Specify up to a maximum of 50 Pokémon.**
       select:
         errors:
           alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
