@@ -57,13 +57,13 @@ object BattleActionEvent : Event() {
           val partnerPokemon = module.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
 
           event.hook.sendMessageEmbeds(Embed {
-            title = "${event.interaction.user.name} VS ${partnerUser.name}"
+            title = "${event.interaction.user.name} vs. ${partnerUser.name}"
             // TODO: use translator somehow
             description = """
-                  ${pokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${pokemon.stats.hp}HP**
-                  ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
+                  **${pokemon.displayName}**: ${battle.initiator.pokemonStats.hp}/${pokemon.stats.hp} HP
+                  **${partnerPokemon.displayName}**: ${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                   
-                  **Choose a move to use**
+                  > **Select a move to execute.**
                 """.trimIndent()
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
@@ -79,7 +79,7 @@ object BattleActionEvent : Event() {
         is BattleModule.Buttons.BattleAction.ChooseMove -> {
           if (battle.endedAtMillis != null) {
             event.replyEmbeds(Embed {
-              title = "Error"
+              title = "Battle Already Ended"
               color = EmbedTemplates.Color.RED.code
               description = "This battle has already ended!"
             }).setEphemeral(true).queue()
@@ -91,7 +91,7 @@ object BattleActionEvent : Event() {
           val (self, partner) = battle.getTrainers(event.user.id)
           if (self.pendingMove != null) {
             event.replyEmbeds(Embed {
-              title = "Error"
+              title = "Move Already Pending"
               color = EmbedTemplates.Color.RED.code
               description = "You already have a move pending!"
             }).setEphemeral(true).queue()
@@ -214,18 +214,18 @@ object BattleActionEvent : Event() {
             val opponentPokemon = if (self.id == battle.initiator.id) partnerPokemon else selfPokemon
 
             event.hook.sendMessageEmbeds(Embed {
-              title = "${event.interaction.user.name} VS ${partnerUser.name}"
+              title = "${event.interaction.user.name} vs. ${partnerUser.name}"
               description = """
-                ${selfPokemon.displayName}: **${self.pokemonStats.hp}/${selfPokemon.stats.hp}HP**
-                ${partnerPokemon.displayName}: **${partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
+                **${selfPokemon.displayName}**: ${self.pokemonStats.hp}/${selfPokemon.stats.hp} HP
+                **${partnerPokemon.displayName}**: ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                 
                 ${getMoveResultTexts()}
                 ${
                 if (winner != null) """
-                    **${if (winner.id == self.id) event.user.name else partnerUser.name}** won the battle, **${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName}** gained **${gainedXp}** XP!                    
+                    **${if (winner.id == self.id) event.user.name else partnerUser.name}** won the battle! **${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName}** gained **${gainedXp}** XP!                    
                     **${
                   if (winner.id == self.id) partnerUser.name else event.user.name
-                }** lost the battle, **${
+                }** lost the battle! **${
                   (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName
                 }** fainted!
                   """.trimIndent()
@@ -255,8 +255,8 @@ object BattleActionEvent : Event() {
               .queue()
           } else {
             event.hook.sendMessageEmbeds(Embed {
-              title = "Move Chosen"
-              description = "Move will be used when the other player chooses a move."
+              title = "Move Locked In"
+              description = "The move will be executed when your opponent is ready."
             }).queue()
           }
         }
@@ -272,7 +272,7 @@ object BattleActionEvent : Event() {
               event.replyEmbeds(Embed {
                 title = "Failed to End Battle"
                 description =
-                  "This battle cannot be ended yet. You can end the battle ${TimeFormat.RELATIVE.format(minRequiredTime)}."
+                  "Thou shall not show weaknesss. The battle can be ended in ${TimeFormat.RELATIVE.format(minRequiredTime)}."
               }).setEphemeral(true).queue()
             } else {
               module.bot.database.battleRepository.endBattle(battle)
@@ -291,11 +291,11 @@ object BattleActionEvent : Event() {
   private fun getMoveResultText(
     moveResult: Battle.MoveResult, selfPokemon: OwnedPokemon, partnerPokemon: OwnedPokemon, moveData: MoveData
   ): String {
-    if (moveResult.isMissed) return "**${selfPokemon.displayName}** missed **${moveData.name}**"
+    if (moveResult.isMissed) return "**${selfPokemon.displayName}** used **${moveData.name}**, but it missed!"
     if (moveResult.nothingHappened) return "**${selfPokemon.displayName}** used **${moveData.name}**, but nothing happened."
     val sb = StringBuilder()
-    sb.append("**${selfPokemon.displayName}** dealt **${-moveResult.defenderDamage}HP** to **${partnerPokemon.displayName}**")
-    sb.appendLine("${if (moveResult.selfDamage > 0) "and **${-moveResult.selfDamage}HP** to itself" else ""} using **${moveData.name}**.")
+    sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
+    sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
     if (moveResult.isCritical) sb.appendLine("It's a critical hit!")
     if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!")
     else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective!")
