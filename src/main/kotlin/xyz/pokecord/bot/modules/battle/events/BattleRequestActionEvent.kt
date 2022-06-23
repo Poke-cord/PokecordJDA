@@ -52,13 +52,13 @@ object BattleRequestActionEvent : Event() {
         // TODO: use context-less EmbedTemplates here when it's available after merge
         event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(
           Embed {
-            title = "${initiator.name} VS ${partner.name}"
+            title = "${initiator.name} vs. ${partner.name}"
             // TODO: use translator somehow
             description = """
-              ${initiatorPokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${
+              **${initiatorPokemon.displayName}**: ${battle.initiator.pokemonStats.hp}/${
               initiatorPokemon.stats.hp
-            }HP**
-              ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
+            } HP
+              **${partnerPokemon.displayName}**: ${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
             """.trimIndent()
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
