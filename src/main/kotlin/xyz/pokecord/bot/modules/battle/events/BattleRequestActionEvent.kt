@@ -55,10 +55,10 @@ object BattleRequestActionEvent : Event() {
             title = "${initiator.name} VS ${partner.name}"
             // TODO: use translator somehow
             description = """
-              ${initiatorPokemon.displayName}: **${battle.initiator.pokemonStats.hp}/${
+              **${initiatorPokemon.displayName}**: ${battle.initiator.pokemonStats.hp}/${
               initiatorPokemon.stats.hp
-            }HP**
-              ${partnerPokemon.displayName}: **${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp}HP**
+            } HP
+              **${partnerPokemon.displayName}**: ${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
             """.trimIndent()
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
