@@ -6,18 +6,9 @@ import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 
 @Serializable
-data class TraderData(
+data class Release(
   val userId: String,
-  val partnerId: String,
-  var confirmed: Boolean = false,
-  var credits: Int = 0,
   var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf(),
-)
-
-@Serializable
-data class Trade(
-  val initiator: TraderData,
-  val receiver: TraderData,
 
   @Contextual val _id: Id<Trade> = newId(),
   var ended: Boolean = false

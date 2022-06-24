@@ -28,6 +28,7 @@ class Database(cache: Cache) {
   private val marketCollection: CoroutineCollection<Listing>
   private val orderCollection: CoroutineCollection<Order>
   private val ownedPokemonCollection: CoroutineCollection<OwnedPokemon>
+  private val releaseCollection: CoroutineCollection<Release>
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
   private val userCollection: CoroutineCollection<User>
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
@@ -44,6 +45,7 @@ class Database(cache: Cache) {
   val marketRepository: MarketRepository
   val orderRepository: OrderRepository
   val pokemonRepository: PokemonRepository
+  val releaseRepository: ReleaseRepository
   val rewardRepository: RewardRepository
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
@@ -74,6 +76,7 @@ class Database(cache: Cache) {
     marketCollection = database.getCollection()
     orderCollection = database.getCollection()
     ownedPokemonCollection = database.getCollection()
+    releaseCollection = database.getCollection()
     spawnChannelCollection = database.getCollection()
     userCollection = database.getCollection()
     voteRewardsCollection = database.getCollection()
@@ -91,6 +94,7 @@ class Database(cache: Cache) {
     marketRepository = MarketRepository(this, marketCollection, cache.listingMap)
     orderRepository = OrderRepository(this, orderCollection)
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
+    releaseRepository = ReleaseRepository(this, releaseCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
       SpawnChannelRepository(

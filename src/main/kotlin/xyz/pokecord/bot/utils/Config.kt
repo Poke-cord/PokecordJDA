@@ -27,6 +27,8 @@ object Config {
   const val minAuctionTime = 4 * 60 * 60 * 1000L
   const val maxAuctionTime = 30 * 24 * 60 * 60 * 1000L
 
+  const val maxReleaseSessionPokemon = 20
+
   const val publicNotificationWebhook =
     "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"
   const val donationNotificationWebhook =

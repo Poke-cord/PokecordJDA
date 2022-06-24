@@ -12,27 +12,30 @@ object ReleaseStartCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getTradeState()
+    val releaseState = context.getReleaseState()
     if (releaseState != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.alreadyInRelease")
+          context.translate("modules.release.errors.alreadyInRelease")
+        ).build()
+      ).queue()
+      return
+    }
+    if (context.getTradeState() != null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.release.errors.inTrade")
         ).build()
       ).queue()
       return
     }
 
-    context.bot.database.tradeRepository.createTrade(context.author.id, context.author.id)
-
-    val trade = context.getTradeState()
-    if (trade != null) {
-      context.bot.database.tradeRepository.setRelease(trade, context.author.id)
-    }
+    context.bot.database.releaseRepository.createRelease(context.author.id)
 
     context.reply(
       context.embedTemplates.normal(
-        context.translate("modules.pokemon.commands.release.embeds.center.releaseStarted.description",),
-        context.translate("modules.pokemon.commands.release.embeds.center.releaseStarted.title")
+        context.translate("modules.release.embeds.center.releaseStarted.description"),
+        context.translate("modules.release.embeds.center.releaseStarted.title")
       ).build()
     ).queue()
   }

@@ -12,32 +12,24 @@ object ReleaseCancelCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getTradeState()
+    val releaseState = context.getReleaseState()
     if (releaseState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.notInRelease")
-        ).build()
-      ).queue()
-      return
-    }
-    if(!releaseState.initiator.releaseTrade) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.inTrade")
+          context.translate("modules.release.errors.notInRelease")
         ).build()
       ).queue()
       return
     }
 
-    context.bot.database.tradeRepository.endTrade(releaseState)
+    context.bot.database.releaseRepository.endRelease(releaseState)
 
     context.reply(
       context.embedTemplates.normal(
         context.translate(
-          "modules.pokemon.commands.release.embeds.cancelled.description",
+          "modules.release.embeds.cancelled.description",
         ),
-        context.translate("modules.pokemon.commands.release.embeds.cancelled.title")
+        context.translate("modules.release.embeds.cancelled.title")
       ).build()
     ).queue()
   }

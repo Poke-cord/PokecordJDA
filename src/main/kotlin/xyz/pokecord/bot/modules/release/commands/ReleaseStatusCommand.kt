@@ -2,7 +2,7 @@ package xyz.pokecord.bot.modules.release.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.trading.TradingModule
+import xyz.pokecord.bot.modules.release.ReleaseModule
 
 object ReleaseStatusCommand : Command() {
   override val name: String = "status"
@@ -13,29 +13,20 @@ object ReleaseStatusCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getTradeState()
+    val releaseState = context.getReleaseState()
     if (releaseState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.notInRelease")
-        ).build()
-      ).queue()
-      return
-    }
-    if(!releaseState.initiator.releaseTrade) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.inTrade")
+          context.translate("modules.release.errors.notInRelease")
         ).build()
       ).queue()
       return
     }
 
-    val authorReleaseData = releaseState.initiator
+    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(releaseState.pokemon)
 
-    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorReleaseData.pokemon)
-
-    val authorPokemonText = TradingModule.getTradeStatePokemonText(context, authorPokemon, authorPokemon.map { it.id }, false)
+    val authorPokemonText =
+      ReleaseModule.getReleaseStatePokemonText(context, authorPokemon, authorPokemon.map { it.id }, false)
 
 
     context.reply(

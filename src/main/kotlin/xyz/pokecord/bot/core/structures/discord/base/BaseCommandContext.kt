@@ -58,6 +58,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     return bot.database.tradeRepository.getTrade(author.id)
   }
 
+  override suspend fun getReleaseState(): Release? {
+    return bot.database.releaseRepository.getRelease(author.id)
+  }
+
   override suspend fun getTraderState(): TraderData? {
     return bot.database.tradeRepository.getTraderData(author.id)
   }

@@ -4,7 +4,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
-import xyz.pokecord.bot.modules.trading.TradingModule
+import xyz.pokecord.bot.modules.release.ReleaseModule
 import xyz.pokecord.bot.utils.Confirmation
 
 object ReleaseConfirmCommand : Command() {
@@ -16,52 +16,41 @@ object ReleaseConfirmCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getTradeState()
+    val releaseState = context.getReleaseState()
     if (releaseState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.notInRelease")
-        ).build()
-      ).queue()
-      return
-    }
-    if(!releaseState.initiator.releaseTrade) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.inTrade")
+          context.translate("modules.release.errors.notInRelease")
         ).build()
       ).queue()
       return
     }
 
-    if (
-      releaseState.initiator.pokemon.isEmpty()
-    ) {
+    if (releaseState.pokemon.isEmpty()) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.embeds.confirmation.errors.emptyRelease")
+          context.translate("modules.release.embeds.confirmation.errors.emptyRelease")
         ).build()
       ).queue()
       return
     }
 
-    val authorReleaseData = releaseState.initiator
-    val authorUserData = context.bot.database.userRepository.getUser(authorReleaseData.userId)
-    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorReleaseData.pokemon)
+    val authorUserData = context.bot.database.userRepository.getUser(releaseState.userId)
+    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(releaseState.pokemon)
 
     val authorPokemonText =
-      TradingModule.getTradeStatePokemonText(context, authorPokemon, authorPokemon.map { it.id }, false)
+      ReleaseModule.getReleaseStatePokemonText(context, authorPokemon, authorPokemon.map { it.id }, false)
     val confirmation = Confirmation(context)
     val result =
       confirmation.result(
         context.embedTemplates.confirmation(
           context.translate(
-            "modules.pokemon.commands.release.embeds.confirmation.embed.description",
+            "modules.release.embeds.confirmation.embed.description",
             mapOf(
               "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" }
             )
           ),
-          context.translate("modules.pokemon.commands.release.embeds.confirmation.embed.title")
+          context.translate("modules.release.embeds.confirmation.embed.title")
         )
           .setFooter(
             context.translate(
@@ -74,8 +63,8 @@ object ReleaseConfirmCommand : Command() {
     if (!result) {
       confirmation.sentMessage!!.editMessageEmbeds(
         context.embedTemplates.normal(
-          context.translate("modules.pokemon.commands.release.embeds.cancelled.description"),
-          context.translate("modules.pokemon.commands.release.embeds.cancelled.title")
+          context.translate("modules.release.embeds.cancelled.description"),
+          context.translate("modules.release.embeds.cancelled.title")
         ).build()
       ).queue()
       return
@@ -93,7 +82,7 @@ object ReleaseConfirmCommand : Command() {
       authorPokemon.map { pokemon ->
 
         val evAmount = (if (pokemon.level % 2 == 0) pokemon.level else pokemon.level - 1) / 2
-        for(i in 0 until evAmount) {
+        for (i in 0 until evAmount) {
           val randomEV: EVItem.EVItems = EVItem.getRandom()
           rewardsMap.putIfAbsent(randomEV, 0)
           rewardsMap[randomEV] = rewardsMap[randomEV]!!.plus(1)
@@ -112,19 +101,19 @@ object ReleaseConfirmCommand : Command() {
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.pokemon.commands.release.embeds.released.description",
+            "modules.release.embeds.released.description",
             mapOf(
               "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" },
               "rewards" to rewardsMess.dropLast(2)
             )
           ),
-          context.translate("modules.pokemon.commands.release.embeds.released.title")
+          context.translate("modules.release.embeds.released.title")
         ).build()
       ).queue()
 
       clientSession.commitTransactionAndAwait()
     }
 
-    context.bot.database.tradeRepository.endTrade(releaseState)
+    context.bot.database.releaseRepository.endRelease(releaseState)
   }
 }

@@ -17,6 +17,7 @@ val KParameter.asOptionType
   get() = when {
     type.isBoolean -> OptionType.BOOLEAN
     type.isInteger -> OptionType.INTEGER
+    type.isIntArray -> OptionType.STRING
     type.isString -> OptionType.STRING
     type.isRegex -> OptionType.STRING
 
@@ -34,6 +35,8 @@ val KType.isBoolean
   get() = javaType === java.lang.Boolean::class.java || javaType === Boolean::class.javaPrimitiveType
 val KType.isInteger
   get() = javaType === java.lang.Integer::class.java || javaType === Int::class.javaPrimitiveType
+val KType.isIntArray
+  get() = javaType === IntArray::class.java || javaType === IntArray::class.javaPrimitiveType
 val KType.isString
   get() = javaType === java.lang.String::class.java || javaType === String::class
 val KType.isRegex

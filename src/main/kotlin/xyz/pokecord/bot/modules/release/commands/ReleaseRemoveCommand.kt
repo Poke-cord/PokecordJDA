@@ -3,7 +3,8 @@ package xyz.pokecord.bot.modules.release.commands
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.utils.PokemonResolvable
+import xyz.pokecord.bot.modules.release.ReleaseModule
+import xyz.pokecord.bot.utils.Config
 
 object ReleaseRemoveCommand : Command() {
   override val name: String = "remove"
@@ -12,23 +13,15 @@ object ReleaseRemoveCommand : Command() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument pokemon: PokemonResolvable?
+    @Argument pokemon: IntArray?
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getTradeState()
+    val releaseState = context.getReleaseState()
     if (releaseState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.notInRelease")
-        ).build()
-      ).queue()
-      return
-    }
-    if(!releaseState.initiator.releaseTrade) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.release.errors.inTrade")
+          context.translate("modules.release.errors.notInRelease")
         ).build()
       ).queue()
       return
@@ -43,34 +36,50 @@ object ReleaseRemoveCommand : Command() {
       return
     }
 
-    val userData = context.getUserData()
-    val selectedPokemon = context.resolvePokemon(context.author, userData, pokemon)
+    if (pokemon.size > Config.maxReleaseSessionPokemon) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.release.errors.notInRange")
+        ).build()
+      ).queue()
+      return
+    }
 
-    if (selectedPokemon == null) {
+    val pokemonList = pokemon.toSet().mapNotNull {
+      context.bot.database.pokemonRepository.getPokemonByIndex(context.author.id, it)
+    }
+
+    if (pokemonList.isEmpty()) {
       context.reply(
         context.embedTemplates.error(
           context.translate(
-            "modules.trading.commands.remove.errors.noPokemonFound",
+            "modules.release.commands.remove.errors.noPokemonFound",
             "index" to pokemon.toString()
           )
         ).build()
       ).queue()
     } else {
+      val authorPokemonText =
+        ReleaseModule.getReleaseStatePokemonText(context, pokemonList, pokemonList.map { it.id }, false)
+
       val session = context.bot.database.startSession()
       session.use {
         session.startTransaction()
-        context.bot.database.tradeRepository.removePokemon(releaseState, context.author.id, selectedPokemon._id, session)
-        context.bot.database.tradeRepository.clearConfirmState(releaseState, session)
+        pokemonList.forEach {
+          context.bot.database.releaseRepository.removePokemon(releaseState, it._id, session)
+        }
         session.commitTransactionAndAwait()
       }
 
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.pokemon.commands.release.embeds.center.removePokemon.description",
-            "pokemon" to context.translator.pokemonName(selectedPokemon).toString()
+            "modules.release.embeds.center.removePokemon.description",
+            mapOf(
+              "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" }
+            )
           ),
-          context.translate("modules.pokemon.commands.release.embeds.center.removePokemon.title")
+          context.translate("modules.release.embeds.center.removePokemon.title")
         ).build()
       ).queue()
     }
