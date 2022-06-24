@@ -591,7 +591,6 @@ modules:
             description: "Trading session between {{author}} & {{partner}}."
         errors:
           notInTrade: You haven't started a trading session yet, please do that first.
-          inRelease: You should finish your release session first before trading.
           noPartnerFound:
             title: Partner Not Found
             description: Your partner seems to not have access to the bot currently, would you like to end the trade?
@@ -644,6 +643,8 @@ modules:
           confirmed:
             title: Trading Session Confirmed
             description: "The trading session between you and {{partner}} has been confirmed."
+    errors:
+      inRelease: You should finish your release session first before trading.
   general:
     commands:
       faq:

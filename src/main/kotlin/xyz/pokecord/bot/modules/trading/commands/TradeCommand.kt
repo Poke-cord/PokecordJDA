@@ -33,6 +33,15 @@ object TradeCommand : ParentCommand() {
       return
     }
 
+    if (context.getReleaseState() != null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.errors.inRelease")
+        ).build()
+      ).queue()
+      return
+    }
+
     if (partner.id == context.author.id) {
       context.reply(
         context.embedTemplates.error(
