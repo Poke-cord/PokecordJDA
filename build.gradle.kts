@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 group = "xyz.pokecord"
-version = "2.0.0"
+version = "2.1.1"
 
 val discordWebhooksVersion = "0.7.4"
 val graalJsVersion = "21.2.0"
