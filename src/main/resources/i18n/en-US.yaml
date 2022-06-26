@@ -870,72 +870,72 @@ modules:
           noResults: No pokémon found with the specified filters.
         embeds:
           title: "{{user}}'s Pokémon"
-      release:
-        embeds:
-          center:
-            embed:
-              description: |-
-                **Try using**:
-                `{{prefix}}release add <pokemon number(s)>`
+  release:
+    embeds:
+      center:
+        embed:
+          description: |-
+            **Try using**:
+            `{{prefix}}release add <pokemon number(s)>`
+            
+            **E.g.**
+            `{{prefix}}release add 11, 22, 33`
+            `{{prefix}}release add 1-20`
+          title: Release Add Usage
+        releaseStarted:
+          title: A Release Session has Started
+          description: "Release session has been initiated.\n> **You can only release 50 Pokémon per session.**"
+        removePokemon:
+          title: A Pokémon has been Removed
+          description: |-
+            **Name**: {{pokemon}}
 
-                **E.g.**
-                `{{prefix}}release add 11, 22, 33`
-                `{{prefix}}release add 1-20`
-              title: Release Add Usage
-            releaseStarted:
-              title: A Release Session has Started
-              description: "Release session has been initiated.\n> **You can only release 50 Pokémon per session.**"
-            removePokemon:
-              title: A Pokémon has been Removed
-              description: |-
-                **Name**: {{pokemon}}
-                
-                Pokémon were removed from release.
-          confirmation:
-            embed:
-              description: |-
-                {{pokemon}}
+            Pokémon were removed from release.
+      confirmation:
+        embed:
+          description: |-
+            {{pokemon}}
 
-                React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-              title: Pokémon Releasing is Pending
-            embedNoConfirm:
-              description: |-
-                {{pokemon}}
-              title: Pokémon have been Added
-            errors:
-              emptyRelease: |-
-                You released nothing. Wait, you can't.
-                > **Add Pokémon to your release session before releasing.**
-          released:
-            description: |-
-              **Pokémon**:
-              {{pokemon}}
-              
-              **Rewards**: 
-              {{rewards}}
-            title: Pokémons have been Released
-          cancelled:
-            description: |-
-              Success!
-              > **The release session was cancelled.**
-            title: Release Session has been Cancelled
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: Pokémon Releasing is Pending
+        embedNoConfirm:
+          description: |-
+            {{pokemon}}
+          title: Pokémon have been Added
         errors:
-          selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
+          emptyRelease: |-
+            You released nothing. Wait, you can't.
+            > **Add Pokémon to your release session before releasing.**
+      released:
+        description: |-
+          **Pokémon**:
+          {{pokemon}}
+              
+          **Rewards**: 
+          {{rewards}}
+        title: Pokémons have been Released
+      cancelled:
+        description: |-
+          Success!
+          > **The release session was cancelled.**
+        title: Release Session has been Cancelled
+    errors:
+      selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
                         before releasing it!'
-          favoritePokemon: '**Suggestion**: Try removing this Pokémon from
+      favoritePokemon: '**Suggestion**: Try removing this Pokémon from
                         your favorites before releasing it!'
-          notInRelease: |-
-            Priorities!
-            > **Start a release session first.**
-          inTrade: |-
-            Two you? No. Two things at once? Also no.
-            > **Finish your current trade first.**
-          alreadyInRelease: |-
-            Two you? No. Two release sessions? Also no.
-            > **Finish your current release session first.**
-          notInRange: |-
-            Pokecord reached for your Pokémon. Too bad it can't reach far.
-            > **Specify up to a maximum of 50 Pokémon.**
+      notInRelease: |-
+        Priorities!
+        > **Start a release session first.**
+      inTrade: |-
+        Two you? No. Two things at once? Also no.
+        > **Finish your current trade first.**
+      alreadyInRelease: |-
+        Two you? No. Two release sessions? Also no.
+        > **Finish your current release session first.**
+      notInRange: |-
+        Pokecord reached for your Pokémon. Too bad it can't reach far.
+        > **Specify up to a maximum of 50 Pokémon.**
       select:
         errors:
           alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
