@@ -455,7 +455,7 @@ modules:
           noPriceProvided: Please provide the price you would like to list your pokémon for.
           startingBidPrice: |-
             Pokecord reached for your price. Too bad it can't reach far.
-            > **Specify a starting bid between 1,000 and 10 million credits.**
+            > **Specify a starting price between 1,000 and 10 million credits.**
         confirmation:
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
