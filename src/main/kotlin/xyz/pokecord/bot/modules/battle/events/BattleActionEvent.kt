@@ -30,6 +30,11 @@ object BattleActionEvent : Event() {
 
       val battle = module.bot.database.battleRepository.getBattle(ObjectId(battleId).toId()) ?: return
       if (!battle.hasTrainer(event.user.id)) return
+      val userData = module.bot.database.userRepository.getUser(event.user)
+      if (userData.blacklisted) {
+        module.bot.database.battleRepository.endBattle(battle)
+        return
+      }
 
       when (button) {
         is BattleModule.Buttons.BattleAction.UseMove -> {
@@ -50,7 +55,6 @@ object BattleActionEvent : Event() {
           val partner = if (interactionTrainer == battle.initiator) battle.partner else battle.initiator
           val partnerUser = event.jda.retrieveUserById(partner.id).await()
 
-          val userData = module.bot.database.userRepository.getUser(self.id)
           val partnerData = module.bot.database.userRepository.getUser(partner.id)
 
           val pokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
