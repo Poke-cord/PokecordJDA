@@ -17,14 +17,29 @@ class EVItem(id: Int, val type: String) : Item(id) {
         false,
         context.embedTemplates.error(
           context.translate(
-            "items.ev.errors.alreadyMaxEv",
+            "items.ev.errors.alreadyMaxTotalEv",
             "pokemon" to context.translator.pokemonDisplayName(pokemon)
           )
         )
       )
     }
 
-    context.bot.database.pokemonRepository.addEffort(pokemon, evItemData);
+    val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.id)
+
+    // If a EV stat is already maxed out
+    if (result) {
+      return UsageResult(
+        false,
+        context.embedTemplates.error(
+          context.translate(
+            "items.ev.errors.alreadyMaxStat",
+            "pokemon" to context.translator.pokemonDisplayName(pokemon),
+            "stat" to evsMap[evItemData.id].toString()
+          )
+        )
+      )
+    }
+
 
     return UsageResult(
       true,
@@ -52,26 +67,18 @@ class EVItem(id: Int, val type: String) : Item(id) {
     val id: Int,
     val identifier: String,
     val itemName: String,
-    val stat: PokemonStats,
     val statName: String,
     var cost: Int = 0,
     val flingPower: Int = 0,
     val flingEffectId: Int = 0,
     val useGems: Boolean = false,
   ) {
-    HPUp(45, "hp-up", "HP Up", PokemonStats(0, 0, points,
-      0, 0, 0), "HP"),
-    Protein(46, "protein", "Protein", PokemonStats(
-      points, 0, 0,
-      0, 0, 0), "Attack"),
-    Iron(47, "iron", "Iron", PokemonStats(0, points, 0,
-      0, 0, 0), "Defense"),
-    Calcium(49, "calcium", "Calcium", PokemonStats(0, 0, 0,
-      points, 0, 0), "Special Attack"),
-    Zinc(52, "zinc", "Zinc", PokemonStats(0, 0, 0,
-      0, points, 0), "Special Defense"),
-    Carbos(48, "carbos", "Carbos", PokemonStats(0, 0, 0,
-      0, 0, points), "Speed")
+    HPUp(45, "hp-up", "HP Up", "HP"),
+    Protein(46, "protein", "Protein", "Attack"),
+    Iron(47, "iron", "Iron", "Defense"),
+    Calcium(49, "calcium", "Calcium", "Special Attack"),
+    Zinc(52, "zinc", "Zinc", "Special Defense"),
+    Carbos(48, "carbos", "Carbos", "Speed")
   }
 
   companion object {

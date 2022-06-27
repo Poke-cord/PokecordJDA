@@ -1196,7 +1196,8 @@ items:
       title: A {{redeem}} has been Used
   ev:
     error:
-      alreadyMaxEv: Your **{{pokemon}}** is already at the max of total 510 effort points in total!
+      alreadyMaxTotalEv: Your **{{pokemon}}** has maxed out additional EV points!
+      alreadyMaxStat:  Your **{{pokemon}}**'s has already max EV points as {{stat}}!
     embed:
       title: Vitamin {{vitamin}} Used!
       description: Your **{{pokemon}}'s** {{statName}} is now up with {{points}} EVs
