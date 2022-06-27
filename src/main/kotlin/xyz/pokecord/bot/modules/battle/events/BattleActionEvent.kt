@@ -64,8 +64,8 @@ object BattleActionEvent : Event() {
             title = "${event.interaction.user.name} vs. ${partnerUser.name}"
             // TODO: use translator somehow
             description = """
-                  **${pokemon.displayName}**: ${battle.initiator.pokemonStats.hp}/${pokemon.stats.hp} HP
-                  **${partnerPokemon.displayName}**: ${battle.partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
+                  **${pokemon.displayName}**: ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
+                  **${partnerPokemon.displayName}**: ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                   
                   > **Select a move to execute.**
                 """.trimIndent()
@@ -110,8 +110,7 @@ object BattleActionEvent : Event() {
             } catch (e: Throwable) {
               null
             } ?: return
-
-            val userData = module.bot.database.userRepository.getUser(self.id)
+            
             val partnerData = module.bot.database.userRepository.getUser(partner.id)
 
             val selfPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
