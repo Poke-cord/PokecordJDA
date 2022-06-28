@@ -1197,7 +1197,7 @@ items:
   ev:
     error:
       alreadyMaxTotalEv: Your **{{pokemon}}** has maxed out additional EV points!
-      alreadyMaxStat:  Your **{{pokemon}}**'s has already max EV points as {{stat}}!
+      alreadyMaxStat: Your **{{pokemon}}**'s has already max EV points as {{stat}}!
     embed:
       title: Vitamin {{vitamin}} Used!
       description: Your **{{pokemon}}'s** {{statName}} is now up with {{points}} EVs

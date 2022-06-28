@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.pokemon.Stat
 
 class EVItem(id: Int, val type: String) : Item(id) {
 
@@ -80,7 +81,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
           "items.ev.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
-            "statName" to evItemData.statName,
+            "statName" to context.translator.stat(evItemData.stat),
             "points" to (points * consumed).toString()
           )
         ),
@@ -99,18 +100,18 @@ class EVItem(id: Int, val type: String) : Item(id) {
     val id: Int,
     val identifier: String,
     val itemName: String,
-    val statName: String,
+    val stat: Stat,
     var cost: Int = 0,
     val flingPower: Int = 0,
     val flingEffectId: Int = 0,
     val useGems: Boolean = false,
   ) {
-    HPUp(45, "hp-up", "HP Up", "HP"),
-    Protein(46, "protein", "Protein", "Attack"),
-    Iron(47, "iron", "Iron", "Defense"),
-    Calcium(49, "calcium", "Calcium", "Special Attack"),
-    Zinc(52, "zinc", "Zinc", "Special Defense"),
-    Carbos(48, "carbos", "Carbos", "Speed")
+    HPUp(45, "hp-up", "HP Up", Stat.hp),
+    Protein(46, "protein", "Protein", Stat.attack),
+    Iron(47, "iron", "Iron", Stat.defense),
+    Calcium(49, "calcium", "Calcium", Stat.specialAttack),
+    Zinc(52, "zinc", "Zinc", Stat.specialDefense),
+    Carbos(48, "carbos", "Carbos", Stat.speed)
   }
 
   companion object {
@@ -130,10 +131,12 @@ class EVItem(id: Int, val type: String) : Item(id) {
     )
 
     fun getRandom(): EVItems {
-      val evs = listOf(EVItems.HPUp, EVItems.Protein,
-        EVItems.Iron, EVItems.Calcium, EVItems.Zinc, EVItems.Carbos)
+      val evs = listOf(
+        EVItems.HPUp, EVItems.Protein,
+        EVItems.Iron, EVItems.Calcium, EVItems.Zinc, EVItems.Carbos
+      )
 
-      return evs.random();
+      return evs.random()
     }
 
     const val categoryId = 1020
