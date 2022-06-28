@@ -51,7 +51,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
 
     var consumed = 0
     for (i in 1..count) {
-      val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.id)
+      val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.stat)
 
       // If a EV stat is already maxed out
       if (result) {
