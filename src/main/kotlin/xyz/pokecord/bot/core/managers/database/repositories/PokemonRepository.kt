@@ -286,31 +286,31 @@ class PokemonRepository(
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
   }
 
-  suspend fun addEffort(pokemon: OwnedPokemon, statId: Int): Boolean {
+  suspend fun addEffort(pokemon: OwnedPokemon, stat: Stat): Boolean {
+    val statField = when (stat.id) {
+      Stat.hp.id -> PokemonStats::hp
+      Stat.attack.id -> PokemonStats::attack
+      Stat.defense.id -> PokemonStats::defense
+      Stat.specialAttack.id -> PokemonStats::specialAttack
+      Stat.specialDefense.id -> PokemonStats::specialDefense
+      Stat.speed.id -> PokemonStats::speed
+      else -> throw IllegalArgumentException("Unknown stat found: ${stat.id}")
+    }
+    var statEV = statField.get(pokemon.evs)
 
-    val statList = mutableMapOf(
-      46 to pokemon.evs.attack,
-      47 to pokemon.evs.defense,
-      45 to pokemon.evs.hp,
-      49 to pokemon.evs.specialAttack,
-      52 to pokemon.evs.specialDefense,
-      48 to pokemon.evs.speed
+    if (statEV >= 252) return true
+    else if (statEV + EVItem.points >= 252) statEV = 252
+    else statEV += EVItem.points
+
+
+    statField.set(pokemon.evs, statEV)
+
+    collection.updateOne(
+      OwnedPokemon::_id eq pokemon._id,
+      set(
+        OwnedPokemon::evs / statField setTo statEV
+      )
     )
-
-    if (statList[statId]!! >= 252) return true
-
-    else if (statList[statId]!! + EVItem.points >= 252) statList[statId] = 252
-
-    else statList[statId] = statList[statId]!! + EVItem.points
-
-    pokemon.evs.attack = statList[46]!!
-    pokemon.evs.defense = statList[47]!!
-    pokemon.evs.hp = statList[45]!!
-    pokemon.evs.specialAttack = statList[49]!!
-    pokemon.evs.specialDefense = statList[52]!!
-    pokemon.evs.speed = statList[48]!!
-
-    collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::evs setTo pokemon.evs))
 
     return false
   }
