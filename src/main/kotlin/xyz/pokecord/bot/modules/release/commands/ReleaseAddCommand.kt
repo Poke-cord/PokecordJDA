@@ -54,7 +54,10 @@ object ReleaseAddCommand : Command() {
     }
 
     val pokemonList = pokemon.toSet().mapNotNull {
-      context.bot.database.pokemonRepository.getPokemonByIndex(context.author.id, it)
+      context.bot.database.pokemonRepository.getPokemonByIndex(
+        context.author.id,
+        it - 1
+      )  // Pokemon index starts at 0, but user input starts at 1
     }
 
 
