@@ -1,7 +1,6 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.utils.PokemonStats
 
 class EVItem(id: Int, val type: String) : Item(id) {
 
@@ -24,32 +23,65 @@ class EVItem(id: Int, val type: String) : Item(id) {
       )
     }
 
-    val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.id)
+    var count = 1
+    if (args[0].isNotEmpty()) {
+      count = args[0].toIntOrNull()!!
+    }
 
-    // If a EV stat is already maxed out
-    if (result) {
+    val inventoryItem = context.bot.database.userRepository.getInventoryItem(context.author.id, evItemData.id)
+
+    if (inventoryItem == null || inventoryItem.amount < count) {
       return UsageResult(
         false,
-        context.embedTemplates.error(
-          context.translate(
-            "items.ev.errors.alreadyMaxStat",
-            "pokemon" to context.translator.pokemonDisplayName(pokemon),
-            "stat" to evsMap[evItemData.id].toString()
+          context.embedTemplates.error(
+            context.translate(
+              "modules.profile.commands.item.errors.itemNotOwned.description",
+              mapOf(
+                "user" to context.author.asMention,
+                "item" to evItemData.name
+              )
+            ),
+            context.translate(
+              "modules.profile.commands.item.errors.itemNotOwned.title"
+            )
           )
-        )
       )
     }
 
+    var consumed = 0
+    for (i in 1..count) {
+      val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.id)
+
+      // If a EV stat is already maxed out
+      if (result) {
+        UsageResult(
+          false,
+          context.embedTemplates.error(
+            context.translate(
+              "items.ev.errors.alreadyMaxStat",
+              "pokemon" to context.translator.pokemonDisplayName(pokemon),
+              "stat" to evsMap[evItemData.id].toString()
+            )
+          )
+        )
+        break
+      }
+
+      // Consume
+      context.bot.database.userRepository.consumeInventoryItem(inventoryItem)
+
+      consumed++
+    }
 
     return UsageResult(
-      true,
+      false,
       context.embedTemplates.normal(
         context.translate(
           "items.ev.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
             "statName" to evItemData.statName,
-            "points" to points.toString()
+            "points" to (points * consumed).toString()
           )
         ),
         context.translate(
