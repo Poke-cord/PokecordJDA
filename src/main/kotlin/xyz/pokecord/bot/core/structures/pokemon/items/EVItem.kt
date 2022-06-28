@@ -24,10 +24,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
       )
     }
 
-    var count = 1
-    if (args[0].isNotEmpty()) {
-      count = args[0].toIntOrNull()!!
-    }
+    val count = args.firstOrNull()?.toIntOrNull() ?: 1
 
     val inventoryItem = context.bot.database.userRepository.getInventoryItem(context.author.id, evItemData.id)
 
