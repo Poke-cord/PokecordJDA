@@ -31,23 +31,23 @@ class EVItem(id: Int, val type: String) : Item(id) {
     if (inventoryItem == null || inventoryItem.amount < count) {
       return UsageResult(
         false,
-          context.embedTemplates.error(
-            context.translate(
-              "modules.profile.commands.item.errors.itemNotOwned.description",
-              mapOf(
-                "user" to context.author.asMention,
-                "item" to evItemData.name
-              )
-            ),
-            context.translate(
-              "modules.profile.commands.item.errors.itemNotOwned.title"
+        context.embedTemplates.error(
+          context.translate(
+            "modules.profile.commands.item.errors.itemNotOwned.description",
+            mapOf(
+              "user" to context.author.asMention,
+              "item" to evItemData.name
             )
+          ),
+          context.translate(
+            "modules.profile.commands.item.errors.itemNotOwned.title"
           )
+        )
       )
     }
 
     var consumed = 0
-    for (i in 1..count) {
+    repeat(count) {
       val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.stat)
 
       // If a EV stat is already maxed out
@@ -62,7 +62,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
             )
           )
         )
-        break
+        return@repeat
       }
 
       // Consume
