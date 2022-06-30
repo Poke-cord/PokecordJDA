@@ -18,9 +18,43 @@ object RareCandyItem : Item(50, false) {
         )
       )
     }
-    context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(pokemon, gainedXp = pokemon.requiredXpToLevelUp())
+
+    val count = args.firstOrNull()?.toIntOrNull() ?: 1
+
+    val inventoryItem = context.bot.database.userRepository.getInventoryItem(context.author.id, data.id)
+
+    if (inventoryItem == null || inventoryItem.amount < count) {
+      return UsageResult(
+        false,
+        context.embedTemplates.error(
+          context.translate(
+            "modules.profile.commands.item.errors.itemNotOwned.description",
+            mapOf(
+              "user" to context.author.asMention,
+              "item" to data.name
+            )
+          ),
+          context.translate(
+            "modules.profile.commands.item.errors.itemNotOwned.title"
+          )
+        )
+      )
+    }
+
+
+    repeat(count) {
+      val result = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(pokemon, gainedXp = pokemon.requiredXpToLevelUp())
+
+      if (!result.first) {
+        return@repeat
+      }
+
+      // Consume
+      context.bot.database.userRepository.consumeInventoryItem(inventoryItem)
+    }
+
     return UsageResult(
-      true,
+      false,
       context.embedTemplates.normal(
         context.translate(
           "items.rareCandy.embed.description",
