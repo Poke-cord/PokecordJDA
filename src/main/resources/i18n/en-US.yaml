@@ -209,7 +209,7 @@ modules:
           noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
           partnerHasNotStarted: |-
             Pokecord is recruiting new users, like {{partner}}!
-            > **Use `{{prefix}}start` to get started.**
+            > **Use the `start` command to get started.**
           selfBattle: |-
             You battled yourself. Wait, you can't. 
             > **Select another user to battle with.**
