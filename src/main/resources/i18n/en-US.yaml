@@ -921,9 +921,9 @@ modules:
         title: Release Session has been Cancelled
     errors:
       selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
-                        before releasing it!'
+                    before releasing it!'
       favoritePokemon: '**Suggestion**: Try removing this Pokémon from
-                        your favorites before releasing it!'
+                    your favorites before releasing it!'
       notInRelease: |-
         Priorities!
         > **Start a release session first.**
