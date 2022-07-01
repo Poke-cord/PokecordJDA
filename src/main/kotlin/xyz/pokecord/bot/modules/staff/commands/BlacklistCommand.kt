@@ -6,7 +6,7 @@ import xyz.pokecord.bot.modules.staff.StaffCommand
 
 class BlacklistCommand : StaffCommand() {
   override val name = "Blacklist"
-
+  override var aliases = arrayOf("bl")
   @Executor
   suspend fun execute(
     context: ICommandContext,
@@ -20,7 +20,7 @@ class BlacklistCommand : StaffCommand() {
     context.bot.database.userRepository.setBlacklisted(userData, !userData.blacklisted)
 
     context.reply(
-      context.embedTemplates.normal("${user.asMention} has been ${if (userData.blacklisted) "blacklisted" else "un-blacklisted"}")
+      context.embedTemplates.normal("${user.asMention} has been ${if (userData.blacklisted) "blacklisted" else "whitelisted"}.")
         .build()
     ).queue()
   }
