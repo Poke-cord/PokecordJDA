@@ -931,7 +931,6 @@ modules:
           **Credits**: {{credits}}
           **Tokens**: {{tokens}}
 
-          All items you own will be available here.
         title: '{{user}}''s Bag'
       item:
         errors:
