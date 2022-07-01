@@ -203,7 +203,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
   fun updatePresence() {
     val activityTextData = mapOf(
       "prefix" to (commandHandler.prefix),
-      "version" to (if (devEnv) "Development Edition" else "v$version")
+      "version" to (if (devEnv) "BETA Environment" else "v$version")
     )
 
     val activityTranslationKey =
@@ -227,7 +227,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
       shardManager.setActivity(Activity.of(Activity.ActivityType.valueOf(type), activity, url))
     } catch (e: IllegalArgumentException) {
       shardManager.setActivity(
-        Activity.playing("${commandHandler.prefix}help | pokecord.xyz | ${if (devEnv) "Development Edition" else "v$version"}")
+        Activity.playing("${commandHandler.prefix}help | ${if (devEnv) "BETA Environment" else "v$version"}")
       )
     }
   }
