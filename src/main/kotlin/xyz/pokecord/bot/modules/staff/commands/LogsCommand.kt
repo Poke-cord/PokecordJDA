@@ -17,7 +17,7 @@ import java.util.*
 
 object LogsCommand : StaffCommand() {
   override val name = "Logs"
-
+  override var aliases = arrayOf("l", "log")
   @Executor
   suspend fun execute(
     context: ICommandContext,
