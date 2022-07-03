@@ -128,7 +128,8 @@ class StoreCommand : Command() {
                     mapOf(
                       "item" to itemName, "link" to module.bot.payPal.getCheckoutLink(orderId)
                     )
-                  )
+                  ),
+                  context.translate("modules.economy.commands.store.dm.embed.title")
                 ).build()
               ).await()
             } catch (t: Throwable) {

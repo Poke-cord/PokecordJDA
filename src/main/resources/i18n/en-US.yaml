@@ -122,7 +122,7 @@ misc:
     altNames: Alternative Names
     argument_aliases: Argument Aliases
     argument_names: Argument Names
-    availableFaqs: Available FAQs
+    availableFaqs: Available FAQ
     baseStats: Base Stats
     command: Command
     command_aliases: Aliases
@@ -870,6 +870,27 @@ modules:
           noResults: No pokémon found with the specified filters.
         embeds:
           title: "{{user}}'s Pokémon"
+      select:
+        errors:
+          alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
+                          have selected currently!'
+          inBattle: You can't select another Pokémon while you are in battle!
+        embed:
+          description: |-
+            **Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+            
+            Your selected Pokémon has been updated!
+          title: A Pokémon has been Selected
+      start:
+        description: |-
+          Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
+          
+          **Get Started**: Use `{{prefix}}pick <Pokémon Name>` to choose a Pokémon.
+          **Example**: `{{prefix}}pick torchic`
+        startingTwice: '**Suggestion** Try catching a Pokémon instead of starting twice!'
+        welcomeToPokeWorld: Welcome to the World of Pokecord!
   release:
     embeds:
       center:
@@ -936,28 +957,6 @@ modules:
       notInRange: |-
         Pokecord reached for your Pokémon. Too bad it can't reach far.
         > **Specify up to a maximum of 50 Pokémon.**
-      select:
-        errors:
-          alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
-                    have selected currently!'
-          inBattle: You can't select another Pokémon while you are in battle!
-        embed:
-          description: |-
-            **Name**: {{pokemon}}
-            **Level**: {{level}}
-            **IV Percent**: {{ivPercentage}}
-
-            Your selected Pokémon has been updated!
-          title: A Pokémon has been Selected
-      start:
-        description: |-
-          Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
-
-          **Get Started**: Use `{{prefix}}pick <Pokémon Name>` to choose a Pokémon.
-          **Example**: `{{prefix}}pick torchic`
-        startingTwice: '**Suggestion** Try catching a Pokémon instead of starting
-                    twice!'
-        welcomeToPokeWorld: Welcome to the World of Pokecord!
     events:
       spawner:
         embeds:
@@ -1051,8 +1050,12 @@ modules:
           notEnoughGems: "You don't have enough gems to buy this item."
           notEnoughTokens: "You don't have enough tokens to buy this item."
         embed:
-          description: You have bought **{{amount}}** of **{{item}}**!
-          title: Item Purchase Successful!
+          description: |-
+            **Item Name**: {{item}}
+            **Amount**: {{amount}}
+            
+            The item(s) have been added to your inventory.
+          title: An Item has been Purchased
       shop:
         embed:
           description: |
@@ -1077,34 +1080,44 @@ modules:
 
       store:
         embed:
-          oldOrderDescription: |
-            **[Click here]({{link}})** in order to pay for your last order for **{{item}}**.
+          oldOrderDescription: |-
+            **Order Item**: {{item}}
+            
+            Your previous order can be paid for [here]({{link}}).
           confirmation:
-            cancelOldOrder: You already have an order open, would you like to cancel it?
+            cancelOldOrder: |-
+              Cancel your current open order?
+              
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
           orderCreated:
-            title: Order Created
-            description: Your order information has been sent in your DMs.
-          description: Click the emoji corresponding to which category you would like to open.
+            title: An Order has been Opened
+            description: Order information has been sent to your DMs.
+          description: Welcome to the Pokecord Store! Select a category to get started.
           title: Pokecord Store
         errors:
           cancelOldOrder:
-            orderCancelled: Order has been cancelled or nothing was selected.
-          failedToCancelOrder: There was an error creating the order, please contact the administrators.
-          dmsClosed: Please open your DM's and restart the process above in order to continue.
+            orderCancelled: The order has been cancelled or the session timed out.
+          failedToCancelOrder: |-
+            An error occurred when creating your order.
+            > **Contact us [here](https://discord.gg/poke) to resolve this issue.**
+          dmsClosed: |-
+            Pokecord couldn't DM you!
+            > **Allow Pokecord to DM you before ordering again.**
         dm:
           embed:
-            title: Order
-            description: |
-              Your order for **{{item}}** has been created.
-              **[Click here]({{link}})** in order to pay for the item(s) you ordered.
+            title: Thanks for Supporting Pokecord!
+            description: |-
+              **Order Item**: {{item}}
+              
+              Your order may be accessed and paid for **[here]({{link}})**.
 store:
   packages:
     gems:
       name: Gems
-      description: Purchase gems in order to buy exclusive items on the in-game item shop.
+      description: Purchase gems to buy exclusive redeems in our shop.
       embed:
         title: Purchase Gems
-        description: Click the emoji corresponding to the amount of gems you would like to purchase.
+        description: Select a desired package for purchase.
       items:
         100_gems: 100 Gems
         525_gems: 525 Gems
@@ -1114,10 +1127,10 @@ store:
         6750_gems: 6750 Gems
     roles:
       name: Roles
-      description: Purchase an upgraded trainer and receive perks such as shop discounts and xp boosts.
+      description: Purchase a trainer role for our **[official server](https://discord.gg/poke)** to receive shop discounts and XP boosts.
       embed:
         title: Purchase Roles
-        description: Click the emoji corresponding to the role you would like to purchase.
+        description: Select a desired role for purchase.
       items:
         apprentice_trainer: Apprentice Trainer
         intermediate_trainer: Intermediate Trainer
