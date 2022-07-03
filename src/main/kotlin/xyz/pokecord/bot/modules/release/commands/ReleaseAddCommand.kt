@@ -88,7 +88,7 @@ object ReleaseAddCommand : Command() {
         releaseState.pokemon.size + pokemonList.size >= 50 -> {
           context.reply(
             context.embedTemplates.error(
-              context.translate("modules.release.commands.add.errors.maxPokemonCount")
+              context.translate("modules.release.commands.add.errors.notInRange")
             ).build()
           ).queue()
           return
