@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 object Config {
-  const val version = "2.0.0"
+  const val version = "2.1.5"
 
   val voteSeasonStartDate: LocalDate = Instant.ofEpochMilli(1609459200000).atZone(ZoneOffset.UTC).toLocalDate()
 
@@ -27,7 +27,7 @@ object Config {
   const val minAuctionTime = 4 * 60 * 60 * 1000L
   const val maxAuctionTime = 30 * 24 * 60 * 60 * 1000L
 
-  const val maxReleaseSessionPokemon = 50
+  const val maxReleaseSessionPokemon = 51
 
   const val publicNotificationWebhook =
     "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"
