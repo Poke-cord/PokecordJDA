@@ -66,9 +66,10 @@ misc:
         Congratulations {{user}}!
       title: A Pokémon has Leveled Up
     progressPrivate:
-      description: '{{user}} has set their progress to be hidden from other
-                players.'
-      title: A User Enabled Private Progress
+      description: |-
+        Behold! {{user}}'s progress is hidden from others.
+        > **That includes you too.** :)
+      title: User Progress is Private
     rules:
       description: |-
         Hey {{user}}! Welcome to the world of {{botUsername}}.
@@ -278,8 +279,8 @@ modules:
           inTrade: |-
             A little too ambitious!
             > **Finish your current trade first.**
-          noPokemonProvided: Please provide the pokémon you would like to list.
-          noPokemonFound: The pokémon you are looking for doesn't seem to exist.
+          noPokemonProvided: Please provide the Pokémon you would like to list.
+          noPokemonFound: The Pokémon you are looking for doesn't seem to exist.
           startingBidPrice: |-
             Pokecord reached for your price. Too bad it can't reach far.
             > **Specify a starting bid between 1,000 and 10 million credits.**
