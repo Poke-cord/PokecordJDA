@@ -1214,11 +1214,20 @@ items:
       title: A {{redeem}} has been Used
   ev:
     error:
-      alreadyMaxTotalEv: Your **{{pokemon}}** has maxed out additional EV points!
-      alreadyMaxStat: Your **{{pokemon}}**'s has already max EV points as {{stat}}!
+      alreadyMaxTotalEv: |-
+        Too many vitamins!
+        > **Your {{pokemon}}'s EVs are maxed out at 510!**
+      alreadyMaxStat: |-
+        Too many {{stat}} vitamins!
+        > **Your {{pokemon}}'s {{stat}} EVs are maxed out at 255!**
     embed:
-      title: Vitamin {{vitamin}} Used!
-      description: Your **{{pokemon}}'s** {{statName}} is now up with {{points}} EVs
+      title: {{vitamin}} Vitamin Used!
+      description: |-
+        **Name**: {{pokemon}} 
+        **Stat Buffed**: {{statName}} 
+        **EVs Applied**: {{points}}
+        
+        Congratulations!
   unusable:
     description: '**Suggestion**: Try using `{{prefix}}give` or use another
                       item!'
