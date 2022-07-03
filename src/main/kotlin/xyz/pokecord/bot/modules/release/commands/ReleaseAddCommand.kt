@@ -44,15 +44,6 @@ object ReleaseAddCommand : Command() {
       return
     }
 
-    if (releaseState.pokemon.size + pokemon.size > Config.maxReleaseSessionPokemon) {
-      context.reply(
-        context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRange")
-        ).build()
-      ).queue()
-      return
-    }
-
     val pokemonList = pokemon.toSet().mapNotNull {
       context.bot.database.pokemonRepository.getPokemonByIndex(
         context.author.id,
@@ -60,6 +51,14 @@ object ReleaseAddCommand : Command() {
       )  // Pokemon index starts at 0, but user input starts at 1
     }
 
+    if (releaseState.pokemon.size + pokemonList.size > Config.maxReleaseSessionPokemon) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.release.errors.notInRange")
+        ).build()
+      ).queue()
+      return
+    }
 
     if (pokemonList.isEmpty()) {
       context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
@@ -83,14 +82,6 @@ object ReleaseAddCommand : Command() {
               .build()
           )
             .queue()
-          return
-        }
-        releaseState.pokemon.size + pokemonList.size >= 51 -> {
-          context.reply(
-            context.embedTemplates.error(
-              context.translate("modules.release.commands.add.errors.notInRange")
-            ).build()
-          ).queue()
           return
         }
       }
