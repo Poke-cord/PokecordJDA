@@ -1060,7 +1060,7 @@ modules:
             **Amount**: {{amount}}
             
             The item(s) have been added to your inventory.
-          title: An Item has been Purchased
+          title: Item(s) has been Purchased
       shop:
         embed:
           description: |
