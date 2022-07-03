@@ -12,7 +12,8 @@ class StaffModule(bot: Bot) : Module(
     ShardsCommand(),
     BlacklistCommand(),
     ShowCommand(),
-    LogsCommand
+    LogsCommand,
+    BlacklistsCommand
   ),
   tasks = arrayOf(
     StaffSyncTask()

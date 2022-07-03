@@ -8,6 +8,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.coroutine.CoroutineFindPublisher
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
@@ -351,7 +352,7 @@ class UserRepository(
     }
   }
 
-  suspend fun clearLeaderboardCache(){
+  suspend fun clearLeaderboardCache() {
     leaderboardCacheMap.deleteAsync().awaitSuspending()
   }
 
@@ -404,6 +405,20 @@ class UserRepository(
     userData.blacklisted = blacklisted
     collection.updateOne(User::id eq userData.id, set(User::blacklisted setTo userData.blacklisted))
     setCacheUser(userData)
+  }
+
+  suspend fun getBlacklistedUserCount(): Long {
+    return collection.countDocuments(User::blacklisted eq true)
+  }
+
+  fun getBlacklistedUsers(limit: Int? = null, skip: Int? = null): CoroutineFindPublisher<User> {
+    return collection.find(User::blacklisted eq true)
+      .also {
+        if (skip != null) it.skip(skip)
+      }
+      .also {
+        if (limit != null) it.limit(limit)
+      }
   }
 
   suspend fun updatePokemonCount(userData: User, pokemonCount: Int, clientSession: ClientSession) {
