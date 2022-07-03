@@ -908,19 +908,25 @@ modules:
         removePokemon:
           title: A Pokémon has been Removed
           description: |-
-            **Name**: {{pokemon}}
+            **Name(s)**: 
+            {{pokemon}}
 
             Pokémon were removed from release.
       confirmation:
         embed:
           description: |-
+            **Name(s)**:
             {{pokemon}}
-
+            
+            Confirm release of the Pokémon above.
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
           title: Pokémon Releasing is Pending
         embedNoConfirm:
           description: |-
+            **Name(s)**:
             {{pokemon}}
+            
+            Pokémon were successfully added to release.
           title: Pokémon have been Added
         errors:
           emptyRelease: |-
@@ -928,7 +934,7 @@ modules:
             > **Add Pokémon to your release session before releasing.**
       released:
         description: |-
-          **Pokémon**:
+          **Name(s)**:
           {{pokemon}}
               
           **Rewards**: 
