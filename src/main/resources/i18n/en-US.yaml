@@ -226,7 +226,6 @@ modules:
               Sound trumpets! {{partner}} has been challenged by {{initiator}}! To either victory, or else a grave.
 
               Doth thee accept my challenge, {{partner}}?
-            footer: Adapted from Shakespeare's Henry VI Part 3.
       moves:
         embed:
           title: "Pokémon Moves | Level {{level}} {{pokemon}} "
