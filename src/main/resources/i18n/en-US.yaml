@@ -225,7 +225,7 @@ modules:
             description: |-
               Sound trumpets! {{partner}} has been challenged by {{initiator}}! To either victory, or else a grave.
 
-              Doth thee accept my challenge, {{partner}}?
+              Do you accept the challenge, {{partner}}?
       moves:
         embed:
           title: "Pokémon Moves | Level {{level}} {{pokemon}} "
