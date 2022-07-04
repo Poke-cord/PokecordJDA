@@ -1,5 +1,7 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
+import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 
@@ -9,19 +11,6 @@ class EVItem(id: Int, val type: String) : Item(id) {
     val userData = context.getUserData()
     val pokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
       ?: return UsageResult(false, context.embedTemplates.start())
-
-    // Meet the requirement of total 510 effort points in total per Pokémon
-    if (pokemon.evs.total >= 510) {
-      return UsageResult(
-        false,
-        context.embedTemplates.error(
-          context.translate(
-            "items.ev.errors.alreadyMaxTotalEv",
-            "pokemon" to context.translator.pokemonDisplayName(pokemon)
-          )
-        )
-      )
-    }
 
     val count = args.firstOrNull()?.toIntOrNull() ?: 1
 
@@ -45,28 +34,39 @@ class EVItem(id: Int, val type: String) : Item(id) {
       )
     }
 
-    var consumed = 0
-    repeat(count) {
-      val result = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.stat)
+    // Meet the requirement of total 510 effort points in total per Pokémon
+    if (pokemon.evs.total + count >= 510) {
+      return UsageResult(
+        false,
+        context.embedTemplates.error(
+          context.translate(
+            "items.ev.errors.alreadyMaxTotalEv",
+            "pokemon" to context.translator.pokemonDisplayName(pokemon)
+          )
+        )
+      )
+    }
 
-      // If a EV stat is already maxed out
-      if (result) {
+    val session = context.bot.database.startSession()
+    val consumed = session.use {
+      it.startTransaction()
+      val wasApplied = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.stat, count, it)
+      if (!wasApplied) {
+        it.abortTransactionAndAwait()
+        // If a EV stat is already maxed out
         return UsageResult(
           false,
           context.embedTemplates.error(
             context.translate(
               "items.ev.errors.alreadyMaxStat",
               "pokemon" to context.translator.pokemonDisplayName(pokemon),
-              "stat" to evsMap[evItemData.id].toString()
+              "stat" to context.translator.stat(evItemData.stat)
             )
           )
         )
       }
-
-      // Consume
-      context.bot.database.userRepository.consumeInventoryItem(inventoryItem)
-
-      consumed++
+      context.bot.database.userRepository.consumeInventoryItem(inventoryItem, count)
+      it.commitTransactionAndAwait()
     }
 
     return UsageResult(
@@ -77,7 +77,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
             "statName" to context.translator.stat(evItemData.stat),
-            "points" to (points * consumed).toString()
+            "points" to consumed.toString()
           )
         ),
         context.translate(
@@ -109,8 +109,6 @@ class EVItem(id: Int, val type: String) : Item(id) {
   }
 
   companion object {
-    const val points: Int = 1
-
     private fun EVItem.asPair(): Pair<Int, EVItem> {
       return id to this
     }

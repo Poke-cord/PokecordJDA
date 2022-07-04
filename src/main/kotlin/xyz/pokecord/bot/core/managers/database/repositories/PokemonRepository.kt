@@ -19,7 +19,6 @@ import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.pokemon.*
-import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
 import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
 import java.util.concurrent.TimeUnit
@@ -284,7 +283,12 @@ class PokemonRepository(
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
   }
 
-  suspend fun addEffort(pokemon: OwnedPokemon, stat: Stat): Boolean {
+  suspend fun addEffort(
+    pokemon: OwnedPokemon,
+    stat: Stat,
+    count: Int,
+    session: ClientSession
+  ): Boolean {
     val statField = when (stat.id) {
       Stat.hp.id -> PokemonStats::hp
       Stat.attack.id -> PokemonStats::attack
@@ -296,20 +300,23 @@ class PokemonRepository(
     }
     var statEV = statField.get(pokemon.evs)
 
-    if (statEV >= 252) return true
-    else if (statEV + EVItem.points >= 252) statEV = 252
-    else statEV += EVItem.points
+    if (statEV >= 252) return false
+
+    val requiredUntilMax = 252 - statEV
+    if (count > requiredUntilMax) return false
+    statEV += count
 
     statField.set(pokemon.evs, statEV)
 
     collection.updateOne(
+      session,
       OwnedPokemon::_id eq pokemon._id,
       set(
         OwnedPokemon::evs setTo pokemon.evs
       )
     )
 
-    return false
+    return true
   }
 
   suspend fun levelUpAndEvolveIfPossible(
