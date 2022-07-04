@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
 import xyz.pokecord.bot.utils.Confirmation
 
-object GiftCreditCommand : Command() {
+object GiftCreditCommand : StaffCommand() {
   override val name = "Credit"
 
   override var aliases = arrayOf("c")
