@@ -22,7 +22,7 @@ object BlacklistsCommand : StaffCommand() {
     if (blacklistedUserCount <= 0) {
       context.reply(
         context.embedTemplates.error(
-          "No blacklisted users found.",
+          "No blacklisted users were found.",
           "Blacklisted Users"
         ).build()
       ).queue()
@@ -33,7 +33,7 @@ object BlacklistsCommand : StaffCommand() {
       val startingIndex = it * PAGE_SIZE
       val items = context.bot.database.userRepository.getBlacklistedUsers(PAGE_SIZE, startingIndex).toList()
       val userList = items.mapIndexed { index, user ->
-        "${startingIndex + index + 1}. ${user.id}[${if (user.tag.isNullOrEmpty()) "N/A" else user.tag}] <@${user.id}>"
+        "|`${startingIndex + index + 1}`| **${user.id}** - [${if (user.tag.isNullOrEmpty()) "null" else user.tag}]"
       }.joinToString("\n")
       context.embedTemplates.normal(
         userList,
