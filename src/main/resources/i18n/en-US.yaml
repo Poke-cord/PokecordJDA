@@ -1221,7 +1221,7 @@ items:
         Too many {{stat}} vitamins!
         > **Your {{pokemon}}'s {{stat}} EVs are maxed out at 255!**
     embed:
-      title: {{vitamin}} Vitamin Used!
+      title: "{{vitamin}} Vitamin Used!" # I guess it needs quotes if it starts with {
       description: |-
         **Name**: {{pokemon}} 
         **Stat Buffed**: {{statName}} 
