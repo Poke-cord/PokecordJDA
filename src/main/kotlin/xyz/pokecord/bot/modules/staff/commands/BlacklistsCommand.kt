@@ -9,7 +9,8 @@ object BlacklistsCommand : StaffCommand() {
   private const val PAGE_SIZE = 10
 
   override val name = "Blacklists"
-
+  override var aliases = arrayOf("bls")
+  
   @Executor
   suspend fun execute(
     context: ICommandContext,
@@ -22,7 +23,7 @@ object BlacklistsCommand : StaffCommand() {
     if (blacklistedUserCount <= 0) {
       context.reply(
         context.embedTemplates.error(
-          "No blacklisted users were found.",
+          "No blacklisted users were found. You're dreaming.",
           "Blacklisted Users"
         ).build()
       ).queue()
