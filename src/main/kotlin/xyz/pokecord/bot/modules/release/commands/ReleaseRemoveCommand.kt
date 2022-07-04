@@ -63,7 +63,7 @@ object ReleaseRemoveCommand : Command() {
       ).queue()
     } else {
       val authorPokemonText =
-        ReleaseModule.getReleaseStatePokemonText(context, pokemonList, pokemonList.map { it.id }, false)
+        ReleaseModule.getReleaseStatePokemonText(context, pokemonList)
 
       val session = context.bot.database.startSession()
       session.use {

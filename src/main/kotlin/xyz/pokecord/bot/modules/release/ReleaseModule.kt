@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.modules.release
 
-import com.mongodb.reactivestreams.client.ClientSession
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.Bot
@@ -16,19 +15,12 @@ class ReleaseModule(bot: Bot) : Module(
   companion object {
     suspend fun getReleaseStatePokemonText(
       context: ICommandContext,
-      pokemon: List<OwnedPokemon>,
-      partnerPokemonIds: List<Int>,
-      updateInDb: Boolean,
-      clientSession: ClientSession? = null
+      pokemon: List<OwnedPokemon>
     ): List<String> {
       return pokemon.map {
-        val initialName = context.translator.pokemonName(it)
-        val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
-          it, null, null, partnerPokemonIds, updateInDb, clientSession
-        )
+        val name = context.translator.pokemonName(it)
 
-        val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(it)}" else ""
-        "${it.index + 1} | ${initialName}${evolutionNameText} - ${it.level} - ${it.ivPercentage}"
+        "${it.index + 1} | $name - ${it.level} - ${it.ivPercentage}"
       }
     }
   }

@@ -88,7 +88,7 @@ object ReleaseAddCommand : Command() {
     }
 
     val authorPokemonText =
-      ReleaseModule.getReleaseStatePokemonText(context, pokemonList, pokemonList.map { it.id }, false)
+      ReleaseModule.getReleaseStatePokemonText(context, pokemonList)
 
     context.reply(
       context.embedTemplates.normal(
