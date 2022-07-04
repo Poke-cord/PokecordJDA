@@ -2,9 +2,9 @@ package xyz.pokecord.bot.modules.pokemon.gift
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.staff.StaffCommand
 
-object GiftToggleCommand : StaffCommand() {
+
+object GiftToggleCommand : Command() {
   override val name = "Toggle"
 
   override var aliases = arrayOf("t")
