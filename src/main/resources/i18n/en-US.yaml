@@ -1216,10 +1216,10 @@ items:
     errors:
       alreadyMaxTotalEv: |-
         Too many vitamins!
-        > **A Pokémon may only have 510 EVs at once.**
+        > **Pokémon may only have 510 EVs in total.**
       alreadyMaxStat: |-
         Too many {{stat}} vitamins!
-        > **A Pokémon may only have 252 EVs in a single stat at once.**
+        > **Pokémon may only have 252 EVs in a single stat.**
     embed:
       title: "{{vitamin}} Vitamin was Used" # I guess it needs quotes if it starts with {
       description: |-
