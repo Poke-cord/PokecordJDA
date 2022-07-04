@@ -39,6 +39,7 @@ interface ICommandContext {
   suspend fun getPrefix(): String
   suspend fun getUserData(forceFetch: Boolean = false): User
   suspend fun getTradeState(): Trade?
+  suspend fun getReleaseState(): Release?
   suspend fun getTraderState(): TraderData?
   suspend fun getBattleState(): Battle?
   suspend fun handleException(

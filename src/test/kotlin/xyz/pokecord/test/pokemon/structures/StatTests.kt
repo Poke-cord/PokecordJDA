@@ -29,19 +29,19 @@ class StatTests : DescribeSpec({
     it("Should return correct values from the methods for Attack") {
       Stat.attack.getBaseEffortValue(1) shouldBe 0
       Stat.attack.getBaseValue(1) shouldBe 49
-      OwnedPokemon.getStatValue(1, 50, Stat.attack, Nature.getByName("jolly")!!, 25) shouldBe 66
+      OwnedPokemon.getStatValue(1, 50, Stat.attack, Nature.getByName("jolly")!!, 25, 0, 0) shouldBe 66
     }
 
     it("Should return correct values from the methods for HP") {
       Stat.hp.getBaseEffortValue(1) shouldBe 0
       Stat.hp.getBaseValue(1) shouldBe 45
-      OwnedPokemon.getStatValue(1, 50, Stat.hp, Nature.getByName("calm")!!, 29) shouldBe 119
+      OwnedPokemon.getStatValue(1, 50, Stat.hp, Nature.getByName("calm")!!, 29, 0, 0) shouldBe 119
     }
 
     it("Should return correct values from the methods for neutral natures") {
       Stat.defense.getBaseEffortValue(1) shouldBe 0
       Stat.defense.getBaseValue(1) shouldBe 49
-      OwnedPokemon.getStatValue(1, 50, Stat.defense, Nature.getByName("serious")!!, 29) shouldBe 68
+      OwnedPokemon.getStatValue(1, 50, Stat.defense, Nature.getByName("serious")!!, 29, 0, 0) shouldBe 68
     }
   }
 })

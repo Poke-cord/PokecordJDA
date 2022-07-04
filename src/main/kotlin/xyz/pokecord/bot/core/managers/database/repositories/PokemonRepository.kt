@@ -18,14 +18,9 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
-import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
-import xyz.pokecord.bot.core.structures.pokemon.Nature
-import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Type
-import xyz.pokecord.bot.utils.Config
-import xyz.pokecord.bot.utils.CountResult
-import xyz.pokecord.bot.utils.PokemonOrder
-import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
+import xyz.pokecord.bot.core.structures.pokemon.*
+import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
+import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
 import java.util.concurrent.TimeUnit
 
@@ -57,6 +52,10 @@ class PokemonRepository(
 
   suspend fun getPokemonByIndex(ownerId: String, index: Int): OwnedPokemon? {
     return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::index eq index)
+  }
+
+  suspend fun getPokemonByTotalIv(ownerId: String, totalIv: Int): OwnedPokemon? {
+    return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::totalIv eq totalIv)
   }
 
   suspend fun getLatestPokemon(ownerId: String): OwnedPokemon? {
@@ -283,6 +282,34 @@ class PokemonRepository(
   suspend fun releasePokemon(pokemon: OwnedPokemon, session: ClientSession) {
     releasedPokemonCollection.insertOne(session, pokemon)
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
+  }
+
+  suspend fun addEffort(pokemon: OwnedPokemon, stat: Stat): Boolean {
+    val statField = when (stat.id) {
+      Stat.hp.id -> PokemonStats::hp
+      Stat.attack.id -> PokemonStats::attack
+      Stat.defense.id -> PokemonStats::defense
+      Stat.specialAttack.id -> PokemonStats::specialAttack
+      Stat.specialDefense.id -> PokemonStats::specialDefense
+      Stat.speed.id -> PokemonStats::speed
+      else -> throw IllegalArgumentException("Unknown stat found: ${stat.id}")
+    }
+    var statEV = statField.get(pokemon.evs)
+
+    if (statEV >= 252) return true
+    else if (statEV + EVItem.points >= 252) statEV = 252
+    else statEV += EVItem.points
+
+    statField.set(pokemon.evs, statEV)
+
+    collection.updateOne(
+      OwnedPokemon::_id eq pokemon._id,
+      set(
+        OwnedPokemon::evs / statField setTo statEV
+      )
+    )
+
+    return false
   }
 
   suspend fun levelUpAndEvolveIfPossible(

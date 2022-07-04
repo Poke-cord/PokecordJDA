@@ -5,14 +5,14 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 object Config {
-  const val version = "2.0.0"
+  const val version = "2.1.51"
 
   val voteSeasonStartDate: LocalDate = Instant.ofEpochMilli(1609459200000).atZone(ZoneOffset.UTC).toLocalDate()
 
   val officialServerOnlyMode = System.getenv("OFFICIAL_SERVER_ONLY") != null
 
   val devs =
-    mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752")
+    mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752", "341282855625818122")
 
   const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"
@@ -26,6 +26,8 @@ object Config {
 
   const val minAuctionTime = 4 * 60 * 60 * 1000L
   const val maxAuctionTime = 30 * 24 * 60 * 60 * 1000L
+
+  const val maxReleaseSessionPokemon = 50
 
   const val publicNotificationWebhook =
     "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"

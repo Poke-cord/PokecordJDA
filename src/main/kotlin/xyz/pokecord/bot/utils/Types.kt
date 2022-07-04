@@ -12,12 +12,12 @@ import kotlin.reflect.KProperty1
 
 @Serializable
 data class PokemonStats(
-  val attack: Int,
-  val defense: Int,
-  val hp: Int,
-  val specialAttack: Int,
-  val specialDefense: Int,
-  val speed: Int
+  var attack: Int,
+  var defense: Int,
+  var hp: Int,
+  var specialAttack: Int,
+  var specialDefense: Int,
+  var speed: Int
 ) {
   @Transient
   val total = attack + defense + hp + specialAttack + specialDefense + speed
@@ -49,6 +49,7 @@ data class CountResult(val count: Int)
 sealed class PokemonResolvable(val data: Any?) {
   class Latest : PokemonResolvable("latest")
   class Int(data: kotlin.Int?) : PokemonResolvable(data)
+  class Ivs(data: kotlin.Int?) : PokemonResolvable(data)
 }
 
 enum class PokemonOrder(vararg val aliases: String) {

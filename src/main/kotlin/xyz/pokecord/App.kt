@@ -17,6 +17,7 @@ import xyz.pokecord.bot.modules.general.GeneralModule
 import xyz.pokecord.bot.modules.market.MarketModule
 import xyz.pokecord.bot.modules.pokemon.PokemonModule
 import xyz.pokecord.bot.modules.profile.ProfileModule
+import xyz.pokecord.bot.modules.release.ReleaseModule
 import xyz.pokecord.bot.modules.staff.StaffModule
 import xyz.pokecord.bot.modules.trading.TradingModule
 import xyz.pokecord.migration.Migration
@@ -66,6 +67,7 @@ object App {
           TradingModule(bot),
           StaffModule(bot),
           DeveloperModule(bot),
+          ReleaseModule(bot),
         )
         modules.forEach {
           bot.modules[it.name.lowercase()] = it
