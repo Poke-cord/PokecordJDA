@@ -1214,9 +1214,7 @@ items:
       title: A {{redeem}} has been Used
   ev:
     error:
-      alreadyMaxTotalEv: |-
-        Too many vitamins!
-        > **Your {{pokemon}}'s EVs are maxed out at 510!**
+      alreadyMaxTotalEv: "Too many vitamins!\n> **Your {{pokemon}}'s EVs are maxed out at 510!**"
       alreadyMaxStat: |-
         Too many {{stat}} vitamins!
         > **Your {{pokemon}}'s {{stat}} EVs are maxed out at 255!**
