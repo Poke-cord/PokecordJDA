@@ -39,7 +39,7 @@ object ReleaseConfirmCommand : Command() {
     val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(releaseState.pokemon)
 
     val authorPokemonText =
-      ReleaseModule.getReleaseStatePokemonText(context, authorPokemon, authorPokemon.map { it.id }, false)
+      ReleaseModule.getReleaseStatePokemonText(context, authorPokemon)
     val confirmation = Confirmation(context)
     val result =
       confirmation.result(
