@@ -1175,7 +1175,7 @@ items:
     embed:
       title: Glimmering Candy Used!
       description: Your shiny chance has been increased until the next shiny.
-  natureCAndy:
+  natureCandy:
     embed:
       title: Nature Candy Used!
       description: Congratulations, you received a **{{natureMint}}**!

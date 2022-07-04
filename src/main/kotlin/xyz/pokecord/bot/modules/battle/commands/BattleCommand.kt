@@ -8,7 +8,7 @@ import xyz.pokecord.bot.modules.battle.BattleModule
 
 object BattleCommand : Command() {
   override val name = "Battle"
-  override var aliases = arrayOf("duel")
+  override var aliases = arrayOf("duel", "b")
 
   @Executor
   suspend fun execute(
