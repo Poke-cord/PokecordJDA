@@ -4,7 +4,6 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 
 class EVItem(id: Int, val type: String) : Item(id) {
-
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val evItemData = EVItems.values().find { it.id == id }!!
     val userData = context.getUserData()
@@ -52,7 +51,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
 
       // If a EV stat is already maxed out
       if (result) {
-        UsageResult(
+        return UsageResult(
           false,
           context.embedTemplates.error(
             context.translate(
@@ -62,7 +61,6 @@ class EVItem(id: Int, val type: String) : Item(id) {
             )
           )
         )
-        return@repeat
       }
 
       // Consume
@@ -90,7 +88,6 @@ class EVItem(id: Int, val type: String) : Item(id) {
         )
       )
     )
-
   }
 
   enum class EVItems(
