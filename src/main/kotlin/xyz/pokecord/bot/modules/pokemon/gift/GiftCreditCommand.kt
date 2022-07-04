@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 import xyz.pokecord.bot.utils.Confirmation
 
 object GiftCreditCommand : StaffCommand() {
