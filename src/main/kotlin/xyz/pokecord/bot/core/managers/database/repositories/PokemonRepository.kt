@@ -305,7 +305,7 @@ class PokemonRepository(
     collection.updateOne(
       OwnedPokemon::_id eq pokemon._id,
       set(
-        OwnedPokemon::evs / statField setTo statEV
+        OwnedPokemon::evs setTo pokemon.evs
       )
     )
 
