@@ -891,6 +891,14 @@ modules:
           **Example**: `{{prefix}}pick torchic`
         startingTwice: '**Suggestion** Try catching a Pokémon instead of starting twice!'
         welcomeToPokeWorld: Welcome to the World of Pokecord!
+    events:
+      spawner:
+        embeds:
+          spawn:
+            description: Use `{{prefix}}catch <Pokémon Name>` to catch
+              it!
+            footer: The next Pokémon will replace this one.
+            title: A Wild Pokémon has Appeared
   release:
     embeds:
       center:
@@ -963,14 +971,6 @@ modules:
       notInRange: |-
         Pokecord reached for your Pokémon. Too bad it can't reach far.
         > **Specify up to a maximum of 50 Pokémon.**
-    events:
-      spawner:
-        embeds:
-          spawn:
-            description: Use `{{prefix}}catch <Pokémon Name>` to catch
-              it!
-            footer: The next Pokémon will replace this one.
-            title: A Wild Pokémon has Appeared
   profile:
     commands:
       bag:
