@@ -1173,21 +1173,21 @@ items:
       inBattle: You can't use a nature mint during a battle!
   glimmeringCandy:
     embed:
-      title: Glimmering Candy Used!
+      title: A Glimmering Candy was Used
       description: Your shiny chance has been increased until the next shiny.
   natureCandy:
     embed:
-      title: Nature Candy Used!
+      title: A Nature Candy was Used
       description: Congratulations, you received a **{{natureMint}}**!
   rareCandy:
     embed:
-      title: Rare Candy Used!
+      title: Rare Candy was Used
       description: Your **{{pokemon}}** is now at **Level {{level}}**.
     errors:
       alreadyMaxLevel: Your **{{pokemon}}** is already at max level!
   cct:
     embed:
-      title: "Credit Conversion Token Used!"
+      title: "Credit Conversion Token was Used"
       description: "**{{cost}}** credits has been converted to **{{token}}** token(s)."
     errors:
       notEnoughCredits: |-
@@ -1216,12 +1216,12 @@ items:
     errors:
       alreadyMaxTotalEv: |-
         Too many vitamins!
-        > **Your {{pokemon}}'s EVs are maxed out at 510!**
+        > **A Pokémon may only have 510 EVs at once.**
       alreadyMaxStat: |-
         Too many {{stat}} vitamins!
-        > **Your {{pokemon}}'s {{stat}} EVs are maxed out at 252!**
+        > **A Pokémon may only have 252 EVs in a single stat at once.**
     embed:
-      title: "{{vitamin}} Vitamin Used!" # I guess it needs quotes if it starts with {
+      title: "{{vitamin}} Vitamin was Used" # I guess it needs quotes if it starts with {
       description: |-
         **Name**: {{pokemon}} 
         **Stat Buffed**: {{statName}} 
