@@ -2,6 +2,7 @@ package xyz.pokecord.bot.core.managers.database.repositories
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import org.litote.kmongo.ascendingIndex
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.eq
 import org.litote.kmongo.set
@@ -19,6 +20,10 @@ class GuildRepository(
   private val collection: CoroutineCollection<Guild>,
   private val cacheMap: RMapCacheAsync<String, String>
 ) : Repository(database) {
+  override suspend fun createIndexes() {
+    collection.createIndex(ascendingIndex(Guild::id))
+  }
+
   private suspend fun getCacheGuild(guildId: String): Guild? {
     val json = cacheMap.getAsync(guildId).awaitSuspending() ?: return null
     return Json.decodeFromString(json)
