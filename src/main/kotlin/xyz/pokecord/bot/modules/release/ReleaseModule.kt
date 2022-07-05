@@ -18,7 +18,7 @@ class ReleaseModule(bot: Bot) : Module(
       pokemon: List<OwnedPokemon>
     ): List<String> {
       return pokemon.map {
-        val name = context.translator.pokemonName(it)
+        val name = context.translator.pokemonDisplayName(it, false)
 
         "${it.index + 1} | $name - ${it.level} - ${it.ivPercentage}"
       }
