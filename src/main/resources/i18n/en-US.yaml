@@ -149,7 +149,7 @@ misc:
     male: Male
     moveInfo: Move Info
     moveLearned: |-
-      **{{pokemon}}** learned **{{move}}**! | **Name**: {{pokemon}}
+      **Name**: {{pokemon}}
       **Move**: {{move}}
 
       Congratulations {{user}}!
