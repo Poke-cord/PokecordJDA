@@ -307,8 +307,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       if (hasRunningCommand) {
         context.reply(
           context.embedTemplates.error(
-            "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
-            "Failed to execute command"
+            "Pokecord is processing another command!\n> **This command was cancelled as a result.**",
+            "Command Execution Cancelled"
           ).build()
         ).queue()
         return
