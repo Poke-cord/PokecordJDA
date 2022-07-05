@@ -48,7 +48,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
     }
 
     val session = context.bot.database.startSession()
-    val consumed = session.use {
+    session.use {
       it.startTransaction()
       val wasApplied = context.bot.database.pokemonRepository.addEffort(pokemon, evItemData.stat, count, it)
       if (!wasApplied) {
@@ -77,7 +77,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
             "statName" to context.translator.stat(evItemData.stat),
-            "points" to consumed.toString()
+            "points" to count.toString()
           )
         ),
         context.translate(
