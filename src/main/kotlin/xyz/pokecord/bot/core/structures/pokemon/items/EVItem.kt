@@ -35,7 +35,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
     }
 
     // Meet the requirement of total 510 effort points in total per Pokémon
-    if (pokemon.evs.total + count >= 510) {
+    if (pokemon.evs.total + count > 510) {
       return UsageResult(
         false,
         context.embedTemplates.error(
