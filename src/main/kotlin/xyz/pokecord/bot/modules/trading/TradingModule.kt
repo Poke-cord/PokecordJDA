@@ -28,7 +28,7 @@ class TradingModule(bot: Bot) : Module(
         )
 
         val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(it)}" else ""
-        "${it.index + 1} | ${initialName}${evolutionNameText} - ${it.level} - ${it.ivPercentage}"
+        "|`${it.index + 1}`| **${initialName}${evolutionNameText}** - Lvl. **${it.level}** - **${it.ivPercentage}** IV"
       }
     }
   }
