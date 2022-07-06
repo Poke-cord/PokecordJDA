@@ -11,6 +11,10 @@ class ReleaseRepository(
   database: Database,
   private val collection: CoroutineCollection<Release>,
 ) : Repository(database) {
+  override suspend fun createIndexes() {
+    collection.createIndex(ascendingIndex(Release::userId))
+  }
+
   suspend fun createRelease(userId: String) {
     collection.insertOne(Release(userId))
   }

@@ -9,7 +9,11 @@ import xyz.pokecord.bot.core.managers.database.models.Config
 import xyz.pokecord.bot.core.managers.database.models.PaypalCredentials
 
 class ConfigRepository(database: Database, private val collection: CoroutineCollection<Config>) : Repository(database) {
-  suspend fun getConfig(): Config {
+  override suspend fun createIndexes() {
+    // No need of index here
+  }
+
+  private suspend fun getConfig(): Config {
     var config = collection.findOne()
     if (config == null) {
       config = Config()
