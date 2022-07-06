@@ -409,7 +409,7 @@ modules:
           title: "🎪 | Auction House"
         errors:
           noResults: |-
-            You're here! But the auction you searched is not.
+            You're here! But the auction you searched for is not.
             > **Wait for an auction to start.**
       notify:
         toggledOn:
@@ -561,7 +561,7 @@ modules:
           title: "🏘️ | Marketplace"
         errors:
           noResults: |-
-            You're here! But the listing you searched is not.
+            You're here! But the listing you searched for is not.
             > **Wait for a listing to be posted.**
   trading:
     commands:
