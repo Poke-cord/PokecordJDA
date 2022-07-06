@@ -11,6 +11,7 @@ object TradeCommand : ParentCommand() {
   override val childCommands =
     mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
   override val name = "Trade"
+  override var aliases = arrayOf("t")
 
   @Executor
   suspend fun execute(
