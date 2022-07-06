@@ -20,7 +20,7 @@ class ReleaseModule(bot: Bot) : Module(
       return pokemon.map {
         val name = context.translator.pokemonDisplayName(it, false)
 
-        "${it.index + 1} | $name - ${it.level} - ${it.ivPercentage}"
+        "|`${it.index + 1}`| **$name** - Lvl. **${it.level}** - **${it.ivPercentage}** IV"
       }
     }
   }
