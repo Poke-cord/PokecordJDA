@@ -72,7 +72,7 @@ misc:
       title: User Progress is Private
     rules:
       description: |-
-        Hey {{user}}! Welcome to the world of {{botUsername}}.
+        Hey {{user}}! Welcome to {{botUsername}}.
 
         Read and agree to our [Terms of Service]({{tosUrl}}) to continue.
         **By accessing {{botUsername}}, you will abide by our Terms.**
