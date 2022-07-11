@@ -23,6 +23,7 @@ class SpawnChannelRepository(
   private val guildSpawnChannelCacheMap = mutableMapOf<String, MutableSet<String>>()
 
   override suspend fun createIndexes() {
+    collection.createIndex(Indexes.ascending("id"))
     collection.createIndex(Indexes.ascending("guildId"))
   }
 
