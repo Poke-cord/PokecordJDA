@@ -214,7 +214,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           mapOf(
             "botUsername" to jda.selfUser.name,
             "user" to author.asMention,
-            "tosUrl" to "https://pokecord.xyz/rules"
+            "tosUrl" to "https://pokecord.fandom.com/wiki/Terms_of_Service"
           )
         )
       )
