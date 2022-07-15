@@ -2,6 +2,9 @@ package xyz.pokecord.bot.core.managers.database
 
 import com.mongodb.ClientSessionOptions
 import com.mongodb.ConnectionString
+import com.mongodb.ReadPreference
+import com.mongodb.TransactionOptions
+import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.coroutines.*
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -122,8 +125,13 @@ class Database(cache: Cache) {
     userRepository.createIndexes()
   }
 
-  suspend fun startSession(options: ClientSessionOptions? = null) =
-    if (options != null) client.startSession(options) else client.startSession()
+  suspend fun startSession(options: ClientSessionOptions? = null): ClientSession {
+    val sessionOptionsBuilder = options?.let { ClientSessionOptions.builder(it) } ?: ClientSessionOptions.builder()
+    sessionOptionsBuilder.defaultTransactionOptions(
+      TransactionOptions.builder().readPreference(ReadPreference.primary()).build()
+    )
+    return client.startSession(sessionOptionsBuilder.build())
+  }
 
   fun close() {
     client.close()
