@@ -39,6 +39,11 @@ object BattleRequestActionEvent : Event() {
         ).setEphemeral(true).queue()
         return
       }
+      val userData = module.bot.database.userRepository.getUser(event.user)
+      if (userData.blacklisted) {
+        module.bot.database.battleRepository.rejectBattleRequest(battleRequest)
+        return
+      }
       event.message.delete().queue()
 
       if (button is BattleModule.Buttons.BattleRequest.Accept) {

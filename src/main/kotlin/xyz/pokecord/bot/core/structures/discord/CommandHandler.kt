@@ -140,6 +140,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
             val option = event.getOption(commandArgumentAnnotation.name.ifEmpty { param.name!! })
             val parsedParam: Any? = when {
               param.type.isInteger -> option?.asLong?.toInt()
+              param.type.isIntArray -> option?.asString?.toIntArrayOrNull()
               param.type.isBoolean -> option?.asBoolean
               param.type.isString -> option?.asString
               param.type.isRegex -> option?.asString?.toRegex()
@@ -306,8 +307,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       if (hasRunningCommand) {
         context.reply(
           context.embedTemplates.error(
-            "You tried to execute a command while your last command was already processing and as a result, command execution has been cancelled.",
-            "Failed to execute command"
+            "Pokecord is processing another command!\n> **This command was cancelled as a result.**",
+            "Command Execution Cancelled"
           ).build()
         ).queue()
         return
@@ -366,6 +367,9 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
               when {
                 param.type.isInteger -> {
                   parsedParameters.add(argumentParser.getInteger())
+                }
+                param.type.isIntArray -> {
+                  parsedParameters.add(argumentParser.getIntArray())
                 }
                 param.type.isBoolean -> {
                   parsedParameters.add(

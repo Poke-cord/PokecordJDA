@@ -74,6 +74,7 @@ class RedeemItem(
     val minTotal = round((minIvPercentage / 100.0) * 186).toInt()
     val maxTotal = round((maxIvPercentage / 100.0) * 186).toInt()
     val items = spreadRandomly(0, 31, 6, Random.nextInt(minTotal, maxTotal + 1))
+    items.shuffle() // People say attack IV is always very close to 0, so we shuffle them so that it's not only the attack stat that's affected.
     return PokemonStats(
       items[0],
       items[1],

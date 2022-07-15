@@ -6,6 +6,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.isBoolean
+import xyz.pokecord.bot.utils.extensions.toIntArrayOrNull
 import kotlin.reflect.KType
 
 class ArgumentParser(
@@ -106,6 +107,13 @@ class ArgumentParser(
       nextArg()?.toIntOrNull()
     optionalArgCleanup(int)
     return int
+  }
+
+  fun getIntArray(): IntArray? {
+    val intArray =
+      nextArg()?.toIntArrayOrNull()
+    optionalArgCleanup(intArray)
+    return intArray
   }
 
   fun getRegex(): Regex? {

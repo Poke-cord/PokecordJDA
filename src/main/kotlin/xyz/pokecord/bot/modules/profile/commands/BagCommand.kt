@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
+import xyz.pokecord.bot.utils.EmbedPaginator
+import kotlin.math.ceil
 
 class BagCommand : Command() {
   override val name = "Bag"
@@ -48,18 +50,25 @@ class BagCommand : Command() {
       return
     }
 
-    val embed = context.embedTemplates.normal(
-      context.translate(
-        "modules.profile.commands.bag.description",
-        mapOf(
-          "credits" to context.translator.numberFormat(userData.credits),
-          "gems" to context.translator.numberFormat(userData.gems),
-          "tokens" to context.translator.numberFormat(userData.tokens)
+    val pageCount = ceil((items.size.toDouble() / 15)).toInt()
+    EmbedPaginator(
+      context,
+      pageCount,
+      {
+        val embed = context.embedTemplates.normal(
+          context.translate(
+            "modules.profile.commands.bag.description",
+            mapOf(
+              "credits" to context.translator.numberFormat(userData.credits),
+              "gems" to context.translator.numberFormat(userData.gems),
+              "tokens" to context.translator.numberFormat(userData.tokens)
+            )
+          ),
+          context.translate("modules.profile.commands.bag.title", "user" to targetUser.asTag)
         )
-      ),
-      context.translate("modules.profile.commands.bag.title", "user" to targetUser.asTag)
-    )
-    items.forEach(embed::addField)
-    context.reply(embed.build()).queue()
+        items.drop(it * 15).take(15).forEach(embed::addField)
+        embed
+      }
+    ).start()
   }
 }

@@ -2,8 +2,7 @@ package xyz.pokecord.bot.modules.staff
 
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
-import xyz.pokecord.bot.modules.staff.commands.MaintenanceCommand
-import xyz.pokecord.bot.modules.staff.commands.ShardsCommand
+import xyz.pokecord.bot.modules.staff.commands.*
 import xyz.pokecord.bot.modules.staff.tasks.StaffSyncTask
 
 class StaffModule(bot: Bot) : Module(
@@ -11,6 +10,10 @@ class StaffModule(bot: Bot) : Module(
   arrayOf(
     MaintenanceCommand(),
     ShardsCommand(),
+    BlacklistCommand(),
+    ShowCommand(),
+    LogsCommand,
+    BlacklistsCommand
   ),
   tasks = arrayOf(
     StaffSyncTask()

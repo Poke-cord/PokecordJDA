@@ -3,11 +3,11 @@ package xyz.pokecord.bot.modules.pokemon.gift
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 import xyz.pokecord.bot.utils.Confirmation
 
-object GiftCreditCommand : Command() {
+object GiftCreditCommand : StaffCommand() {
   override val name = "Credit"
 
   override var aliases = arrayOf("c")
@@ -20,7 +20,7 @@ object GiftCreditCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    if(context.getTradeState() != null || context.getBattleState() != null) {
+    if (context.getTradeState() != null || context.getBattleState() != null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.pokemon.commands.gift.errors.tradeBattleState")
@@ -81,7 +81,7 @@ object GiftCreditCommand : Command() {
       return
     }
 
-    val userData = context.getUserData()
+    var userData = context.getUserData()
     if (userData.credits < amount) {
       context.reply(
         context.embedTemplates.error(
@@ -107,6 +107,16 @@ object GiftCreditCommand : Command() {
     )
 
     if (confirmed) {
+      userData = context.getUserData()
+      if (userData.credits < amount) {
+        context.reply(
+          context.embedTemplates.error(
+            context.translate("modules.pokemon.commands.gift.errors.notEnoughCredits")
+          ).build()
+        ).queue()
+        return
+      }
+
       module.bot.database.userRepository.giftCredits(userData, receiverData, amount)
       try {
         val privateChannel = receiver.openPrivateChannel().await()

@@ -75,6 +75,22 @@ data class ItemData(
         }
       )
 
+      // Effort value
+      items.addAll(
+        EVItem.EVItems.values().map {
+          ItemData(
+            it.id,
+            it.identifier,
+            it.itemName,
+            EVItem.categoryId,
+            it.cost,
+            it.flingPower,
+            it.flingEffectId,
+            it.useGems
+          )
+        }
+      )
+
       // Redeems
       items.addAll(
         RedeemItem.Redeems.values().map {
@@ -104,6 +120,7 @@ data class ItemData(
           usesTokens = true
         )
       )
+      
       // Credit Conversion Token
       items.add(
         ItemData(
@@ -116,14 +133,33 @@ data class ItemData(
           0
         )
       )
+      
+      // Nature Candy
+      items.add(
+        ItemData(
+          NatureCandyItem.id,
+          "nature-candy",
+          "Nature Candy",
+          NatureCandyItem.categoryId,
+          7,
+          0,
+          0,
+          usesTokens = true
+        )
+      )
     }
 
     private fun applyCustomModifications() {
       items.forEach { itemData ->
-        when (itemData.id) {
-          50 -> {
-            itemData.usesTokens = true
-            itemData.cost = 1
+        val item: EVItem.EVItems? = EVItem.EVItems.values().find { it.id == itemData.id }
+        if (item != null) {
+          itemData.cost = 0
+          return@forEach
+        }
+
+        when (itemData.categoryId) {
+          NatureMintItem.categoryId -> {
+            itemData.cost = 0 // make it un-purchasable
           }
         }
       }

@@ -11,6 +11,7 @@ object TradeCommand : ParentCommand() {
   override val childCommands =
     mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
   override val name = "Trade"
+  override var aliases = arrayOf("t")
 
   @Executor
   suspend fun execute(
@@ -28,6 +29,15 @@ object TradeCommand : ParentCommand() {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.trading.commands.trade.errors.alreadyInTrade")
+        ).build()
+      ).queue()
+      return
+    }
+
+    if (context.getReleaseState() != null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("modules.trading.errors.inRelease")
         ).build()
       ).queue()
       return

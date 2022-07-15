@@ -6,8 +6,6 @@ import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.UpdateResult
 import com.mongodb.reactivestreams.client.ClientSession
-import kotlinx.serialization.json.*
-import org.bson.BsonDocument
 import org.bson.conversions.Bson
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -20,16 +18,10 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
-import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.core.structures.pokemon.EvolutionChain
-import xyz.pokecord.bot.core.structures.pokemon.Nature
-import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Type
-import xyz.pokecord.bot.utils.Config
-import xyz.pokecord.bot.utils.CountResult
-import xyz.pokecord.bot.utils.PokemonOrder
-import xyz.pokecord.bot.utils.PokemonWithOnlyObjectId
+import xyz.pokecord.bot.core.structures.pokemon.*
+import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
+import java.util.concurrent.TimeUnit
 
 class PokemonRepository(
   database: Database,
@@ -43,8 +35,8 @@ class PokemonRepository(
     collection.createIndex(Indexes.ascending("level"))
     collection.createIndex(Indexes.ascending("totalIv"))
     collection.createIndex(Indexes.ascending("ownerId"))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("id"), Indexes.ascending("_id")))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("_id")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("id")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("nickname")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("ownerId")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
   }
@@ -59,6 +51,10 @@ class PokemonRepository(
 
   suspend fun getPokemonByIndex(ownerId: String, index: Int): OwnedPokemon? {
     return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::index eq index)
+  }
+
+  suspend fun getPokemonByTotalIv(ownerId: String, totalIv: Int): OwnedPokemon? {
+    return collection.findOne(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::totalIv eq totalIv)
   }
 
   suspend fun getLatestPokemon(ownerId: String): OwnedPokemon? {
@@ -287,6 +283,42 @@ class PokemonRepository(
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
   }
 
+  suspend fun addEffort(
+    pokemon: OwnedPokemon,
+    stat: Stat,
+    count: Int,
+    session: ClientSession
+  ): Boolean {
+    val statField = when (stat.id) {
+      Stat.hp.id -> PokemonStats::hp
+      Stat.attack.id -> PokemonStats::attack
+      Stat.defense.id -> PokemonStats::defense
+      Stat.specialAttack.id -> PokemonStats::specialAttack
+      Stat.specialDefense.id -> PokemonStats::specialDefense
+      Stat.speed.id -> PokemonStats::speed
+      else -> throw IllegalArgumentException("Unknown stat found: ${stat.id}")
+    }
+    var statEV = statField.get(pokemon.evs)
+
+    if (statEV >= 252) return false
+
+    val requiredUntilMax = 252 - statEV
+    if (count > requiredUntilMax) return false
+    statEV += count
+
+    statField.set(pokemon.evs, statEV)
+
+    collection.updateOne(
+      session,
+      OwnedPokemon::_id eq pokemon._id,
+      set(
+        OwnedPokemon::evs setTo pokemon.evs
+      )
+    )
+
+    return true
+  }
+
   suspend fun levelUpAndEvolveIfPossible(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
@@ -310,8 +342,10 @@ class PokemonRepository(
       requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
     }
 
-    if (pokemon.id != 790 && pokemon.heldItemId != 206) {
+    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) {
       val evolution = pokemon.data.nextEvolutions.map { EvolutionChain.details(it) }.find { evolutionDetails ->
+        if (evolutionDetails?.evolvedSpeciesId in Pokemon.dontEvolveInto) return@find false
+
         val isGenderOk =
           if (evolutionDetails?.genderId != 0) if (evolutionDetails?.genderId == 1) pokemon.gender == 0 else if (evolutionDetails?.genderId == 2) pokemon.gender == 1 else true else true
         val isHeldItemOk =
@@ -424,15 +458,12 @@ class PokemonRepository(
   }
 
   suspend fun reindexPokemon(
-    bot: Bot,
     ownerId: String,
     order: PokemonOrder,
     extraOps: suspend (session: ClientSession, pokemonCount: Int) -> Unit = { _, _ -> }
   ) {
     val sortProperty = order.getSortProperty()
-    val userLock = cache.getUserLock(ownerId)
-    bot.addUserLock(userLock)
-    userLock.withCoroutineLock {
+    cache.getUserLock(ownerId).withCoroutineLock(5, TimeUnit.MINUTES) {
       var done = 0
       val session = database.startSession()
       session.use {
@@ -473,7 +504,6 @@ class PokemonRepository(
         it.commitTransactionAndAwait()
       }
     }
-    bot.removeUserLock(userLock)
   }
 
   suspend fun getEstimatedPokemonCount(): Long {
@@ -487,51 +517,61 @@ class PokemonRepository(
     update: Bson,
     updateOptions: UpdateOptions = UpdateOptions()
   ): UpdateResult {
-    val session = database.startSession()
-    return session.use { clientSession ->
-      clientSession.startTransaction()
-      val insertedId = database.transferLogCollection.insertOne(
-        clientSession,
-        TransferLog(
-          filter.json,
-          update.json,
-          context.author.id,
-          context.channel.id,
-          performedInGuild = context.guild?.id
-        )
-      ).insertedId!!.asObjectId().value.toId<TransferLog>()
+    var result = UpdateResult.unacknowledged()
+    val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(filter)
+      .projection(OwnedPokemon::_id from OwnedPokemon::_id)
+      .toList()
+      .map { it._id }
 
-      var done = 0
-      do {
-        val matchedIds = collection.findAndCast<PokemonWithOnlyObjectId>(clientSession, filter)
-          .projection(OwnedPokemon::_id from OwnedPokemon::_id)
-          .skip(done)
-          .limit(Config.transferChunkSize)
-          .toList()
-          .map { it._id }
-        done += matchedIds.size
+    val insertedId = database.transferLogCollection.insertOne(
+      TransferLog(
+        filter.json,
+        update.json,
+        context.author.id,
+        context.channel.id,
+        performedInGuild = context.guild?.id
+      )
+    ).insertedId!!.asObjectId().value.toId<TransferLog>()
+
+    val chunks = matchedIds
+      .chunked(Config.transferChunkSize)
+
+    for (chunk in chunks) {
+      val session = database.startSession()
+      session.use {
+        it.startTransaction()
+        val updateResult = collection.updateMany(it, OwnedPokemon::_id `in` chunk, update, updateOptions)
         database.transferLogCollection.updateOne(
-          clientSession,
+          it,
           TransferLog::_id eq insertedId,
           combine(
-            pushEach(TransferLog::matchedIds, matchedIds),
+            pushEach(TransferLog::matchedIds, chunk),
             set(TransferLog::status setTo TransferLog.Status.STARTED)
           )
         )
-        if (matchedIds.size < Config.transferChunkSize) break
-      } while (true)
-
-      val updateResult = collection.updateMany(filter, update, updateOptions)
-      database.transferLogCollection.updateOne(
-        clientSession,
-        TransferLog::_id eq insertedId,
-        combine(
-          set(TransferLog::status setTo TransferLog.Status.COMPLETE)
-        )
-      )
-      clientSession.commitTransactionAndAwait()
-      updateResult
+        it.commitTransactionAndAwait()
+        if (updateResult.wasAcknowledged()) {
+          result = if (result.wasAcknowledged()) {
+            UpdateResult.acknowledged(
+              result.matchedCount + updateResult.matchedCount,
+              result.modifiedCount + updateResult.modifiedCount,
+              null
+            )
+          } else {
+            UpdateResult.acknowledged(updateResult.matchedCount, updateResult.modifiedCount, null)
+          }
+        }
+      }
     }
+
+    database.transferLogCollection.updateOne(
+      TransferLog::_id eq insertedId,
+      combine(
+        set(TransferLog::status setTo TransferLog.Status.COMPLETE)
+      )
+    )
+
+    return result
   }
 
   suspend fun updateNature(pokemon: OwnedPokemon, newNature: String) {
@@ -625,6 +665,51 @@ class PokemonRepository(
     val pipeline: Array<Bson>
       get() {
         val aggregation = mutableListOf<Bson>()
+        if (ids.isNotEmpty()) {
+          aggregation.add(match(OwnedPokemon::id `in` ids.asIterable()))
+        }
+        if (regex != null || searchQuery != null) {
+          aggregation.add(
+            match(
+              or(
+                OwnedPokemon::id `in` searchIds,
+                OwnedPokemon::nickname.regex(
+                  (regex ?: searchQuery!!).toString(),
+                  if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
+                ),
+              )
+            )
+          )
+
+//          aggregation.add(
+//            BsonDocument.parse(
+//              buildJsonObject {
+//                putJsonObject("\$match") {
+//                  putJsonArray("\$or") {
+//                    addJsonObject {
+//                      putJsonObject(OwnedPokemon::nickname.name) {
+//                        put("\$regex", (regex ?: searchQuery!!).toString())
+//                        put(
+//                          "\$options",
+//                          if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
+//                        )
+//                      }
+//                    }
+//                    addJsonObject {
+//                      putJsonObject(OwnedPokemon::id.name) {
+//                        putJsonArray("\$in") {
+//                          searchIds.forEach {
+//                            add(it)
+//                          }
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//              }.toString()
+//            )
+//          )
+        }
         if (favorites == true) {
           aggregation.add(match(OwnedPokemon::favorite eq true))
         }
@@ -636,39 +721,6 @@ class PokemonRepository(
           if (natureObj != null) {
             aggregation.add(match(OwnedPokemon::nature eq natureObj.name!!.name))
           }
-        }
-        if (ids.isNotEmpty()) {
-          aggregation.add(match(OwnedPokemon::id `in` ids.asIterable()))
-        }
-        if (regex != null || searchQuery != null) {
-          aggregation.add(
-            BsonDocument.parse(
-              buildJsonObject {
-                putJsonObject("\$match") {
-                  putJsonArray("\$or") {
-                    addJsonObject {
-                      putJsonObject(OwnedPokemon::nickname.name) {
-                        put("\$regex", (regex ?: searchQuery!!).toString())
-                        put(
-                          "\$options",
-                          if (regex?.options?.contains(RegexOption.IGNORE_CASE) == true || regex == null) "i" else ""
-                        )
-                      }
-                    }
-                    addJsonObject {
-                      putJsonObject(OwnedPokemon::id.name) {
-                        putJsonArray("\$in") {
-                          searchIds.forEach {
-                            add(it)
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }.toString()
-            )
-          )
         }
         if (!noSorting) aggregation.add(orderBson ?: sort(ascending(OwnedPokemon::index)))
         return aggregation.toTypedArray()

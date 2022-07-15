@@ -88,11 +88,17 @@ class AuctionsRepository(
 
   suspend fun getAuctionList(
     ownerId: String? = null,
+    showBids: Boolean = false,
     limit: Int? = 10,
     skip: Int? = 0,
     aggregation: MutableList<Bson> = mutableListOf()
   ): List<Auction> {
-    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
+    if (ownerId != null) {
+      if (showBids) aggregation.add(match(Auction::bids / Bid::userId eq ownerId))
+      else aggregation.add(match(Auction::ownerId eq ownerId))
+    } else if (showBids) {
+      throw IllegalArgumentException("Cannot show bids without ownerId")
+    }
     if (skip != null) aggregation.add(skip(skip))
     if (limit != null) aggregation.add(limit(limit))
     val result = collection.aggregate<Auction>(*aggregation.toTypedArray())
@@ -101,9 +107,15 @@ class AuctionsRepository(
 
   suspend fun getAuctionCount(
     ownerId: String? = null,
+    showBids: Boolean = false,
     aggregation: MutableList<Bson> = mutableListOf()
   ): Int {
-    if (ownerId != null) aggregation.add(match(Auction::ownerId eq ownerId))
+    if (ownerId != null) {
+      if (showBids) aggregation.add(match(Auction::bids / Bid::userId eq ownerId))
+      else aggregation.add(match(Auction::ownerId eq ownerId))
+    } else if (showBids) {
+      throw IllegalArgumentException("Cannot show bids without ownerId")
+    }
     val result = collection.aggregate<CountResult>(
       *aggregation.toTypedArray(),
       Aggregates.count("count")

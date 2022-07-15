@@ -58,6 +58,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     return bot.database.tradeRepository.getTrade(author.id)
   }
 
+  override suspend fun getReleaseState(): Release? {
+    return bot.database.releaseRepository.getRelease(author.id)
+  }
+
   override suspend fun getTraderState(): TraderData? {
     return bot.database.tradeRepository.getTraderData(author.id)
   }
@@ -125,6 +129,9 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
     }
     if (pokemonResolvable is PokemonResolvable.Latest) {
       return bot.database.pokemonRepository.getLatestPokemon(jdaUser.id)
+    }
+    if (pokemonResolvable is PokemonResolvable.Ivs) {
+      return bot.database.pokemonRepository.getPokemonByTotalIv(jdaUser.id, (pokemonResolvable.data as Int))
     }
     return null
   }
@@ -207,7 +214,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           mapOf(
             "botUsername" to jda.selfUser.name,
             "user" to author.asMention,
-            "tosUrl" to "https://pokecord.xyz/rules"
+            "tosUrl" to "https://pokecord.fandom.com/wiki/Terms_of_Service"
           )
         )
       )
@@ -215,9 +222,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun isStaff(): Boolean {
-    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
-      author.id
-    ).awaitSuspending())
+//    return Config.devs.contains(author.id) || (guild?.id == Config.mainServer && bot.cache.staffMemberIds.containsAsync(
+//      author.id
+//    ).awaitSuspending())
+    return Config.devs.contains(author.id) || bot.cache.staffMemberIds.containsAsync(author.id).awaitSuspending()
   }
 
   companion object {

@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import com.mongodb.client.model.Indexes
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.dv8tion.jda.api.entities.User
@@ -22,8 +21,8 @@ class BattleRepository(
   private val battleRequestCacheMap: RMapCacheAsync<String, String>
 ) : Repository(database) {
   override suspend fun createIndexes() {
-    collection.createIndex(Indexes.ascending("initiatorId"))
-    collection.createIndex(Indexes.ascending("partnerId"))
+    collection.createIndex(ascendingIndex(Battle::initiator / Battle.Trainer::id))
+    collection.createIndex(ascendingIndex(Battle::partner / Battle.Trainer::id))
   }
 
   suspend fun getUserCurrentBattle(user: User) = getUserCurrentBattle(user.id)

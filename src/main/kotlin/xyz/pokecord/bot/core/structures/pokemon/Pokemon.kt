@@ -1104,6 +1104,9 @@ data class Pokemon(
     )
     val pseudoLegendaries = listOf(149, 248, 373, 376, 445, 635, 706, 784, 887)
 
+    val dontEvolveFrom = listOf(790)
+    val dontEvolveInto = listOf(292, 862, 863, 864, 865, 866, 867)
+
     init {
       val stream = Pokemon::class.java.getResourceAsStream("/data/pokemon.json")
       if (stream == null) {

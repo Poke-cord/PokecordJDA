@@ -6,10 +6,10 @@ import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 
 @Serializable
-data class Gift(
-  val senderId: String,
-  val receiverId: String,
-  val credits: Int = 0,
-  val pokemonIds: List<@Contextual Id<OwnedPokemon>>,
-  val _id: @Contextual Id<Gift> = newId()
+data class Release(
+  val userId: String,
+  var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf(),
+
+  @Contextual val _id: Id<Trade> = newId(),
+  var ended: Boolean = false
 )

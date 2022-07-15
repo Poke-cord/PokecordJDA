@@ -22,13 +22,13 @@ class TradingModule(bot: Bot) : Module(
       clientSession: ClientSession? = null
     ): List<String> {
       return pokemon.map {
-        val initialName = context.translator.pokemonName(it)
+        val initialName = context.translator.pokemonDisplayName(it, false)
         val (_, evolved) = context.bot.database.pokemonRepository.levelUpAndEvolveIfPossible(
           it, null, null, partnerPokemonIds, updateInDb, clientSession
         )
 
         val evolutionNameText = if (evolved) "-> ${context.translator.pokemonName(it)}" else ""
-        "${it.index + 1} | ${initialName}${evolutionNameText} - ${it.level} - ${it.ivPercentage}"
+        "|`${it.index + 1}`| **${initialName}${evolutionNameText}** - Lvl. **${it.level}** - **${it.ivPercentage}** IV"
       }
     }
   }

@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 object NotifyCommand : Command() {
   override val name = "Notify"
-  override var aliases = arrayOf("notification", "noti")
+  override var aliases = arrayOf("notification", "notif")
 
   @Executor
   suspend fun execute(context: ICommandContext) {

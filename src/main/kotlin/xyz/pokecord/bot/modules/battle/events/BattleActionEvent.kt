@@ -31,6 +31,11 @@ object BattleActionEvent : Event() {
 
       val battle = module.bot.database.battleRepository.getBattle(ObjectId(battleId).toId()) ?: return
       if (!battle.hasTrainer(event.user.id)) return
+      val userData = module.bot.database.userRepository.getUser(event.user)
+      if (userData.blacklisted) {
+        module.bot.database.battleRepository.endBattle(battle)
+        return
+      }
 
       when (button) {
         is BattleModule.Buttons.BattleAction.UseMove -> {
@@ -50,7 +55,6 @@ object BattleActionEvent : Event() {
           val partner = if (interactionTrainer == battle.initiator) battle.partner else battle.initiator
           val partnerUser = event.jda.retrieveUserById(partner.id).await()
 
-          val userData = module.bot.database.userRepository.getUser(self.id)
           val partnerData = module.bot.database.userRepository.getUser(partner.id)
 
           val pokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
@@ -118,8 +122,7 @@ object BattleActionEvent : Event() {
             } catch (e: Throwable) {
               null
             } ?: return
-
-            val userData = module.bot.database.userRepository.getUser(self.id)
+            
             val partnerData = module.bot.database.userRepository.getUser(partner.id)
 
             val selfPokemon = module.bot.database.pokemonRepository.getPokemonById(userData.selected!!)!!
@@ -365,11 +368,11 @@ object BattleActionEvent : Event() {
   private fun getMoveResultText(
     moveResult: Battle.MoveResult, selfPokemon: OwnedPokemon, partnerPokemon: OwnedPokemon, moveData: MoveData
   ): String {
-    if (moveResult.isMissed) return "**${selfPokemon.displayName}** missed **${moveData.name}**"
+    if (moveResult.isMissed) return "**${selfPokemon.displayName}** used **${moveData.name}**, but it missed!"
     if (moveResult.nothingHappened) return "**${selfPokemon.displayName}** used **${moveData.name}**, but nothing happened."
     val sb = StringBuilder()
-    sb.append("**${selfPokemon.displayName}** dealt **${-moveResult.defenderDamage}HP** to **${partnerPokemon.displayName}**")
-    sb.appendLine("${if (moveResult.selfDamage > 0) "and **${-moveResult.selfDamage}HP** to itself" else ""} using **${moveData.name}**.")
+    sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
+    sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
     if (moveResult.isCritical) sb.appendLine("It's a critical hit!")
     if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!")
     else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective!")

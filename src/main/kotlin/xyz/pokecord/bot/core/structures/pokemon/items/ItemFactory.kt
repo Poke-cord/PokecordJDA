@@ -7,6 +7,7 @@ object ItemFactory {
 
   init {
     items.putAll(CreditsItem.creditsMap)
+    items.putAll(EVItem.evsMap)
     items.putAll(RedeemItem.redeemMap)
 
     items.putAll(
@@ -21,15 +22,16 @@ object ItemFactory {
       }
     )
 
-//    items.putAll(
-//      ItemData.getByCategoryId(NatureMintItem.categoryId).map {
-//        it.id to NatureMintItem(it.id)
-//      }
-//    )
+    items.putAll(
+      ItemData.getByCategoryId(NatureMintItem.categoryId).map {
+        it.id to NatureMintItem(it.id)
+      }
+    )
 
     items[RareCandyItem.id] = RareCandyItem
 
     items[GlimmeringCandyItem.id] = GlimmeringCandyItem
     items[CCTItem.id] = CCTItem
+    items[NatureCandyItem.id] = NatureCandyItem
   }
 }

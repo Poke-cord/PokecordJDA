@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.pokemon.gift
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
+
 object GiftToggleCommand : Command() {
   override val name = "Toggle"
 

@@ -12,6 +12,14 @@ class TradeRepository(
   database: Database,
   private val collection: CoroutineCollection<Trade>,
 ) : Repository(database) {
+  override suspend fun createIndexes() {
+    collection.createIndex(ascendingIndex(Trade::ended))
+    collection.createIndex(ascendingIndex(Trade::initiator / TraderData::confirmed))
+    collection.createIndex(ascendingIndex(Trade::receiver / TraderData::confirmed))
+    collection.createIndex(ascendingIndex(Trade::initiator / TraderData::userId))
+    collection.createIndex(ascendingIndex(Trade::receiver / TraderData::userId))
+  }
+
   suspend fun createTrade(traderId: String, tradedId: String) {
     val trader = TraderData(traderId, tradedId)
     val traded = TraderData(tradedId, traderId)

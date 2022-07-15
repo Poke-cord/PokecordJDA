@@ -7,10 +7,11 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
+import xyz.pokecord.bot.modules.staff.StaffCommand
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-object GiftPokemonCommand : Command() {
+object GiftPokemonCommand : StaffCommand() {
   override val name = "Pokemon"
 
   override var aliases = arrayOf("p")

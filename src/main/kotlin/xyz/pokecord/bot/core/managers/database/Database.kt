@@ -19,21 +19,22 @@ class Database(cache: Cache) {
   private val client: CoroutineClient
   val database: CoroutineDatabase
 
-  private val auctionCollection: CoroutineCollection<Auction>
   private val battleCollection: CoroutineCollection<Battle>
   private val configCollection: CoroutineCollection<Config>
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>
-  private val marketCollection: CoroutineCollection<Listing>
   private val orderCollection: CoroutineCollection<Order>
   private val ownedPokemonCollection: CoroutineCollection<OwnedPokemon>
+  private val releaseCollection: CoroutineCollection<Release>
   private val spawnChannelCollection: CoroutineCollection<SpawnChannel>
   private val userCollection: CoroutineCollection<User>
   private val voteRewardsCollection: CoroutineCollection<VoteReward>
-  private val tradeCollection: CoroutineCollection<Trade>
 
+  val auctionCollection: CoroutineCollection<Auction>
   val giftCollection: CoroutineCollection<Gift>
+  val marketCollection: CoroutineCollection<Listing>
+  val tradeCollection: CoroutineCollection<Trade>
   val transferLogCollection: CoroutineCollection<TransferLog>
 
   val auctionRepository: AuctionsRepository
@@ -44,6 +45,7 @@ class Database(cache: Cache) {
   val marketRepository: MarketRepository
   val orderRepository: OrderRepository
   val pokemonRepository: PokemonRepository
+  val releaseRepository: ReleaseRepository
   val rewardRepository: RewardRepository
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
@@ -74,6 +76,7 @@ class Database(cache: Cache) {
     marketCollection = database.getCollection()
     orderCollection = database.getCollection()
     ownedPokemonCollection = database.getCollection()
+    releaseCollection = database.getCollection()
     spawnChannelCollection = database.getCollection()
     userCollection = database.getCollection()
     voteRewardsCollection = database.getCollection()
@@ -91,6 +94,7 @@ class Database(cache: Cache) {
     marketRepository = MarketRepository(this, marketCollection, cache.listingMap)
     orderRepository = OrderRepository(this, orderCollection)
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
+    releaseRepository = ReleaseRepository(this, releaseCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
     spawnChannelRepository =
       SpawnChannelRepository(

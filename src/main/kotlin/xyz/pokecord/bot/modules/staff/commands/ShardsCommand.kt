@@ -35,7 +35,7 @@ class ShardsCommand : StaffCommand() {
         } - ${status.guildCacheSize}"
       }
       context.embedTemplates.normal(
-        "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount\n\nPossibly Dead Hosts: ${
+        "$shardList\n\nCurrent Shard: ${context.jda.shardInfo.shardId}\nGuild Count: $guildCount\n\nAPI Status: [discordstatus.com](https://discordstatus.com)\nPossibly Dead Hosts: ${
           possiblyDeadHosts.joinToString(", ").ifEmpty { "None" }
         }",
         "Shard Status"

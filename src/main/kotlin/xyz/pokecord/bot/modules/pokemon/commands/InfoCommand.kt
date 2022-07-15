@@ -45,19 +45,19 @@ class InfoCommand : Command() {
 
     val infoSection = """
         **${context.translate("misc.texts.xp")}**: ${if (pokemon.level >= 100) "Max" else "${pokemon.xp}/${pokemon.requiredXpToLevelUp()}"}
-        **${context.translate("misc.texts.gender")}**: ${context.translator.gender(pokemon)}
+        **${context.translate("misc.texts.gender")}**: ${context.translator.gender(pokemon)} ${if (pokemon.heldItemId != 0) "\n**${context.translate("misc.texts.heldItem")}**: ${(ItemData.getById(pokemon.heldItemId)?.name ?: pokemon.heldItemId)}" else ""}
         **${context.translate("misc.texts.nature")}**: ${context.translator.nature(pokemon.nature)}
-        ${if (pokemon.heldItemId != 0) "**${context.translate("misc.texts.heldItem")}**: ${(ItemData.getById(pokemon.heldItemId)?.name ?: pokemon.heldItemId)}" else ""}
         """.trimIndent()
 
     val statSection = """
-        **${context.translator.stat(Stat.hp)}**: ${pokemon.stats.hp} - ${pokemon.ivs.hp}/31
-        **${context.translator.stat(Stat.attack)}**: ${pokemon.stats.attack} - ${pokemon.ivs.attack}/31
-        **${context.translator.stat(Stat.defense)}**: ${pokemon.stats.defense} - ${pokemon.ivs.defense}/31
-        **${context.translator.stat(Stat.specialAttack)}**: ${pokemon.stats.specialAttack} - ${pokemon.ivs.specialAttack}/31
-        **${context.translator.stat(Stat.specialDefense)}**: ${pokemon.stats.specialDefense} - ${pokemon.ivs.specialDefense}/31
-        **${context.translator.stat(Stat.speed)}**: ${pokemon.stats.speed} - ${pokemon.ivs.speed}/31
-        **${context.translate("misc.texts.totalIv")}**: ${pokemon.ivPercentage}
+        **Stat Spread (IV, +EV)**
+        `${context.translate("misc.texts.hp").padEnd(7)}| ${pokemon.stats.hp.toString().padStart(3)} | ${pokemon.ivs.hp.toString().padStart(2)}/31${ if(pokemon.evs.hp > 0) ("+" + (pokemon.evs.hp).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.attack").padEnd(7)}| ${pokemon.stats.attack.toString().padStart(3)} | ${pokemon.ivs.attack.toString().padStart(2)}/31${ if(pokemon.evs.attack > 0) ("+" + (pokemon.evs.attack).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.defense").padEnd(7)}| ${pokemon.stats.defense.toString().padStart(3)} | ${pokemon.ivs.defense.toString().padStart(2)}/31${ if(pokemon.evs.defense > 0) ("+" + (pokemon.evs.defense).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${pokemon.stats.specialAttack.toString().padStart(3)} | ${pokemon.ivs.specialAttack.toString().padStart(2)}/31${ if(pokemon.evs.specialAttack > 0) ("+" + (pokemon.evs.specialAttack).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${pokemon.stats.specialDefense.toString().padStart(3)} | ${pokemon.ivs.specialDefense.toString().padStart(2)}/31${ if(pokemon.evs.specialDefense > 0) ("+" + (pokemon.evs.specialDefense ).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.speed").padEnd(7)}| ${pokemon.stats.speed.toString().padStart(3)} | ${pokemon.ivs.speed.toString().padStart(2)}/31${ if(pokemon.evs.speed > 0) ("+" + (pokemon.evs.speed).toString()).padStart(6) else " ".repeat(6)}`
+        **${context.translate("misc.texts.totalIv").padEnd(7)}**: ${pokemon.ivPercentage}
         """.trimIndent()
 
     val trainerSection = """
@@ -73,7 +73,7 @@ class InfoCommand : Command() {
 
     context.reply(
       context.embedTemplates.normal(
-        infoSection + "\n" + statSection + "\n\n" + trainerSection,
+        infoSection + "\n\n" + trainerSection + "\n\n" + statSection + "\n",
         context.translate(
           "modules.pokemon.commands.info.embed.title",
           mapOf(
