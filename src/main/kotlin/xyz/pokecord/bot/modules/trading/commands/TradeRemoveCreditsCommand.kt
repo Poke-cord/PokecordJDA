@@ -2,9 +2,10 @@ package xyz.pokecord.bot.modules.trading.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.structures.discord.base.Command
+// import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.staff.StaffCommand
 
-object TradeRemoveCreditsCommand: Command() {
+object TradeRemoveCreditsCommand: StaffCommand() {
   override val name = "credits"
   override var aliases = arrayOf("c", "creds", "credits", "credit")
 

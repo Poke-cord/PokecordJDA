@@ -37,8 +37,8 @@ class PokemonRepository(
     collection.createIndex(Indexes.ascending("ownerId"))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("id")))
     collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("nickname")))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("index"), Indexes.ascending("ownerId")))
-    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("timestamp")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.ascending("index")))
+    collection.createIndex(Indexes.compoundIndex(Indexes.ascending("ownerId"), Indexes.descending("timestamp")))
   }
 
   suspend fun getPokemonByIds(ids: List<Id<OwnedPokemon>>): List<OwnedPokemon> {
