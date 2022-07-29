@@ -68,7 +68,7 @@ misc:
     progressPrivate:
       description: |-
         Behold! {{user}}'s progress is hidden from others.
-        > **That includes you too.** :)
+        > **That includes you too** :)
       title: User Progress is Private
     rules:
       description: |-
