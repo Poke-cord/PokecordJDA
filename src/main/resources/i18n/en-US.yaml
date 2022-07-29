@@ -252,11 +252,11 @@ modules:
               Pokecord went on an adventure and came back with nothing.
               > **Specified move was not found. Search for another move.**
             moveNotSpecified: |- 
-              Please follow the following format: `p!moves teach <slot number 1-4> <move name>
+              Please follow the following format: `p!moves teach <slot number 1-4> <move name>`
               E.g., `p!moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotNotSpecified: |-
-              Please follow the following format: `p!moves teach <slot number 1-4> <move name>
+              Please follow the following format: `p!moves teach <slot number 1-4> <move name>`
               E.g., `p!moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotOutOfRange: |-
