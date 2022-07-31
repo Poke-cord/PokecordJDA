@@ -27,8 +27,9 @@ object MarketCommand : ParentCommand() {
       val listingPokemon = context.bot.database.pokemonRepository.getPokemonById(it.pokemon)
       if (listingPokemon != null) {
         val pokemonIv = listingPokemon.ivPercentage
+        val pokemonLevel = listingPokemon.level
         val pokemonName = context.translator.pokemonDisplayName(listingPokemon, false)
-        "|`${it.id}`| **$pokemonName** - $pokemonIv IV - **${context.translator.numberFormat(it.price)}** credits"
+        "|`${it.id}`| **$pokemonName** - Lvl. **$pokemonLevel** - **$pokemonIv** IV - **${context.translator.numberFormat(it.price)}** credits"
       } else null
     }
 
