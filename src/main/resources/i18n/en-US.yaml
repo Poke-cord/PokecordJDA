@@ -703,7 +703,7 @@ modules:
           description: |-
             **Voting Link**: [Vote for Pokecord]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
-            Next vote **{{nextVoteTime}}**!
+            Next vote... **{{nextVoteTime}}**!
           footer: Want more rewards? Check in every 12 hours to vote!
           title: Pokecord Voting | Season {{season}}
   pokemon:
