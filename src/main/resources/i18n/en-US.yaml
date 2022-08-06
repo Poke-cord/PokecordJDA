@@ -701,9 +701,9 @@ modules:
         now: now
         embed:
           description: |-
-            **Voting Link**: [Vote for Pokecord]({{voteLink}})
+            **Voting Link**: [top.gg page]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
-            Next vote... **{{nextVoteTime}}**!
+            **Next vote**... {{nextVoteTime}}!
           footer: Want more rewards? Check in every 12 hours to vote!
           title: Pokecord Voting | Season {{season}}
   pokemon:
