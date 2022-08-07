@@ -664,8 +664,9 @@ modules:
           author:
             text: An Invite has been Requested
           description: |-
-            [Invite Pokecord Here]({{inviteLink}})
-
+            Add Pokecord to your server [here]({{inviteLink}}).
+            Join Pokecord's community and support server [here](https://discord.gg/poke).
+            
             Thank you for choosing {{botUsername}}!
       ping:
         embed:
