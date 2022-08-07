@@ -3,11 +3,11 @@ package xyz.pokecord.bot.modules.trading.commands
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
-// import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.staff.StaffCommand
+import xyz.pokecord.bot.core.structures.discord.base.Command
+// import xyz.pokecord.bot.modules.staff.StaffCommand
 import xyz.pokecord.bot.utils.PokemonResolvable
 
-object TradeAddPokemonCommand : StaffCommand() {
+object TradeAddPokemonCommand : Command() {
   override val name = "pokemon"
   override var aliases = arrayOf("p", "pkmn", "pokemon", "poke")
 
