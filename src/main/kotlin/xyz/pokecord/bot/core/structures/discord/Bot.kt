@@ -105,6 +105,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
   }
 
   suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder? {
+    if (!module.enabled) return null
     val commandEntries = mutableListOf<String>()
     for (command in module.commands) {
       if (!command.enabled) continue
