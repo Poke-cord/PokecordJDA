@@ -251,10 +251,13 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
-      val effectivePrefix = context.getPrefix()
+      var effectivePrefix = context.getPrefix()
       val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
       var commandString = splitMessage.removeFirst()
-      if (!commandString.startsWith(effectivePrefix, true)) return
+      if (!commandString.startsWith(effectivePrefix, true)) {
+        effectivePrefix = event.jda.selfUser.asMention // If prefix wasn't found at the start of the message, we try to find mention to the bot instead
+        if (!commandString.startsWith(effectivePrefix)) return
+      }
 
       commandString = commandString.drop(effectivePrefix.length).trim().ifEmpty {
         splitMessage.removeFirstOrNull() ?: return
