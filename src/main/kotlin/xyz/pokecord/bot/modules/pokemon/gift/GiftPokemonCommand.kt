@@ -23,10 +23,10 @@ object GiftPokemonCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    if(context.getTradeState() != null || context.getBattleState() != null) {
+    if (context.getTradeState() != null || context.getReleaseState() != null || context.getBattleState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.gift.errors.tradeBattleState")
+          context.translate("modules.pokemon.commands.gift.errors.tradeReleaseBattleState")
         ).build()
       ).queue()
       return
