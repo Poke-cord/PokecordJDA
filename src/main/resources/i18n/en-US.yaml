@@ -114,7 +114,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "{{prefix}}help | {{version}}"
+      activity: "@Pokecord | {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
