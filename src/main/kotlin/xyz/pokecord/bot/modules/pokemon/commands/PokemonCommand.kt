@@ -12,7 +12,7 @@ import kotlin.math.ceil
 
 class PokemonCommand : Command() {
   override val name = "Pokemon"
-  override var aliases = arrayOf("p")
+  override var aliases = arrayOf("p", "pk")
 
   @Executor
   suspend fun execute(
