@@ -6,8 +6,7 @@ import xyz.pokecord.bot.modules.staff.StaffCommand
 
 class BlacklistCommand : StaffCommand() {
   override val name = "Blacklist"
-  override var aliases = arrayOf("bl")
-
+  override var aliases = arrayOf("bl", "wl")
   @Executor
   suspend fun execute(
     context: ICommandContext,
