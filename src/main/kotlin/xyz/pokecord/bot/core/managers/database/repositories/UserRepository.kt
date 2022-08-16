@@ -411,8 +411,11 @@ class UserRepository(
     return collection.countDocuments(User::blacklisted eq true)
   }
 
-  fun getBlacklistedUsers(limit: Int? = null, skip: Int? = null): CoroutineFindPublisher<User> {
+  fun getBlacklistedUsers(limit: Int? = null, skip: Int? = null, filteredUserIds: List<String> = emptyList()): CoroutineFindPublisher<User> {
     return collection.find(User::blacklisted eq true)
+      .also {
+        if (filteredUserIds.isNotEmpty()) it.filter(User::id `in` filteredUserIds)
+      }
       .also {
         if (skip != null) it.skip(skip)
       }

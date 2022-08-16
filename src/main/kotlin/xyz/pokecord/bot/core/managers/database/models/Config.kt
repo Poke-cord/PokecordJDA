@@ -12,5 +12,6 @@ data class PaypalCredentials(
 
 @Serializable
 data class Config(
-  val paypalCredentials: PaypalCredentials? = null
+  val paypalCredentials: PaypalCredentials? = null,
+  val susBlacklistIds: List<String> = emptyList()
 )
