@@ -26,6 +26,10 @@ class StatsSyncTask : Task() {
     .build("bot_misc_pokemon_count", "Pokémon Count")
     .register(PrometheusService.registry)
 
+  private val creditsCount = Gauge
+    .build("bot_misc_credits_count", "Credits Count")
+    .register(PrometheusService.registry)
+
   private val userCount = Gauge
     .build("bot_misc_user_count", "User Count")
     .register(PrometheusService.registry)
@@ -72,6 +76,7 @@ class StatsSyncTask : Task() {
     // Prometheus Stats
     guildCount.set(guildsCount.toDouble())
     pokemonCount.set(module.bot.database.pokemonRepository.getEstimatedPokemonCount().toDouble())
+    creditsCount.set(module.bot.database.userRepository.getTotalCreditsCount().toDouble())
     userCount.set(usersCount.toDouble())
 
     // Top.gg Stats
