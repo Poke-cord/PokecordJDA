@@ -297,7 +297,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(bot_misc_credits_count[$__rate_interval])",
+          "expr": "bot_misc_credits_count",
           "interval": "",
           "legendFormat": "",
           "range": true,
