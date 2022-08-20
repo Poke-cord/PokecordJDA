@@ -8,6 +8,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -261,7 +262,8 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
         effectivePrefix =
           event.jda.selfUser.asMention // If prefix wasn't found at the start of the message, we try to find mention to the bot instead
         if (!commandString.startsWith(effectivePrefix)) return
-      } else {
+      } else if (event.channel.type != ChannelType.PRIVATE) {
+        // if mention prefix was not used and the channel is not a DM
         val embedBuilder = EmbedBuilder(title = "NOTICE: Pokecord Prefix Update")
         if (SimpleDateFormat("dd/MM/yyyy").parse("24/08/2022").before(Date())) {
           embedBuilder.description = """
