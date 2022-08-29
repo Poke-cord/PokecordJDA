@@ -95,6 +95,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun getPrefix(): String {
+    // TODO: return mention prefix since September 2022
     if (prefix == null) {
       prefix = if (isFromGuild) {
         val guild = getGuildData()!!

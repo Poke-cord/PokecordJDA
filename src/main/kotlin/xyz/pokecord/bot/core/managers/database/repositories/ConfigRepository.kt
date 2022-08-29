@@ -1,9 +1,7 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import org.litote.kmongo.EMPTY_BSON
+import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.set
-import org.litote.kmongo.setTo
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Config
 import xyz.pokecord.bot.core.managers.database.models.PaypalCredentials
@@ -29,5 +27,15 @@ class ConfigRepository(database: Database, private val collection: CoroutineColl
 
   suspend fun setPaypalCredentials(paypalCredentials: PaypalCredentials) {
     collection.updateOne(EMPTY_BSON, set(Config::paypalCredentials setTo paypalCredentials))
+  }
+
+  suspend fun addSusBlacklist(id: String) {
+    collection.updateOne(EMPTY_BSON, addToSet(Config::susBlacklistIds, id))
+  }
+  suspend fun removeSusBlacklist(id: String) {
+    collection.updateOne(EMPTY_BSON, pull(Config::susBlacklistIds, id))
+  }
+  suspend fun getSusBlacklistIds(): List<String> {
+    return getConfig().susBlacklistIds
   }
 }

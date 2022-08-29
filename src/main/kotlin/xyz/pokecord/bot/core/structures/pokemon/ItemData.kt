@@ -11,7 +11,7 @@ import kotlin.system.exitProcess
 data class ItemData(
   val id: Int,
   val identifier: String,
-  val name: String,
+  var name: String,
   val categoryId: Int,
   var cost: Int,
   val flingPower: Int,
@@ -36,6 +36,7 @@ data class ItemData(
       items = Json.decodeFromString(json)
 
       addAllCustomItems()
+      applyCustomItemNames()
       applyCustomModifications()
 
       items = items.filter { !disabledItemIds.contains(it.id) && !disabledCategoryIds.contains(it.categoryId) }
@@ -120,7 +121,7 @@ data class ItemData(
           usesTokens = true
         )
       )
-      
+
       // Credit Conversion Token
       items.add(
         ItemData(
@@ -133,7 +134,7 @@ data class ItemData(
           0
         )
       )
-      
+
       // Nature Candy
       items.add(
         ItemData(
@@ -147,6 +148,16 @@ data class ItemData(
           usesTokens = true
         )
       )
+    }
+
+    private fun applyCustomItemNames() {
+      items.forEach { itemData ->
+        if (itemData.categoryId == MachineItem.categoryId) {
+          Machine.getByItemId(itemData.id)?.let { machine ->
+            itemData.name += " (${MoveData.getById(machine.moveId)!!.name})"
+          }
+        }
+      }
     }
 
     private fun applyCustomModifications() {

@@ -1,11 +1,14 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import com.mongodb.client.model.BsonField
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import org.bson.BsonDocument
+import org.bson.BsonInt64
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineFindPublisher
@@ -20,6 +23,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.PokemonStats
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import xyz.pokecord.bot.utils.jsonObject
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import net.dv8tion.jda.api.entities.User as JDAUser
@@ -411,8 +415,15 @@ class UserRepository(
     return collection.countDocuments(User::blacklisted eq true)
   }
 
-  fun getBlacklistedUsers(limit: Int? = null, skip: Int? = null): CoroutineFindPublisher<User> {
+  fun getBlacklistedUsers(
+    limit: Int? = null,
+    skip: Int? = null,
+    filteredUserIds: List<String> = emptyList()
+  ): CoroutineFindPublisher<User> {
     return collection.find(User::blacklisted eq true)
+      .also {
+        if (filteredUserIds.isNotEmpty()) it.filter(User::id `in` filteredUserIds)
+      }
       .also {
         if (skip != null) it.skip(skip)
       }
@@ -434,6 +445,17 @@ class UserRepository(
 
   suspend fun clearCache() {
     cacheMap.deleteAsync().awaitSuspending()
+  }
+
+  suspend fun getTotalCreditsCount(): Long {
+    val doc = collection.aggregate<BsonDocument>(
+      listOf(
+        group(null, BsonField("credits", BsonDocument.parse(jsonObject {
+          string("\$sum", "\$credits")
+        }.toString())))
+      )
+    ).first()
+    return doc?.getInt64("credits", BsonInt64(0))?.value ?: 0
   }
 
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
