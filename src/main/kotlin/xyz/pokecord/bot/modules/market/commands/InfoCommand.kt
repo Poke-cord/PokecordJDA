@@ -7,7 +7,7 @@ import xyz.pokecord.bot.core.structures.pokemon.Stat
 
 object InfoCommand : Command() {
   override val name = "Info"
-
+  override var aliases = arrayOf("i")
   @Executor
   suspend fun execute(
     context: ICommandContext,

@@ -8,6 +8,7 @@ import xyz.pokecord.bot.utils.extensions.humanizeMs
 
 object InfoCommand : Command() {
   override val name = "Info"
+  override var aliases = arrayOf("i")
 
   @Executor
   suspend fun execute(
