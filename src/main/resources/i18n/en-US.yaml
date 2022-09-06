@@ -41,7 +41,7 @@ misc:
   checks:
     hasStarted:
       embed:
-        description: Make sure to use `{{prefix}}start` in order to start
+        description: Make sure to use `@Pokecord start` in order to start
           using Pokémon commands!
         title: A User Must Start
   confirmation:
@@ -107,7 +107,7 @@ misc:
       > **Could not find your search query. Search for something else.**
     userHasNotStarted: |-
       Pokecord is recruiting new users, like {{user}}!
-      > **Use `{{prefix}}start` to get started.**
+      > **Use `@Pokecord start` to get started.**
   presence:
     maintenance:
       activity: Maintenance Break | {{version}}
@@ -860,7 +860,7 @@ modules:
                     name!'
         pickingTwice: '**Suggestion**: Try catching Pokémon instead of picking
                     more!'
-        starterNotFound: '**Suggestion**: Try using `{{prefix}}start` to se
+        starterNotFound: '**Suggestion**: Try using `@Pokecord start` to se
                     the list of starter Pokémon!'
       pokedex:
         embed:
@@ -894,15 +894,15 @@ modules:
         description: |-
           Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
           
-          **Get Started**: Use `{{prefix}}pick <Pokémon Name>` to choose a Pokémon.
-          **Example**: `{{prefix}}pick torchic`
+          **Get Started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
+          **Example**: `@Pokecord pick torchic`
         startingTwice: '**Suggestion** Try catching a Pokémon instead of starting twice!'
         welcomeToPokeWorld: Welcome to the World of Pokecord!
     events:
       spawner:
         embeds:
           spawn:
-            description: Use `{{prefix}}catch <Pokémon Name>` to catch
+            description: Use `@Pokecord catch <Pokémon Name>` to catch
               it!
             footer: The next Pokémon will replace this one.
             title: A Wild Pokémon has Appeared
@@ -912,11 +912,11 @@ modules:
         embed:
           description: |-
             **Try using**:
-            `{{prefix}}release add <pokemon number(s)>`
+            `@Pokecord release add <pokemon number(s)>`
             
             **E.g.**
-            `{{prefix}}release add 11, 22, 33`
-            `{{prefix}}release add 1-20`
+            `@Pokecord release add 11, 22, 33`
+            `@Pokecord release add 1-20`
           title: Release Add Usage
         releaseStarted:
           title: A Release Session has Started
@@ -1043,7 +1043,7 @@ modules:
 
               **Catch Rewards**: {{unclaimedCatchRewards}}
 
-              Use `{{prefix}}rewards <type of reward>` or `{{prefix}}rewards all` to claim rewards!
+              Use `@Pokecord rewards <type of reward>` or `@Pokecord rewards all` to claim rewards!
             title: '{{totalRewards}} Reward(s) Available'
         errors:
           noPokemonRewards: '**Suggestion**: Try catching more Pokémon to
@@ -1236,6 +1236,6 @@ items:
         
         Congratulations!
   unusable:
-    description: '**Suggestion**: Try using `{{prefix}}give` or use another
+    description: '**Suggestion**: Try using `@Pokecord give` or use another
                       item!'
     title: An Item is Unusable
