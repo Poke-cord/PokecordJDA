@@ -252,12 +252,12 @@ modules:
               Pokecord went on an adventure and came back with nothing.
               > **Specified move was not found. Search for another move.**
             moveNotSpecified: |- 
-              Please follow the following format: `p!moves teach <slot number 1-4> <move name>`
-              E.g., `p!moves teach 2 hyper beam`
+              Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
+              E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotNotSpecified: |-
-              Please follow the following format: `p!moves teach <slot number 1-4> <move name>`
-              E.g., `p!moves teach 2 hyper beam`
+              Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
+              E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotOutOfRange: |-
               Pokecord reached for your slot number. Too bad it can't reach far.
@@ -584,7 +584,7 @@ modules:
         errors:
           noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
           tradingYourself: You can't trade with yourself!
-          partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `p!start` command?"
+          partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `@Pokecord start` command?"
           alreadyInTrade: You cannot start a trade until your trade / release session is done..
           alreadyRequested: You've already sent out a trade request that has not been accepted yet! Please be patient in order to start another trade.
       status:
