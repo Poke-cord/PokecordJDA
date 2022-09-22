@@ -915,7 +915,7 @@ modules:
             `@Pokecord release add <pokemon number(s)>`
             
             **E.g.**
-            `@Pokecord release add 11, 22, 33`
+            `@Pokecord release add 11,22,33`
             `@Pokecord release add 1-20`
           title: Release Add Usage
         releaseStarted:
