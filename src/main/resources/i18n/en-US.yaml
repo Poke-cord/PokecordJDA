@@ -77,7 +77,7 @@ misc:
         Read and agree to our [Terms of Service]({{tosUrl}}) to continue.
         **By accessing {{botUsername}}, you will abide by our Terms.**
 
-        > Seeing this again? We've updated our Terms.
+        > **Latest Changes**: Addition of a Privacy Policy.
   errors:
     embeds:
       commandExecutionFailed:
