@@ -95,14 +95,14 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun getPrefix(): String {
-    return jda.selfUser.asMention
-    //  if (prefix == null) {
-    //    prefix = if (isFromGuild) {
-    //      val guild = getGuildData()!!
-    //      guild.prefix ?: bot.commandHandler.prefix
-    //    } else bot.commandHandler.prefix
-    //  }
-    //  return prefix!!
+    // TODO: return mention prefix since September 2022
+    if (prefix == null) {
+      prefix = if (isFromGuild) {
+        val guild = getGuildData()!!
+        guild.prefix ?: bot.commandHandler.prefix
+      } else bot.commandHandler.prefix
+    }
+    return prefix!!
   }
 
   override suspend fun hasStarted(sendMessage: Boolean): Boolean {
