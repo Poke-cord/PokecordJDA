@@ -13,16 +13,15 @@ class EvalCommand : DeveloperCommand() {
   override var timeout = TimeUnit.MINUTES.toMillis(15)
 
   private val codeRegex =
-    "```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL))
+    ".+\n```([a-z]+)[\\s\\n](.+)[\\s\\n]```".toRegex(setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL))
   private val scriptEngineManager = ScriptEngineManager()
 
   @Executor
   suspend fun execute(context: ICommandContext) {
     if (context !is MessageCommandContext) return
 
-    val input = context.event.message.contentRaw.drop(context.getPrefix().length + name.length).trim()
-
-    val groupValues = input.let { codeRegex.matchEntire(it)?.groupValues }
+    val input = context.event.message.contentRaw
+    val groupValues = codeRegex.matchEntire(input)?.groupValues
     var extension = groupValues?.get(1) ?: "kts"
     var code = groupValues?.get(2)
 
