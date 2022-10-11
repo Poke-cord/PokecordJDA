@@ -20,7 +20,7 @@ class EvalCommand : DeveloperCommand() {
   suspend fun execute(context: ICommandContext) {
     if (context !is MessageCommandContext) return
 
-    val input = context.event.message.contentRaw.drop(context.getPrefix().length + name.length).trim()
+    val input = context.event.message.contentRaw.drop(context.getPrefix().length).trim().drop(name.length).trim()
 
     val groupValues = input.let { codeRegex.matchEntire(it)?.groupValues }
     var extension = groupValues?.get(1) ?: "kts"
