@@ -460,11 +460,11 @@ modules:
           inTrade: |-
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
-          noPokemonProvided: Please provide the pokémon you would like to list.
+          noPokemonProvided: Please provide the Pokémon you would like to list.
           noPokemonFound: |-
             Pokecord went on an adventure and came back with nothing.
             > **Could not find your search query. Search for something else.**
-          noPriceProvided: Please provide the price you would like to list your pokémon for.
+          noPriceProvided: Please provide the price you would like to list your Pokémon for.
           startingBidPrice: |-
             Pokecord reached for your price. Too bad it can't reach far.
             > **Specify a starting price between 1,000 and 10 million credits.**
@@ -610,10 +610,10 @@ modules:
       add:
         errors:
           notInTrade: You haven't started a trading session yet, please do that first.
-          noNumberPokemon: Please provide the index number of the pokémon you would like to add.
+          noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
-          noPokemonFound: "There was no pokémon found with the given index value."
+          noPokemonFound: "There was no Pokémon found with the given index value."
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
           notTransferableTitle: Not Transferable
         embeds:
@@ -626,11 +626,11 @@ modules:
       remove:
         errors:
           notInTrade: You haven't started a trading session yet, please do that first.
-          noNumberPokemon: Please provide the index number of the pokémon you would like to add.
+          noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
-          noPokemonFound: "There was no pokémon found with the index value {{index}}."
-          notTransferable: This pokémon is not in your trading session.
+          noPokemonFound: "There was no Pokémon found with the index value {{index}}."
+          notTransferable: This Pokémon is not in your trading session.
         embeds:
           removeCredits:
             title: Credits Withdrawn
