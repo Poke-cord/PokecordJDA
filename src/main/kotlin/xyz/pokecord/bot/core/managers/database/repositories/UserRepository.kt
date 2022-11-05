@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.bson.BsonDocument
-import org.bson.BsonInt64
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineFindPublisher
@@ -455,7 +454,14 @@ class UserRepository(
         }.toString())))
       )
     ).first()
-    return doc?.getInt64("credits", BsonInt64(0))?.value ?: 0
+    val credits = doc?.get("credits")
+    if (credits?.isInt32 == true) {
+      return credits.asInt32().value.toLong()
+    }
+    if (credits?.isInt64 == true) {
+      return credits.asInt64().value
+    }
+    return 0
   }
 
 //  private val pokemonCountLeaderboardGroupStage = BsonDocument.parse(
