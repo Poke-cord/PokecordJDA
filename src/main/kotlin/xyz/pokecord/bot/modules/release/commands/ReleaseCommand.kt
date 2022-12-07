@@ -10,5 +10,5 @@ object ReleaseCommand : ParentCommand() {
     )
   override val name = "Release"
 
-  override var aliases = arrayOf("r")
+  override var aliases = arrayOf("r", "transfer", "ts")
 }
