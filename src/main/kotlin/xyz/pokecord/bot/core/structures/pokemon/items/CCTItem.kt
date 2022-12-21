@@ -1,6 +1,5 @@
 package xyz.pokecord.bot.core.structures.pokemon.items
 
-import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.utils.Confirmation
@@ -61,10 +60,7 @@ object CCTItem : Item(10010001, false) {
       session.use {
         it.startTransaction()
         context.bot.database.userRepository.incTokens(userData, tokenCount, it)
-        if (!context.bot.database.userRepository.incCredits(userData, -(usageCost * tokenCount), it)) {
-          it.abortTransactionAndAwait()
-          return@use
-        }
+        context.bot.database.userRepository.incCredits(userData, -cost, it)
         context.bot.database.userRepository.consumeInventoryItem(inventoryItem, tokenCount, it)
         it.commitTransactionAndAwait()
       }
