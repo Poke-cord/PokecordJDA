@@ -56,7 +56,16 @@ class GuildRepository(
 
   suspend fun toggleSilence(guildData: Guild) {
     guildData.levelUpMessagesSilenced = !guildData.levelUpMessagesSilenced
-    collection.updateOne(Guild::id eq guildData.id, set(Guild::levelUpMessagesSilenced setTo guildData.levelUpMessagesSilenced))
+    collection.updateOne(
+      Guild::id eq guildData.id,
+      set(Guild::levelUpMessagesSilenced setTo guildData.levelUpMessagesSilenced)
+    )
+    setCacheGuild(guildData)
+  }
+
+  suspend fun setLevelUpMessageChannel(guildData: Guild, channelId: String?) {
+    guildData.levelUpChannelId = channelId
+    collection.updateOne(Guild::id eq guildData.id, set(Guild::levelUpChannelId setTo guildData.levelUpChannelId))
     setCacheGuild(guildData)
   }
 
