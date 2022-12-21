@@ -38,7 +38,7 @@ class VoteCommand : Command() {
         )
       )
         .setFooter(context.translate("modules.general.commands.vote.embed.footer"))
-        .setImage("https://votemap.s3.wasabisys.com/votemap/${VoteUtils.getSeasonDay()}.png")
+        .setImage("https://images.pokecord.xyz/votemap/${VoteUtils.getSeasonDay()}.png")
         .build()
     ).queue()
   }
