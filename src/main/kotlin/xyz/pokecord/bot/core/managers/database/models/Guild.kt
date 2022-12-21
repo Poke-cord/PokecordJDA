@@ -12,10 +12,11 @@ data class Guild(
   val id: String,
   var prefix: String? = null,
   var levelUpMessagesSilenced: Boolean = false,
+  var levelUpChannelId: String? = null,
   val language: I18n.Language? = null,
   @Contextual val _id: Id<Guild> = newId(),
   @Transient var _isNew: Boolean = false
 ) {
   val isDefault
-    get() = (language == null && prefix == null && !levelUpMessagesSilenced)
+    get() = (language == null && prefix == null && !levelUpMessagesSilenced && levelUpChannelId == null)
 }
