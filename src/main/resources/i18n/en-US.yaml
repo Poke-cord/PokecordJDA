@@ -741,7 +741,7 @@ modules:
           disabled: You will not be able to receive gifts from other players!
         embeds:
           cancelled:
-            description: Gifting cancelled by user.
+            description: Gift execution cancelled.
             title: Gifting Cancelled
           confirmation:
             credits: |-
