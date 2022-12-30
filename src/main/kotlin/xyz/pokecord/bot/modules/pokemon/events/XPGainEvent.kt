@@ -70,11 +70,14 @@ class XPGainEvent : Event() {
       context.channel.id
     ).inc()
 
+    val guildData = context.getGuildData()!!
+    val levelUpMessageChannel =
+      guildData.levelUpChannelId?.let { context.guild!!.getTextChannelById(it) } ?: context.channel
+
     if (context.isFromGuild) {
-      val guildData = context.getGuildData()
-      if (guildData?.levelUpMessagesSilenced == true) return
+      if (guildData.levelUpMessagesSilenced) return
       if (!context.guild!!.selfMember.hasPermission(
-          context.channel as GuildChannel,
+          levelUpMessageChannel as GuildChannel,
           Permission.VIEW_CHANNEL,
           Permission.MESSAGE_READ,
           Permission.MESSAGE_WRITE,
@@ -97,6 +100,7 @@ class XPGainEvent : Event() {
           ),
           context.translate("misc.embeds.evolved.title")
         )
+
         leveledUp -> context.embedTemplates.normal(
           context.translate(
             "misc.embeds.levelUp.description",
@@ -108,12 +112,13 @@ class XPGainEvent : Event() {
           ),
           context.translate("misc.embeds.levelUp.title")
         )
+
         else -> null
       }
 
     embedBuilder?.let {
       it.setColor(selectedPokemon.data.species.color.colorCode)
-      context.channel.sendMessageEmbeds(it.build()).queue()
+      levelUpMessageChannel.sendMessageEmbeds(it.build()).queue()
     }
   }
 }

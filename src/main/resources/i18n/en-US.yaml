@@ -17,6 +17,7 @@ misc:
       "set.private": Change your progress visibility to public/private.
       "set.silence": Toggle Pokémon level up message notifications.
       "set.spawn": Set server spawn channels.
+      "set.level": Set server level up messages channel.
       vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
     pokemon:
       catch: Catch 'em all! Or someone else will.
@@ -177,7 +178,7 @@ misc:
     attack: Atk
     defense: Def
     specialAttack: Sp Atk
-    specialDefense: Sp Def 
+    specialDefense: Sp Def
     speed: Spe
     totalIv: Total IV
     trainerID: Trainer ID
@@ -209,7 +210,7 @@ modules:
           partnerPokemonNotFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
-          pokemonNotFound: |- 
+          pokemonNotFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
@@ -254,7 +255,7 @@ modules:
             moveNotFound: |-
               Pokecord went on an adventure and came back with nothing.
               > **Specified move was not found. Search for another move.**
-            moveNotSpecified: |- 
+            moveNotSpecified: |-
               Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
               E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
@@ -390,7 +391,7 @@ modules:
           selfBid: |-
             You bid on your own auction. Wait, you can't.
             > **Bid on another user's auction.**
-          noPokemonFound: |- 
+          noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
@@ -409,7 +410,7 @@ modules:
           noAuctionFound: |-
             Pokecord went on an adventure and came back with nothing.
             > **Could not find auction {{id}}. Search for another auction.**
-          noPokemonFound: |- 
+          noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
         title: Auction {{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
@@ -509,7 +510,7 @@ modules:
           bidsActive: |-
             Too much finance! Pokecord can't figure it out.
             > **Unlist listings that haven't been purchased.**
-          noPokemonFound: |- 
+          noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
       buy:
@@ -546,7 +547,7 @@ modules:
           selfBuy: |-
             You purchased your own listing. Wait, you can't.
             > **Purchase another user's listing.**
-          noPokemonFound: |- 
+          noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
           notEnoughCredits: |-
@@ -561,7 +562,7 @@ modules:
           noListingFound: |-
             Pokecord went on an adventure and came back with nothing.
             > **Could not find listing {{id}}. Search for another listing.**
-          noPokemonFound: |- 
+          noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/poke).**
         title: Listing {{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
@@ -701,6 +702,13 @@ modules:
           title:
             added: A Spawn has been Added
             removed: A Spawn has been Removed
+        level:
+          description:
+            updated: Level up messages will now go to {{channel}}.
+            removed: Level up messages will now go to the current channel at that time.
+          title:
+            updated: Level Up Message Channel Updated
+            removed: Level Up Message Channel Removed
       vote:
         now: now
         embed:
@@ -955,7 +963,7 @@ modules:
         description: |-
           **Name(s)**:
           {{pokemon}}
-              
+          
           **Rewards**: 
           {{rewards}}
         title: Pokémons have been Released
@@ -1199,11 +1207,17 @@ items:
     embed:
       title: "Credit Conversion Token was Used"
       description: "**{{cost}}** credits has been converted to **{{token}}** token(s)."
+    confirmation:
+      title: "Credit Conversion Token Usage Confirmation"
+      description: |
+        Using **{{count}}** Credit Conversion Tokens will consume **{{credits}}** credits in exchange of **{{count}}** tokens.
+        Are you sure you want to continue?
     errors:
       notEnoughCredits: |-
         You don't have enough credits to use this item.
         Required Credits: **{{cost}}**
       notEnoughCCT: "You don't have enough Credit Conversion Tokens."
+      cancelled: "Credit Conversion Token usage has been cancelled."
   credits:
     embed:
       title: Credits Received!
