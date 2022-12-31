@@ -274,7 +274,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
             
             > Why is this happening? Read Discord's explantion [here](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-for-Verified-Bots).
             
-            > Need further clarification? Visit our support server [here](https://discord.gg/poke).
+            > Need further clarification? Visit our support server [here](https://discord.gg/EUYgq3Jub3).
             
             > Is there a faster way for PC users? Sort of. Try "**@pkc**".
           """.trimIndent()
@@ -288,7 +288,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
             
             > Why is this happening? Read Discord's explantion [here](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-for-Verified-Bots).
             
-            > Need further clarification? Visit our support server [here](https://discord.gg/poke).
+            > Need further clarification? Visit our support server [here](https://discord.gg/EUYgq3Jub3).
             
             > Is there a faster way for PC users? Sort of. Try "**@pkc**".
           """.trimIndent()

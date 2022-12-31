@@ -87,7 +87,7 @@ misc:
       commandExecutionFailed:
         description: |-
           Failed to execute the {{command}} command. 
-          > **Report this error [here](https://discord.gg/poke) if it recurs.**
+          > **Report this error [here](https://discord.gg/EUYgq3Jub3) if it recurs.**
         title: Command Execution Failure
       commandRateLimitReached:
         description: |-
@@ -134,7 +134,7 @@ misc:
     commands: Commands
     commandTimedOut: |-
       Too powerful! Command execution timed out. 
-      > **Report this error [here](https://discord.gg/poke) if it recurs.**
+      > **Report this error [here](https://discord.gg/EUYgq3Jub3) if it recurs.**
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
@@ -209,10 +209,10 @@ modules:
             > **Wait for their duel to finish.**
           partnerPokemonNotFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           pokemonNotFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: |-
             Doing nothing is not an option in battles.
@@ -348,7 +348,7 @@ modules:
             > **Unlist auctions that have no bids.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           auctionSold: |-
             Pokecord went on an adventure and came back with nothing.
             > **Auction was sold or has ended. Unlist another auction.**
@@ -393,7 +393,7 @@ modules:
             > **Bid on another user's auction.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
           notEnoughCredits: |-
             Got spare credits lying around?
@@ -412,7 +412,7 @@ modules:
             > **Could not find auction {{id}}. Search for another auction.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
         title: Auction {{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
@@ -512,7 +512,7 @@ modules:
             > **Unlist listings that haven't been purchased.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
       buy:
         sold:
           title: A Listing has been Sold
@@ -549,7 +549,7 @@ modules:
             > **Purchase another user's listing.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           notEnoughCredits: |-
             Got spare credits lying around?
             > **Gain more credits to purchase this listing.**
@@ -564,7 +564,7 @@ modules:
             > **Could not find listing {{id}}. Search for another listing.**
           noPokemonFound: |-
             Pokémon not found.
-            > **Report this error [here](https://discord.gg/poke).**
+            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
         title: Listing {{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
@@ -669,7 +669,7 @@ modules:
             text: An Invite has been Requested
           description: |-
             Add Pokecord to your server [here]({{inviteLink}}).
-            Join Pokecord's community and support server [here](https://discord.gg/poke).
+            Join Pokecord's community and support server [here](https://discord.gg/EUYgq3Jub3).
             
             Thank you for choosing {{botUsername}}!
       ping:
@@ -1036,7 +1036,7 @@ modules:
             title: An Item has been Taken
           errors:
             holdingUnknownItem: '**Suggestion**: Try joining our [support
-                            server](https://discord.gg/poke) to resolve this issue!'
+                            server](https://discord.gg/EUYgq3Jub3) to resolve this issue!'
             notHolding: '**Suggestion**: Try giving an item to your Pokémon
                             before taking anything!'
       rewards:
@@ -1122,7 +1122,7 @@ modules:
             orderCancelled: The order has been cancelled or the session timed out.
           failedToCancelOrder: |-
             An error occurred when creating your order.
-            > **Contact us [here](https://discord.gg/poke) to resolve this issue.**
+            > **Contact us [here](https://discord.gg/EUYgq3Jub3) to resolve this issue.**
           dmsClosed: |-
             Pokecord couldn't DM you!
             > **Allow Pokecord to DM you before ordering again.**
@@ -1150,7 +1150,7 @@ store:
         6750_gems: 6750 Gems
     roles:
       name: Roles
-      description: Purchase a trainer role for our **[official server](https://discord.gg/poke)** to receive shop discounts and XP boosts.
+      description: Purchase a trainer role for our **[official server](https://discord.gg/EUYgq3Jub3)** to receive shop discounts and XP boosts.
       embed:
         title: Purchase Roles
         description: Select a desired role for purchase.
