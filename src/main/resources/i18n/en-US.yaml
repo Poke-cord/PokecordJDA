@@ -49,7 +49,7 @@ misc:
     timeoutText: Reactions will automatically time out in 30 seconds.
   embeds:
     error:
-      footer: "Support is available at discord.gg/poke."
+      footer: "Support is available at discord.gg/EUYgq3Jub3."
       title: Something went wrong...
     evolved:
       description: |-
