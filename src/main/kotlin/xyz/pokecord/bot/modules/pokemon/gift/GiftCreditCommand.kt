@@ -24,7 +24,7 @@ object GiftCreditCommand : Command() {
     if (context.getTradeState() != null || context.getBattleState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.gift.errors.tradeBattleState")
+          context.translate("modules.pokemon.commands.gift.errors.tradeReleaseBattleState")
         ).build()
       ).queue()
       return
