@@ -79,6 +79,9 @@ misc:
         **By accessing {{botUsername}}, you will abide by our Terms.**
 
         > Seeing this again? We've updated our Terms.
+    transactionCancelled:
+      title: Transaction Cancelled
+      description: The **{{type}}** transaction has been cancelled. Please try again later.
   errors:
     embeds:
       commandExecutionFailed:

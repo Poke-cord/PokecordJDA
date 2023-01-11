@@ -66,7 +66,13 @@ class AuctionsRepository(
 
   suspend fun endAuction(auction: Auction, session: ClientSession) {
     auction.ended = true
-    collection.updateOne(session, Auction::id eq auction.id, set(Auction::ended setTo true))
+    collection.updateOne(session, Auction::id eq auction.id, set(Auction::ended setTo auction.ended))
+    setCacheAuction(auction)
+  }
+
+  suspend fun undoEndAuction(auction: Auction) {
+    auction.ended = false
+    collection.updateOne(Auction::id eq auction.id, set(Auction::ended setTo auction.ended))
     setCacheAuction(auction)
   }
 

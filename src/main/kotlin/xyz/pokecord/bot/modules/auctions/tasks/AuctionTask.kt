@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.auctions.tasks
 
 import dev.minn.jda.ktx.await
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Task
@@ -27,7 +28,14 @@ object AuctionTask : Task() {
               session.startTransaction()
               val userData = module.bot.database.userRepository.getUser(highestBid.userId)
               module.bot.database.pokemonRepository.updateOwnerId(pokemon, highestBid.userId, session)
-              module.bot.database.userRepository.incCredits(user, highestBid.amount, session)
+              if (!module.bot.database.userRepository.incCredits(user, highestBid.amount, session)) {
+                session.abortTransactionAndAwait()
+                module.bot.logger.warn("Negative credits encountered while processing auction ${endedAuction.id}")
+                module.bot.cache.getAuctionLock(endedAuction.id).withCoroutineLock(30) {
+                  module.bot.database.auctionRepository.undoEndAuction(endedAuction)
+                }
+                return@withCoroutineLock
+              }
               module.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
               session.commitTransactionAndAwait()
             }

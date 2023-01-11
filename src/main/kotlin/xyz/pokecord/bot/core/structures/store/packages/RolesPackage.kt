@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.core.structures.store.packages
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.discord.Bot
@@ -65,8 +66,8 @@ object RolesPackage : Package() {
     )
   )
 
-  override suspend fun giveReward(bot: Bot, userData: User, item: Item) {
-    if (item !is RoleItem) return
+  override suspend fun giveReward(bot: Bot, userData: User, item: Item): Boolean {
+    if (item !is RoleItem) return false
     val session = bot.database.startSession()
     session.use { clientSession ->
       clientSession.startTransaction()
@@ -77,7 +78,10 @@ object RolesPackage : Package() {
           clientSession
         )
       }
-      bot.database.userRepository.incCredits(userData, item.credits, clientSession)
+      if (!bot.database.userRepository.incCredits(userData, item.credits, clientSession)) {
+        clientSession.abortTransactionAndAwait()
+        return false
+      }
       val allowedRedeems = RedeemItem.redeemMap.filter { entry -> entry.key >= item.minRedeemId }.keys
       repeat(item.redeemCount) {
         val randomRedeemId = allowedRedeems.random()
@@ -88,6 +92,7 @@ object RolesPackage : Package() {
     if (!bot.discordRestClient.giveMemberRole(Config.mainServer, userData.id, item.roleId)) {
       bot.logger.error("Failed to give role ${item.roleId} to ${userData.id}")
     }
+    return true
   }
 
   class RoleItem(

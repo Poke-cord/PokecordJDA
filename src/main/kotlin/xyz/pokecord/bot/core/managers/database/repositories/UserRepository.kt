@@ -1,8 +1,6 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
-import com.mongodb.client.model.BsonField
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.client.model.Indexes
+import com.mongodb.client.model.*
 import com.mongodb.reactivestreams.client.ClientSession
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -11,6 +9,7 @@ import org.bson.BsonDocument
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineFindPublisher
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.redisson.api.RMapCacheAsync
 import xyz.pokecord.bot.core.managers.database.Database
@@ -60,10 +59,11 @@ class UserRepository(
     return getUser(jdaUser.id)
   }
 
-  suspend fun getUser(userId: String, userTag: String = ""): User {
+  suspend fun getUser(userId: String, userTag: String = "", session: ClientSession? = null): User {
     var user: User? = getCacheUser(userId)
     if (user == null) {
-      user = collection.findOne(User::id eq userId)
+      user = if (session == null) collection.findOne(User::id eq userId)
+      else collection.findOne(session, User::id eq userId)
       if (user == null) {
         user = User(userId, userTag, _isNew = true)
       } else setCacheUser(user)
@@ -77,11 +77,32 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun incCredits(userData: User, amount: Number, session: ClientSession? = null) {
-    userData.credits += amount.toInt()
-    if (session == null) collection.updateOne(User::id eq userData.id, inc(User::credits, amount))
-    else collection.updateOne(session, User::id eq userData.id, inc(User::credits, amount))
-    setCacheUser(userData)
+  suspend fun incCredits(userData: User, amount: Number, session: ClientSession? = null): Boolean {
+    val newUserData = if (session == null) {
+      val returnValue = collection.findOneAndUpdate(
+        User::id eq userData.id,
+        inc(User::credits, amount),
+        FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+      )
+      if (returnValue == null || returnValue.credits < 0) {
+        collection.updateOne(User::id eq userData.id, inc(User::credits, -amount.toInt()))
+        return false
+      }
+      returnValue
+    } else collection.findOneAndUpdate(
+      session,
+      User::id eq userData.id,
+      inc(User::credits, amount),
+      FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    )
+
+    return if (newUserData != null && newUserData.credits >= 0) {
+      userData.credits = newUserData.credits
+      setCacheUser(userData)
+      true
+    } else {
+      false
+    }
   }
 
   suspend fun incPokemonCount(userData: User, amount: Number, session: ClientSession? = null) {
@@ -235,19 +256,24 @@ class UserRepository(
     setCacheUser(receiver)
   }
 
-  suspend fun giftCredits(sender: User, receiver: User, amount: Int) {
+  suspend fun giftCredits(sender: User, receiver: User, amount: Int): Boolean {
     val session = database.startSession()
     session.use { clientSession ->
       clientSession.startTransaction()
-      collection.updateOne(clientSession, User::id eq sender.id, inc(User::credits, -amount))
-      collection.updateOne(clientSession, User::id eq receiver.id, inc(User::credits, amount))
+      if (!incCredits(sender, -amount, clientSession)) {
+        clientSession.abortTransactionAndAwait()
+        return false
+      }
+      if (!incCredits(receiver, amount, clientSession)) {
+        clientSession.abortTransactionAndAwait()
+        return false
+      }
       database.giftCollection.insertOne(clientSession, Gift(sender.id, receiver.id, amount, mutableListOf()))
       clientSession.commitTransactionAndAwait()
-      sender.credits -= amount
-      receiver.credits += amount
       setCacheUser(sender)
       setCacheUser(receiver)
     }
+    return true
   }
 
   suspend fun getInventoryItems(userId: String) =

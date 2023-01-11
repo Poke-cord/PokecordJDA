@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.market.commands
 
 import dev.minn.jda.ktx.await
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -24,6 +25,21 @@ object BuyCommand : Command() {
         ).build()
       ).queue()
     } else {
+      suspend fun cancelled() {
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "misc.embeds.transactionCancelled.description",
+              mapOf(
+                "type" to "market buy"
+              )
+            ),
+            context.translate("misc.embeds.transactionCancelled.title")
+          ).build()
+        ).queue()
+        return
+      }
+
       context.bot.cache.getMarketLock(listingId).withCoroutineLock(30) {
         val listing = context.bot.database.marketRepository.getListing(listingId)
         if (listing == null) {
@@ -97,9 +113,17 @@ object BuyCommand : Command() {
             val session = context.bot.database.startSession()
             session.use {
               session.startTransaction()
-              context.bot.database.userRepository.incCredits(userData, -listing.price, session)
+              if (!context.bot.database.userRepository.incCredits(userData, -listing.price, session)) {
+                session.abortTransactionAndAwait()
+                cancelled()
+                return@withCoroutineLock
+              }
               context.bot.database.userRepository.updatePokemonCount(userData, userData.pokemonCount + 1, session)
-              context.bot.database.userRepository.incCredits(sellerData, listing.price, session)
+              if (!context.bot.database.userRepository.incCredits(sellerData, listing.price, session)) {
+                session.abortTransactionAndAwait()
+                cancelled()
+                return@withCoroutineLock
+              }
               context.bot.database.marketRepository.markSold(listing, context.author.id, session)
               context.bot.database.pokemonRepository.updateOwnerId(pokemon, context.author.id, session)
               session.commitTransactionAndAwait()

@@ -38,9 +38,10 @@ object GemsPackage : Package() {
     )
   )
 
-  override suspend fun giveReward(bot: Bot, userData: User, item: Item) {
-    if (item !is GemItem) return
+  override suspend fun giveReward(bot: Bot, userData: User, item: Item): Boolean {
+    if (item !is GemItem) return false
     bot.database.userRepository.incGems(userData, item.gems)
+    return true
   }
 
   class GemItem(

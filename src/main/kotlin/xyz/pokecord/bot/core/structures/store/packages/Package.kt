@@ -7,7 +7,7 @@ abstract class Package {
   abstract val id: String
   abstract val items: List<Item>
 
-  abstract suspend fun giveReward(bot: Bot, userData: User, item: Item)
+  abstract suspend fun giveReward(bot: Bot, userData: User, item: Item): Boolean
 
   open class Item(
     val id: String,
