@@ -301,7 +301,7 @@ object BattleActionEvent : Event() {
     sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
     if (moveResult.isCritical) sb.appendLine("It's a critical hit!")
     if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!")
-    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective!")
+    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective...")
     return sb.toString()
   }
 }
