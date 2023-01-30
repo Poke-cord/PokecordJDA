@@ -190,12 +190,13 @@ misc:
     xp: XP
     auctionId: Auction ID
     startingBid: Starting Bid
+    startingCurrentBid: Starting / Current Bid
     bidCount: Bid Count
     timeLeft: Time Left
     currentBid: Current Bid
     noBids: No Bids
     listingId: Listing ID
-    price: Price
+    price: Listing Price
 modules:
   battle:
     commands:
@@ -413,7 +414,7 @@ modules:
           noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
-        title: Auction {{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
+        title: Auction \#{{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
           title: "🎪 | Auction House"
@@ -565,7 +566,7 @@ modules:
           noPokemonFound: |-
             Pokémon not found.
             > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
-        title: Listing {{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
+        title: Listing \#{{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
           title: "🏘️ | Marketplace"
