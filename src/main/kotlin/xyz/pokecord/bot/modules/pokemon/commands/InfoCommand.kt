@@ -57,7 +57,7 @@ class InfoCommand : Command() {
         `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${pokemon.stats.specialAttack.toString().padStart(3)} | ${pokemon.ivs.specialAttack.toString().padStart(2)}/31${ if(pokemon.evs.specialAttack > 0) ("+" + (pokemon.evs.specialAttack).toString()).padStart(6) else " ".repeat(6)}`
         `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${pokemon.stats.specialDefense.toString().padStart(3)} | ${pokemon.ivs.specialDefense.toString().padStart(2)}/31${ if(pokemon.evs.specialDefense > 0) ("+" + (pokemon.evs.specialDefense ).toString()).padStart(6) else " ".repeat(6)}`
         `${context.translate("misc.texts.speed").padEnd(7)}| ${pokemon.stats.speed.toString().padStart(3)} | ${pokemon.ivs.speed.toString().padStart(2)}/31${ if(pokemon.evs.speed > 0) ("+" + (pokemon.evs.speed).toString()).padStart(6) else " ".repeat(6)}`
-        **${context.translate("misc.texts.totalIv").padEnd(7)}**: ${pokemon.ivPercentage}
+        **${context.translate("misc.texts.totalIv")}**: ${pokemon.ivPercentage}
         """.trimIndent()
 
     val trainerSection = """
