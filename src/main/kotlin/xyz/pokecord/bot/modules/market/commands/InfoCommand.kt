@@ -36,29 +36,32 @@ object InfoCommand : Command() {
       if (listingPokemon != null) {
         val pokemon = Pokemon.getById(listingPokemon.id)
 
-        val infoSection = """
+        val mkInfoSection = """
         **${context.translate("misc.texts.listingId")}**: ${listing.id}
         **${context.translate("misc.texts.price")}**: ${context.translator.numberFormat(listing.price)}
-        
+        """.trimIndent()
+
+        val infoSection = """
         **${context.translate("misc.texts.xp")}**: ${if (listingPokemon.level >= 100) "Max" else "${listingPokemon.xp}/${listingPokemon.requiredXpToLevelUp()}"}
         **${context.translate("misc.texts.gender")}**: ${context.translator.gender(listingPokemon)}
         **${context.translate("misc.texts.nature")}**: ${context.translator.nature(listingPokemon.nature)}
         """.trimIndent()
 
         val statSection = """
-        **${context.translator.stat(Stat.hp)}**: ${listingPokemon.stats.hp} - ${listingPokemon.ivs.hp}/31
-        **${context.translator.stat(Stat.attack)}**: ${listingPokemon.stats.attack} - ${listingPokemon.ivs.attack}/31
-        **${context.translator.stat(Stat.defense)}**: ${listingPokemon.stats.defense} - ${listingPokemon.ivs.defense}/31
-        **${context.translator.stat(Stat.specialAttack)}**: ${listingPokemon.stats.specialAttack} - ${listingPokemon.ivs.specialAttack}/31
-        **${context.translator.stat(Stat.specialDefense)}**: ${listingPokemon.stats.specialDefense} - ${listingPokemon.ivs.specialDefense}/31
-        **${context.translator.stat(Stat.speed)}**: ${listingPokemon.stats.speed} - ${listingPokemon.ivs.speed}/31
+        **Stat Spread (IV, +EV)**
+        `${context.translate("misc.texts.hp").padEnd(7)}| ${listingPokemon.stats.hp.toString().padStart(3)} | ${listingPokemon.ivs.hp.toString().padStart(2)}/31${ if(listingPokemon.evs.hp > 0) ("+" + (listingPokemon.evs.hp).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.attack").padEnd(7)}| ${listingPokemon.stats.attack.toString().padStart(3)} | ${listingPokemon.ivs.attack.toString().padStart(2)}/31${ if(listingPokemon.evs.attack > 0) ("+" + (listingPokemon.evs.attack).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.defense").padEnd(7)}| ${listingPokemon.stats.defense.toString().padStart(3)} | ${listingPokemon.ivs.defense.toString().padStart(2)}/31${ if(listingPokemon.evs.defense > 0) ("+" + (listingPokemon.evs.defense).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${listingPokemon.stats.specialAttack.toString().padStart(3)} | ${listingPokemon.ivs.specialAttack.toString().padStart(2)}/31${ if(listingPokemon.evs.specialAttack > 0) ("+" + (listingPokemon.evs.specialAttack).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${listingPokemon.stats.specialDefense.toString().padStart(3)} | ${listingPokemon.ivs.specialDefense.toString().padStart(2)}/31${ if(listingPokemon.evs.specialDefense > 0) ("+" + (listingPokemon.evs.specialDefense).toString()).padStart(6) else " ".repeat(6)}`
+        `${context.translate("misc.texts.speed").padEnd(7)}| ${listingPokemon.stats.speed.toString().padStart(3)} | ${listingPokemon.ivs.speed.toString().padStart(2)}/31${ if(listingPokemon.evs.speed > 0) ("+" + (listingPokemon.evs.speed).toString()).padStart(6) else " ".repeat(6)}`
         **${context.translate("misc.texts.totalIv")}**: ${listingPokemon.ivPercentage}
         """.trimIndent()
 
         context.reply(
           context.embedTemplates
             .normal(
-              infoSection + "\n" + statSection,
+              mkInfoSection + "\n\n" + infoSection + "\n\n" + statSection,
               context.translate(
                 "modules.market.commands.info.title",
                 mapOf(
