@@ -831,7 +831,7 @@ modules:
           cancelled:
             description: Your Pokémon hint request was cancelled.
             title: A Hint has been Cancelled
-          dmFailed: '**Suggestion**: Try allowing Pokecord to DM you!'
+          dmFailed: "**Suggestion**: Try allowing Pokecord to DM you!"
           notEnoughCredits: "You don't have enough credits to buy a hint."
       info:
         embed:
