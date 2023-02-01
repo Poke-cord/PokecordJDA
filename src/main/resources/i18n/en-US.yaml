@@ -190,7 +190,6 @@ misc:
     xp: XP
     auctionId: Auction ID
     startingBid: Starting Bid
-    startingCurrentBid: Starting / Current Bid
     bidCount: Bid Count
     timeLeft: Time Left
     currentBid: Current Bid

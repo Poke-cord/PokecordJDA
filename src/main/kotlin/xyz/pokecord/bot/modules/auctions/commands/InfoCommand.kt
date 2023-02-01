@@ -3,7 +3,7 @@ package xyz.pokecord.bot.modules.auctions.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.Stat
+// import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.utils.extensions.humanizeMs
 
 object InfoCommand : Command() {
@@ -40,17 +40,24 @@ object InfoCommand : Command() {
 
         val auInfoSection = """
         **${context.translate("misc.texts.auctionId")}**: ${auction.id}
-        **${context.translate("misc.texts.bidCount")}**: ${auction.bids.size}
-        **${context.translate("misc.texts.startingCurrentBid")}**
-        > ${context.translator.numberFormat(auction.startingBid)} / ${
+        **${context.translate("misc.texts.bidCount")}**: ${if (auction.bids.size > 0) auction.bids.size else context.translate("misc.texts.noBids")}
+        **${if (auction.bids.size > 0) context.translate("misc.texts.currentBid") else context.translate("misc.texts.startingBid")}**: ${
           auction.highestBid?.amount?.let {
             context.translator.numberFormat(
               it
             )
-          } ?: context.translate("misc.texts.noBids")
+          } ?: context.translator.numberFormat(auction.startingBid)
         }
         **${context.translate("misc.texts.timeLeft")}**: ${auction.timeLeft.humanizeMs()}
         """.trimIndent()
+
+//     **${context.translate("misc.texts.startingCurrentBid")}**
+//        > ${context.translator.numberFormat(auction.startingBid)} / ${'$'}{
+//          auction.highestBid?.amount?.let {
+//            context.translator.numberFormat(
+//              it
+//          } ?: context.translate("misc.texts.noBids")
+//        }
 
         val infoSection = """
         **${context.translate("misc.texts.xp")}**: ${if (auctionPokemon.level >= 100) "Max" else "${auctionPokemon.xp}/${auctionPokemon.requiredXpToLevelUp()}"}
