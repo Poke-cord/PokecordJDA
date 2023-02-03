@@ -1,12 +1,12 @@
 package xyz.pokecord.bot.modules.staff.commands
 
-import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
 import xyz.pokecord.bot.core.structures.store.packages.RolesPackage
 import xyz.pokecord.bot.modules.staff.StaffCommand
 
-class GiveRedeemCommand : StaffCommand() {
+object GiveRedeemCommand : StaffCommand() {
   override val name = "GiveRole"
   override var aliases = arrayOf("gr")
 
@@ -14,31 +14,31 @@ class GiveRedeemCommand : StaffCommand() {
   suspend fun execute(
     context: ICommandContext,
     @Argument user: User?,
-    @Argument role: Role?,
+    @Argument redeemName: String?,
   ) {
     if (user == null) {
       context.reply(context.embedTemplates.error("gib user pls").build()).queue()
       return
     }
-    if (role == null) {
-      context.reply(context.embedTemplates.error("gib role pls").build()).queue()
+    if (redeemName == null) {
+      context.reply(context.embedTemplates.error("gib redeem name pls").build()).queue()
       return
     }
 
-    val roleItem = RolesPackage.items.find {
-      it is RolesPackage.RoleItem && it.roleId == role.id
+    val redeemItem = RedeemItem.redeemMap.values.find {
+      it.data.name.contains(redeemName, true)
     }
 
-    if (roleItem == null) {
-      context.reply(context.embedTemplates.error("role is not a valid package").build()).queue()
+    if (redeemItem == null) {
+      context.reply(context.embedTemplates.error("no redeem found with that name").build()).queue()
       return
     }
 
     val userData = context.bot.database.userRepository.getUser(user)
-    RolesPackage.giveReward(context.bot, userData, roleItem)
+    context.bot.database.userRepository.addInventoryItem(userData.id, redeemItem.id, 1)
 
     context.reply(
-      context.embedTemplates.normal("${user.asMention} has been given the rewards of role ${role.asMention}").build()
+      context.embedTemplates.normal("${user.asMention} has been given the ${redeemItem.data.name}").build()
     ).queue()
   }
 }

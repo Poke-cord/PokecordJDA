@@ -15,6 +15,7 @@ class StaffModule(bot: Bot) : Module(
     LogsCommand,
     BlacklistsCommand,
     GiveRoleCommand,
+    GiveRedeemCommand,
   ),
   tasks = arrayOf(
     StaffSyncTask()
