@@ -7,8 +7,8 @@ import xyz.pokecord.bot.core.structures.store.packages.RolesPackage
 import xyz.pokecord.bot.modules.staff.StaffCommand
 
 object GiveRedeemCommand : StaffCommand() {
-  override val name = "GiveRole"
-  override var aliases = arrayOf("gr")
+  override val name = "GiveRedeem"
+  override var aliases = arrayOf("grd")
 
   @Executor
   suspend fun execute(
