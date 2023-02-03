@@ -13,7 +13,8 @@ class StaffModule(bot: Bot) : Module(
     BlacklistCommand(),
     ShowCommand(),
     LogsCommand,
-    BlacklistsCommand
+    BlacklistsCommand,
+    GiveRoleCommand,
   ),
   tasks = arrayOf(
     StaffSyncTask()
