@@ -24,7 +24,6 @@ class XPGainEvent : Event() {
   suspend fun onMessage(context: MessageCommandContext) {
     if (!context.shouldProcess()) return
     if (!envFlag || context.bot.maintenance) return
-    if (context.event.message.contentRaw.length <= 2) return
     val prefix = context.getPrefix()
     if (context.event.message.contentRaw.startsWith(prefix, true)) return
 
