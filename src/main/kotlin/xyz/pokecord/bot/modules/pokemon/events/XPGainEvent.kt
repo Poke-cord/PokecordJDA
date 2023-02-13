@@ -39,7 +39,7 @@ class XPGainEvent : Event() {
     val selectedPokemon = context.bot.database.pokemonRepository.getPokemonById(userData.selected!!)
     if (selectedPokemon == null || selectedPokemon.level >= 100) return
 
-    var xp = min(context.event.message.contentRaw.replace("[ \\n]".toRegex(), "").length * 10, 1000)
+    var xp = min(10, 1000)
     val percentage = when (userData.donationTier) {
       6 -> 20
       5 -> 15
