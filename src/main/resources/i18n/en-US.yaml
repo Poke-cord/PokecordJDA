@@ -3,42 +3,42 @@ misc:
     developer:
       eval: Evaluate JavaScript/Kotlin code.
     economy:
-      buy: Attempts to buy the specified item from the shop.
-      shop: Shows the available items in the shop.
-      store: Purchase items from the Pokecord store.
+      buy: Purchase items from the shop.
+      shop: Displays various in-game items.
+      store: Purchase official server Trainer Roles or Gem Packages.
     general:
-      faq: 'Have a question? I might have just the right answer for you'
-      help: "Pretty sure this is what you're looking at right now"
-      invite: Invite our bot to your own server.
+      faq: Search frequently asked questions by keyword.
+      help: "Pretty sure this is what you're looking at right now.."
+      invite: Invite Pokecord to other servers.
       leaderboard: Shows who’s boss around here B)
       ping: 'Ping, pong!'
-      set: The usual settings stuff.
-      "set.prefix": Set server prefix.
-      "set.private": Change your progress visibility to public/private.
-      "set.silence": Toggle Pokémon level up message notifications.
-      "set.spawn": Set server spawn channels.
-      "set.level": Set server level up messages channel.
-      vote: Who doesn’t like rewards? Vote every 12 hours and receive some ;)
+      set: Miscellaneous setting configurations.
+      "set.prefix": Sets the server prefix.
+      "set.private": Toggles your progress visibility to public/private.
+      "set.silence": Toggles server Pokémon level-up messages.
+      "set.spawn": Sets/removes a server spawn channel.
+      "set.level": Sets the server level-up messages channel.
+      vote: Links Pokecord's vote page and reveals current day of vote season.
     pokemon:
       catch: Catch 'em all! Or someone else will.
-      favorite: Want to favorite a friend? Or just un-favorite it? Favorite a Pokémon and it will be in your favorites.
-      hint: Not so bright? Wumpus isn’t either. Trigger your memory and buy a hint with credits.
-      info: In a hurry? Get nitty gritty statistics on the go.
-      move: Ever wonder what a move does? Here's an encyclopedia of information crammed into one command!
-      moveset: Want to know how to use your Pokémon properly? You're in luck. We have just the thing for you ;)
-      nickname: Want to name a friend? Or just unname it? Change the nickname of a Pokémon and!
-      order: Order your Pokémon by any order you like.
-      pick: Lonely? Pick a starter Pokémon to join you.
-      pokedex: For all you nerds out there. All the nitty gritty statistics.
-      pokemon: Don’t like Wumpus? Get a list of all your pocket monsters instead.
-      release: Releases a Pokémon into the wild where he can be free!
-      select: Want to choose another friend? Select a Pokémon and it will be with you.
+      favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
+      hint: Reveals the first letter of the spawned Pokémon name.
+      info: Displays individual Pokémon current stats, IVs, and EVs.
+      move: Displays individual move information.
+      moveset: Recommends movesets for legendary and mythical Pokémon.
+      nickname: Sets/resets the name of a Pokémon. Pokémon are searchable by nickname.
+      order: Orders your Pokémon collection by any available filter.
+      pick: Allows you to start their Pokecord journey with a Pokémon.
+      pokedex: Displays Pokémon base stats and general information.
+      pokemon: Displays a Pokémon collection with filters and searchability.
+      release: Transfers Pokémon to Professor Zihadikarp.
+      select: Selects a Pokémon, becoming your active Pokémon.
     profile:
-      bag: For all you hoarders out there. Use this command to view your collection of items.
-      item: It's like eating a chocolate bar. Use an item in your backpack.
-      profile: It's just... your profile.
-      rewards: You shall receive the rewards you deserve as a trainer out in the wild.
-      start: The beginners guide to life. Just kidding. Guide to your Pokémon adventure.
+      bag: Displays all currency and items collected.
+      item: Consumes an item from your inventory. It's like eating a chocolate bar.
+      profile: Displays user information.
+      rewards: Displays/claim all available rewards.
+      start: Displays Pokecord's welcome message. This should also be your first command.
   checks:
     hasStarted:
       embed:
@@ -125,6 +125,7 @@ misc:
     accuracy: Accuracy
     ailmentChance: Ailment Chance
     altNames: Alternative Names
+    appearance: Appearance
     argument_aliases: Argument Aliases
     argument_names: Argument Names
     availableFaqs: Available FAQ
@@ -159,13 +160,14 @@ misc:
       Congratulations {{user}}!
     name: Name
     nature: Nature
-    nextEvolution: Next Evolution(s)
+    nextEvolution: Evolves Into
     noEvolution: No Evolution
+    obtained: Obtained
     originalTrainerID: OG Trainer ID
     physical: Physical
     power: Power
     pp: PP
-    prevEvolution: Prev Evolution
+    prevEvolution: Pre-Evolution
     priority: Priority
     serverOnlyCommand: |-
       Server command only. 
