@@ -148,6 +148,19 @@ data class ItemData(
           usesTokens = true
         )
       )
+
+      // Void Stone
+      items.add(
+        ItemData(
+          VoidStoneItem.id,
+          "void-stone",
+          "Void Stone",
+          VoidStoneItem.categoryId,
+          3000,
+          0,
+          0,
+        )
+      )
     }
 
     private fun applyCustomItemNames() {

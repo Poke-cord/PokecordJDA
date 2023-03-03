@@ -19,6 +19,7 @@ import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.TransferLog
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.pokemon.*
+import xyz.pokecord.bot.core.structures.pokemon.items.VoidStoneItem
 import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
 import java.util.concurrent.TimeUnit
@@ -330,19 +331,21 @@ class PokemonRepository(
     var leveledUp = false
     var evolved = false
 
-    if (gainedXp != null) {
-      pokemon.xp += gainedXp
+    if (pokemon.heldItemId != VoidStoneItem.id) {
+      if (gainedXp != null) {
+        pokemon.xp += gainedXp
+      }
+
+      var requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
+      while (pokemon.level < 100 && requiredXpToLevelUp <= pokemon.xp) {
+        leveledUp = true
+        pokemon.xp -= requiredXpToLevelUp
+        pokemon.level++
+        requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
+      }
     }
 
-    var requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
-    while (pokemon.level < 100 && requiredXpToLevelUp <= pokemon.xp) {
-      if (!leveledUp) leveledUp = true
-      pokemon.xp -= requiredXpToLevelUp
-      pokemon.level++
-      requiredXpToLevelUp = pokemon.requiredXpToLevelUp()
-    }
-
-    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) {
+    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) { // 206 - everstone
       val evolution = pokemon.data.nextEvolutions.map { EvolutionChain.details(it) }.find { evolutionDetails ->
         if (evolutionDetails?.evolvedSpeciesId in Pokemon.dontEvolveInto) return@find false
 
@@ -386,14 +389,17 @@ class PokemonRepository(
     }
 
     val updatesBson = mutableListOf<Bson>()
-    if (leveledUp || gainedXp != null) {
-      updatesBson.add(
-        set(
-          OwnedPokemon::level setTo pokemon.level,
-          OwnedPokemon::xp setTo pokemon.xp
+    if (pokemon.heldItemId != VoidStoneItem.id) {
+      if (leveledUp || gainedXp != null) {
+        updatesBson.add(
+          set(
+            OwnedPokemon::level setTo pokemon.level,
+            OwnedPokemon::xp setTo pokemon.xp
+          )
         )
-      )
+      }
     }
+
     if (evolved) {
       updatesBson.add(set(OwnedPokemon::id setTo pokemon.id))
     }
