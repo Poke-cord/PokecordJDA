@@ -124,7 +124,7 @@ misc:
   texts:
     accuracy: Accuracy
     ailmentChance: Ailment Chance
-    altNames: Alternative Names
+    altNames: Alternative Identifiers
     appearance: Appearance
     argument_aliases: Argument Aliases
     argument_names: Argument Names

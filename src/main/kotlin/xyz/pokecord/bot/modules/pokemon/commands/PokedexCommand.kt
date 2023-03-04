@@ -106,7 +106,7 @@ class PokedexCommand : Command() {
       )
       .addField(
         context.translate("misc.texts.altNames"),
-        pokemon.species.getNames().map { it.name }.toSet().joinToString(", "),
+        pokemon.species.getNames().map { it.name }.toSet().joinToString("\n"),
         true
       )
     context.reply(embed.build()).queue()
