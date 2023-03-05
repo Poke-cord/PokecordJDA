@@ -56,10 +56,7 @@ object TradeCommand : ParentCommand() {
     if (partnerData.selected == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate(
-            "modules.trading.commands.trade.errors.partnerHasntStarted",
-            "partner" to partner.asMention
-          )
+          context.translate("misc.errors.userHasNotStarted")
         ).build()
       ).queue()
     }
@@ -76,7 +73,7 @@ object TradeCommand : ParentCommand() {
           "modules.trading.commands.trade.confirmation.description",
           mapOf(
             "trader" to context.author.asMention,
-            "traded" to partner.asMention
+            "partner" to partner.asMention
           )
         ),
         context.translate(
@@ -89,13 +86,7 @@ object TradeCommand : ParentCommand() {
       context.bot.database.tradeRepository.createTrade(context.author.id, partner.id)
       context.reply(
         context.embedTemplates.normal(
-          context.translate(
-            "modules.trading.commands.trade.tradeStarted.description",
-            mapOf(
-              "partner" to partner.asMention,
-              "author" to context.author.asMention
-            )
-          ),
+          context.translate("modules.trading.commands.trade.tradeStarted.description"),
           context.translate("modules.trading.commands.trade.tradeStarted.title")
         ).build()
       ).queue()
@@ -103,9 +94,7 @@ object TradeCommand : ParentCommand() {
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.trading.commands.trade.tradeCancelled.description",
-            "partner" to partner.asMention
-          ),
+            "modules.trading.commands.trade.tradeCancelled.description"),
           context.translate("modules.trading.commands.trade.tradeCancelled.title")
         ).build()
       ).queue()

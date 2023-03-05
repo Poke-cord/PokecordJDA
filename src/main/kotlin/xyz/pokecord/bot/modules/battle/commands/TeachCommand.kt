@@ -38,7 +38,7 @@ object TeachCommand : Command() {
     if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.errors.pokemonNotFound")
+          context.translate("misc.errors.pokemonNotFound")
         ).build()
       ).queue()
       return
@@ -125,6 +125,7 @@ object TeachCommand : Command() {
           "modules.battle.commands.moves.teach.embed.description",
           "move" to targetMove.moveData.name,
           "pokemon" to context.translator.pokemonDisplayName(pokemon),
+          "user" to context.author.asMention,
           "slot" to slot.toString()
         ),
         context.translate("modules.battle.commands.moves.teach.embed.title")

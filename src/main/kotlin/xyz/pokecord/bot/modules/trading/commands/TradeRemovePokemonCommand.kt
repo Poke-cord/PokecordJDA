@@ -21,7 +21,7 @@ object TradeRemovePokemonCommand : Command() {
     if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.notInTrade")
+          context.translate("modules.trading.errors.notInTrade")
         ).build()
       ).queue()
       return
@@ -42,10 +42,7 @@ object TradeRemovePokemonCommand : Command() {
     if (selectedPokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate(
-            "modules.trading.commands.remove.errors.noPokemonFound",
-            "index" to pokemon.toString()
-          )
+          context.translate("misc.errors.pokemonNotFound")
         ).build()
       ).queue()
     } else {

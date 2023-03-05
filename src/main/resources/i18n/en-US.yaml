@@ -42,9 +42,11 @@ misc:
   checks:
     hasStarted:
       embed:
-        description: Make sure to use `@Pokecord start` in order to start
-          using Pokémon commands!
-        title: A User Must Start
+        description: |-
+          Hey there! Welcome to Pokecord.
+          
+          Get started with `@Pokecord start` before you use other commands.
+        title: Start your Pokecord Journey
   confirmation:
     timeoutText: Reactions will automatically time out in 30 seconds.
   embeds:
@@ -80,8 +82,7 @@ misc:
         ・ [Terms of Service]({{tosUrl}})
         ・ [Privacy Policy]({{privacyUrl}})
         **By accessing the Service, you agree to abide by our Terms.**
-        
-        > Seeing this again? We've updated our Terms.
+      footer: Seeing this again? We've updated our Terms.
   errors:
     embeds:
       commandExecutionFailed:
@@ -107,11 +108,14 @@ misc:
       You're here! But Pokémon are not.
       > **Wait for a Pokémon to spawn.**
     pokemonNotFound: |-
-      Pokecord went on an adventure and came back with nothing.
-      > **Could not find your search query. Search for something else.**
+      Pokecord looked far and wide, to no avail.
+      > **Check Pokémon name, ID, and spelling.**
+    pokemonDoesNotExist: |-
+      Pokémon does not exist.
+      > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
     userHasNotStarted: |-
-      Pokecord is recruiting new users, like {{user}}!
-      > **Use `@Pokecord start` to get started.**
+      The user you mentioned hasn't started yet.
+      > **Ask them to use `@Pokecord start`.**
   presence:
     maintenance:
       activity: Maintenance Break | {{version}}
@@ -207,25 +211,16 @@ modules:
             Two you? No. Two duels? Also no.
             > **Finish your current duel first.**
           partnerAlreadyBattling: |-
-            {{partner}}'s in combat!
+            {{partner}} is in combat!
             > **Wait for their duel to finish.**
-          partnerPokemonNotFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
-          pokemonNotFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: |-
             Doing nothing is not an option in battles.
             > **Teach your Pokémon moves.**
           noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
-          partnerHasNotStarted: |-
-            Pokecord is recruiting new users, like {{partner}}!
-            > **Use the `start` command to get started.**
           selfBattle: |-
             You battled yourself. Wait, you can't. 
-            > **Select another user to battle with.**
+            > **Mention another user to battle with.**
         embeds:
           battleRequest:
             title: Battle Request
@@ -236,10 +231,6 @@ modules:
       moves:
         embed:
           title: "Pokémon Moves | Level {{level}} {{pokemon}} "
-        errors:
-          pokemonNotFound: |-
-            Pokecord went on an adventure and came back with nothing.
-            > **Specified Pokémon was not found. Search for something else.**
         teach:
           embed:
             title: A Move has been Taught
@@ -248,14 +239,14 @@ modules:
               **Pokémon**: {{pokemon}}
               **Slot Number**: {{slot}}
               
-              Congratulations!
+              Congratulations {{user}}!
           errors:
             inBattle: |-
               Two you? No. Two things at once? Also no.
               > **Finish your current duel first.**
             cancelled: Move teaching has been cancelled.
             moveNotFound: |-
-              Pokecord went on an adventure and came back with nothing.
+              Pokecord looked far and wide, to no avail.
               > **Specified move was not found. Search for another move.**
             moveNotSpecified: |-
               Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
@@ -289,7 +280,7 @@ modules:
           title: "🎪 | {{userTag}}'s Auctions"
         errors:
           noResults: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **You have no current auctions. Create one to get started.**
       list:
         errors:
@@ -297,7 +288,6 @@ modules:
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the Pokémon you would like to list.
-          noPokemonFound: The Pokémon you are looking for doesn't seem to exist.
           startingBidPrice: |-
             Pokecord reached for your price. Too bad it can't reach far.
             > **Specify a starting bid between 1,000 and 10 million credits.**
@@ -340,7 +330,7 @@ modules:
         errors:
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
           notYourAuction: |-
             You tried to unlisted someone else's auction. It didn't work. 
@@ -348,11 +338,8 @@ modules:
           bidsActive: |-
             Too much finance! Pokecord can't figure it out.
             > **Unlist auctions that have no bids.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           auctionSold: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Auction was sold or has ended. Unlist another auction.**
       bid:
         bidNotification:
@@ -388,14 +375,11 @@ modules:
             > **Specified auction has ended.**
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
           selfBid: |-
             You bid on your own auction. Wait, you can't.
             > **Bid on another user's auction.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
           notEnoughCredits: |-
             Got spare credits lying around?
@@ -410,11 +394,8 @@ modules:
         errors:
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
         title: Auction \#{{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
@@ -459,7 +440,7 @@ modules:
           title: "🏘️ | {{userTag}}'s Marketplace Listings"
         errors:
           noResults: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **You have no current listings. Create one to get started.**
       list:
         errors:
@@ -467,9 +448,6 @@ modules:
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the Pokémon you would like to list.
-          noPokemonFound: |-
-            Pokecord went on an adventure and came back with nothing.
-            > **Could not find your search query. Search for something else.**
           noPriceProvided: Please provide the price you would like to list your Pokémon for.
           startingBidPrice: |-
             Pokecord reached for your price. Too bad it can't reach far.
@@ -504,7 +482,7 @@ modules:
         errors:
           noListingId: Please provide a valid listing ID.
           noListingFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
           notYourListing: |-
             You tried to unlisted someone else's listing. It didn't work. 
@@ -512,9 +490,6 @@ modules:
           bidsActive: |-
             Too much finance! Pokecord can't figure it out.
             > **Unlist listings that haven't been purchased.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
       buy:
         sold:
           title: A Listing has been Sold
@@ -544,29 +519,23 @@ modules:
             > **Specified listing has been sold.**
           noListingId: Please provide a valid listing ID.
           noListingFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
           selfBuy: |-
             You purchased your own listing. Wait, you can't.
             > **Purchase another user's listing.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
           notEnoughCredits: |-
             Got spare credits lying around?
             > **Gain more credits to purchase this listing.**
           unlisted: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Listing has been unlisted. Search for another listing.**
       info:
         errors:
           noListingId: Please provide a valid listing ID.
           noListingFound: |-
-            Pokecord went on an adventure and came back with nothing.
+            Pokecord looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
-          noPokemonFound: |-
-            Pokémon not found.
-            > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
         title: Listing \#{{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
@@ -579,49 +548,62 @@ modules:
     commands:
       trade:
         confirmation:
-          title: Trade Request
-          description: "{{trader}} has requested to trade {{traded}}!\n\nWanna trade with {{trader}}?"
+          title: Trade Request Pending
+          description: |-
+            Dear {{partner}},
+            
+            {{trader}} wishes to trade with you.
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         tradeStarted:
-          title: Trade Accepted
-          description: "{{partner}} accepted {{author}}'s trade request.\n> **You can only trade 20 Pokémon per session.**"
+          title: Trade Session Initiated
+          description: The trade request has been accepted.\n> **You may only trade 20 Pokémon per session.**
         tradeCancelled:
-          title: Trade Request Cancelled
-          description: "Trade request to {{partner}} has been denied or has expired."
+          title: Trade Request Terminated
+          description: The trade request has expired or been denied.
         errors:
-          noPartnerTagged: "You can’t trade with nobody. :expressionless: Please tag a user."
-          tradingYourself: You can't trade with yourself!
-          partnerHasntStarted: "{{partner}} hasn't started playing yet. Why not tell them to use the `@Pokecord start` command?"
-          alreadyInTrade: You cannot start a trade until your trade / release session is done..
-          alreadyRequested: You've already sent out a trade request that has not been accepted yet! Please be patient in order to start another trade.
+          noPartnerTagged: |-
+            You traded with nobody. Wait, you can't.
+            > **Mention a user to trade with.**
+          tradingYourself: |-
+            You traded with yourself. Wait, you can't.
+            > **Mention another user to trade with.**
+          alreadyInTrade: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current trade first.**
+          alreadyRequested: |-
+            Two you? No. Two things at once? Also no.
+            > **Wait for your current trade request to be accepted.**
       status:
         embeds:
           tradeEnded:
-            title: Trade Ended
-            description: You have ended the trade.
+            title: Trade Session Terminated
+            description: The trade has ended.
           status:
-            title: "{{confirmator}} confirmed the trading session."
-            description: "Trading session between {{author}} & {{partner}}."
+            title: "{{confirmator}} has confirmed the trading session"
+            description: The trade between {{author}} and {{partner}} is pending confirmation.
         errors:
-          notInTrade: You haven't started a trading session yet, please do that first.
           noPartnerFound:
-            title: Partner Not Found
-            description: Your partner seems to not have access to the bot currently, would you like to end the trade?
+#            title: Partner Not Found
+            description: |-
+              Partner not found.
+              > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
       cancel:
-        errors:
-          notInTrade: You haven't started a trading session yet, please do that first.
         embeds:
           cancelTrade:
-            title: Trading Cancelled
-            description: "The trading session between {{author}} and {{partner}} ended because... Well idk why. You tell me."
+            title: Trading Session Terminated
+            description: The trade between {{author}} and {{partner}} has ended.
       add:
         errors:
-          notInTrade: You haven't started a trading session yet, please do that first.
-          noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
+          noNumberPokemon: |-
+            You tried to add air. That didn't work.
+            > **Specify up to 20 Pokémon IDs.**
+            Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
-          noPokemonFound: "There was no Pokémon found with the given index value."
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
-          notTransferableTitle: Not Transferable
+          notTransferable:
+            title: Not Transferable
         embeds:
           addCredits:
             title: Credits Added
@@ -631,11 +613,9 @@ modules:
             description: "**{{pokemon}}** has been added to your trading session."
       remove:
         errors:
-          notInTrade: You haven't started a trading session yet, please do that first.
           noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
-          noPokemonFound: "There was no Pokémon found with the index value {{index}}."
           notTransferable: This Pokémon is not in your trading session.
         embeds:
           removeCredits:
@@ -647,33 +627,40 @@ modules:
       confirm:
         errors:
           emptyTrade: Both you and your partner must at least choose a Pokémon or some credits before confirming the trade.
-          notInTrade: You haven't started a trading session yet, please do that first.
         embeds:
           partConfirmed:
-            title: Pending Trading Confirmation
-            description: The trading session has been confirmed by you. Changes will be applied once your partner confirms.
+            title: Trade Confirmation Pending
+            description: |-
+              You confirmed the trading session. 
+              > **Trade will be executed when your partner confirms.**
+            #Replace "your partner" with {{partner}}. Could not implement in TradeConfirmCommand.kt.
           confirmed:
-            title: Trading Session Confirmed
-            description: "The trading session between you and {{partner}} has been confirmed."
+            title: Trade Session Confirmed
+            description: The trade between {{trader}} and {{partner}} has been executed.
     errors:
       inRelease: You should finish your release session first before trading.
+      notInTrade: |-
+        You tried to trade with air. That didn't work.
+        > **Initiate a trade session first.**
   general:
     commands:
       faq:
         errors:
-          noFaqFound: No FAQ found that matches the specified keyword
+          noFaqFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **No FAQ found matching specified keyword.**
         list:
           embed:
-            title: Available FAQs
+            title: Frequently Asked Questions
       invite:
         embed:
-          author:
-            text: An Invite has been Requested
+          title: Pokecord Quick Links
           description: |-
-            Add Pokecord to your server [here]({{inviteLink}}).
-            Join Pokecord's community and support server [here](https://discord.gg/EUYgq3Jub3).
-            
-            Thank you for choosing {{botUsername}}!
+            **Links** :arrow_upper_right:
+            Invite Bot: [Add Pokecord]({{inviteLink}})
+            Official Website: [Visit]({{websiteLink}})
+            Community and Support: [Join Discord Server](https://discord.gg/EUYgq3Jub3)
+          footer: Thank you for choosing Pokecord!
       ping:
         embed:
           description: |-
@@ -733,20 +720,20 @@ modules:
           footer: The Pokémon has been added to your collection.
           title: A Pokémon has been Caught
         errors:
-          incorrectNameProvided: '**Suggestion**: Try specifying a valid
-                        Pokémon name!'
-          noNameProvided: '**Suggestion**: Try specifying a valid Pokémon
-                        name!'
+          incorrectNameProvided: |-
+            The great Pokédex says you're wrong.
+            > **Check Pokémon name or spelling.**
+          noNameProvided: |-
+            You caught nothing. Wait, you can't.
+            > **Specify Pokémon name.**
       favorite:
-        added: A Favorite has been Added
+        added: Favorite Addition Successful
         embed:
           description: |-
-            **Name**: {{pokemon}}
-            **Level**: {{level}}
-            **IV Percent**: {{ivPercentage}}
+            **Display Name**: {{pokemon}}
 
             Your favorites have been updated.
-        removed: A Favorite has been Removed
+        removed: Favorite Removal Successful
       gift:
         toggle:
           title: Gift Receiving
@@ -844,7 +831,6 @@ modules:
           footer: Credits to Dominater & SilverAQ for the movesets.
         errors:
           noMoveset: No moveset available for the specified Pokémon yet. Please check back later!
-          noPokemonFound: No Pokémon found with the specified name.
           noPokemonName: No Pokémon name specified.
       nickname:
         embed:
@@ -883,11 +869,11 @@ modules:
           uncaught: This Pokémon has not been registered to your Pokédex!
         noPokemonName: '**Suggestion**: Try specifying a valid Pokémon name
                     or number!'
-        pokemonNotFound: '**Suggestion**: Try specifying a valid Pokémon name
-                    or number!'
       pokemon:
-        errors:
-          noResults: No pokémon found with the specified filters.
+#        errors:
+#          noResults: |-
+#            Pokecord looked far and wide, to no avail.
+#            > **Could not find your search query. Search for something else.**
         embeds:
           title: "{{user}}'s Pokémon"
       select:
@@ -915,8 +901,7 @@ modules:
       spawner:
         embeds:
           spawn:
-            description: Use `@Pokecord catch <Pokémon Name>` to catch
-              it!
+            description: Use `@Pokecord catch <Pokémon Name>` to catch it!
             footer: The next Pokémon will replace this one.
             title: A Wild Pokémon has Appeared
   release:

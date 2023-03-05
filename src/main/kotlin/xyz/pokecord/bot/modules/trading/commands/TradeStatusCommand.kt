@@ -19,7 +19,7 @@ object TradeStatusCommand: Command() {
     if(tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.status.errors.notInTrade")
+          context.translate("modules.trading.errors.notInTrade")
         ).build()
       ).queue()
       return
@@ -32,9 +32,8 @@ object TradeStatusCommand: Command() {
     if(partnerUser == null) {
       val confirmation = Confirmation(context, initiator.userId)
       val confirmed = confirmation.result(
-        context.embedTemplates.confirmation(
-          context.translate("modules.trading.commands.status.errors.noPartnerFound.description"),
-          context.translate("modules.trading.commands.status.errors.noPartnerFound.title")
+        context.embedTemplates.error(
+          context.translate("modules.trading.commands.status.errors.noPartnerFound.description")
         )
       )
 

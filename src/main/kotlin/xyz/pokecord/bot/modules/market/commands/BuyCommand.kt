@@ -63,7 +63,7 @@ object BuyCommand : Command() {
         if (pokemon == null) {
           context.reply(
             context.embedTemplates.error(
-              context.translate("modules.market.commands.buy.errors.noPokemonFound")
+              context.translate("misc.errors.pokemonDoesNotExist")
             ).build()
           ).queue()
           return@withCoroutineLock

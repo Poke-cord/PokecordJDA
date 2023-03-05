@@ -78,7 +78,7 @@ object InfoCommand : Command() {
       } else {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.market.commands.info.errors.noPokemonFound")
+            context.translate("misc.errors.pokemonDoesNotExist")
           ).build()
         ).queue()
       }

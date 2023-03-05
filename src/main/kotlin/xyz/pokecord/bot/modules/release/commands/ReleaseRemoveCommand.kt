@@ -56,7 +56,7 @@ object ReleaseRemoveCommand : Command() {
       context.reply(
         context.embedTemplates.error(
           context.translate(
-            "modules.release.commands.remove.errors.noPokemonFound",
+            "misc.errors.pokemonNotFound",
             "index" to pokemon.toString()
           )
         ).build()

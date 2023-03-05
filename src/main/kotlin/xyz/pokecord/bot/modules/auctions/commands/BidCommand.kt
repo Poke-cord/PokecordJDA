@@ -60,7 +60,7 @@ object BidCommand : Command() {
       if (pokemon == null) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.bid.errors.noPokemonFound")
+            context.translate("misc.errors.pokemonNotFound")
           ).build()
         ).queue()
         return@withCoroutineLock

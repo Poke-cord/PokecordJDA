@@ -69,7 +69,7 @@ class PokemonCommand : Command() {
         .setColor(EmbedTemplates.Color.GREEN.code)
     if (count < 1) {
       context.reply(
-        templateEmbedBuilder.setDescription(context.translate("modules.pokemon.commands.pokemon.errors.noResults"))
+        templateEmbedBuilder.setDescription(context.translate("misc.errors.pokemonNotFound"))
           .setColor(EmbedTemplates.Color.RED.code).build()
       ).queue()
       return
@@ -77,7 +77,7 @@ class PokemonCommand : Command() {
     val pageCount = ceil((count.toDouble() / 15)).toInt()
     val paginator = EmbedPaginator(context, pageCount, { pageIndex ->
       if (pageIndex >= pageCount) {
-        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.pokemon.commands.pokemon.errors.noResults"))
+        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("misc.errors.pokemonNotFound"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
       val ownedPokemonList = module.bot.database.pokemonRepository.getPokemonList(

@@ -59,13 +59,7 @@ object GiftCreditCommand : Command() {
     if (receiverData.selected == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate(
-            "misc.errors.userHasNotStarted",
-            mapOf(
-              "user" to receiver.asMention,
-              "prefix" to context.getPrefix()
-            )
-          )
+          context.translate("misc.errors.userHasNotStarted")
         ).build()
       ).queue()
       return

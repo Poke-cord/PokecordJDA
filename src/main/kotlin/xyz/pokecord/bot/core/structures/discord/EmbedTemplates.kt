@@ -48,7 +48,7 @@ open class EmbedTemplates {
   )
 
   open suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description", "prefix" to "p!"),
+    translate("misc.checks.hasStarted.embed.description"),
     translate("misc.checks.hasStarted.embed.title")
   )
 }
@@ -67,7 +67,12 @@ class ContextEmbedTemplates(private val context: ICommandContext) : EmbedTemplat
   }
 
   override suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description", "prefix" to context.getPrefix()),
+    translate("misc.checks.hasStarted.embed.description"//,
+//      mapOf(
+//        "user" to context.author.asMention,
+//        "prefix" to context.getPrefix()
+//       )
+      ),
     translate("misc.checks.hasStarted.embed.title")
-  )
+  ).setFooter("misc.embeds.error.footer")
 }

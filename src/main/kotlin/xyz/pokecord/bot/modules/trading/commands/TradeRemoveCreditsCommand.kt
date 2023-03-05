@@ -20,7 +20,7 @@ object TradeRemoveCreditsCommand: StaffCommand() {
     if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.remove.errors.notInTrade")
+          context.translate("modules.trading.errors.notInTrade")
         ).build()
       ).queue()
       return

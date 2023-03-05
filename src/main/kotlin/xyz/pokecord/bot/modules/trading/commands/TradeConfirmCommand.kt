@@ -16,7 +16,7 @@ object TradeConfirmCommand : Command() {
     if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.confirm.errors.notInTrade")
+          context.translate("modules.trading.errors.notInTrade")
         ).build()
       ).queue()
       return
@@ -93,11 +93,13 @@ object TradeConfirmCommand : Command() {
         session.commitTransactionAndAwait()
 
         context.reply(
-          context.embedTemplates
-            .normal(
+          context.embedTemplates.normal(
               context.translate(
                 "modules.trading.commands.confirm.embeds.confirmed.description",
-                "partner" to "<@${partnerUserData.id}>"
+                mapOf(
+                  "author" to "<@${authorUserData.id}>",
+                  "partner" to "<@${partnerUserData.id}>"
+                )
               ),
               context.translate("modules.trading.commands.confirm.embeds.confirmed.title"),
             )

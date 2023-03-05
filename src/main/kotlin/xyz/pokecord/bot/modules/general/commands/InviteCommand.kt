@@ -7,27 +7,35 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 class InviteCommand : Command() {
   override val name = "Invite"
 
-  override var aliases = arrayOf("inv")
-
   @Executor
   suspend fun execute(
     context: ICommandContext
   ) {
-    val embedAuthorText = context.translate(
-      "modules.general.commands.invite.embed.author.text",
-      mapOf("botUsername" to context.jda.selfUser.name)
-    )
-    val embedDescription = context.translate(
-      "modules.general.commands.invite.embed.description",
-      mapOf(
-        "botUsername" to context.jda.selfUser.name,
-        "inviteLink" to "https://pokecord.xyz/invite",
-      )
-    )
+//    context.embedTemplates.normal(
+//
+//    )
+//    val embedAuthorText = context.translate(
+//      "modules.general.commands.invite.embed.author.text",
+//      mapOf("botUsername" to context.jda.selfUser.name)
+//    )
+//    val embedDescription = context.translate(
+//      "modules.general.commands.invite.embed.description",
+//     mapOf(
+//      "botUsername" to context.jda.selfUser.name,
+//        "inviteLink" to "https://pokecord.xyz/invite",
+//      )
+//    )
     context.reply(
-      context.embedTemplates.normal(embedDescription)
-        .setColor(EmbedTemplates.Color.GREEN.code)
-        .setAuthor(embedAuthorText, context.jda.selfUser.effectiveAvatarUrl)
+      context.embedTemplates.normal(
+        context.translate(
+          "modules.general.commands.invite.embed.description",
+          mapOf(
+            "inviteLink" to "https://pokecord.xyz/invite",
+            "websiteLink" to "https://pokecord.xyz"
+          )
+        ),
+        context.translate("modules.general.commands.invite.embed.title")
+      ).setFooter("modules.general.commands.invite.embed.footer")
         .build()
     ).queue()
   }

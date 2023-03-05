@@ -30,7 +30,7 @@ class PokedexCommand : Command() {
 
     if (pokemon == null) {
       context.reply(
-        context.embedTemplates.error(context.translate("modules.pokemon.commands.pokedex.pokemonNotFound")).build()
+        context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build()
       ).queue()
       return
     }

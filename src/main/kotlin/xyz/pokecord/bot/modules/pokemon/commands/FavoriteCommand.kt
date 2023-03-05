@@ -28,11 +28,7 @@ class FavoriteCommand : Command() {
       context.embedTemplates.normal(
         context.translate(
           "modules.pokemon.commands.favorite.embed.description",
-          mapOf(
-            "pokemon" to context.translator.pokemonDisplayName(pokemon),
-            "level" to pokemon.level.toString(),
-            "ivPercentage" to pokemon.ivPercentage
-          )
+            "pokemon" to context.translator.pokemonDisplayName(pokemon)
         ),
         context.translate(if (pokemon.favorite) "modules.pokemon.commands.favorite.added" else "modules.pokemon.commands.favorite.removed")
       )

@@ -22,7 +22,7 @@ object MovesCommand : ParentCommand() {
     if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.errors.pokemonNotFound")
+          context.translate("misc.errors.pokemonDoesNotExist")
         ).build()
       )
       return
