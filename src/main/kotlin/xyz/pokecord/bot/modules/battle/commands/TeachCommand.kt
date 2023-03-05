@@ -9,6 +9,7 @@ import xyz.pokecord.bot.utils.PokemonResolvable
 
 object TeachCommand : Command() {
   override val name = "Teach"
+  override var aliases = arrayOf("learn")
 
   @Executor
   suspend fun execute(
