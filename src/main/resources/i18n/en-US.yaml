@@ -598,7 +598,6 @@ modules:
           noNumberPokemon: |-
             You tried to add air. That didn't work.
             > **Specify up to 20 Pokémon IDs.**
-            Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
