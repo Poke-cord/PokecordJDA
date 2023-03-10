@@ -95,12 +95,12 @@ class PokedexCommand : Command() {
       .addField(
         context.translate("misc.texts.baseStats"),
         """
-          `${context.translate("misc.texts.hp").padEnd(7)}| ${Stat.hp.getBaseValue(pokemon.id).toString().padEnd(3)}`
-          `${context.translate("misc.texts.attack").padEnd(7)}| ${Stat.attack.getBaseValue(pokemon.id).toString().padEnd(3)}`
-          `${context.translate("misc.texts.defense").padEnd(7)}| ${Stat.defense.getBaseValue(pokemon.id).toString().padEnd(3)}`
-          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(3)}`
-          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(3)}`
-          `${context.translate("misc.texts.speed").padEnd(7)}| ${Stat.speed.getBaseValue(pokemon.id).toString().padEnd(3)}`
+          `${context.translate("misc.texts.hp").padEnd(7)}| ${Stat.hp.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.attack").padEnd(7)}| ${Stat.attack.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.defense").padEnd(7)}| ${Stat.defense.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.speed").padEnd(7)}| ${Stat.speed.getBaseValue(pokemon.id).toString().padEnd(4)}`
         """.trimIndent(),
         true
       )
