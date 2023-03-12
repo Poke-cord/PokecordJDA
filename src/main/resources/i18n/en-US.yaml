@@ -792,7 +792,9 @@ modules:
               Your gift has been sent.
             title: Gift Sending Confirmed
         errors:
-          botReceiver: '**Suggestion**: Try gifting a user, not a bot!'
+          botReceiver: |-
+            You sent a gift to a bot. Wait, you can't.
+            > **You may only send gifts to users.**
           selectedPokemon: '**Suggestion**: Try selecting a different
                         Pokémon before gifting!'
           favoritePokemon: '**Suggestion**: Try removing this Pokémon
@@ -834,6 +836,8 @@ modules:
           noMoveset: No moveset available for the specified Pokémon yet. Please check back later!
           noPokemonName: No Pokémon name specified.
       nickname:
+        reset: A Nickname has been Reset
+        updated: A Nickname has been Updated
         embed:
           description: |-
             **Pokémon Name**: {{pokemon}}
@@ -846,9 +850,7 @@ modules:
           pokemonName: '**Suggestion**: Try excluding any Pokémon names
                         in the nickname!'
           shinyStar: '**Suggestion**: Try excluding a :star: from the nickname!'
-          tooLong: '**Suggestion**: Try entering a nickname under 64 characters!'
-        reset: A Nickname has been Reset
-        updated: A Nickname has been Updated
+          charLimit: '**Suggestion**: Try entering a nickname under 64 characters!'
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.
         ordered: Finished ordering your Pokémon!
@@ -879,8 +881,9 @@ modules:
           title: "{{user}}'s Pokémon"
       select:
         errors:
-          alreadySelected: '**Suggestion**: Try selecting a Pokémon you don''t
-                          have selected currently!'
+          alreadySelected: |-
+            You can't select something twice.
+            > **Try
           inBattle: You can't select another Pokémon while you are in battle!
         embed:
           description: |-
