@@ -601,8 +601,6 @@ modules:
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
           maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
-          notTransferable:
-            title: Not Transferable
         embeds:
           addCredits:
             title: Credits Added
@@ -615,7 +613,7 @@ modules:
           noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
           noNumberCredits: Please provide the amount of credits you would like to add.
           notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
-          notTransferable: This Pokémon is not in your trading session.
+          notAdded: This Pokémon is not in your trading session.
         embeds:
           removeCredits:
             title: Credits Withdrawn
@@ -726,22 +724,24 @@ modules:
             You caught nothing. Wait, you can't.
             > **Specify Pokémon name.**
       favorite:
-        added: Favorite Addition Successful
+        added: Added to Favorites
+        removed: Removed from Favorites
         embed:
           description: |-
             **Display Name**: {{pokemon}}
 
             Your favorites have been updated.
-        removed: Favorite Removal Successful
       gift:
         toggle:
-          title: Gift Receiving
-          enabled: You will be able to receive gifts from other players!
-          disabled: You will not be able to receive gifts from other players!
+          title: Toggle Incoming Gifts
+          enabled: |-
+            You are eligible to receive gifts from other users. Swell!
+          disabled: |-
+            You won't receive gifts from other users. Sad trombone.
         embeds:
           cancelled:
-            description: Gift execution cancelled.
-            title: Gifting Cancelled
+            description: The gift was not sent.
+            title: Gift Sending Cancelled
           confirmation:
             credits: |-
               **Sender**: {{sender}}
@@ -771,7 +771,7 @@ modules:
               **Name**: {{pokemon}}
               **Level**: {{level}}
               **IV Percent**: {{ivPercentage}}
-            title: You have Received A Gift
+            title: You Received a Gift
           giftSent:
             credits: |-
               **Receiver**: {{receiver}}

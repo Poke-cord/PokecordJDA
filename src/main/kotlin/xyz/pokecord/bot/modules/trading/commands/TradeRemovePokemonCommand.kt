@@ -50,7 +50,7 @@ object TradeRemovePokemonCommand : Command() {
       if (transfer != OwnedPokemon.TransferStates.TRADE_SESSION) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.trading.commands.remove.errors.notTransferable")
+            context.translate("modules.trading.commands.remove.errors.notAdded")
           ).build()
         ).queue()
         return

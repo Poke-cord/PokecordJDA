@@ -61,7 +61,6 @@ object TradeAddPokemonCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               transfer.errMessage,
-              context.translate("modules.trading.commands.add.errors.notTransferable.title")
             ).build()
           ).queue()
           return
