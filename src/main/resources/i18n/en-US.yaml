@@ -98,6 +98,9 @@ misc:
     notYourButton: |-
       You pressed someone else's button. It didn't work.
       > **Use buttons that belong to your own commands.**
+    inState:
+      You used a command while busy. It didn't work.
+      > **Cancel current trade, release, or battle first.**
     invalidAmount: |-
       You entered an invalid amount.
       > **Enter a valid amount.**
@@ -759,7 +762,7 @@ modules:
               **IV Percent**: {{ivPercentage}}
 
               React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-            title: A Gift is Pending
+            title: Gift Sending is Pending
           giftReceived:
             credits: |-
               {{sender}} has gifted you credits!
@@ -787,9 +790,8 @@ modules:
               **IV Percent**: {{ivPercentage}}
 
               Your gift has been sent.
-            title: A Gift has been Sent
+            title: Gift Sending Confirmed
         errors:
-          tradeReleaseBattleState: You cannot gift someone while in a trade, release or battle!
           botReceiver: '**Suggestion**: Try gifting a user, not a bot!'
           selectedPokemon: '**Suggestion**: Try selecting a different
                         Pokémon before gifting!'
