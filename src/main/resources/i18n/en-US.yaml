@@ -83,10 +83,6 @@ misc:
         ・ [Privacy Policy]({{privacyUrl}})
         **By accessing the Service, you agree to abide by our Terms.**
       footer: Seeing this again? We've updated our Terms.
-    transactionCancelled:
-      title: Transaction Cancelled
-      description: The **{{type}}** transaction has been cancelled. Please try again later.
-
   errors:
     embeds:
       commandExecutionFailed:
