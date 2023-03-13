@@ -95,14 +95,7 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
   }
 
   override suspend fun getPrefix(): String {
-    // TODO: return mention prefix since September 2022
-    if (prefix == null) {
-      prefix = if (isFromGuild) {
-        val guild = getGuildData()!!
-        guild.prefix ?: bot.commandHandler.prefix
-      } else bot.commandHandler.prefix
-    }
-    return prefix!!
+    return jda.selfUser.asMention
   }
 
   override suspend fun hasStarted(sendMessage: Boolean): Boolean {
@@ -215,10 +208,12 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           mapOf(
             "botUsername" to jda.selfUser.name,
             "user" to author.asMention,
-            "tosUrl" to "https://sites.google.com/view/pokecord4908/english/terms"
+            "tosUrl" to "https://sites.google.com/view/pokecord4908/english/terms",
+            "privacyUrl" to "https://sites.google.com/view/pokecord4908/english/privacy"
           )
-        )
-      )
+        ),
+        translate("misc.embeds.rules.title")
+      ).setFooter("misc.embeds.rules.footer")
     )
   }
 

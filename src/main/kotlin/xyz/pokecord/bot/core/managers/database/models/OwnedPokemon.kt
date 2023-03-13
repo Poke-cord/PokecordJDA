@@ -76,12 +76,12 @@ data class OwnedPokemon(
   }
 
   enum class TransferStates(var errMessage: String) {
-    STICKY("You cannot transfer this pokemon because its sticky."),
-    FAVORITE("You cannot transfer this pokemon because its favorited."),
-    TRADE_SESSION("You cannot transfer this pokemon because its in a trade session."),
-    NO_POKEMON("You cannot transfer this pokemon because its the only one you have.\nThink this is wrong? Try using the `order` command."),
-    SELECTED("You cannot transfer this pokemon because you have it selected."),
-    SUCCESS("The pokemon is transferable.")
+    STICKY("This Pokémon is stickied to your account.\n> **You cannot transfer this Pokémon.**"),
+    FAVORITE("This Pokémon is favorited.\n> **Unfavorite the Pokémon before transferring.**"),
+    TRADE_SESSION("This Pokémon is in a trade session.\n> **End your current trade before transferring.**"),
+    NO_POKEMON("This is your only Pokémon. Pretty sure.\n> **Not the case? Use <@705016654341472327> `order`.**"),
+    SELECTED("This Pokémon is selected.\n> **Select another Pokémon before transferring.**"),
+    SUCCESS("This Pokémon is transferable.")
   }
 
   suspend fun transferable(database: Database): TransferStates {

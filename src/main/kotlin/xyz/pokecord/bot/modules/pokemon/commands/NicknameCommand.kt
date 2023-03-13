@@ -28,7 +28,7 @@ class NicknameCommand : Command() {
     if (!nickname.isNullOrBlank()) {
       if (nickname.length > 64) {
         context.reply(
-          context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.tooLong")).build()
+          context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.charLimit")).build()
         ).queue()
         return
       } else if (nickname.endsWith("⭐")) {

@@ -1,14 +1,12 @@
 package xyz.pokecord.bot.core.structures.discord
 
 import dev.minn.jda.ktx.CoroutineEventListener
-import dev.minn.jda.ktx.EmbedBuilder
 import io.prometheus.client.Counter
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -24,8 +22,6 @@ import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonOrder
 import xyz.pokecord.bot.utils.PokemonResolvable
 import xyz.pokecord.bot.utils.extensions.*
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspend
@@ -255,45 +251,11 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
       if (!context.shouldProcess()) return
       if (bot.maintenance && !Config.devs.contains(context.author.id)) return
 
-      var effectivePrefix = context.getPrefix()
+      val effectivePrefix = context.getPrefix()
       val splitMessage = event.message.contentRaw.split("\\s|\\n".toRegex()).toMutableList()
       var commandString = splitMessage.removeFirst()
       if (!commandString.startsWith(effectivePrefix, true)) {
-        effectivePrefix =
-          event.jda.selfUser.asMention // If prefix wasn't found at the start of the message, we try to find mention to the bot instead
-        if (!commandString.startsWith(effectivePrefix)) return
-      } else if (event.channel.type != ChannelType.PRIVATE) {
-        // if mention prefix was not used and the channel is not a DM
-        val embedBuilder = EmbedBuilder(title = "NOTICE: Pokecord Prefix Update")
-        if (SimpleDateFormat("dd/MM/yyyy").parse("24/08/2022").before(Date())) {
-          embedBuilder.description = """
-            Hey there!
-            It looks like you've used a command using the prefix "**p!**" or your own custom one.
-            **__Pokecord is only accepting__** "<@705016654341472327>" (mentioning Pokecord) **__as its prefix__** in preparation for changes across all Discord bots.
-            Beyond September 1st, Pokecord will no longer have the ability to respond to "**p!**" or any custom prefixes.
-            
-            > Why is this happening? Read Discord's explantion [here](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-for-Verified-Bots).
-            
-            > Need further clarification? Visit our support server [here](https://discord.gg/poke).
-            
-            > Is there a faster way for PC users? Sort of. Try "**@pkc**".
-          """.trimIndent()
-          event.channel.sendMessageEmbeds(embedBuilder.build()).queue()
-          return
-        } else {
-          embedBuilder.description = """
-            Hey there!
-            It looks like you've used a command using the prefix "**p!**" or your own custom one.
-            **__Starting August 24th, Pokecord will only accept__** "<@705016654341472327>" (mentioning Pokecord) **__as its prefix__** in preparation for changes across all Discord bots.
-            
-            > Why is this happening? Read Discord's explantion [here](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-for-Verified-Bots).
-            
-            > Need further clarification? Visit our support server [here](https://discord.gg/poke).
-            
-            > Is there a faster way for PC users? Sort of. Try "**@pkc**".
-          """.trimIndent()
-          event.channel.sendMessageEmbeds(embedBuilder.build()).queue()
-        }
+        return
       }
 
       commandString = commandString.drop(effectivePrefix.length).trim().ifEmpty {

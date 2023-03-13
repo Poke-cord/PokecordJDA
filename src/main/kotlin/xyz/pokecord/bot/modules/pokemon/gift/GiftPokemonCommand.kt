@@ -26,7 +26,7 @@ object GiftPokemonCommand : Command() {
     if (context.getTradeState() != null || context.getReleaseState() != null || context.getBattleState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.gift.errors.tradeReleaseBattleState")
+          context.translate("misc.errors.inState")
         ).build()
       ).queue()
       return
@@ -93,7 +93,6 @@ object GiftPokemonCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               transfer.errMessage,
-              context.translate("modules.trading.commands.add.errors.notTransferableTitle")
             ).build()
           ).queue()
           return

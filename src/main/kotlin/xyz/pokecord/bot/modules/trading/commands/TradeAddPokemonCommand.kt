@@ -22,7 +22,7 @@ object TradeAddPokemonCommand : Command() {
     if (tradeState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.notInTrade")
+          context.translate("modules.trading.errors.notInTrade")
         ).build()
       ).queue()
     } else {
@@ -41,9 +41,7 @@ object TradeAddPokemonCommand : Command() {
       if (selectedPokemon == null) {
         context.reply(
           context.embedTemplates.error(
-            context.translate(
-              "modules.trading.commands.add.errors.noPokemonFound"
-            )
+            context.translate("misc.errors.pokemonNotFound")
           ).build()
         ).queue()
       } else {
@@ -63,7 +61,6 @@ object TradeAddPokemonCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               transfer.errMessage,
-              context.translate("modules.trading.commands.add.errors.notTransferableTitle")
             ).build()
           ).queue()
           return

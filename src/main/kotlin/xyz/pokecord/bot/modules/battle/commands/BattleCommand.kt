@@ -83,10 +83,7 @@ object BattleCommand : Command() {
     if (partnerData.selected == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate(
-            "modules.battle.commands.battle.errors.partnerHasNotStarted",
-            "partner" to partner.asMention
-          )
+          context.translate("misc.errors.userHasNotStarted")
         ).build()
       ).queue()
       return
@@ -101,7 +98,7 @@ object BattleCommand : Command() {
     if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.pokemonNotFound")
+          context.translate("misc.errors.pokemonDoesNotExist")
         ).build()
       ).queue()
       return
@@ -109,7 +106,7 @@ object BattleCommand : Command() {
     if (partnerPokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.partnerPokemonNotFound")
+          context.translate("misc.errors.pokemonDoesNotExist")
         ).build()
       ).queue()
       return

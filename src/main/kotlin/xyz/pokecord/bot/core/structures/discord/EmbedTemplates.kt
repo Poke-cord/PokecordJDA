@@ -9,7 +9,8 @@ open class EmbedTemplates {
   enum class Color(val code: Int) {
     GREEN(0x2ecc71),
     RED(0xf04747),
-    YELLOW(0xf0e365)
+    YELLOW(0xf0e365),
+    ORANGE(0xfaa61a)
   }
 
   open suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
@@ -33,7 +34,7 @@ open class EmbedTemplates {
   }
 
   fun confirmation(description: String, title: String? = null) =
-    EmbedBuilder().setColor(0xfaa61a).setDescription(description).setTitle(
+    EmbedBuilder().setColor(Color.ORANGE.code).setDescription(description).setTitle(
       title
     )
 
@@ -47,7 +48,7 @@ open class EmbedTemplates {
   )
 
   open suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description", "prefix" to "p!"),
+    translate("misc.checks.hasStarted.embed.description"),
     translate("misc.checks.hasStarted.embed.title")
   )
 }
@@ -66,7 +67,12 @@ class ContextEmbedTemplates(private val context: ICommandContext) : EmbedTemplat
   }
 
   override suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description", "prefix" to context.getPrefix()),
+    translate("misc.checks.hasStarted.embed.description"//,
+//      mapOf(
+//        "user" to context.author.asMention,
+//        "prefix" to context.getPrefix()
+//       )
+      ),
     translate("misc.checks.hasStarted.embed.title")
-  )
+  ).setFooter("misc.embeds.error.footer")
 }

@@ -64,8 +64,8 @@ object BattleActionEvent : Event() {
             title = "${event.interaction.user.name} vs. ${partnerUser.name}"
             // TODO: use translator somehow
             description = """
-                  **${pokemon.displayName}**: ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
-                  **${partnerPokemon.displayName}**: ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
+                  **${pokemon.displayName}** (lv. ${pokemon.level}): ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
+                  **${partnerPokemon.displayName}** (lv. ${partnerPokemon.level}): ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                   
                   > **Select a move to execute.**
                 """.trimIndent()
@@ -219,8 +219,8 @@ object BattleActionEvent : Event() {
             event.hook.sendMessageEmbeds(Embed {
               title = "${event.interaction.user.name} vs. ${partnerUser.name}"
               description = """
-                **${selfPokemon.displayName}**: ${self.pokemonStats.hp}/${selfPokemon.stats.hp} HP
-                **${partnerPokemon.displayName}**: ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
+                **${selfPokemon.displayName}** (lv. ${selfPokemon.level}): ${self.pokemonStats.hp}/${selfPokemon.stats.hp} HP
+                **${partnerPokemon.displayName}** (lv. ${partnerPokemon.level}): ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                 
                 ${getMoveResultTexts()}
                 ${
@@ -275,7 +275,7 @@ object BattleActionEvent : Event() {
               event.replyEmbeds(Embed {
                 title = "Failed to End Battle"
                 description =
-                  "Thou shall not show weaknesss. The battle can be ended in ${TimeFormat.RELATIVE.format(minRequiredTime)}."
+                  "Thou shall not show weakness. The battle can be ended ${TimeFormat.RELATIVE.format(minRequiredTime)}."
               }).setEphemeral(true).queue()
             } else {
               module.bot.database.battleRepository.endBattle(battle)
@@ -301,7 +301,7 @@ object BattleActionEvent : Event() {
     sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
     if (moveResult.isCritical) sb.appendLine("It's a critical hit!")
     if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!")
-    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective!")
+    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective...")
     return sb.toString()
   }
 }

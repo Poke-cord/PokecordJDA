@@ -103,7 +103,7 @@ object UnlistCommand : Command() {
       } else {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.unlist.errors.noPokemonFound")
+            context.translate("misc.errors.pokemonDoesNotExist")
           ).build()
         ).queue()
       }

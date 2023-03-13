@@ -5,14 +5,14 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 object Config {
-  const val version = "2.1.96"
+  const val version = "2.1.152"
 
   val voteSeasonStartDate: LocalDate = Instant.ofEpochMilli(1609459200000).atZone(ZoneOffset.UTC).toLocalDate()
 
   val officialServerOnlyMode = System.getenv("OFFICIAL_SERVER_ONLY") != null
 
   val devs =
-    mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752", "341282855625818122")
+    mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752", "341282855625818122", "312135171656646658")
 
   const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"

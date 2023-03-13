@@ -26,7 +26,7 @@ class MovesetCommand : Command() {
 
     if (pokemon == null) {
       context.reply(
-        context.embedTemplates.error(context.translate("modules.pokemon.commands.moveset.errors.noPokemonFound"))
+        context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound"))
           .build()
       ).queue()
       return

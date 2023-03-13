@@ -92,7 +92,9 @@ class HintCommand : Command() {
         ).queue()
       } catch (e: Exception) {
         context.reply(
-          context.embedTemplates.error("modules.pokemon.commands.hint.errors.dmFailed").build()
+          context.embedTemplates.error(
+            context.translate("modules.pokemon.commands.hint.errors.dmFailed")
+          ).build()
         ).queue()
       }
     }

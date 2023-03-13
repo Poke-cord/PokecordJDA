@@ -30,7 +30,7 @@ class PokedexCommand : Command() {
 
     if (pokemon == null) {
       context.reply(
-        context.embedTemplates.error(context.translate("modules.pokemon.commands.pokedex.pokemonNotFound")).build()
+        context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build()
       ).queue()
       return
     }
@@ -72,41 +72,41 @@ class PokedexCommand : Command() {
         pokemon.types.mapNotNull { it.name?.name }.joinToString(", "),
         true
       ).addField(
-        context.translate("misc.texts.height"),
-        "${pokemon.height / 10.0} m",
+        context.translate("misc.texts.appearance"),
+        "**Height**: ${pokemon.height / 10.0} m\n**Weight**: ${pokemon.weight / 10.0} kg",
         true
       ).addField(
-        context.translate("misc.texts.weight"),
-        "${pokemon.weight / 10.0} kg",
+        context.translate("misc.texts.obtained"),
+        "Catchable, Redeemable",
         true
+      //Define each Pokemon as catchable, redeemable etc. and make this dynamic.
       )
       .addField(context.translate("misc.texts.prevEvolution"), prevEvolution, true)
       .addField(context.translate("misc.texts.nextEvolution"), nextEvolution, true)
-      .addField(
-        context.translate("misc.texts.habitat"),
-        context.translator.habitat(pokemon)?.name ?: context.translate("misc.texts.unknown"),
-        true
-      )
+      //Add level that the Pokemon evolves at.
       .addField(context.translate("misc.texts.genderRate"), genderRate, true)
-      .addField(context.translate("misc.texts.genus"), context.translator.pokemonGenus(pokemon), true)
-      .addField(context.translate("misc.texts.generation"), pokemon.species.romanGenerationId, true)
+      //.addField(
+      //  context.translate("misc.texts.habitat"),
+      //  context.translator.habitat(pokemon)?.name ?: context.translate("misc.texts.unknown"),
+      //  true
+      //)
+      //.addField(context.translate("misc.texts.genus"), context.translator.pokemonGenus(pokemon), true)
+      //.addField(context.translate("misc.texts.generation"), pokemon.species.romanGenerationId, true)
       .addField(
         context.translate("misc.texts.baseStats"),
         """
-          **${context.translator.stat(Stat.hp)}** ${Stat.hp.getBaseValue(pokemon.id).toString()}
-          **${context.translator.stat(Stat.attack)}** ${Stat.attack.getBaseValue(pokemon.id).toString()}
-          **${context.translator.stat(Stat.defense)}** ${Stat.defense.getBaseValue(pokemon.id).toString()}
-          **${context.translator.stat(Stat.specialAttack)}** ${Stat.specialAttack.getBaseValue(pokemon.id).toString()}
-          **${context.translator.stat(Stat.specialDefense)}** ${
-          Stat.specialDefense.getBaseValue(pokemon.id).toString()
-        }
-          **${context.translator.stat(Stat.speed)}** ${Stat.speed.getBaseValue(pokemon.id).toString()}
+          `${context.translate("misc.texts.hp").padEnd(7)}| ${Stat.hp.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.attack").padEnd(7)}| ${Stat.attack.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.defense").padEnd(7)}| ${Stat.defense.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.speed").padEnd(7)}| ${Stat.speed.getBaseValue(pokemon.id).toString().padEnd(4)}`
         """.trimIndent(),
         true
       )
       .addField(
         context.translate("misc.texts.altNames"),
-        pokemon.species.getNames().map { it.name }.toSet().joinToString(", "),
+        pokemon.species.getNames().map { it.name }.toSet().joinToString("\n"),
         true
       )
     context.reply(embed.build()).queue()
