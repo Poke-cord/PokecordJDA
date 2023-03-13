@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.modules.auctions.commands
 
 import dev.minn.jda.ktx.await
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.Bid
@@ -159,14 +160,17 @@ object BidCommand : Command() {
 
       if (confirmed) {
         val session = context.bot.database.startSession()
-        session.use {
+        val cancelled = session.use {
           session.startTransaction()
 
           if (highestBid != null) {
             val highestBidUserData = context.bot.database.userRepository.getUser(highestBid.userId)
             val highestBidUser = context.jda.retrieveUserById(highestBid.userId).await()
 
-            context.bot.database.userRepository.incCredits(highestBidUserData, highestBid.amount, session)
+            if (!context.bot.database.userRepository.incCredits(highestBidUserData, highestBid.amount, session)) {
+              session.abortTransactionAndAwait()
+              return@use true
+            }
 
             highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
               context.embedTemplates.normal(
@@ -184,10 +188,29 @@ object BidCommand : Command() {
             ).queue()
           }
 
-          context.bot.database.userRepository.incCredits(userData, -bidAmount, session)
+          if (!context.bot.database.userRepository.incCredits(userData, -bidAmount, session)) {
+            session.abortTransactionAndAwait()
+            return@use true
+          }
           context.bot.database.auctionRepository.insertBid(auction, Bid(context.author.id, bidAmount), session)
           context.bot.database.auctionRepository.incTimeLeft(auction, 60, session)
           session.commitTransactionAndAwait()
+          false
+        }
+
+        if (cancelled) {
+          context.reply(
+            context.embedTemplates.normal(
+              context.translate(
+                "misc.embeds.transactionCancelled.description",
+                mapOf(
+                  "type" to "bid"
+                )
+              ),
+              context.translate("misc.embeds.transactionCancelled.title")
+            ).build()
+          ).queue()
+          return@withCoroutineLock
         }
 
         context.reply(

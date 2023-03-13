@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.economy.commands
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -92,15 +93,36 @@ class BuyCommand : Command() {
       }
     }
 
-    session.use {
+    val cancelled = session.use {
       it.startTransaction()
       module.bot.database.userRepository.addInventoryItem(context.author.id, itemData.id, effectiveAmount, session)
       when {
         itemData.usesGems -> module.bot.database.userRepository.incGems(userData, -cost, it)
         itemData.usesTokens -> module.bot.database.userRepository.incTokens(userData, -cost, it)
-        else -> module.bot.database.userRepository.incCredits(userData, -cost, it)
+        else -> {
+          if (!module.bot.database.userRepository.incCredits(userData, -cost, it)) {
+            it.abortTransactionAndAwait()
+            return@use true
+          }
+        }
       }
       it.commitTransactionAndAwait()
+      false
+    }
+
+    if (cancelled) {
+      context.reply(
+        context.embedTemplates.normal(
+          context.translate(
+            "misc.embeds.transactionCancelled.description",
+            mapOf(
+              "type" to "buy"
+            )
+          ),
+          context.translate("misc.embeds.transactionCancelled.title")
+        ).build()
+      ).queue()
+      return
     }
 
     context.reply(

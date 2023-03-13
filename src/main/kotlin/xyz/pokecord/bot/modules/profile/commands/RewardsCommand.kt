@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.profile.commands
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.repositories.PokemonRepository
@@ -56,7 +57,24 @@ class RewardsCommand : Command() {
       val catch = catchValues.contains(lowerCaseAction)
 
       if (all || catch) {
-        val (claimResult, claimedCredits) = giveCatchRewards(context)
+        val catchRewardsResult = giveCatchRewards(context)
+        if (catchRewardsResult == null) {
+          // transaction cancelled
+          context.reply(
+            context.embedTemplates.normal(
+              context.translate(
+                "misc.embeds.transactionCancelled.description",
+                mapOf(
+                  "type" to "claim rewards"
+                )
+              ),
+              context.translate("misc.embeds.transactionCancelled.title")
+            ).build()
+          ).queue()
+          return
+        }
+
+        val (claimResult, claimedCredits) = catchRewardsResult
         if (!all && claimedCredits < 1) {
           context.reply(
             context.embedTemplates.error(
@@ -102,7 +120,7 @@ class RewardsCommand : Command() {
 
   private suspend fun giveCatchRewards(
     context: ICommandContext
-  ): Pair<PokemonRepository.CatchRewardClaimResult, Int> {
+  ): Pair<PokemonRepository.CatchRewardClaimResult, Int>? {
     val userData = context.getUserData()
     var claimed = 0
     var claimResult: PokemonRepository.CatchRewardClaimResult
@@ -116,7 +134,10 @@ class RewardsCommand : Command() {
       claimed += claimResult.pseudoLegendaryCount * 50
       claimed += claimResult.otherCount * 35
       if (claimed > 0) {
-        module.bot.database.userRepository.incCredits(userData, claimed, it)
+        if (!module.bot.database.userRepository.incCredits(userData, claimed, it)) {
+          it.abortTransactionAndAwait()
+          return null
+        }
       }
       it.commitTransactionAndAwait()
     }
