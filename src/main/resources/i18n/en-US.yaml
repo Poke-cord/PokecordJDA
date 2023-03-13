@@ -795,15 +795,14 @@ modules:
           botReceiver: |-
             You sent a gift to a bot. Wait, you can't.
             > **You may only send gifts to users.**
-          selectedPokemon: '**Suggestion**: Try selecting a different
-                        Pokémon before gifting!'
-          favoritePokemon: '**Suggestion**: Try removing this Pokémon
-                        from your favorites before gifting!'
           mentionUser: '**Suggestion**: Try specifying a user you would
                         like to gift to!'
-          notEnoughCredits: '**Suggestion**: Try gifting an amount of credits
-                        you have!'
-          selfReceiver: '**Suggestion**: Try gifting another user!'
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to gift this amount.**
+          selfReceiver: |-
+            You sent a gift to yourself. Wait, you can't.
+            > **You may only send gifts to other users.**
           giftsDisabled: 'The receiver is not currently accepting gifts!'
       hint:
         confirmation:
@@ -812,19 +811,21 @@ modules:
               Please confirm you want to purchase a Pokémon hint.
 
               React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-            title: A Hint has been Requested
+            title: Hint Request Pending
         dm:
           embed:
             title: Pokémon Hint
         embed:
           description: The hint has been sent to your DMs.
-          title: A Hint has been Generated
+          title: Hint Generated
         errors:
           cancelled:
             description: Your Pokémon hint request was cancelled.
             title: A Hint has been Cancelled
           dmFailed: "**Suggestion**: Try allowing Pokecord to DM you!"
-          notEnoughCredits: "You don't have enough credits to buy a hint."
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase a hint.**
       info:
         embed:
           footer: 'Showing #{{index}} | Caught Date'
@@ -882,8 +883,8 @@ modules:
       select:
         errors:
           alreadySelected: |-
-            You can't select something twice.
-            > **Try
+            The selector couldn't select. Sad face.
+            > **Select a Pokémon by your collection ID.**
           inBattle: You can't select another Pokémon while you are in battle!
         embed:
           description: |-
@@ -1060,7 +1061,9 @@ modules:
           cannotBePurchased: '**Suggestion**: Try buying a purchasable item!'
           noItemName: '**Suggestion**: Try specifying an item name!'
           invalidAmount: '**Suggestion**: Try specifying an amount between 1 and 1024!'
-          notEnoughCredits: "You don't have enough credits to buy this item."
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase this item.**
           notEnoughGems: "You don't have enough gems to buy this item."
           notEnoughTokens: "You don't have enough tokens to buy this item."
         embed:
