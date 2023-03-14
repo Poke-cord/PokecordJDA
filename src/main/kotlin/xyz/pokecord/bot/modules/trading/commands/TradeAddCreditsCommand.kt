@@ -1,11 +1,12 @@
 package xyz.pokecord.bot.modules.trading.commands
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
-// import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.staff.StaffCommand
+import xyz.pokecord.bot.core.structures.discord.base.Command
+// import xyz.pokecord.bot.modules.staff.StaffCommand
 
-object TradeAddCreditsCommand : StaffCommand() {
+object TradeAddCreditsCommand : Command() {
   override val name = "credits"
   override var aliases = arrayOf("c", "creds", "credits", "credit")
 
@@ -48,7 +49,21 @@ object TradeAddCreditsCommand : StaffCommand() {
     val session = context.bot.database.startSession()
     session.use {
       session.startTransaction()
-      context.bot.database.userRepository.incCredits(userData, -amount, session)
+      if (!context.bot.database.userRepository.incCredits(userData, -amount, session)) {
+        session.abortTransactionAndAwait()
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "misc.embeds.transactionCancelled.description",
+              mapOf(
+                "type" to "trade add credits"
+              )
+            ),
+            context.translate("misc.embeds.transactionCancelled.title")
+          ).build()
+        ).queue()
+        return
+      }
       context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount, session)
       context.bot.database.tradeRepository.clearConfirmState(tradeState, session)
       session.commitTransactionAndAwait()

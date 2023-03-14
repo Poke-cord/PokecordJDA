@@ -77,7 +77,7 @@ misc:
       title: Access of Services Agreement
       description: |-
         Hey {{user}}! Welcome to {{botUsername}}.
-
+        
         Read and agree to the following to continue.
         ・ [Terms of Service]({{tosUrl}})
         ・ [Privacy Policy]({{privacyUrl}})
@@ -228,9 +228,11 @@ modules:
           battleRequest:
             title: Battle Request
             description: |-
-              Sound trumpets! {{partner}} has been challenged by {{initiator}}! To either victory, or else a grave.
-
-              Do you accept the challenge, {{partner}}?
+              Dear {{partner}},
+            
+              {{initiator}} wishes to have a battle.
+            
+              React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
       moves:
         embed:
           title: "Pokémon Moves | Level {{level}} {{pokemon}} "
@@ -557,7 +559,7 @@ modules:
             
             {{trader}} wishes to trade with you.
             
-            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
         tradeStarted:
           title: Trade Session Initiated
           description: |-

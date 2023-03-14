@@ -12,7 +12,7 @@ class TradingModule(bot: Bot) : Module(
   arrayOf(TradeCommand)
 ) {
   override val name = "Trading"
-  override var enabled = false
+  override var enabled = true
   companion object {
     suspend fun getTradeStatePokemonText(
       context: ICommandContext,

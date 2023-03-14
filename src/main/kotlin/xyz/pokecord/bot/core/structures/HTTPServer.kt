@@ -19,6 +19,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import net.dv8tion.jda.api.JDA
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 import xyz.pokecord.bot.core.managers.I18n
@@ -122,7 +123,11 @@ class HTTPServer(val bot: Bot) {
       clientSession.startTransaction()
       val userData = bot.database.userRepository.getUser(args.user)
       bot.database.userRepository.setLastVoteTime(userData, session = clientSession)
-      bot.database.userRepository.incCredits(userData, credits, clientSession)
+      if (!bot.database.userRepository.incCredits(userData, credits, clientSession)) {
+        clientSession.abortTransactionAndAwait()
+        bot.logger.warn("Negative credits encountered while processing vote of user ${args.user}")
+        return
+      }
       bot.database.userRepository.incTokens(userData, tokens, clientSession)
       if (cct > 0) {
         bot.database.userRepository.addInventoryItem(args.user, CCTItem.id, cct, clientSession)
@@ -241,7 +246,10 @@ class HTTPServer(val bot: Bot) {
               }
               item?.let {
                 itemName = I18n.translate(null, "store.packages.${`package`.id}.items.${item.id}")
-                `package`.giveReward(bot, userData, item)
+                if (!`package`.giveReward(bot, userData, item)) {
+                  call.respond(HttpStatusCode.NotAcceptable, "Transaction cancelled")
+                  return@get
+                }
               }
             }
 
@@ -316,7 +324,10 @@ class HTTPServer(val bot: Bot) {
                     }
                     item?.let {
                       itemName = I18n.translate(null, "store.packages.${`package`.id}.items.${item.id}")
-                      `package`.giveReward(bot, userData, item)
+                      if (!`package`.giveReward(bot, userData, item)) {
+                        call.respond(HttpStatusCode.NotAcceptable, "Transaction cancelled")
+                        return@get
+                      }
                     }
                   }
 

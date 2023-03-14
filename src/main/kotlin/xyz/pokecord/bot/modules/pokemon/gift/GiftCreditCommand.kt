@@ -112,7 +112,21 @@ object GiftCreditCommand : Command() {
         return
       }
 
-      module.bot.database.userRepository.giftCredits(userData, receiverData, amount)
+      if (!module.bot.database.userRepository.giftCredits(userData, receiverData, amount)) {
+        context.reply(
+          context.embedTemplates.normal(
+            context.translate(
+              "misc.embeds.transactionCancelled.description",
+              mapOf(
+                "type" to "gift credit"
+              )
+            ),
+            context.translate("misc.embeds.transactionCancelled.title")
+          ).build()
+        ).queue()
+        return
+      }
+
       try {
         val privateChannel = receiver.openPrivateChannel().await()
         privateChannel.sendMessageEmbeds(

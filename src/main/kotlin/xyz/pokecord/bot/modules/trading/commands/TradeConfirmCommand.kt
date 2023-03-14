@@ -1,5 +1,6 @@
 package xyz.pokecord.bot.modules.trading.commands
 
+import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
@@ -46,20 +47,48 @@ object TradeConfirmCommand : Command() {
       val partnerTradeData =
         if (tradeState.initiator.userId == context.author.id) tradeState.receiver else tradeState.initiator
 
-      val authorUserData = context.bot.database.userRepository.getUser(authorTradeData.userId)
-      val partnerUserData = context.bot.database.userRepository.getUser(partnerTradeData.userId)
-
       val session = context.bot.database.startSession()
 
       session.use {
         session.startTransaction()
 
+        val authorUserData = context.bot.database.userRepository.getUser(authorTradeData.userId)
+        val partnerUserData = context.bot.database.userRepository.getUser(partnerTradeData.userId)
+
         if (authorTradeData.credits > 0) {
-          context.bot.database.userRepository.incCredits(partnerUserData, authorTradeData.credits, session)
+          if (!context.bot.database.userRepository.incCredits(partnerUserData, authorTradeData.credits, session)) {
+            session.abortTransactionAndAwait()
+            context.reply(
+              context.embedTemplates.normal(
+                context.translate(
+                  "misc.embeds.transactionCancelled.description",
+                  mapOf(
+                    "type" to "trade confirm"
+                  )
+                ),
+                context.translate("misc.embeds.transactionCancelled.title")
+              ).build()
+            ).queue()
+            return
+          }
         }
 
         if (partnerTradeData.credits > 0) {
-          context.bot.database.userRepository.incCredits(authorUserData, partnerTradeData.credits, session)
+          if (!context.bot.database.userRepository.incCredits(authorUserData, partnerTradeData.credits, session)) {
+            session.abortTransactionAndAwait()
+            context.reply(
+              context.embedTemplates.normal(
+                context.translate(
+                  "misc.embeds.transactionCancelled.description",
+                  mapOf(
+                    "type" to "trade confirm"
+                  )
+                ),
+                context.translate("misc.embeds.transactionCancelled.title")
+              ).build()
+            ).queue()
+            return
+          }
         }
 
         val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorTradeData.pokemon)
