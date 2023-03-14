@@ -560,7 +560,9 @@ modules:
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         tradeStarted:
           title: Trade Session Initiated
-          description: The trade request has been accepted.\n> **You may only trade 20 Pokémon per session.**
+          description: |-
+            The trade request has been accepted.
+            > **You may only trade 20 Pokémon per session.**
         tradeCancelled:
           title: Trade Request Terminated
           description: The trade request has expired or been denied.
@@ -636,7 +638,7 @@ modules:
             #Replace "your partner" with {{partner}}. Could not implement in TradeConfirmCommand.kt.
           confirmed:
             title: Trade Session Confirmed
-            description: The trade between {{trader}} and {{partner}} has been executed.
+            description: The trade between {{author}} and {{partner}} has been executed.
     errors:
       inRelease: You should finish your release session first before trading.
       notInTrade: |-
