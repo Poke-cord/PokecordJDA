@@ -75,7 +75,7 @@ object TradeAddCreditsCommand : Command() {
           "modules.trading.commands.add.embeds.addCredits.description",
           "credits" to amount.toString()
         ),
-        context.translate("modules.trading.commands.add.embeds.addCredits.title")
+        context.translate("modules.trading.commands.add.embeds.title")
       ).build()
     ).queue()
   }

@@ -8,6 +8,7 @@ import xyz.pokecord.bot.modules.trading.TradingModule
 
 object TradeConfirmCommand : Command() {
   override val name = "confirm"
+  override var aliases = arrayOf("cf")
 
   @Executor
   suspend fun execute(context: ICommandContext) {

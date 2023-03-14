@@ -8,7 +8,7 @@ import xyz.pokecord.bot.utils.PokemonResolvable
 
 object TradeRemovePokemonCommand : Command() {
   override val name = "pokemon"
-  override var aliases = arrayOf("p", "pkmn", "pokemon", "poke")
+  override var aliases = arrayOf("p", "pkmn", "pokemon", "poke", "pk")
 
   @Executor
   suspend fun execute(
@@ -30,7 +30,7 @@ object TradeRemovePokemonCommand : Command() {
     if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.noNumberPokemon")
+          context.translate("modules.trading.commands.remove.errors.noNumberPokemon")
         ).build()
       ).queue()
       return
@@ -70,7 +70,7 @@ object TradeRemovePokemonCommand : Command() {
             "modules.trading.commands.remove.embeds.removePokemon.description",
             "pokemon" to context.translator.pokemonName(selectedPokemon).toString()
           ),
-          context.translate("modules.trading.commands.remove.embeds.removePokemon.title")
+          context.translate("modules.trading.commands.remove.embeds.title")
         ).build()
       ).queue()
     }

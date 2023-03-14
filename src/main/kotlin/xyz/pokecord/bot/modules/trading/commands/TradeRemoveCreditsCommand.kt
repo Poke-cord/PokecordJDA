@@ -78,7 +78,7 @@ object TradeRemoveCreditsCommand: StaffCommand() {
           "modules.trading.commands.remove.embeds.removeCredits.description",
           "credits" to amount.toString()
         ),
-        context.translate("modules.trading.commands.remove.embeds.removeCredits.title")
+        context.translate("modules.trading.commands.remove.embeds.title")
       ).build()
     ).queue()
   }

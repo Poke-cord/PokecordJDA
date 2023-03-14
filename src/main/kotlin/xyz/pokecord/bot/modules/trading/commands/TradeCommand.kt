@@ -37,7 +37,7 @@ object TradeCommand : ParentCommand() {
     if (context.getReleaseState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.errors.inRelease")
+          context.translate("modules.trading.errors.inState")
         ).build()
       ).queue()
       return

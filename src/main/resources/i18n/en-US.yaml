@@ -74,7 +74,6 @@ misc:
         > **That includes you too** :)
       title: User Progress is Private
     rules:
-      title: Access of Services Agreement
       description: |-
         Hey {{user}}! Welcome to {{botUsername}}.
         
@@ -83,6 +82,7 @@ misc:
         ・ [Privacy Policy]({{privacyUrl}})
         **By accessing the Service, you agree to abide by our Terms.**
       footer: Seeing this again? We've updated our Terms.
+      title: Access of Services Agreement
   errors:
     embeds:
       commandExecutionFailed:
@@ -262,7 +262,7 @@ modules:
               E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotOutOfRange: |-
-              Pokecord reached for your slot number. Too bad it can't reach far.
+              Pokecord couldn't find your slot number.
               > **Specify a slot number between 1 and 4.**
           replaceConfirmation:
             title: A Move Replacement is Pending
@@ -294,11 +294,11 @@ modules:
             > **Finish your current trade first.**
           noPokemonProvided: Please provide the Pokémon you would like to list.
           startingBidPrice: |-
-            Pokecord reached for your price. Too bad it can't reach far.
-            > **Specify a starting bid between 1,000 and 10 million credits.**
+            Pokecord couldn't enter your starting bid.
+            > **Specify starting bid between 1,000 and 10 million credits.**
           minimumTime: |-
-            Pokecord reached for your auction time. Too bad it can't reach far.
-            > **Specify a time between 4 hours and 30 days.**
+            Pokecord couldn't enter your auction time.
+            > **Specify time between 4 hours and 30 days.**
         confirmation:
           description: |-
             **Auction Item**: {{pokemonIV}} {{pokemonName}}
@@ -455,8 +455,8 @@ modules:
           noPokemonProvided: Please provide the Pokémon you would like to list.
           noPriceProvided: Please provide the price you would like to list your Pokémon for.
           startingBidPrice: |-
-            Pokecord reached for your price. Too bad it can't reach far.
-            > **Specify a starting price between 1,000 and 10 million credits.**
+            Pokecord couldn't enter your listing price.
+            > **Specify listing price between 1,000 and 10 million credits.**
         confirmation:
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
@@ -567,7 +567,7 @@ modules:
             > **You may only trade 20 Pokémon per session.**
         tradeCancelled:
           title: Trade Request Terminated
-          description: The trade request has expired or been denied.
+          description: The trade request has expired or been declined.
         errors:
           noPartnerTagged: |-
             You traded with nobody. Wait, you can't.
@@ -591,7 +591,6 @@ modules:
             description: The trade between {{author}} and {{partner}} is pending confirmation.
         errors:
           noPartnerFound:
-#            title: Partner Not Found
             description: |-
               Partner not found.
               > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
@@ -605,32 +604,58 @@ modules:
           noNumberPokemon: |-
             You tried to add air. That didn't work.
             > **Specify up to 20 Pokémon IDs.**
-          noNumberCredits: Please provide the amount of credits you would like to add.
-          notEnoughCredits: "You have to give me a credit amount from your balance. :expressionless:"
-          maxPokemonCount: "You can't trade more than 20 Pokémon in a single trade!"
+          noNumberCredits: |-
+            You tried to add air. That didn't work.
+            > **Specify credit amount to add.**
+          notEnoughCredits: |-
+            Pokecord couldn't enter your credit amount.
+            > **Check current credit balance.**
+          maxPokemonCount: |-
+            Too many Pokémon! Pokecord can't count.
+            > **You may only specify 20 Pokémon IDs.**
         embeds:
+          title: Trade Session Updated
           addCredits:
-            title: Credits Added
-            description: "You have successfully added `{{credits}}` credits to your trading session."
+            description: |-
+              **Credits Added**: {{credits}}
+              
+              Your offer has been updated.
           addPokemon:
-            title: Pokémon Added
-            description: "**{{pokemon}}** has been added to your trading session."
+            description: |-
+              **Pokémon Added**: {{pokemon}}
+              
+              Your offer has been updated.
       remove:
         errors:
-          noNumberPokemon: Please provide the index number of the Pokémon you would like to add.
-          noNumberCredits: Please provide the amount of credits you would like to add.
-          notEnoughCredits: "You don't even have `{{credits}}` credits in your trade session. :expressionless:"
-          notAdded: This Pokémon is not in your trading session.
+          noNumberPokemon: |-
+            You tried to remove air. That didn't work.
+            > **Specify up to 20 Pokémon IDs.**
+          noNumberCredits: |-
+            You tried to remove air. That didn't work.
+            > **Specify credit amount to remove.**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain {{credits}} more credits to add this amount.**
+          notAdded: |-
+            Pokecord looked far and wide, to no avail.
+            > **Specified Pokémon is not in trade.**
         embeds:
+          title: Trade Session Revised
           removeCredits:
-            title: Credits Withdrawn
-            description: "You have successfully withdrew `{{credits}}` credits to your trading session."
+            description: |-
+              **Credits Removed**: {{credits}}
+              
+              Your offer has been revised.
           removePokemon:
-            title: Pokémon Withdrawn
-            description: "{{pokemon}} has been withdrawn from your trading session."
+            description: |-
+              **Pokémon Removed**: {{pokemon}}
+              
+              Your offer has been revised.
       confirm:
         errors:
-          emptyTrade: Both you and your partner must at least choose a Pokémon or some credits before confirming the trade.
+          emptyTrade: |-
+            You don't need a trade to trade nothing.
+            > **Both trade partners must add credits or Pokémon.**
         embeds:
           partConfirmed:
             title: Trade Confirmation Pending
@@ -642,7 +667,6 @@ modules:
             title: Trade Session Confirmed
             description: The trade between {{author}} and {{partner}} has been executed.
     errors:
-      inRelease: You should finish your release session first before trading.
       notInTrade: |-
         You tried to trade with air. That didn't work.
         > **Initiate a trade session first.**
@@ -658,13 +682,13 @@ modules:
             title: Frequently Asked Questions
       invite:
         embed:
-          title: Pokecord Quick Links
           description: |-
             **Links** :arrow_upper_right:
             Invite Bot: [Add Pokecord]({{inviteLink}})
-            Official Website: [Visit]({{websiteLink}})
-            Community and Support: [Join Discord Server](https://discord.gg/EUYgq3Jub3)
+            Official Website: [Visit site]({{websiteLink}})
+            Community and Support: [Join Discord server](https://discord.gg/EUYgq3Jub3)
           footer: Thank you for choosing Pokecord!
+          title: Pokecord Quick Links
       ping:
         embed:
           description: |-
@@ -983,7 +1007,7 @@ modules:
         Two you? No. Two release sessions? Also no.
         > **Finish your current release session first.**
       notInRange: |-
-        Pokecord reached for your Pokémon. Too bad it can't reach far.
+        Pokecord couldn't 
         > **Specify up to a maximum of 50 Pokémon.**
   profile:
     commands:
