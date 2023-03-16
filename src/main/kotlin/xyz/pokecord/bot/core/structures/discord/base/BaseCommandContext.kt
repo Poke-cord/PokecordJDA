@@ -213,7 +213,8 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
           )
         ),
         translate("misc.embeds.rules.title")
-      ).setFooter("misc.embeds.rules.footer")
+      )
+        .setFooter(translate("misc.embeds.rules.footer"))
     )
   }
 

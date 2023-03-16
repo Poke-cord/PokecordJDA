@@ -74,5 +74,5 @@ class ContextEmbedTemplates(private val context: ICommandContext) : EmbedTemplat
 //       )
       ),
     translate("misc.checks.hasStarted.embed.title")
-  ).setFooter("misc.embeds.error.footer")
+  ).setFooter(translate("misc.embeds.error.footer"))
 }
