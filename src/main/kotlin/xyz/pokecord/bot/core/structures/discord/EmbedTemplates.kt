@@ -7,10 +7,10 @@ import xyz.pokecord.bot.core.managers.I18n
 
 open class EmbedTemplates {
   enum class Color(val code: Int) {
-    GREEN(0x2ecc71),
-    RED(0xf04747),
-    YELLOW(0xf0e365),
-    ORANGE(0xfaa61a)
+    GREEN(0x2ecc71), //Success
+    RED(0xf04747), //Error
+    YELLOW(0xf0e365), //Information
+    ORANGE(0xfaa61a) //Pending
   }
 
   open suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
@@ -74,5 +74,6 @@ class ContextEmbedTemplates(private val context: ICommandContext) : EmbedTemplat
 //       )
       ),
     translate("misc.checks.hasStarted.embed.title")
-  ).setFooter(translate("misc.embeds.error.footer"))
+  )
+    .setFooter(translate("misc.embeds.error.footer"))
 }
