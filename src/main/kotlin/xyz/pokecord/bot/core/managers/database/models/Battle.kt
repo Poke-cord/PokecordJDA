@@ -46,7 +46,7 @@ data class Battle(
 
   companion object {
     fun gainedCredits(wager: Int): Int {
-      return (((wager * 2) * 1.25) * 0.75).roundToInt()
+      return wager //(((wager * 2) * 1.25) * 0.75).roundToInt()
     }
 
     fun gainedXp(

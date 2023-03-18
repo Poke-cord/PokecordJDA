@@ -217,6 +217,12 @@ object BattleActionEvent : Event() {
                   (if(self.id == winner.id) userData else partnerData),
                   gainedCredits
                 )
+              if (gainedCredits !== null) {
+                module.bot.database.userRepository.incCredits(
+                  (if(self.id == winner.id) userData else partnerData),
+                  -(gainedCredits)
+                )
+              }
 
               module.bot.database.battleRepository.endBattle(battle)
             }

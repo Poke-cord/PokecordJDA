@@ -101,7 +101,7 @@ object BattleCommand : Command() {
       if(wager < 1000 || wager > 100000) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.battle.commands.battle.errors.wagerLimits")
+            context.translate("modules.battle.commands.battle.errors.wagerLimit")
           ).build()
         ).queue()
         return
