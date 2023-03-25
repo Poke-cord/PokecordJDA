@@ -172,6 +172,7 @@ object Migration {
       objectId.date.time,
       sticky,
       nickname,
+      null,
       IdGenerator.defaultGenerator.create(objectId.toHexString()).cast(),
       originalId?.toHexString()?.let { IdGenerator.defaultGenerator.create(it) }?.cast(),
     )

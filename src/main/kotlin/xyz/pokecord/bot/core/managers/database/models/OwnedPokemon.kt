@@ -35,6 +35,7 @@ data class OwnedPokemon(
   val timestamp: Long = System.currentTimeMillis(),
   val sticky: Boolean = false,
   var nickname: String? = null,
+  val formId: Int? = null,
   @Contextual val _id: Id<OwnedPokemon> = newId(),
   @Contextual val originalId: Id<OwnedPokemon>? = null
 ) {
@@ -50,7 +51,7 @@ data class OwnedPokemon(
   val totalIv = ivs.total
 
   val displayName
-    get() = "$name${if (shiny) " ⭐" else ""}"
+    get() = "$name${data.getEmoji(shiny)}"
 
   val imageUrl
     get() = PokemonData.getImageUrl(id, shiny)

@@ -21,8 +21,29 @@ class Translator(val context: BaseCommandContext) {
     return SimpleDateFormat("EEE, d MMM yyyy", locale).format(date)
   }
 
-  suspend fun pokemonName(pokemon: OwnedPokemon) = pokemonName(pokemon.data)
-  suspend fun pokemonName(pokemon: Pokemon) = pokemonName(pokemon.species)
+  suspend fun pokemonName(pokemon: OwnedPokemon): String? {
+    var name =
+      pokemon.data.species.forms.find { it.id == pokemon.formId }?.let { pokemonName(it) }
+    if (name == null) {
+      name = pokemonName(pokemon.data)
+    }
+    return name
+  }
+
+  suspend fun pokemonName(pokemon: Pokemon): String? {
+    val form = pokemon.form
+    return if (form != null && pokemon.species.forms.size != 1 && form.pokemonId != pokemon.speciesId) {
+      pokemonName(form)
+    } else {
+      pokemonName(pokemon.species)
+    }
+  }
+
+  suspend fun pokemonName(form: PokemonForm): String? {
+    val languageId = context.getLanguage().pokeApiLanguageId ?: I18n.Language.EN_US.pokeApiLanguageId!!
+    return form.names.find { it.languageId == languageId }?.pokemonName?.ifEmpty { null }
+  }
+
   suspend fun pokemonName(species: Species): String? {
     val languageId = context.getLanguage().pokeApiLanguageId ?: I18n.Language.EN_US.pokeApiLanguageId!!
     return (species.getName(languageId) ?: species.name)?.name
@@ -41,7 +62,7 @@ class Translator(val context: BaseCommandContext) {
   }
 
   suspend fun pokemonDisplayName(pokemon: OwnedPokemon, showNickname: Boolean = true) =
-    "${if (showNickname && pokemon.nickname != null) pokemon.nickname else pokemonName(pokemon)}${if (pokemon.shiny) " ⭐" else ""}"
+    "${if (showNickname && pokemon.nickname != null) pokemon.nickname else pokemonName(pokemon)}${pokemon.data.getEmoji(pokemon.shiny)}"
 
   suspend fun habitat(pokemon: Pokemon) = translatePokemonHabitatName(pokemon.species)
   private suspend fun translatePokemonHabitatName(species: Species): Name? {
@@ -57,6 +78,7 @@ class Translator(val context: BaseCommandContext) {
       1 -> context.translate(
         "misc.texts.male"
       )
+
       else -> context.translate("misc.texts.unknown")
     }
 

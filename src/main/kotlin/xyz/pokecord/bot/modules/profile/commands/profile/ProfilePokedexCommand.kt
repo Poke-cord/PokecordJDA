@@ -5,6 +5,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.EmbedPaginator
 
 object ProfilePokedexCommand : Command() {
@@ -40,7 +41,7 @@ object ProfilePokedexCommand : Command() {
               if (userData.caughtShinies.contains(
                   pokemonList[i].id
                 )
-              ) "⭐" else " ✅"
+              ) Config.Emojis.SHINY else " ✅"
             }"
           )
         }

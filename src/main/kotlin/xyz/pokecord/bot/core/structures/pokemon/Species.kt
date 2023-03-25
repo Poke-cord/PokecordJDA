@@ -48,6 +48,12 @@ data class Species(
   val name = getName()
   val habitatName = getHabitatName()
 
+  val forms by lazy {
+    Pokemon.getBySpeciesId(id).mapNotNull {
+      PokemonForm.getByPokemonId(it.id)
+    }
+  }
+
   fun getName(languageId: Int = 9) =
     names.find { it.id == id && it.languageId == languageId }
 

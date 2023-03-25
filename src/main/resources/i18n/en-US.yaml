@@ -150,6 +150,7 @@ misc:
     accuracy: Accuracy
     ailmentChance: Ailment Chance
     altNames: Alternative Identifiers
+    formNames: Alternative Forms
     appearance: Appearance
     argument_aliases: Argument Aliases
     argument_names: Argument Names
@@ -902,12 +903,10 @@ modules:
           pokemonName: |-
             Identity theft is real. No stealing!
             > **Do not include another Pokémon's name.**
-          shinyStar: |-
-            Shiny fraud is forbidden. We see you.
-            > **Including :star:'s are prohibited.**
           charLimit: |-
             Too long! Pokecord can't handle it.
             > **Limit nickname to 64 characters.**
+          emojiNotAllowed: '**Suggestion**: The following emojis are not allowed at the end of nicknames: :star: :large_blue_diamond: :diamond_shape_with_a_dot_inside:'
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.
         ordered: Finished ordering your Pokémon!

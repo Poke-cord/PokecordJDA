@@ -2,6 +2,7 @@ package xyz.pokecord.bot.core.structures.pokemon
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Json
 import kotlin.system.exitProcess
 
@@ -24,10 +25,14 @@ data class Pokemon(
   val species
     get() = Species.getById(speciesId)!!
 
+  val form by lazy {
+    PokemonForm.getByPokemonId(id)
+  }
+
   val leftFacing
-   get() = Companion.leftFacing.contains(id)
+    get() = Companion.leftFacing.contains(id)
   val rightFacing
-   get() = Companion.rightFacing.contains(id)
+    get() = Companion.rightFacing.contains(id)
 
   val types by lazy {
     Companion.types.find { it.id == this.id }?.types?.map { Type.getById(it)!! }!!
@@ -57,20 +62,27 @@ data class Pokemon(
   }
 
   val formattedSpeciesId
-    get() = "#${id.toString().padStart(3, '0')}"
+    get() = "#${speciesId.toString().padStart(3, '0')}"
+
+  fun getEmoji(isShiny: Boolean): String {
+    val isEventPokemon = SpecialEvents.isEventPokemon(this)
+    val emoji =
+      if (isEventPokemon && isShiny) Config.Emojis.EVENT_SHINY else if (isEventPokemon) Config.Emojis.EVENT else if (isShiny) Config.Emojis.SHINY else null
+    return if (emoji != null) " $emoji" else ""
+  }
 
   companion object {
     private val nextEvolutionsCache: MutableMap<Int, List<Int>> = mutableMapOf()
 
-    private val items: List<Pokemon>
-    private val types: List<PokemonType>
+    private val items: MutableList<Pokemon>
+    private val types: MutableList<PokemonType>
 
     private var cachedMaxId: Int? = null
 
     val maxId: Int
       get() {
         if (cachedMaxId == null) {
-          cachedMaxId = items.maxOfOrNull { it.id } ?: 898
+          cachedMaxId = items.maxOfOrNull { it.speciesId } ?: 898
         }
         return cachedMaxId!!
       }
@@ -1114,7 +1126,7 @@ data class Pokemon(
         exitProcess(0)
       }
       val json = stream.readAllBytes().decodeToString()
-      items = Json.decodeFromString<List<Pokemon>>(json).filter { it.id <= 898 }
+      items = Json.decodeFromString<List<Pokemon>>(json).filter { it.id <= 898 }.toMutableList()
       val typesStream = Pokemon::class.java.getResourceAsStream("/data/pokemon_types.json")
       if (typesStream == null) {
         println("Pokemon types data not found. Exiting...")
@@ -1138,7 +1150,9 @@ data class Pokemon(
 
       identifierMatch || it.species.getNames().any { name ->
         name.name.equals(targetName, true)
-      }
+      } || it.form?.names?.any { formName ->
+        formName.pokemonName.equals(targetName, true)
+      } ?: false
     }
 
     fun searchRegex(regex: Regex) = items.filter { pokemon ->
@@ -1166,5 +1180,11 @@ data class Pokemon(
     fun getImageUrl(id: Int, shiny: Boolean = false) =
 //      "https://pokecord-images.s3.wasabisys.com/${if (shiny) "shiny" else "regular"}/${id}.png"
       "https://images.pokecord.zihad.dev/${if (shiny) "shiny" else "regular"}/${id}.png"
+
+    fun getBySpeciesId(speciesId: Int): List<Pokemon> =
+      items.filter { it.speciesId == speciesId }
+
+    fun addEntry(entry: Pokemon) = items.add(entry)
+    fun addTypeEntry(entry: PokemonType) = types.add(entry)
   }
 }

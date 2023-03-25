@@ -7,6 +7,8 @@ import xyz.pokecord.bot.core.structures.PrometheusService
 import xyz.pokecord.bot.core.structures.discord.SpawnChannelMutex
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.core.structures.pokemon.SpecialEvents
+import kotlin.random.Random
 
 class CatchCommand : Command() {
   override val name = "Catch"
@@ -70,9 +72,15 @@ class CatchCommand : Command() {
 
       val pokemon = Pokemon.getByName(pokemonName)
       if (pokemon != null && spawnChannel.spawned == pokemon.id) {
-        val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id) {
-          module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)
+        val eventPokemonId = SpecialEvents.handleCatching(pokemon.species)
+        val shiny = eventPokemonId?.let {
+          Random.nextInt(100) < 50
         }
+        val finalPokemonId = eventPokemonId ?: pokemon.id
+        val ownedPokemon =
+          module.bot.database.userRepository.givePokemon(context.getUserData(), finalPokemonId, shiny = shiny) {
+            module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)
+          }
         context.reply(
           context.embedTemplates.normal(
             context.translate(

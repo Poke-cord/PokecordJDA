@@ -76,7 +76,7 @@ object App {
           .createLight(token)
           .enableCache(CacheFlag.MEMBER_OVERRIDES)
           .injectKTX()
-          .setStatus(OnlineStatus.DO_NOT_DISTURB)
+          .setStatus(OnlineStatus.INVISIBLE)
           .setActivity(Activity.playing("Initializing..."))
         if (sharderHost != null && sharderPort != null) {
           val client = Client(shardManagerBuilder, sharderHost, sharderPort, token, encryptionKey, shardCapacity)
