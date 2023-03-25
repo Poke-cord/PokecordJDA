@@ -13,7 +13,7 @@ data class PokemonStat(
   val effort: Int,
 ) {
   companion object {
-    private val items: List<PokemonStat>
+    private val items: MutableList<PokemonStat>
 
     init {
       val stream = PokemonStat::class.java.getResourceAsStream("/data/pokemon_stats.json")
@@ -30,5 +30,11 @@ data class PokemonStat(
 
     fun getBaseEffortValue(pokemonId: Int, statId: Int) =
       items.find { it.id == pokemonId && it.statId == statId }?.effort
+
+    fun addEntry(entry: PokemonStat) =
+      items.add(entry)
+
+    fun getByPokemonId(pokemonId: Int): List<PokemonStat> =
+      items.filter { it.id == pokemonId }
   }
 }

@@ -16,6 +16,9 @@ object CustomPokemon {
       "blues-custom-pokemon",
       "Blue's Custom Pokemon",
       PokemonType(bluesSpinda.id, spinda.types.map { it.id }),
+      PokemonStat.getByPokemonId(spinda.id).map {
+        it.copy(id = bluesSpinda.id)
+      }
     )
   }
 
@@ -24,6 +27,7 @@ object CustomPokemon {
     formIdentifier: String,
     formName: String,
     type: PokemonType,
+    stats: List<PokemonStat>,
     isBattleOnly: Boolean = false,
     isMega: Boolean = false,
   ) {
@@ -32,6 +36,9 @@ object CustomPokemon {
 
     // Custom Pokemon Type Entry
     Pokemon.addTypeEntry(type)
+
+    // Custom Pokemon Stat Entries
+    stats.forEach { PokemonStat.addEntry(it) }
 
     // Custom Form Entry
     PokemonForm.addEntry(
