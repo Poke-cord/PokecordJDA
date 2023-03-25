@@ -47,6 +47,7 @@ class PokedexCommand : Command() {
     val prevEvolution = context.translator.prevEvolution(pokemon)
 
     val userData = context.getUserData()
+    val language = context.getLanguage()
 
     val embed = context.embedTemplates
       .empty()
@@ -79,7 +80,7 @@ class PokedexCommand : Command() {
         context.translate("misc.texts.obtained"),
         "Catchable, Redeemable",
         true
-      //Define each Pokemon as catchable, redeemable etc. and make this dynamic.
+        //Define each Pokemon as catchable, redeemable etc. and make this dynamic.
       )
       .addField(context.translate("misc.texts.prevEvolution"), prevEvolution, true)
       .addField(context.translate("misc.texts.nextEvolution"), nextEvolution, true)
@@ -96,17 +97,42 @@ class PokedexCommand : Command() {
         context.translate("misc.texts.baseStats"),
         """
           `${context.translate("misc.texts.hp").padEnd(7)}| ${Stat.hp.getBaseValue(pokemon.id).toString().padEnd(4)}`
-          `${context.translate("misc.texts.attack").padEnd(7)}| ${Stat.attack.getBaseValue(pokemon.id).toString().padEnd(4)}`
-          `${context.translate("misc.texts.defense").padEnd(7)}| ${Stat.defense.getBaseValue(pokemon.id).toString().padEnd(4)}`
-          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(4)}`
-          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(4)}`
-          `${context.translate("misc.texts.speed").padEnd(7)}| ${Stat.speed.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.attack").padEnd(7)}| ${
+          Stat.attack.getBaseValue(pokemon.id).toString().padEnd(4)
+        }`
+          `${context.translate("misc.texts.defense").padEnd(7)}| ${
+          Stat.defense.getBaseValue(pokemon.id).toString().padEnd(4)
+        }`
+          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${
+          Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(4)
+        }`
+          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${
+          Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(4)
+        }`
+          `${context.translate("misc.texts.speed").padEnd(7)}| ${
+          Stat.speed.getBaseValue(pokemon.id).toString().padEnd(4)
+        }`
         """.trimIndent(),
         true
       )
       .addField(
         context.translate("misc.texts.altNames"),
         pokemon.species.getNames().map { it.name }.toSet().joinToString("\n"),
+        true
+      )
+      .addField(
+        context.translate("misc.texts.formNames"),
+        pokemon.species.forms.map { form ->
+          form.names.filter {
+            it.languageId == language.pokeApiLanguageId
+          }
+        }
+          .flatten()
+          .map {
+            it.pokemonName
+          }
+          .toSet()
+          .joinToString(", "),
         true
       )
     context.reply(embed.build()).queue()

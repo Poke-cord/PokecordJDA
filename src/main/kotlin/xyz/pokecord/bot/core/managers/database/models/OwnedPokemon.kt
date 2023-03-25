@@ -35,6 +35,7 @@ data class OwnedPokemon(
   val timestamp: Long = System.currentTimeMillis(),
   val sticky: Boolean = false,
   var nickname: String? = null,
+  val formId: Int? = null,
   @Contextual val _id: Id<OwnedPokemon> = newId(),
   @Contextual val originalId: Id<OwnedPokemon>? = null
 ) {

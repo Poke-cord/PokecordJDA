@@ -132,6 +132,7 @@ misc:
     accuracy: Accuracy
     ailmentChance: Ailment Chance
     altNames: Alternative Identifiers
+    formNames: Alternative Forms
     appearance: Appearance
     argument_aliases: Argument Aliases
     argument_names: Argument Names

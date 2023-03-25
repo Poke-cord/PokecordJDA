@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.discord.base.Event
+import xyz.pokecord.bot.core.structures.pokemon.CustomPokemon
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
 import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.extensions.asOptionType
@@ -65,6 +66,7 @@ class ReadyEvent : Event() {
 
   @Handler
   suspend fun onReady(event: ReadyEvent) {
+    CustomPokemon.init()
     prepareSlashCommands(event.jda)
 
     // Delete existing shard status when shard 0 logs in
