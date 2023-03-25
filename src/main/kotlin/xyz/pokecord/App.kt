@@ -9,8 +9,6 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.core.structures.pokemon.Pokemon
-import xyz.pokecord.bot.core.structures.pokemon.PokemonForm
 import xyz.pokecord.bot.modules.auctions.AuctionsModule
 import xyz.pokecord.bot.modules.battle.BattleModule
 import xyz.pokecord.bot.modules.developer.DeveloperModule
