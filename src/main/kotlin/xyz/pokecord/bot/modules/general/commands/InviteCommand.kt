@@ -35,7 +35,7 @@ class InviteCommand : Command() {
           )
         ),
         context.translate("modules.general.commands.invite.embed.title")
-      ).setFooter("modules.general.commands.invite.embed.footer")
+      ).setFooter(translate("modules.general.commands.invite.embed.footer"))
         .build()
     ).queue()
   }
