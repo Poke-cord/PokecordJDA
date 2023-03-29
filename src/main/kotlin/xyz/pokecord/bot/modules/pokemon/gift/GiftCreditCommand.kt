@@ -114,7 +114,7 @@ object GiftCreditCommand : Command() {
 
       if (!module.bot.database.userRepository.giftCredits(userData, receiverData, amount)) {
         context.reply(
-          context.embedTemplates.normal(
+          context.embedTemplates.error(
             context.translate(
               "misc.embeds.transactionCancelled.description",
               mapOf(

@@ -83,6 +83,11 @@ misc:
         **By accessing the Service, you agree to abide by our Terms.**
       footer: Seeing this again? We've updated our Terms.
       title: Access of Services Agreement
+    transactionCancelled:
+      description: |-
+        This transaction is prohibited.
+        > **DO NOT ATTEMPT THIS TRANSACTION AGAIN.**
+      title: Illegal Transaction Cancelled
   errors:
     embeds:
       commandExecutionFailed:
