@@ -29,10 +29,8 @@ object Config {
 
   const val maxReleaseSessionPokemon = 50
 
-  const val publicNotificationWebhook =
-    "https://discord.com/api/webhooks/728471507667255297/BBjKGrtaC6pCBcJfVc-eA79SIjx72T-vtAOguSjkMJCcefSi2q_I4ejMrBZD0agBAGet"
-  const val donationNotificationWebhook =
-    "https://discord.com/api/webhooks/743592059231010976/OWTZ4wUvZXE8DL5YqFOo8WS4uRolpf6eSnDBL-o8b2OQA3Rfj1XmGk6rI4TU5i-8hEXd"
+  val publicNotificationWebhook: String? = System.getenv("PUBLIC_NOTIFICATION_WEBHOOK")
+  val donationNotificationWebhook: String? = System.getenv("DONATION_NOTIFICATION_WEBHOOK")
 
   val officialServers = listOf(
     mainServer,

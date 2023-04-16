@@ -54,11 +54,13 @@ class HTTPServer(val bot: Bot) {
 
   private val topggSecret = System.getenv("TOPGG_SECRET") ?: throw Exception("top.gg secret is required.")
 
-  private val publicNotificationWebhookClient = WebhookClientBuilder(Config.publicNotificationWebhook).buildJDA()
-  private val donationNotificationWebhookClient = WebhookClientBuilder(Config.donationNotificationWebhook).buildJDA()
+  private val publicNotificationWebhookClient =
+    Config.publicNotificationWebhook?.let { WebhookClientBuilder(it).buildJDA() }
+  private val donationNotificationWebhookClient =
+    Config.donationNotificationWebhook?.let { WebhookClientBuilder(it).buildJDA() }
 
   private suspend fun sendVoteNotification(userId: String) {
-    publicNotificationWebhookClient.send(
+    publicNotificationWebhookClient?.send(
       EmbedBuilder {
         color = 0xf0e365
         description =
@@ -67,11 +69,11 @@ class HTTPServer(val bot: Bot) {
 
         footer("Support us by using the p!donate command.")
       }.build()
-    ).await()
+    )?.await()
   }
 
   suspend fun sendBoostNotification(userId: String, redeemName: String) {
-    publicNotificationWebhookClient.send(
+    publicNotificationWebhookClient?.send(
       EmbedBuilder {
         color = 0xf0e365
         description =
@@ -80,11 +82,11 @@ class HTTPServer(val bot: Bot) {
 
         footer("Support us by using the p!donate command.")
       }.build()
-    ).await()
+    )?.await()
   }
 
   private suspend fun sendDonationNotification(order: Order, orderInfo: PayPal.OrderInfo, itemName: String) {
-    publicNotificationWebhookClient.send(
+    publicNotificationWebhookClient?.send(
       EmbedBuilder {
         color = 0xf0e365
         description =
@@ -93,17 +95,17 @@ class HTTPServer(val bot: Bot) {
 
         footer("Support us by using the p!donate command.")
       }.build()
-    ).await()
+    )?.await()
 
-    donationNotificationWebhookClient.send(
+    donationNotificationWebhookClient?.send(
       EmbedBuilder {
         color = 0xf0e365
         description = """            
-        **User**: <@${order.userId}> [${order.userId}]
-        **Amount**: ${order.price}
-        **Status**: ${orderInfo.status ?: "N/A"}
-        **Package**: $itemName
-        """.trimIndent()
+          **User**: <@${order.userId}> [${order.userId}]
+          **Amount**: ${order.price}
+          **Status**: ${orderInfo.status ?: "N/A"}
+          **Package**: $itemName
+          """.trimIndent()
         title = "New Purchase"
       }.build()
     )
