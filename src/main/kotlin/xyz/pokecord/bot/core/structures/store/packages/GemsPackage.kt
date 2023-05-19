@@ -7,33 +7,33 @@ object GemsPackage : Package() {
   override val id = "gems"
   override val items: List<Item> = listOf(
     GemItem(
-      "100_gems",
-      0.99,
+      "yBkHEDpYVm",
+      1,
       100
     ),
     GemItem(
-      "525_gems",
-      4.99,
+      "5f-1qvXVmv",
+      5,
       525
     ),
     GemItem(
-      "1100_gems",
-      9.99,
+      "UqUpJ9S1t-",
+      10,
       1100
     ),
     GemItem(
-      "1680_gems",
-      14.99,
+      "BlW-2_tDWS",
+      15,
       1680
     ),
     GemItem(
-      "3000_gems",
-      24.99,
+      "lUGG9CUqd0",
+      25,
       3000
     ),
     GemItem(
-      "6750_gems",
-      49.99,
+      "WqJ86786Uf",
+      50,
       6750
     )
   )
