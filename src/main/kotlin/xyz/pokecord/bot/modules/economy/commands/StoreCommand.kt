@@ -13,7 +13,7 @@ class StoreCommand : Command() {
   override val name = "Store"
 
   override var aliases = arrayOf("donate", "donation")
-//  override var enabled = false
+  override var enabled = false
 
   @Executor
   suspend fun execute(context: ICommandContext) {
