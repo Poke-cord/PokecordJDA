@@ -6,6 +6,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 class InviteCommand : Command() {
   override val name = "Invite"
+  override var aliases = arrayOf("inv", "donate", "support")
 
   @Executor
   suspend fun execute(
@@ -30,8 +31,10 @@ class InviteCommand : Command() {
         context.translate(
           "modules.general.commands.invite.embed.description",
           mapOf(
+            "serverLink" to "https://discord.gg/EUYgq3Jub3",
             "inviteLink" to "https://pokecord.xyz/invite",
-            "websiteLink" to "https://pokecord.xyz"
+            "websiteLink" to "https://pokecord.xyz",
+            "tosLink" to "https://sites.google.com/view/pokecord4908/english/terms"
           )
         ),
         context.translate("modules.general.commands.invite.embed.title")
