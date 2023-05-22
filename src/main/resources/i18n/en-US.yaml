@@ -812,7 +812,7 @@ modules:
               **IV Percent**: {{ivPercentage}}
 
               React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-            title: Gift Pending Confirmation
+            title: Gift Sending Confirmation
           giftReceived:
             credits: |-
               {{sender}} has gifted you credits!

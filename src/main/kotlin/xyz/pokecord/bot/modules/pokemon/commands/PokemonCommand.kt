@@ -98,7 +98,7 @@ class PokemonCommand : Command() {
       for (pokemon in ownedPokemonList) {
         templateEmbedBuilder.addField(
           "__${pokemon.index + 1} | ${context.translator.pokemonDisplayName(pokemon)}__",
-          "LVL ${pokemon.level}, IV **${pokemon.ivPercentage}", true
+          "LVL ${pokemon.level}, IV ${pokemon.ivPercentage}", true
         )
       }
       templateEmbedBuilder
