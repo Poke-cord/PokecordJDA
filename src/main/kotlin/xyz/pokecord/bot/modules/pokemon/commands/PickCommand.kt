@@ -31,8 +31,8 @@ class PickCommand : Command() {
         context.reply(
           context.embedTemplates.error(
             context.translate(
-              "modules.pokemon.commands.pick.starterNotFound",
-              "prefix" to context.getPrefix()
+              "misc.errors.pokemonNotFound",
+              //"prefix" to context.getPrefix()
             )
           ).build()
         ).queue()

@@ -35,7 +35,7 @@ object GiftPokemonCommand : Command() {
     if (receiver == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.gift.errors.mentionUser")
+          context.translate("misc.errors.missingArguments.noUser")
         ).build()
       ).queue()
       return
@@ -44,7 +44,7 @@ object GiftPokemonCommand : Command() {
     if (receiver.isBot) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.gift.errors.botReceiver")
+          context.translate("misc.errors.botInteraction")
         ).build()
       ).queue()
       return

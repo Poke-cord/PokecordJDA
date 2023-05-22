@@ -19,7 +19,7 @@ class PokedexCommand : Command() {
     if (pokemonNameOrId == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.pokemon.commands.pokedex.noPokemonName")
+          context.translate("misc.errors.missingArguments.noPokemonName")
         ).build()
       ).queue()
       return

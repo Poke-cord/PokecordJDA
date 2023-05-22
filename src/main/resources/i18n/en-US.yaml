@@ -8,10 +8,10 @@ misc:
       store: Purchase official server Trainer Roles or Gem Packages.
     general:
       faq: Search frequently asked questions by keyword.
-      help: "Pretty sure this is what you're looking at right now.."
+      help: Displays all commands with descriptions.
       invite: Invite Pokecord to other servers.
       leaderboard: Shows who’s boss around here B)
-      ping: 'Ping, pong!'
+      ping: Ping, pong!
       set: Miscellaneous setting configurations.
       "set.prefix": Sets the server prefix.
       "set.private": Toggles your progress visibility to public/private.
@@ -48,7 +48,7 @@ misc:
           Get started with `@Pokecord start` before you use other commands.
         title: Start your Pokecord Journey
   confirmation:
-    timeoutText: Reactions will automatically time out in 30 seconds.
+    timeoutFooter: Reactions will automatically time out in 30 seconds.
   embeds:
     error:
       footer: "Support is available at discord.gg/pkcord."
@@ -89,6 +89,9 @@ misc:
         > **DO NOT ATTEMPT THIS TRANSACTION AGAIN.**
       title: Illegal Transaction Cancelled
   errors:
+    botInteraction:
+      You interacted with a bot. Wait, you can't.
+      > **Mention a user instead of a bot.**
     embeds:
       commandExecutionFailed:
         description: |-
@@ -105,10 +108,20 @@ misc:
       > **Use buttons that belong to your own commands.**
     inState:
       You used a command while busy. It didn't work.
-      > **Cancel current trade, release, or battle first.**
+      > **Cancel current trade, battle, or release first.**
     invalidAmount: |-
       You entered an invalid amount.
       > **Enter a valid amount.**
+    missingArguments:
+      noUser: |-
+        The question is not what, but who.
+        > **Check user mentioned or specify one.**
+      noPokemon: |-
+        It was decided you can't say nothing
+        > **Specify a Pokémon by collection ID.**
+      noPokemonName:
+        It was decided you can't say nothing.
+        > **Specify a Pokémon by its name.**
     notASpawnChannel: |-
       That command doesn't work here, at least not yet.
       > **Use this command in a spawn channel or create a new spawn.**
@@ -126,7 +139,7 @@ misc:
       > **Ask them to use `@Pokecord start`.**
   presence:
     maintenance:
-      activity: Maintenance Break | {{version}}
+      activity: Maintenance Break
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
@@ -221,11 +234,12 @@ modules:
           partnerAlreadyBattling: |-
             {{partner}} is in combat!
             > **Wait for their duel to finish.**
-          noPartnerMentioned: "You gotta tell me who your gonna battle with. :expressionless:"
           noPokemonMoves: |-
             Doing nothing is not an option in battles.
             > **Teach your Pokémon moves.**
-          noPartnerPokemonMoves: "{{partner}}'s selected Pokémon doesn't have any moves."
+          noPartnerPokemonMoves: |-
+            Doing nothing is not an option in battles.
+            > **Opponent must teach their Pokémon move(s).**
           selfBattle: |-
             You battled yourself. Wait, you can't. 
             > **Mention another user to battle with.**
@@ -240,7 +254,7 @@ modules:
               React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
       moves:
         embed:
-          title: "Pokémon Moves | Level {{level}} {{pokemon}} "
+          title: "Pokémon Moves | Level {{level}} {{pokemon}}"
         teach:
           embed:
             title: A Move has been Taught
@@ -297,7 +311,6 @@ modules:
           inTrade: |-
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
-          noPokemonProvided: Please provide the Pokémon you would like to list.
           startingBidPrice: |-
             Pokecord couldn't enter your starting bid.
             > **Specify starting bid between 1,000 and 10 million credits.**
@@ -457,7 +470,6 @@ modules:
           inTrade: |-
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
-          noPokemonProvided: Please provide the Pokémon you would like to list.
           noPriceProvided: Please provide the price you would like to list your Pokémon for.
           startingBidPrice: |-
             Pokecord couldn't enter your listing price.
@@ -689,9 +701,17 @@ modules:
         embed:
           description: |-
             **Links** :arrow_upper_right:
-            Invite Bot: [Add Pokecord]({{inviteLink}})
-            Official Website: [Visit site]({{websiteLink}})
-            Community and Support: [Join Discord server](https://discord.gg/EUYgq3Jub3)
+            Community and Support: [[**Join Server**]]({{serverLink}})
+            > Receive support and play Pokecord with us!
+            
+            Invite Pokecord: [[**Invite**]]({{inviteLink}})
+            > Play Pokecord in your own server!
+            
+            Make a Donation: [[**Go**]]({{serverLink}})
+            > Once in Official Pokecord, type `/donate` to donate.
+            
+            Official Websites: [[**Main**]]({{websiteLink}}) [[**Terms of Service**]]({{tosLink}})
+            > See an overview of our bot and review rules!
           footer: Thank you for choosing Pokecord!
           title: Pokecord Quick Links
       ping:
@@ -703,16 +723,16 @@ modules:
       set:
         private:
           title: Progress Privacy
-          enabled: Your progress is now hidden from other players!
-          disabled: Your progress is now shown to other players!
+          enabled: Your progress is now hidden from other players.
+          disabled: Your progress is now viewable by other players.
         prefix:
           current: The current prefix is `{{prefix}}`.
           tooLarge: Prefix can't be longer than 10 characters.
           updated: Prefix updated to {{prefix}}.
         silence:
-          title: Level Up Messages
-          enabled: Level Up messages are now enabled!
-          disabled: Level Up messages are now disabled!
+          title: Level-Up Message Toggle
+          enabled: Level-up messages have been enabled.
+          disabled: Level-up messages have been disabled.
         spawn:
           description: |-
             **Channel Name**: {{channelName}}
@@ -726,11 +746,11 @@ modules:
             removed: A Spawn has been Removed
         level:
           description:
-            updated: Level up messages will now go to {{channel}}.
-            removed: Level up messages will now go to the current channel at that time.
+            updated: Level-up messages will be redirected to {{channel}}.
+            removed: Level-up messages will be shown upon level up.
           title:
-            updated: Level Up Message Channel Updated
-            removed: Level Up Message Channel Removed
+            updated: Level-Up Channel Updated
+            removed: Level-Up Channel Removed
       vote:
         now: now
         embed:
@@ -756,9 +776,6 @@ modules:
           incorrectNameProvided: |-
             The great Pokédex says you're wrong.
             > **Check Pokémon name or spelling.**
-          noNameProvided: |-
-            You caught nothing. Wait, you can't.
-            > **Specify Pokémon name.**
       favorite:
         added: Added to Favorites
         removed: Removed from Favorites
@@ -795,7 +812,7 @@ modules:
               **IV Percent**: {{ivPercentage}}
 
               React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-            title: Gift Sending is Pending
+            title: Gift Pending Confirmation
           giftReceived:
             credits: |-
               {{sender}} has gifted you credits!
@@ -828,15 +845,15 @@ modules:
           botReceiver: |-
             You sent a gift to a bot. Wait, you can't.
             > **You may only send gifts to users.**
-          mentionUser: '**Suggestion**: Try specifying a user you would
-                        like to gift to!'
           notEnoughCredits: |-
             Got spare credits lying around?
             > **Gain more credits to gift this amount.**
           selfReceiver: |-
             You sent a gift to yourself. Wait, you can't.
             > **You may only send gifts to other users.**
-          giftsDisabled: 'The receiver is not currently accepting gifts!'
+          giftsDisabled: |-
+            Pokecord couldn't deliver the gift. 
+            > **The receiver is not accepting gifts.**
       hint:
         confirmation:
           embed:
@@ -855,7 +872,9 @@ modules:
           cancelled:
             description: Your Pokémon hint request was cancelled.
             title: A Hint has been Cancelled
-          dmFailed: "**Suggestion**: Try allowing Pokecord to DM you!"
+          dmFailed: |-
+            Pokecord couldn't DM you and returned credits.
+            > **Allow Pokecord#4908 to DM you.**
           notEnoughCredits: |-
             Got spare credits lying around?
             > **Gain more credits to purchase a hint.**
@@ -881,38 +900,40 @@ modules:
 
             Your Pokémon's nickname has been updated!
         errors:
-          pokemonName: '**Suggestion**: Try excluding any Pokémon names
-                        in the nickname!'
-          shinyStar: '**Suggestion**: Try excluding a :star: from the nickname!'
-          charLimit: '**Suggestion**: Try entering a nickname under 64 characters!'
+          pokemonName: |-
+            Identity theft is real. No stealing!
+            > **Do not include another Pokémon's name.**
+          shinyStar: |-
+            Shiny fraud is forbidden. We see you.
+            > **Including :star:'s are prohibited.**
+          charLimit: |-
+            Too long! Pokecord can't handle it.
+            > **Limit nickname to 64 characters.**
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.
         ordered: Finished ordering your Pokémon!
-        tooManyPokemon: You must have {{maxPokemonCount}} or less amount of Pokémon in order to be able to use this command.
+#       tooManyPokemon: You must have {{maxPokemonCount}} or less amount of Pokémon in order to be able to use this command.
       pick:
         embed:
-          description: You chose {{pokemon}} as your starter Pokémon!
-        noNameProvided: '**Suggestion**: Try specifying a starter Pokémon
-                    name!'
-        pickingTwice: '**Suggestion**: Try catching Pokémon instead of picking
-                    more!'
-        starterNotFound: '**Suggestion**: Try using `@Pokecord start` to se
-                    the list of starter Pokémon!'
+          description: |-
+            You chose {{pokemon}} as your starter Pokémon!
+            > Try using `@Pokecord info latest` to view even more stats!
+        pickingTwice: |-
+          Pokecord couldn't find a time machine.
+          > **Try catching Pokémon instead of picking again.**
       pokedex:
         embed:
           title: '{{speciesId}} | {{pokemon}} | Pokédex Info'
         footers:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
-        noPokemonName: '**Suggestion**: Try specifying a valid Pokémon name
-                    or number!'
       pokemon:
 #        errors:
 #          noResults: |-
 #            Pokecord looked far and wide, to no avail.
 #            > **Could not find your search query. Search for something else.**
         embeds:
-          title: "{{user}}'s Pokémon"
+          title: "{{user}}'s Pokémon Collection"
       select:
         errors:
           alreadySelected: |-
@@ -933,7 +954,9 @@ modules:
           
           **Get Started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
           **Example**: `@Pokecord pick torchic`
-        startingTwice: '**Suggestion** Try catching a Pokémon instead of starting twice!'
+        startingTwice: |-
+          Pokecord couldn't find a time machine.
+          > **Try catching Pokémon instead of starting again.**
         welcomeToPokeWorld: Welcome to the World of Pokecord!
     events:
       spawner:
@@ -950,7 +973,7 @@ modules:
             **Try using**:
             `@Pokecord release add <pokemon number(s)>`
             
-            **E.g.**
+            **Example usage**:
             `@Pokecord release add 11,22,33`
             `@Pokecord release add 1-20`
           title: Release Add Usage
@@ -998,10 +1021,12 @@ modules:
           > **The release session was cancelled.**
         title: Release Session has been Cancelled
     errors:
-      selectedPokemon: '**Suggestion**: Try selecting a different Pokémon
-                    before releasing it!'
-      favoritePokemon: '**Suggestion**: Try removing this Pokémon from
-                    your favorites before releasing it!'
+      selectedPokemon: |-
+        This Pokémon is favorited.
+        > **Unfavorite the Pokémon before transferring.**
+      favoritePokemon: |-
+        This Pokémon is selected.
+        > **Select another Pokémon before transferring.**
       notInRelease: |-
         Priorities!
         > **Start a release session first.**

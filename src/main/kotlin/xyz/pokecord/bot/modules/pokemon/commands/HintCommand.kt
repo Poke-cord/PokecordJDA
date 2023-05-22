@@ -59,7 +59,7 @@ class HintCommand : Command() {
           context.translate("modules.pokemon.commands.hint.confirmation.embed.title")
         )
           .setFooter(
-            context.translate("misc.confirmation.timeoutText", "timeout" to confirmation.timeout.toString())
+            context.translate("misc.confirmation.timeoutFooter", "timeout" to confirmation.timeout.toString())
           )
       )
     if (!result) {

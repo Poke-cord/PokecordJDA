@@ -24,7 +24,7 @@ object ReleaseStartCommand : Command() {
     if (context.getTradeState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.inTrade")
+          context.translate("misc.errors.inState")
         ).build()
       ).queue()
       return

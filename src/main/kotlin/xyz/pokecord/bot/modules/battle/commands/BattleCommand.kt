@@ -51,7 +51,7 @@ object BattleCommand : Command() {
     if (partner == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.noPartnerMentioned")
+          context.translate("misc.errors.missingArguments.noUser")
         ).build()
       ).queue()
       return
@@ -149,7 +149,8 @@ object BattleCommand : Command() {
           )
         ),
         context.translate("modules.battle.commands.battle.embeds.battleRequest.title")
-      ).build()
+      ).setFooter(context.translate("misc.confirmation.timeoutFooter"))
+        .build()
     ).setActionRow(
       BattleModule.Buttons.getBattleRequestActionRow(battleRequest)
     ).queue()

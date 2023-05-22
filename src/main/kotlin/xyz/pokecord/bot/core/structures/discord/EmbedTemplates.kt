@@ -34,9 +34,7 @@ open class EmbedTemplates {
   }
 
   fun confirmation(description: String, title: String? = null) =
-    EmbedBuilder().setColor(Color.ORANGE.code).setDescription(description).setTitle(
-      title
-    )
+    EmbedBuilder().setColor(Color.ORANGE.code).setDescription(description).setTitle(title)
 
   fun normal(description: String, title: String? = null): EmbedBuilder {
     return empty().setDescription(description).setTitle(title)

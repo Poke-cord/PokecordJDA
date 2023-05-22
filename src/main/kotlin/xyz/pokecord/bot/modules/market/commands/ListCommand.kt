@@ -32,7 +32,7 @@ object ListCommand : Command() {
     if (pokemonRes == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.market.commands.list.errors.noPokemonProvided")
+          context.translate("misc.errors.missingArguments.noPokemon")
         ).build()
       ).queue()
       return

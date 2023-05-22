@@ -62,7 +62,7 @@ class CatchCommand : Command() {
       if (pokemonName == null) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.pokemon.commands.catch.errors.noNameProvided")
+            context.translate("misc.errors.missingArguments.noPokemonName")
           ).build()
         ).queue()
         return
