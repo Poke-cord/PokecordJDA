@@ -700,7 +700,6 @@ modules:
       invite:
         embed:
           description: |-
-            **Links** :arrow_upper_right:
             Community and Support: [[**Join Server**]]({{serverLink}})
             > Receive support and play Pokecord with us!
             
@@ -711,7 +710,7 @@ modules:
             > Once in Official Pokecord, type `/donate` to donate.
             
             Official Websites: [[**Main**]]({{websiteLink}}) [[**Terms of Service**]]({{tosLink}})
-            > See an overview of our bot and review rules!
+            > See an overview of our bot and review the rules!
           footer: Thank you for choosing Pokecord!
           title: Pokecord Quick Links
       ping:
