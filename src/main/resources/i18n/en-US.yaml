@@ -927,10 +927,10 @@ modules:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
       pokemon:
-#        errors:
-#          noResults: |-
-#            Pokecord looked far and wide, to no avail.
-#            > **Could not find your search query. Search for something else.**
+        errors:
+          noSearchResults: |-
+            Pokecord looked far and wide, to no avail.
+            > **No results found as per your search query.**
         embeds:
           title: "{{user}}'s Pokémon Collection"
       select:
