@@ -23,7 +23,7 @@ import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 import xyz.pokecord.bot.core.managers.I18n
-import xyz.pokecord.bot.core.managers.database.models.Order
+import xyz.pokecord.bot.core.managers.database.models.DonateBotTransaction
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.pokemon.items.CCTItem
@@ -53,6 +53,7 @@ class HTTPServer(val bot: Bot) {
   )
 
   private val topggSecret = System.getenv("TOPGG_SECRET") ?: throw Exception("top.gg secret is required.")
+  private val donateBotSecret = System.getenv("DONATEBOT_SECRET") ?: throw Exception("donatebot secret is required.")
 
   private val publicNotificationWebhookClient =
     Config.publicNotificationWebhook?.let { WebhookClientBuilder(it).buildJDA() }
@@ -85,25 +86,32 @@ class HTTPServer(val bot: Bot) {
     )?.await()
   }
 
-  private suspend fun sendDonationNotification(order: Order, orderInfo: PayPal.OrderInfo, itemName: String) {
-    publicNotificationWebhookClient?.send(
-      EmbedBuilder {
-        color = 0xf0e365
-        description =
-          "Big thanks to <@${order.userId}> for donating!"
-        title = "Thank You for Donating!"
+  private suspend fun sendDonationNotification(
+    userId: String,
+    price: String,
+    itemName: String,
+    status: String?,
+    privateOnly: Boolean = false,
+  ) {
+    if (!privateOnly) {
+      publicNotificationWebhookClient?.send(
+        EmbedBuilder {
+          color = 0xf0e365
+          description = "Big thanks to <@${userId}> for donating!"
+          title = "Thank You for Donating!"
 
-        footer("Support us by using the p!donate command.")
-      }.build()
-    )?.await()
+          footer("Support us by using the p!donate command.")
+        }.build()
+      )?.await()
+    }
 
     donationNotificationWebhookClient?.send(
       EmbedBuilder {
         color = 0xf0e365
         description = """            
-          **User**: <@${order.userId}> [${order.userId}]
-          **Amount**: ${order.price}
-          **Status**: ${orderInfo.status ?: "N/A"}
+          **User**: <@${userId}> [${userId}]
+          **Amount**: $price
+          **Status**: ${status ?: "N/A"}
           **Package**: $itemName
           """.trimIndent()
         title = "New Purchase"
@@ -351,7 +359,9 @@ class HTTPServer(val bot: Bot) {
                     )
                   )
 
-                  sendDonationNotification(order, orderInfo, itemName)
+                  sendDonationNotification(
+                    order.userId, order.price.toString(), itemName, orderInfo.status.toString()
+                  )
                 } else {
                   call.respondText(
                     "This order has already been paid.",
@@ -362,6 +372,62 @@ class HTTPServer(val bot: Bot) {
             } catch (e: Throwable) {
               e.printStackTrace()
             }
+          }
+        }
+
+        post("/api/donatebot") {
+          val secret = call.request.header("Authorization")
+          if (secret != donateBotSecret) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+          }
+
+          val donateBotTransaction = call.receive<DonateBotTransaction>()
+          bot.database.donateBotTransactionRepository.createTransaction(donateBotTransaction)
+
+          if (donateBotTransaction.rawBuyerId.isNullOrEmpty()) {
+            // TODO: send anonymous donation notification?
+            call.respond(HttpStatusCode.OK)
+            return@post
+          }
+
+          try {
+            var itemName = "Unknown"
+            val userData = bot.database.userRepository.getUser(donateBotTransaction.rawBuyerId)
+
+            if (donateBotTransaction.status == DonateBotTransaction.Status.COMPLETED) {
+              val packageId = if (!donateBotTransaction.roleId.isNullOrEmpty()) "roles" else "gems"
+              val itemId = donateBotTransaction.roleId ?: donateBotTransaction.productId ?: throw IllegalStateException(
+                "User must be purchasing either a role or a product..."
+              )
+              val `package` = Package.packages.find {
+                it.id == packageId
+              }
+              `package`?.let {
+                val item = `package`.items.find {
+                  it.id == itemId
+                }
+                item?.let {
+                  itemName = I18n.translate(null, "store.packages.${`package`.id}.items.${item.id}")
+                  if (!`package`.giveReward(bot, userData, item)) {
+                    call.respond(HttpStatusCode.NotAcceptable, "Transaction cancelled")
+                    return@post
+                  }
+                }
+              }
+            }
+
+            call.respond(HttpStatusCode.OK)
+
+            sendDonationNotification(
+              userData.id,
+              donateBotTransaction.price,
+              itemName,
+              donateBotTransaction.status.toString(),
+              privateOnly = donateBotTransaction.status != DonateBotTransaction.Status.COMPLETED,
+            )
+          } catch (e: Throwable) {
+            e.printStackTrace()
           }
         }
 
