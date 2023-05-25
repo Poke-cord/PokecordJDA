@@ -48,5 +48,5 @@ object GemsPackage : Package() {
     id: String,
     price: Number,
     val gems: Int
-  ) : Item(id, price)
+  ) : Item(id, "${gems}_gems", price)
 }

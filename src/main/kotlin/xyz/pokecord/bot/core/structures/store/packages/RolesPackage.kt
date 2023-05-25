@@ -12,6 +12,7 @@ object RolesPackage : Package() {
   override val items: List<Item> = listOf(
     RoleItem(
       1,
+      "apprentice_trainer",
       "739988143427682374",
       1,
       1000,
@@ -19,6 +20,7 @@ object RolesPackage : Package() {
     ),
     RoleItem(
       5,
+      "intermediate_trainer",
       "739988157701030048",
       2,
       5000,
@@ -26,6 +28,7 @@ object RolesPackage : Package() {
     ),
     RoleItem(
       10,
+      "experienced_trainer",
       "739988165041061998",
       3,
       15000,
@@ -33,6 +36,7 @@ object RolesPackage : Package() {
     ),
     RoleItem(
       20,
+      "master_trainer",
       "739988169113731182",
       4,
       25000,
@@ -40,6 +44,7 @@ object RolesPackage : Package() {
     ),
     RoleItem(
       30,
+      "legendary_trainer",
       "748017788932849744",
       5,
       35000,
@@ -47,6 +52,7 @@ object RolesPackage : Package() {
     ),
     RoleItem(
       40,
+      "mythical_trainer",
       "748017810394972260",
       6,
       45000,
@@ -85,10 +91,11 @@ object RolesPackage : Package() {
 
   class RoleItem(
     price: Number,
+    i18nKey: String,
     val roleId: String,
     val donationTier: Int,
     val credits: Int,
     val redeemCount: Int,
     val minRedeemId: Int = RedeemItem.Redeems.Celestial.id
-  ) : Item(roleId, price)
+  ) : Item(roleId, i18nKey, price)
 }

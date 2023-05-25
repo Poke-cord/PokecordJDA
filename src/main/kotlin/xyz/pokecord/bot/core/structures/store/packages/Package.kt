@@ -11,6 +11,7 @@ abstract class Package {
 
   open class Item(
     val id: String,
+    val i18nKey: String,
     val price: Number
   )
 

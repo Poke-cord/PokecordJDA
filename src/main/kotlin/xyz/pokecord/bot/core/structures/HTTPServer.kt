@@ -408,7 +408,7 @@ class HTTPServer(val bot: Bot) {
                   it.id == itemId
                 }
                 item?.let {
-                  itemName = I18n.translate(null, "store.packages.${`package`.id}.items.${item.id}")
+                  itemName = I18n.translate(null, "store.packages.${`package`.id}.items.${item.i18nKey}")
                   if (!`package`.giveReward(bot, userData, item)) {
                     call.respond(HttpStatusCode.NotAcceptable, "Transaction cancelled")
                     return@post
