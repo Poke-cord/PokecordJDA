@@ -4,9 +4,10 @@ import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.store.packages.RolesPackage
-import xyz.pokecord.bot.modules.staff.StaffCommand
+import xyz.pokecord.bot.modules.developer.DeveloperCommand
+// import xyz.pokecord.bot.modules.staff.StaffCommand
 
-object GiveRoleCommand : StaffCommand() {
+object GiveRoleCommand : DeveloperCommand() {
   override val name = "GiveRole"
   override var aliases = arrayOf("gr")
 
