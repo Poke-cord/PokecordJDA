@@ -11,58 +11,52 @@ object RolesPackage : Package() {
   override val id = "roles"
   override val items: List<Item> = listOf(
     RoleItem(
+      1,
       "apprentice_trainer",
-      0.99,
       "739988143427682374",
       1,
       1000,
       1,
-      RedeemItem.Redeems.Celestial.id
     ),
     RoleItem(
+      5,
       "intermediate_trainer",
-      4.99,
       "739988157701030048",
       2,
       5000,
-      1,
-      RedeemItem.Redeems.Stellar.id
+      2,
     ),
     RoleItem(
+      10,
       "experienced_trainer",
-      9.99,
       "739988165041061998",
       3,
       15000,
-      3,
-      RedeemItem.Redeems.Stellar.id
+      2,
     ),
     RoleItem(
+      20,
       "master_trainer",
-      14.99,
       "739988169113731182",
       4,
       25000,
       3,
-      RedeemItem.Redeems.Fanatical.id
     ),
     RoleItem(
+      30,
       "legendary_trainer",
-      24.99,
       "748017788932849744",
       5,
       35000,
       4,
-      RedeemItem.Redeems.Fanatical.id
     ),
     RoleItem(
+      40,
       "mythical_trainer",
-      49.99,
       "748017810394972260",
       6,
-      50000,
+      45000,
       5,
-      RedeemItem.Redeems.Fanatical.id
     )
   )
 
@@ -96,12 +90,12 @@ object RolesPackage : Package() {
   }
 
   class RoleItem(
-    id: String,
     price: Number,
+    i18nKey: String,
     val roleId: String,
     val donationTier: Int,
     val credits: Int,
     val redeemCount: Int,
-    val minRedeemId: Int
-  ) : Item(id, price)
+    val minRedeemId: Int = RedeemItem.Redeems.Celestial.id
+  ) : Item(roleId, i18nKey, price)
 }

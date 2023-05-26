@@ -24,6 +24,7 @@ class Database(cache: Cache) {
 
   private val battleCollection: CoroutineCollection<Battle>
   private val configCollection: CoroutineCollection<Config>
+  private val donateBotTransactionCollection: CoroutineCollection<DonateBotTransaction>
   private val faqCollection: CoroutineCollection<FAQ>
   private val guildCollection: CoroutineCollection<Guild>
   private val inventoryItemsCollection: CoroutineCollection<InventoryItem>
@@ -43,6 +44,7 @@ class Database(cache: Cache) {
   val auctionRepository: AuctionsRepository
   val battleRepository: BattleRepository
   val configRepository: ConfigRepository
+  val donateBotTransactionRepository: DonateBotTransactionRepository
   val faqRepository: FAQRepository
   val guildRepository: GuildRepository
   val marketRepository: MarketRepository
@@ -73,6 +75,7 @@ class Database(cache: Cache) {
     auctionCollection = database.getCollection()
     battleCollection = database.getCollection()
     configCollection = database.getCollection()
+    donateBotTransactionCollection = database.getCollection()
     faqCollection = database.getCollection()
     guildCollection = database.getCollection()
     inventoryItemsCollection = database.getCollection()
@@ -91,6 +94,7 @@ class Database(cache: Cache) {
     auctionRepository = AuctionsRepository(this, auctionCollection, cache.auctionMap)
     battleRepository = BattleRepository(this, battleCollection, cache.battleRequestsMap)
     configRepository = ConfigRepository(this, configCollection)
+    donateBotTransactionRepository = DonateBotTransactionRepository(this, donateBotTransactionCollection)
     faqRepository = FAQRepository(this, faqCollection)
     guildRepository = GuildRepository(this, guildCollection, cache.guildMap)
 
@@ -115,6 +119,7 @@ class Database(cache: Cache) {
   private suspend fun createIndexes() {
     auctionRepository.createIndexes()
     battleRepository.createIndexes()
+    donateBotTransactionRepository.createIndexes()
     faqRepository.createIndexes()
     guildRepository.createIndexes()
     marketRepository.createIndexes()
