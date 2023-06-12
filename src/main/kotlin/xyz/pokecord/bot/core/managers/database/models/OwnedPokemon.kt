@@ -51,7 +51,7 @@ data class OwnedPokemon(
   val totalIv = ivs.total
 
   val displayName
-    get() = "$name${if (shiny) " ⭐" else ""}"
+    get() = "$name${data.getEmoji(shiny)}"
 
   val imageUrl
     get() = PokemonData.getImageUrl(id, shiny)

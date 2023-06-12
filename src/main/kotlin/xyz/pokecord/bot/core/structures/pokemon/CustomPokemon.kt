@@ -2,22 +2,38 @@ package xyz.pokecord.bot.core.structures.pokemon
 
 object CustomPokemon {
   fun init() {
-    val spinda = Pokemon.getById(327)!!
-    val bluesSpinda = spinda.copy(
-      id = 999900001,
-      identifier = "blues-spinda",
-      name = "Blue's Spinda",
-      order = 9999,
+    val charizard = Pokemon.getByName("Charizard")!!
+    val prideCharizardV1 = charizard.copy(
+      id = 100000001,
+      identifier = "pride-charizard-v1",
+      name = "Pride Charizard V1",
       isDefault = false,
-      formName = "Blue's Spinda",
+      formName = "Pride Charizard V1",
+    )
+    val prideCharizardV2 = charizard.copy(
+      id = 100000002,
+      identifier = "pride-charizard-v2",
+      name = "Pride Charizard V2",
+      isDefault = false,
+      formName = "Pride Charizard V2",
+    )
+
+    registerCustomPokemon(
+      prideCharizardV1,
+      "pride-charizard-v1",
+      "Pride Charizard V1",
+      PokemonType(prideCharizardV1.id, charizard.types.map { it.id }),
+      PokemonStat.getByPokemonId(charizard.id).map {
+        it.copy(id = prideCharizardV1.id)
+      }
     )
     registerCustomPokemon(
-      bluesSpinda,
-      "blues-custom-pokemon",
-      "Blue's Custom Pokemon",
-      PokemonType(bluesSpinda.id, spinda.types.map { it.id }),
-      PokemonStat.getByPokemonId(spinda.id).map {
-        it.copy(id = bluesSpinda.id)
+      prideCharizardV2,
+      "pride-charizard-v2",
+      "Pride Charizard V2",
+      PokemonType(prideCharizardV2.id, charizard.types.map { it.id }),
+      PokemonStat.getByPokemonId(charizard.id).map {
+        it.copy(id = prideCharizardV2.id)
       }
     )
   }

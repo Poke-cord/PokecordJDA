@@ -62,7 +62,7 @@ class Translator(val context: BaseCommandContext) {
   }
 
   suspend fun pokemonDisplayName(pokemon: OwnedPokemon, showNickname: Boolean = true) =
-    "${if (showNickname && pokemon.nickname != null) pokemon.nickname else pokemonName(pokemon)}${if (pokemon.shiny) " ⭐" else ""}"
+    "${if (showNickname && pokemon.nickname != null) pokemon.nickname else pokemonName(pokemon)}${pokemon.data.getEmoji(pokemon.shiny)}"
 
   suspend fun habitat(pokemon: Pokemon) = translatePokemonHabitatName(pokemon.species)
   private suspend fun translatePokemonHabitatName(species: Species): Name? {

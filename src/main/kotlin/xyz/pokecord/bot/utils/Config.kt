@@ -68,6 +68,10 @@ object Config {
       "🇾",
       "🇿"
     )
+
+    const val EVENT_SHINY = "💠"
+    const val EVENT = "🔷"
+    const val SHINY = "⭐"
   }
 
   enum class Roles(val id: String) {

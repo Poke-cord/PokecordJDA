@@ -3,6 +3,7 @@ package xyz.pokecord.bot.modules.pokemon.commands
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonResolvable
 
 class NicknameCommand : Command() {
@@ -31,9 +32,13 @@ class NicknameCommand : Command() {
           context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.charLimit")).build()
         ).queue()
         return
-      } else if (nickname.endsWith("⭐")) {
+      } else if (nickname.endsWith(Config.Emojis.EVENT_SHINY) || nickname.endsWith(Config.Emojis.EVENT) || nickname.endsWith(
+          Config.Emojis.SHINY
+        )
+      ) {
         context.reply(
-          context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.shinyStar")).build()
+          context.embedTemplates.error(context.translate("modules.pokemon.commands.nickname.errors.emojiNotAllowed"))
+            .build()
         ).queue()
         return
       } else {

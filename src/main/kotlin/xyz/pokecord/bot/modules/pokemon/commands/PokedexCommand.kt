@@ -56,7 +56,7 @@ class PokedexCommand : Command() {
           "modules.pokemon.commands.pokedex.embed.title",
           mapOf(
             "speciesId" to pokemon.formattedSpeciesId,
-            "pokemon" to "${context.translator.pokemonName(pokemon)}${if (shiny == true) " ⭐" else ""}"
+            "pokemon" to "${context.translator.pokemonName(pokemon)}${pokemon.getEmoji(shiny == true)}"
           )
         )
       )

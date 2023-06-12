@@ -879,7 +879,7 @@ modules:
         errors:
           pokemonName: '**Suggestion**: Try excluding any Pokémon names
                         in the nickname!'
-          shinyStar: '**Suggestion**: Try excluding a :star: from the nickname!'
+          emojiNotAllowed: '**Suggestion**: The following emojis are not allowed at the end of nicknames: :star: :large_blue_diamond: :diamond_shape_with_a_dot_inside:'
           charLimit: '**Suggestion**: Try entering a nickname under 64 characters!'
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.

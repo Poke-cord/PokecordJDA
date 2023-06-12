@@ -2,6 +2,7 @@ package xyz.pokecord.bot.core.structures.pokemon
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.Json
 import kotlin.system.exitProcess
 
@@ -62,6 +63,13 @@ data class Pokemon(
 
   val formattedSpeciesId
     get() = "#${speciesId.toString().padStart(3, '0')}"
+
+  fun getEmoji(isShiny: Boolean): String {
+    val isEventPokemon = SpecialEvents.isEventPokemon(this)
+    val emoji =
+      if (isEventPokemon && isShiny) Config.Emojis.EVENT_SHINY else if (isEventPokemon) Config.Emojis.EVENT else if (isShiny) Config.Emojis.SHINY else null
+    return if (emoji != null) " $emoji" else ""
+  }
 
   companion object {
     private val nextEvolutionsCache: MutableMap<Int, List<Int>> = mutableMapOf()
