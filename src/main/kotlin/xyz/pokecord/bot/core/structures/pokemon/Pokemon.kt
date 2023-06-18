@@ -1165,6 +1165,6 @@ data class Pokemon(
 
     fun getImageUrl(id: Int, shiny: Boolean = false) =
 //      "https://pokecord-images.s3.wasabisys.com/${if (shiny) "shiny" else "regular"}/${id}.png"
-      "https://images.pokecord.xyz/${if (shiny) "shiny" else "regular"}/${id}.png"
+      "https://images.pokecord.zihad.dev/${if (shiny) "shiny" else "regular"}/${id}.png"
   }
 }
