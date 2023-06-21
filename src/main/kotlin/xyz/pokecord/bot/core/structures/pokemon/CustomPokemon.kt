@@ -14,7 +14,7 @@ object CustomPokemon {
     val eevee = Pokemon.getByName("Eevee")!!
     val mewtwo = Pokemon.getByName("Mewtwo")!!
     val umbreon = Pokemon.getByName("Umbreon")!!
-    val linoone = Pokemon.getByName("linoone")!!
+    val linoone = Pokemon.getByName("Linoone")!!
     val wingull = Pokemon.getByName("Wingull")!!
     val minun = Pokemon.getByName("Minun")!!
     val wailord = Pokemon.getByName("Wailord")!!
