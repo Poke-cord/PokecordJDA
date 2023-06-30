@@ -906,7 +906,9 @@ modules:
           charLimit: |-
             Too long! Pokecord can't handle it.
             > **Limit nickname to 64 characters.**
-          emojiNotAllowed: '**Suggestion**: The following emojis are not allowed at the end of nicknames: :star: :large_blue_diamond: :diamond_shape_with_a_dot_inside:'
+          emojiNotAllowed: |-
+            Pokémon fraud is forbidden.
+            > **Exclude :star:\'s, :large_blue_diamond:\'s, and :diamond_shape_with_a_dot_inside:\'s from nicknames.**
       order:
         ordering: Ordering your Pokémon, please don't use any other command until this is done.
         ordered: Finished ordering your Pokémon!
