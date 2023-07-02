@@ -78,7 +78,7 @@ class PokedexCommand : Command() {
         true
       ).addField(
         context.translate("misc.texts.obtained"),
-        "Catchable, Redeemable",
+        "Catchable",
         true
         //Define each Pokemon as catchable, redeemable etc. and make this dynamic.
       )
