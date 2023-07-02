@@ -85,6 +85,7 @@ data class Pokemon(
           cachedMaxId = items.maxOfOrNull { it.speciesId } ?: 898
         }
         return cachedMaxId!!
+        //return items.maxOfOrNull { it.speciesId } ?: 898
       }
 
     val leftFacing = listOf(

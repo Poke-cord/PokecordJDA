@@ -39,7 +39,7 @@ class PickCommand : Command() {
         return
       }
 
-      val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id, true)
+      val ownedPokemon = module.bot.database.userRepository.givePokemon(context.getUserData(), pokemon.id, select = true)
 
       val translatedPokemonName =
         context.translator.pokemonDisplayName(ownedPokemon)

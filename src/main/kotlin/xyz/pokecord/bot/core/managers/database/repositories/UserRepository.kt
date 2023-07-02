@@ -148,7 +148,7 @@ class UserRepository(
     ivs: PokemonStats? = null,
     extraOps: suspend (session: ClientSession) -> Unit = {}
   ): OwnedPokemon {
-    if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
+    //if (pokemonId < 1 || pokemonId > Pokemon.maxId) throw IllegalArgumentException("Pokemon ID $pokemonId is not in range 0 < $pokemonId < ${Pokemon.maxId}")
     val isUnsavedUser = userData.isDefault && userData._isNew
 
     if (shiny == null && userData.shinyRate < 1) userData.shinyRate = 4908.0
