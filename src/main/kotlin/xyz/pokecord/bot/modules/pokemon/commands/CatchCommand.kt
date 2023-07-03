@@ -74,7 +74,7 @@ class CatchCommand : Command() {
       if (pokemon != null && spawnChannel.spawned == pokemon.id) {
         val eventPokemonId = SpecialEvents.handleCatching(pokemon.species)
         val shiny = eventPokemonId?.let {
-          Random.nextInt(100) < 50
+          Random.nextInt(100) < 2
         }
         val finalPokemonId = eventPokemonId ?: pokemon.id
         val ownedPokemon =
