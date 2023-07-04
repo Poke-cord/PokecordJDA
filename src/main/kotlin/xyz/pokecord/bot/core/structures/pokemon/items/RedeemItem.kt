@@ -94,10 +94,10 @@ class RedeemItem(
     val flingEffectId: Int = 0,
     val useGems: Boolean = true
   ) {
-    Celestial(10000000, "celestial-redeem", "Celestial Redeem", 100),
-    Stellar(10000001, "stellar-redeem", "Stellar Redeem", 125),
-    Fanatical(10000002, "fanatical-redeem", "Fanatical Redeem", 175),
-    Apocryphal(10000003, "apocryphal-redeem", "Apocryphal Redeem", 200),
+    Common(10000000, "common-redeem", "Common Redeem", 100),
+    Rare(10000001, "rare-redeem", "Stellar Redeem", 125),
+    Epic(10000002, "epic-redeem", "Epic Redeem", 175),
+    Legendary(10000003, "legendary-redeem", "Legendary Redeem", 200),
     Fabled(10000004, "fabled-redeem", "Fabled Redeem", 250),
     Chromatic(10000005, "chromatic-redeem", "Chromatic Redeem", 150),
   }
@@ -128,19 +128,19 @@ class RedeemItem(
 
     val redeemMap: MutableMap<Int, Item> = mutableMapOf(
       RedeemItem(
-        Redeems.Celestial.id,
+        Redeems.Common.id,
         Pokemon.legendaries + Pokemon.mythicals,
         55,
         80
       ).asPair(),
-      Redeems.Stellar.id to RedeemItem(
-        Redeems.Stellar.id,
+      Redeems.Rare.id to RedeemItem(
+        Redeems.Rare.id,
         Pokemon.legendaries + Pokemon.mythicals,
         55,
         90
       ),
       RedeemItem(
-        Redeems.Fanatical.id,
+        Redeems.Epic.id,
         minIvPercentage = 50,
         maxIvPercentage = 70
       ).asPair(),
@@ -148,7 +148,7 @@ class RedeemItem(
         Redeems.Chromatic.id
       ).asPair(),
       RedeemItem(
-        Redeems.Apocryphal.id,
+        Redeems.Legendary.id,
         minIvPercentage = 55,
         maxIvPercentage = 75
       ).asPair(),
