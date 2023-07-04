@@ -1280,6 +1280,7 @@ items:
                     can get with your redeem!'
       noPokemonName: '**Suggestion**: Try specifying a Pokémon name
                     to redeem!'
+      noCurrentEvents: 'There are no ongoing events right now, try again later!'
     embed:
       description: |-
         **Name**: {{pokemon}}

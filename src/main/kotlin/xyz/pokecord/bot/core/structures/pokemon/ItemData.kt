@@ -107,6 +107,7 @@ data class ItemData(
           )
         }
       )
+      items.add(EventsRedeemItem.itemData)
 
       // Glimmering Candy
       items.add(

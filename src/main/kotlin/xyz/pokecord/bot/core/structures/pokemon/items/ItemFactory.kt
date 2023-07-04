@@ -9,6 +9,7 @@ object ItemFactory {
     items.putAll(CreditsItem.creditsMap)
     items.putAll(EVItem.evsMap)
     items.putAll(RedeemItem.redeemMap)
+    items[EventsRedeemItem.id] = EventsRedeemItem
 
     items.putAll(
       ItemData.getByCategoryId(EvolutionItem.categoryId).map {

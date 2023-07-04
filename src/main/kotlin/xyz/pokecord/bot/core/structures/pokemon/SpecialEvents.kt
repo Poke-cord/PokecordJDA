@@ -156,7 +156,7 @@ object SpecialEvents {
     )
   }
 
-  private data class EventPokemon(
+  data class EventPokemon(
     val startsAt: Long,
     val endsAt: Long,
     val customPokemon: Map<Species, List<Pokemon>>,
@@ -180,6 +180,11 @@ object SpecialEvents {
 
   fun isEventPokemon(pokemon: Pokemon): Boolean {
     return eventPokemonList.any { e -> e.customPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+  }
+
+  fun getCurrentEvents(): List<EventPokemon> {
+    val now = System.currentTimeMillis()
+    return eventPokemonList.filter { now in it.startsAt..it.endsAt }
   }
 
   private val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
