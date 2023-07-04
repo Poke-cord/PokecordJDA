@@ -96,6 +96,6 @@ object RolesPackage : Package() {
     val donationTier: Int,
     val credits: Int,
     val redeemCount: Int,
-    val minRedeemId: Int = RedeemItem.Redeems.Celestial.id
+    val minRedeemId: Int = RedeemItem.Redeems.Common.id
   ) : Item(roleId, i18nKey, price)
 }
