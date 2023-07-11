@@ -28,7 +28,7 @@ object CustomPokemon {
     val lucario = Pokemon.getByName("Lucario")!!
     val darkrai = Pokemon.getByName("Darkrai")!!
     val arceus = Pokemon.getByName("Arceus")!!
-    val serperior = Pokemon.getByName("Seperior")!!
+    val serperior = Pokemon.getByName("Serperior")!!
     val dewott = Pokemon.getByName("Dewott")!!
     val greninja = Pokemon.getByName("Greninja")!!
     val trevenant = Pokemon.getByName("Trevenant")!!
