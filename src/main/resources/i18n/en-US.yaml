@@ -119,7 +119,7 @@ misc:
       noPokemon: |-
         It was decided you can't say nothing
         > **Specify a Pokémon by collection ID.**
-      noPokemonName:
+      noPokemonName: |-
         It was decided you can't say nothing.
         > **Specify a Pokémon by its name.**
     notASpawnChannel: |-
