@@ -55,7 +55,7 @@ abstract class Command {
   open var aliases: Array<String> = arrayOf()
   open var enabled = true
   open var excludeFromHelp = false
-  open var rateLimit = 1500L
+  open var rateLimit = 1000L
   open var rateLimitType = RateLimitType.Command
   open var requiredBotPermissions: Array<Permission> =
     arrayOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
