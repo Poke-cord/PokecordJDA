@@ -61,7 +61,7 @@ object SetSpawnChannelCommand : Command() {
         SpawnChannel(
           textChannel.id,
           textChannel.guild.id,
-          Random.nextInt(5, 41),
+          Random.nextInt(10, 16),
           0,
           0
         )
