@@ -123,8 +123,8 @@ misc:
         It was decided you can't say nothing.
         > **Specify a Pokémon by its name.**
     notASpawnChannel: |-
-      That command doesn't work here, at least not yet.
-      > **Use this command in a spawn channel or create a new spawn.**
+      You can't catch here—at least not yet.
+      > **Catch in spawn channels or create new ones.**
     nothingSpawned: |-
       You're here! But Pokémon are not.
       > **Wait for a Pokémon to spawn.**
