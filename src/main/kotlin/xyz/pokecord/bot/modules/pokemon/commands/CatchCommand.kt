@@ -14,7 +14,7 @@ class CatchCommand : Command() {
   override val name = "Catch"
 
   override var aliases = arrayOf("c")
-  override var rateLimit = 5000L
+  override var rateLimit = 4500L
   override var rateLimitType = RateLimitType.Args
 
   private val caught = Counter

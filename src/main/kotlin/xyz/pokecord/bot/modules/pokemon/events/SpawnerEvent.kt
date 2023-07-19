@@ -67,7 +67,7 @@ class SpawnerEvent : Event() {
         val lastMessageAt =
           lastCountedMessageMap.getOrDefault(context.author.id, null)
         val now = System.currentTimeMillis()
-        if (lastMessageAt != null && lastMessageAt + 4000 > now) return
+        if (lastMessageAt != null && lastMessageAt + 4500 > now) return
         lastCountedMessageMap[context.author.id] = now
 
         val oldSpawnChannelData = SpawnChannel(
@@ -82,7 +82,7 @@ class SpawnerEvent : Event() {
         if (randomSpawnChannel.sentMessages >= randomSpawnChannel.requiredMessages) {
           try {
             randomSpawnChannel.sentMessages = 0
-            randomSpawnChannel.requiredMessages = Random.nextInt(10, 26)
+            randomSpawnChannel.requiredMessages = Random.nextInt(10, 31)
             randomSpawnChannel.spawned = getNextSpawn()
 
             context.bot.database.spawnChannelRepository.updateDetails(
