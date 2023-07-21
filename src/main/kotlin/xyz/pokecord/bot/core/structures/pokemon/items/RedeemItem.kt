@@ -95,7 +95,7 @@ class RedeemItem(
     val useGems: Boolean = true
   ) {
     Common(10000000, "common-redeem", "Common Redeem", 100),
-    Rare(10000001, "rare-redeem", "Stellar Redeem", 125),
+    Rare(10000001, "rare-redeem", "Rare Redeem", 125),
     Epic(10000002, "epic-redeem", "Epic Redeem", 175),
     Legendary(10000003, "legendary-redeem", "Legendary Redeem", 200),
     Fabled(10000004, "fabled-redeem", "Fabled Redeem", 250),
