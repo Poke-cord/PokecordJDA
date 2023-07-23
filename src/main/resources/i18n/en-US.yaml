@@ -1283,12 +1283,11 @@ items:
       noCurrentEvents: 'There are no ongoing events right now, try again later!'
     embed:
       description: |-
-        **Name**: {{pokemon}}
-        **Level**: {{level}}
-        **IV Percent**: {{ivPercentage}}
-
+        *Pokecord reached into the depths of the PC...*
+        Your **{{pokemon}}** is level {{level}} and is ||{{ivPercentage}}|| IV!
+        
         Congratulations {{user}}!
-      title: A {{redeem}} has been Used
+      title: You opened a(n) {{redeem}}...
   ev:
     errors:
       alreadyMaxTotalEv: |-
