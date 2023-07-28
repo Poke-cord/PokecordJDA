@@ -369,8 +369,6 @@ modules:
         bidNotification:
           description: |-
             **Auction Item**: {{pokemonIV}} {{pokemonName}}
-            
-            **Bidder**: {{bidderTag}}
             **Amount**: {{amount}} credits
           title: You Received a Bid
         outbid:
@@ -378,7 +376,6 @@ modules:
             **Auction ID**: {{ID}}
             **Auction Item**: {{pokemonName}}
             
-            **Bidder**: {{bidder}}
             **Bid Difference**: {{bidDifference}} credits
           title: You have been Outbid
         confirmed:
