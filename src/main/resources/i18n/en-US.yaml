@@ -1284,7 +1284,7 @@ items:
     embed:
       description: |-
         *Pokecord reached into the depths of the PC...*
-        Your **{{pokemon}}** is level {{level}} and is ||{{ivPercentage}}|| IV!
+        Your **{{pokemon}}** is level {{level}} and is {{ivPercentage}} IV!
         
         Congratulations {{user}}!
       title: You opened a(n) {{redeem}}...
