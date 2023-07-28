@@ -177,7 +177,6 @@ object BidCommand : Command() {
                 context.translate(
                   "modules.auctions.commands.bid.outbid.description",
                   mapOf(
-                    "bidder" to context.author.asMention,
                     "ID" to auction.id.toString(),
                     "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
                     "bidDifference" to (bidAmount - highestBid.amount).toString()
