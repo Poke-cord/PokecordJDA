@@ -14,8 +14,9 @@ class GeneralModule(bot: Bot) : Module(
     InviteCommand(),
     FAQCommand(),
     LeaderboardCommand(),
-    VoteCommand(),
-    SetCommand()
+    StartupCommand(),
+    SetCommand(),
+    VoteCommand()
   ),
   arrayOf(
     ReadyEvent(),

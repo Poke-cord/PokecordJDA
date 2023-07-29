@@ -152,7 +152,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
             }"
           }
         if (argumentAliasesLines.isNotEmpty()) {
-          descriptionLines += "**${context.translate("misc.texts.argument_aliases")}**\n" + argumentAliasesLines.joinToString(
+          descriptionLines += "**${context.translate("misc.texts.argument_aliases")}**:\n" + argumentAliasesLines.joinToString(
             "\n"
           )
         }

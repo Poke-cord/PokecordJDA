@@ -748,6 +748,12 @@ modules:
           title:
             updated: Level-Up Channel Updated
             removed: Level-Up Channel Removed
+      startup:
+        description: |-
+          This is a test!
+          > **And this is a test.**
+        footer: Toe.
+        title: Hihi
       vote:
         now: now
         embed:

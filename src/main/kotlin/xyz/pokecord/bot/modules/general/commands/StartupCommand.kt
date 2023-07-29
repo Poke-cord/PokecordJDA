@@ -5,7 +5,7 @@ import xyz.pokecord.bot.modules.general.commands.startup.*
 
 class StartupCommand : ParentCommand() {
   override val childCommands =
-    mutableListOf(StartupIntroCommand)
+    mutableListOf(StartupIntroCommand, StartupTutorialCommand)
   override val name = "Startup"
 
   override var aliases = arrayOf("starting", "greeting", "intro", "introduction")

@@ -4,9 +4,9 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object StartupIntroCommand : Command() {
-  override val name = "Intro"
-  override var aliases = arrayOf("introduction")
+object StartupTutorialCommand : Command() {
+  override val name = "Tutorial"
+  override var aliases = arrayOf("guide")
 
   @Executor
   suspend fun execute(
