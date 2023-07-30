@@ -14,7 +14,7 @@ class GeneralModule(bot: Bot) : Module(
     InviteCommand(),
     FAQCommand(),
     LeaderboardCommand(),
-    StartupCommand(),
+    PokepediaCommand(),
     SetCommand(),
     VoteCommand()
   ),

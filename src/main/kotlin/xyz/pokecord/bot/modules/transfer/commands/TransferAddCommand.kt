@@ -1,12 +1,12 @@
-package xyz.pokecord.bot.modules.release.commands
+package xyz.pokecord.bot.modules.transfer.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.release.ReleaseModule
+import xyz.pokecord.bot.modules.transfer.TransferModule
 import xyz.pokecord.bot.utils.Config
 
-object ReleaseAddCommand : Command() {
+object TransferAddCommand : Command() {
   override val name: String = "add"
   override var aliases = arrayOf("a")
 
@@ -17,28 +17,28 @@ object ReleaseAddCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getReleaseState()
+    val transferState = context.getTransferState()
     val userData = context.getUserData()
 
     if (pokemon == null) {
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.release.embeds.center.embed.description",
+            "modules.transfer.embeds.usage.description",
             mapOf(
               "prefix" to context.getPrefix()
             )
           ),
-          context.translate("modules.release.embeds.center.embed.title")
+          context.translate("modules.transfer.embeds.usage.title")
         ).build()
       ).queue()
       return
     }
 
-    if (releaseState == null) {
+    if (transferState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRelease")
+          context.translate("modules.transfer.errors.notInTransfer")
         ).build()
       ).queue()
       return
@@ -48,13 +48,13 @@ object ReleaseAddCommand : Command() {
       context.bot.database.pokemonRepository.getPokemonByIndex(
         context.author.id,
         it - 1
-      )  // Pokemon index starts at 0, but user input starts at 1
+      )  // Pokémon index starts at 0, but user input starts at 1
     }
 
-    if (releaseState.pokemon.size + pokemonList.size > Config.maxReleaseSessionPokemon) {
+    if (transferState.pokemon.size + pokemonList.size > Config.maxTransferSessionPokemon) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRange")
+          context.translate("modules.transfer.errors.notInRange")
         ).build()
       ).queue()
       return
@@ -70,7 +70,7 @@ object ReleaseAddCommand : Command() {
       when {
         ownedPokemon._id == userData.selected -> {
           context.reply(
-            context.embedTemplates.error(context.translate("modules.release.errors.selectedPokemon"))
+            context.embedTemplates.error(context.translate("modules.transfer.errors.selectedPokemon"))
               .build()
           )
             .queue()
@@ -78,7 +78,7 @@ object ReleaseAddCommand : Command() {
         }
         ownedPokemon.favorite -> {
           context.reply(
-            context.embedTemplates.error(context.translate("modules.release.errors.favoritePokemon"))
+            context.embedTemplates.error(context.translate("modules.transfer.errors.favoritePokemon"))
               .build()
           )
             .queue()
@@ -88,17 +88,17 @@ object ReleaseAddCommand : Command() {
     }
 
     val authorPokemonText =
-      ReleaseModule.getReleaseStatePokemonText(context, pokemonList)
+      TransferModule.getTransferStatePokemonText(context, pokemonList)
 
     context.reply(
       context.embedTemplates.normal(
         context.translate(
-          "modules.release.embeds.confirmation.embedNoConfirm.description",
+          "modules.transfer.embeds.add.description",
           mapOf(
             "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" }
           )
         ),
-        context.translate("modules.release.embeds.confirmation.embedNoConfirm.title")
+        context.translate("modules.transfer.embeds.add.title")
       ).build()
     ).queue()
 
@@ -106,7 +106,7 @@ object ReleaseAddCommand : Command() {
       val session = context.bot.database.startSession()
       session.use {
         session.startTransaction()
-        context.bot.database.releaseRepository.addPokemon(releaseState, ownedPokemon._id, session)
+        context.bot.database.transferRepository.addPokemon(transferState, ownedPokemon._id, session)
         session.commitTransactionAndAwait()
       }
     }

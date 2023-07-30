@@ -23,7 +23,7 @@ object GiftPokemonCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    if (context.getTradeState() != null || context.getReleaseState() != null || context.getBattleState() != null) {
+    if (context.getTradeState() != null || context.getTransferState() != null || context.getBattleState() != null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("misc.errors.inState")

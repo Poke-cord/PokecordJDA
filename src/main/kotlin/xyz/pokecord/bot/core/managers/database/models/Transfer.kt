@@ -6,7 +6,7 @@ import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 
 @Serializable
-data class Release(
+data class Transfer(
   val userId: String,
   var pokemon: MutableList<@Contextual Id<OwnedPokemon>> = mutableListOf(),
 

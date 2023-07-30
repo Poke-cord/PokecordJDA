@@ -34,7 +34,7 @@ object TradeCommand : ParentCommand() {
       return
     }
 
-    if (context.getReleaseState() != null) {
+    if (context.getTransferState() != null) {
       context.reply(
         context.embedTemplates.error(
           context.translate("modules.trading.errors.inState")

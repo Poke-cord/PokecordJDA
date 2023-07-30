@@ -12,6 +12,9 @@ misc:
       invite: Invite Pokecord to other servers.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
+      pokepedia: Intro and tutorials for Pokecord.
+      "pokepedia.intro": Introduction for first-time Pokecord players.
+      "pokepedia.tutorial": Tutorials for first-time and returning players.
       set: Miscellaneous setting configurations.
       "set.prefix": Sets the server prefix.
       "set.private": Toggles your progress visibility to public/private.
@@ -31,7 +34,7 @@ misc:
       pick: Allows you to start their Pokecord journey with a Pokémon.
       pokedex: Displays Pokémon base stats and general information.
       pokemon: Displays a Pokémon collection with filters and searchability.
-      release: Transfers Pokémon to Professor Zihadikarp.
+      transfer: Transfers Pokémon to Professor Zihadikarp.
       select: Selects a Pokémon, becoming your active Pokémon.
     profile:
       bag: Displays all currency and items collected.
@@ -108,7 +111,7 @@ misc:
       > **Use buttons that belong to your own commands.**
     inState:
       You used a command while busy. It didn't work.
-      > **Cancel current trade, battle, or release first.**
+      > **Cancel current trade, battle, or transfer first.**
     invalidAmount: |-
       You entered an invalid amount.
       > **Enter a valid amount.**
@@ -748,19 +751,21 @@ modules:
           title:
             updated: Level-Up Channel Updated
             removed: Level-Up Channel Removed
-      startup:
-        description: |-
-          This is a test!
-          > **And this is a test.**
-        footer: Toe.
-        title: Hihi
+      pokepedia:
+        intro:
+          description: |-
+            Hey there!
+            > **And this is a test.**
+          footer: Toe.
+          title: Welcome to Pokecord!
+        tutorial:
       vote:
-        now: now
+        now: now!
         embed:
           description: |-
             **Vote for Pokecord**: [top.gg page]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
-            **Next vote**... {{nextVoteTime}}!
+            **Next vote**... {{nextVoteTime}}
           footer: Want more rewards? Check in every 12 hours to vote!
           title: Pokecord Voting | Season {{season}}
   pokemon:
@@ -968,61 +973,73 @@ modules:
             description: Use `@Pokecord catch <Pokémon Name>` to catch it!
             footer: The next Pokémon will replace this one.
             title: A Wild Pokémon has Appeared
-  release:
+  transfer:
     embeds:
-      center:
-        embed:
-          description: |-
-            **Try using**:
-            `@Pokecord release add <pokemon number(s)>`
-            
-            **Example usage**:
-            `@Pokecord release add 11,22,33`
-            `@Pokecord release add 1-20`
-          title: Release Add Usage
-        releaseStarted:
-          title: A Release Session has Started
-          description: "Release session has been initiated.\n> **You can only release 50 Pokémon per session.**"
-        removePokemon:
-          title: A Pokémon has been Removed
-          description: |-
-            **Name(s)**: 
-            {{pokemon}}
-
-            Pokémon were removed from release.
-      confirmation:
-        embed:
-          description: |-
-            **Name(s)**:
-            {{pokemon}}
-            
-            Confirm release of the Pokémon above.
-            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-          title: Pokémon Releasing is Pending
-        embedNoConfirm:
-          description: |-
-            **Name(s)**:
-            {{pokemon}}
-            
-            Pokémon were successfully added to release.
-          title: Pokémon have been Added
-        errors:
-          emptyRelease: |-
-            You released nothing. Wait, you can't.
-            > **Add Pokémon to your release session before releasing.**
-      released:
+      usage:
         description: |-
-          **Name(s)**:
+          **Try using**:
+          `@Pokecord transfer add <pokemon number(s)>`
+
+          **Example cases**:
+          `@Pokecord transfer add 11,22,33`
+          `@Pokecord transfer add 1-20`
+        title: Transfer Add Usage
+      start:
+        title: Transfer Session Initiated
+        description: |-
+          You may add Pokémon to transfer.
+          > **Limit 50 Pokémon transferable per session.**
+      remove:
+        description: |-
+          **Pokémon**: 
+          {{pokemon}}
+
+          Pokémon successfully returned.
+        title: Transfer Session Updated
+      confirmation:
+        embeds:
+          pending:
+            description: |-
+              **Pokémon**:
+              {{pokemon}}
+
+              Confirm transferring of the Pokémon above.
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: Transfer Session Confirmation
+          timeout:
+            description: |-
+              The confirmation period timed out.
+              > **Confirm again to finish transferring.**
+            title: Transfer Session Unconfirmed
+        errors:
+          emptyTransfer: |-
+            You transferred nothing. Wait, you can't.
+            > **Add Pokémon to your transfer session before releasing.**
+      add:
+        description: |-
+          **Pokémon**:
+          {{pokemon}}
+
+          Pokémon successfully added for transfer.
+        title: Transfer Session Updated
+      status:
+        description: |-
+          **Pokémon**:
           {{pokemon}}
           
-          **Rewards**: 
+          Viewing all Pokémon added for transfer.
+        title: Transfer Session Status
+      transferred:
+        description: |-
+          *Professor Zihadkarp included a few rewards!*
+          **You received**:
           {{rewards}}
-        title: Pokémons have been Released
+        title: Transfer Session Confirmed
       cancelled:
         description: |-
           Success!
-          > **The release session was cancelled.**
-        title: Release Session has been Cancelled
+          > **All Pokémon added in session returned.**
+        title: Transfer Session Terminated
     errors:
       selectedPokemon: |-
         This Pokémon is favorited.
@@ -1030,17 +1047,17 @@ modules:
       favoritePokemon: |-
         This Pokémon is selected.
         > **Select another Pokémon before transferring.**
-      notInRelease: |-
+      notInTransfer: |-
         Priorities!
-        > **Start a release session first.**
+        > **Start a transfer session first.**
       inTrade: |-
         Two you? No. Two things at once? Also no.
         > **Finish your current trade first.**
-      alreadyInRelease: |-
-        Two you? No. Two release sessions? Also no.
-        > **Finish your current release session first.**
+      alreadyInTransfer: |-
+        Two you? No. Two transfer sessions? Also no.
+        > **Finish your current transfer session first.**
       notInRange: |-
-        Pokecord couldn't 
+        Pokecord couldn't get all your Pokémon.
         > **Specify up to a maximum of 50 Pokémon.**
   profile:
     commands:

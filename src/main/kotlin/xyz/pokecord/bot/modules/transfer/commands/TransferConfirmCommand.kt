@@ -1,13 +1,13 @@
-package xyz.pokecord.bot.modules.release.commands
+package xyz.pokecord.bot.modules.transfer.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 import xyz.pokecord.bot.core.structures.pokemon.items.EVItem
-import xyz.pokecord.bot.modules.release.ReleaseModule
+import xyz.pokecord.bot.modules.transfer.TransferModule
 import xyz.pokecord.bot.utils.Confirmation
 
-object ReleaseConfirmCommand : Command() {
+object TransferConfirmCommand : Command() {
   override val name: String = "confirm"
 
   @Executor
@@ -16,41 +16,41 @@ object ReleaseConfirmCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getReleaseState()
-    if (releaseState == null) {
+    val transferState = context.getTransferState()
+    if (transferState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRelease")
+          context.translate("modules.transfer.errors.notInTransfer")
         ).build()
       ).queue()
       return
     }
 
-    if (releaseState.pokemon.isEmpty()) {
+    if (transferState.pokemon.isEmpty()) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.embeds.confirmation.errors.emptyRelease")
+          context.translate("modules.transfer.embeds.confirmation.errors.emptyTransfer")
         ).build()
       ).queue()
       return
     }
 
-    val authorUserData = context.bot.database.userRepository.getUser(releaseState.userId)
-    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(releaseState.pokemon)
+    val authorUserData = context.bot.database.userRepository.getUser(transferState.userId)
+    val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(transferState.pokemon)
 
     val authorPokemonText =
-      ReleaseModule.getReleaseStatePokemonText(context, authorPokemon)
+      TransferModule.getTransferStatePokemonText(context, authorPokemon)
     val confirmation = Confirmation(context)
     val result =
       confirmation.result(
         context.embedTemplates.confirmation(
           context.translate(
-            "modules.release.embeds.confirmation.embed.description",
+            "modules.transfer.embeds.confirmation.embeds.pending.description",
             mapOf(
               "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" }
             )
           ),
-          context.translate("modules.release.embeds.confirmation.embed.title")
+          context.translate("modules.transfer.embeds.confirmation.embeds.pending.title")
         )
           .setFooter(
             context.translate(
@@ -63,8 +63,8 @@ object ReleaseConfirmCommand : Command() {
     if (!result) {
       confirmation.sentMessage!!.editMessageEmbeds(
         context.embedTemplates.normal(
-          context.translate("modules.release.embeds.cancelled.description"),
-          context.translate("modules.release.embeds.cancelled.title")
+          context.translate("modules.transfer.embeds.confirmation.embeds.timeout.description"),
+          context.translate("modules.transfer.embeds.confirmation.embeds.timeout.title")
         ).build()
       ).queue()
       return
@@ -88,8 +88,8 @@ object ReleaseConfirmCommand : Command() {
           rewardsMap[randomEV] = rewardsMap[randomEV]!!.plus(1)
         }
 
-        module.bot.database.pokemonRepository.releasePokemon(pokemon, clientSession)
-        module.bot.database.userRepository.releasePokemon(authorUserData, pokemon, clientSession)
+        module.bot.database.pokemonRepository.transferPokemon(pokemon, clientSession)
+        module.bot.database.userRepository.transferPokemon(authorUserData, pokemon, clientSession)
       }
 
       for ((key, value) in rewardsMap) {
@@ -101,19 +101,19 @@ object ReleaseConfirmCommand : Command() {
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.release.embeds.released.description",
+            "modules.transfer.embeds.transferred.description",
             mapOf(
               "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" },
-              "rewards" to rewardsMess.dropLast(2)
+              "rewards" to rewardsMess.dropLast(2).ifEmpty { "Nothing. How sad." }
             )
           ),
-          context.translate("modules.release.embeds.released.title")
+          context.translate("modules.transfer.embeds.transferred.title")
         ).build()
       ).queue()
 
       clientSession.commitTransactionAndAwait()
     }
 
-    context.bot.database.releaseRepository.endRelease(releaseState)
+    context.bot.database.transferRepository.endTransfer(transferState)
   }
 }

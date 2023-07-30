@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.release.commands
+package xyz.pokecord.bot.modules.transfer.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object ReleaseStartCommand : Command() {
+object TransferStartCommand : Command() {
   override val name: String = "start"
 
   @Executor
@@ -12,11 +12,11 @@ object ReleaseStartCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getReleaseState()
-    if (releaseState != null) {
+    val transferState = context.getTransferState()
+    if (transferState != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.alreadyInRelease")
+          context.translate("modules.transfer.errors.alreadyInTransfer")
         ).build()
       ).queue()
       return
@@ -30,12 +30,12 @@ object ReleaseStartCommand : Command() {
       return
     }
 
-    context.bot.database.releaseRepository.createRelease(context.author.id)
+    context.bot.database.transferRepository.createTransfer(context.author.id)
 
     context.reply(
       context.embedTemplates.normal(
-        context.translate("modules.release.embeds.center.releaseStarted.description"),
-        context.translate("modules.release.embeds.center.releaseStarted.title")
+        context.translate("modules.transfer.embeds.start.description"),
+        context.translate("modules.transfer.embeds.start.title")
       ).build()
     ).queue()
   }

@@ -29,7 +29,7 @@ class PokemonRepository(
   private val cache: Cache,
   private val collection: CoroutineCollection<OwnedPokemon>
 ) : Repository(database) {
-  private val releasedPokemonCollection: CoroutineCollection<OwnedPokemon> =
+  private val transferredPokemonCollection: CoroutineCollection<OwnedPokemon> =
     database.database.getCollection("releasedPokemon")
 
   override suspend fun createIndexes() {
@@ -279,8 +279,8 @@ class PokemonRepository(
     collection.updateOne(OwnedPokemon::_id eq pokemon._id, set(OwnedPokemon::nickname setTo pokemon.nickname))
   }
 
-  suspend fun releasePokemon(pokemon: OwnedPokemon, session: ClientSession) {
-    releasedPokemonCollection.insertOne(session, pokemon)
+  suspend fun transferPokemon(pokemon: OwnedPokemon, session: ClientSession) {
+    transferredPokemonCollection.insertOne(session, pokemon)
     collection.deleteOne(session, OwnedPokemon::_id eq pokemon._id)
   }
 

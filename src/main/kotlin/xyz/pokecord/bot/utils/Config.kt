@@ -27,7 +27,7 @@ object Config {
   const val minAuctionTime = 4 * 60 * 60 * 1000L
   const val maxAuctionTime = 30 * 24 * 60 * 60 * 1000L
 
-  const val maxReleaseSessionPokemon = 50
+  const val maxTransferSessionPokemon = 50
 
   val publicNotificationWebhook: String? = System.getenv("PUBLIC_NOTIFICATION_WEBHOOK")
   val donationNotificationWebhook: String? = System.getenv("DONATION_NOTIFICATION_WEBHOOK")

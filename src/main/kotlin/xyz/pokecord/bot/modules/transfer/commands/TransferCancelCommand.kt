@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.release.commands
+package xyz.pokecord.bot.modules.transfer.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object ReleaseCancelCommand : Command() {
+object TransferCancelCommand : Command() {
   override val name: String = "cancel"
 
   @Executor
@@ -12,24 +12,24 @@ object ReleaseCancelCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getReleaseState()
-    if (releaseState == null) {
+    val transferState = context.getTransferState()
+    if (transferState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRelease")
+          context.translate("modules.transfer.errors.notInTransfer")
         ).build()
       ).queue()
       return
     }
 
-    context.bot.database.releaseRepository.endRelease(releaseState)
+    context.bot.database.transferRepository.endTransfer(transferState)
 
     context.reply(
       context.embedTemplates.normal(
         context.translate(
-          "modules.release.embeds.cancelled.description",
+          "modules.transfer.embeds.cancelled.description",
         ),
-        context.translate("modules.release.embeds.cancelled.title")
+        context.translate("modules.transfer.embeds.cancelled.title")
       ).build()
     ).queue()
   }

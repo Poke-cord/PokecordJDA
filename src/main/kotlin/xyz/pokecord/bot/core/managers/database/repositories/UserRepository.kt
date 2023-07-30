@@ -205,8 +205,8 @@ class UserRepository(
     setCacheUser(userData)
   }
 
-  suspend fun releasePokemon(userData: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
-    val targetList = if (pokemon.shiny) userData.releasedShinies else userData.releasedPokemon
+  suspend fun transferPokemon(userData: User, pokemon: OwnedPokemon, clientSession: ClientSession) {
+    val targetList = if (pokemon.shiny) userData.transferredShinies else userData.transferredPokemon
     if (!targetList.contains(pokemon.id)) {
       targetList.add(pokemon.id)
     }
@@ -214,7 +214,7 @@ class UserRepository(
       clientSession,
       User::id eq userData.id,
       combine(
-        addToSet((if (pokemon.shiny) User::releasedShinies else User::releasedPokemon), pokemon.id),
+        addToSet((if (pokemon.shiny) User::transferredShinies else User::transferredPokemon), pokemon.id),
         inc(User::pokemonCount, -1)
       )
     )

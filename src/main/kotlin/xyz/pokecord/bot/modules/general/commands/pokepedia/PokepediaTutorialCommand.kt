@@ -1,12 +1,11 @@
-package xyz.pokecord.bot.modules.general.commands.startup
+package xyz.pokecord.bot.modules.general.commands.pokepedia
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object StartupIntroCommand : Command() {
-  override val name = "Intro"
-  override var aliases = arrayOf("introduction")
+object PokepediaTutorialCommand : Command() {
+  override val name = "Tutorial"
+  override var aliases = arrayOf("guide")
 
   @Executor
   suspend fun execute(
@@ -15,7 +14,7 @@ object StartupIntroCommand : Command() {
     context.reply(
       context.embedTemplates.normal(
         context.translate(
-          "modules.general.commands.startup.description",
+          "modules.general.commands.pokepedia.tutorial.****",
           mapOf(
             "serverLink" to "https://discord.gg/EUYgq3Jub3",
             "inviteLink" to "https://pokecord.zihad.dev/invite",
@@ -23,8 +22,8 @@ object StartupIntroCommand : Command() {
             "tosLink" to "https://sites.google.com/view/pokecord4908/english/terms"
           )
         ),
-        context.translate("modules.general.commands.startup.title")
-      ).setFooter(context.translate("modules.general.commands.startup.footer"))
+        context.translate("modules.general.commands.pokepedia.tutorial.****")
+      ).setFooter(context.translate("modules.general.commands.pokepedia.tutorial.****"))
         .build()
     ).queue()
   }

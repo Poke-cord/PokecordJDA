@@ -1,12 +1,12 @@
-package xyz.pokecord.bot.modules.release.commands
+package xyz.pokecord.bot.modules.transfer.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.release.ReleaseModule
+import xyz.pokecord.bot.modules.transfer.TransferModule
 import xyz.pokecord.bot.utils.Config
 
-object ReleaseRemoveCommand : Command() {
+object TransferRemoveCommand : Command() {
   override val name: String = "remove"
   override var aliases = arrayOf("r")
 
@@ -17,11 +17,11 @@ object ReleaseRemoveCommand : Command() {
   ) {
     if (!context.hasStarted(true)) return
 
-    val releaseState = context.getReleaseState()
-    if (releaseState == null) {
+    val transferState = context.getTransferState()
+    if (transferState == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRelease")
+          context.translate("modules.transfer.errors.notInTransfer")
         ).build()
       ).queue()
       return
@@ -36,10 +36,10 @@ object ReleaseRemoveCommand : Command() {
       return
     }
 
-    if (pokemon.size > Config.maxReleaseSessionPokemon) {
+    if (pokemon.size > Config.maxTransferSessionPokemon) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.release.errors.notInRange")
+          context.translate("modules.transfer.errors.notInRange")
         ).build()
       ).queue()
       return
@@ -63,13 +63,13 @@ object ReleaseRemoveCommand : Command() {
       ).queue()
     } else {
       val authorPokemonText =
-        ReleaseModule.getReleaseStatePokemonText(context, pokemonList)
+        TransferModule.getTransferStatePokemonText(context, pokemonList)
 
       val session = context.bot.database.startSession()
       session.use {
         session.startTransaction()
         pokemonList.forEach {
-          context.bot.database.releaseRepository.removePokemon(releaseState, it._id, session)
+          context.bot.database.transferRepository.removePokemon(transferState, it._id, session)
         }
         session.commitTransactionAndAwait()
       }
@@ -77,12 +77,12 @@ object ReleaseRemoveCommand : Command() {
       context.reply(
         context.embedTemplates.normal(
           context.translate(
-            "modules.release.embeds.center.removePokemon.description",
+            "modules.transfer.embeds.remove.description",
             mapOf(
               "pokemon" to authorPokemonText.joinToString("\n").ifEmpty { "None" }
             )
           ),
-          context.translate("modules.release.embeds.center.removePokemon.title")
+          context.translate("modules.transfer.embeds.remove.title")
         ).build()
       ).queue()
     }

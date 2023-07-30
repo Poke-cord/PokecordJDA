@@ -1,19 +1,19 @@
-package xyz.pokecord.bot.modules.release
+package xyz.pokecord.bot.modules.transfer
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.Bot
 import xyz.pokecord.bot.core.structures.discord.base.Module
-import xyz.pokecord.bot.modules.release.commands.ReleaseCommand
+import xyz.pokecord.bot.modules.transfer.commands.TransferCommand
 
-class ReleaseModule(bot: Bot) : Module(
+class TransferModule(bot: Bot) : Module(
   bot,
-  arrayOf(ReleaseCommand)
+  arrayOf(TransferCommand)
 ) {
-  override val name: String = "Release"
+  override val name: String = "Transfer"
 
   companion object {
-    suspend fun getReleaseStatePokemonText(
+    suspend fun getTransferStatePokemonText(
       context: ICommandContext,
       pokemon: List<OwnedPokemon>
     ): List<String> {

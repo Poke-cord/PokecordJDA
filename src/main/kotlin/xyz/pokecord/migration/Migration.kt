@@ -396,10 +396,10 @@ object Migration {
         val caughtShinies =
           if (it.isArray("caughtShinies")) it.getArray("caughtShinies").toArray()
             .mapNotNull { item -> if (item is BsonInt32) item.value else null } else listOf()
-        val releasedPokemon =
+        val transferredPokemon =
           if (it.isArray("released")) it.getArray("released").toArray()
             .mapNotNull { item -> if (item is BsonInt32) item.value else null } else listOf()
-        val releasedShinies =
+        val transferredShinies =
           if (it.isArray("releasedShinies")) it.getArray("releasedShinies").toArray()
             .mapNotNull { item -> if (item is BsonInt32) item.value else null } else listOf()
 
@@ -459,8 +459,8 @@ object Migration {
             credits,
             gems,
             0,
-            releasedPokemon.toMutableList(),
-            releasedShinies.toMutableList(),
+            transferredPokemon.toMutableList(),
+            transferredShinies.toMutableList(),
             progressPrivate,
             donationTier,
             selected?.toId(),

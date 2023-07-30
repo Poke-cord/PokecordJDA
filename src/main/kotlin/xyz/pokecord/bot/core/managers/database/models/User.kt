@@ -17,8 +17,8 @@ data class User(
   var credits: Int = 1000,
   var gems: Int = 0,
   var tokens: Int = 0,
-  val releasedPokemon: MutableList<Int> = mutableListOf(),
-  val releasedShinies: MutableList<Int> = mutableListOf(),
+  val transferredPokemon: MutableList<Int> = mutableListOf(),
+  val transferredShinies: MutableList<Int> = mutableListOf(),
   var progressPrivate: Boolean = false,
   var donationTier: Int = 0,
   @Contextual var selected: Id<OwnedPokemon>? = null,
@@ -52,8 +52,8 @@ data class User(
         && caughtShinies.isEmpty()
         && credits == 1000
         && gems == 0
-        && releasedPokemon.isEmpty()
-        && releasedShinies.isEmpty()
+        && transferredPokemon.isEmpty()
+        && transferredShinies.isEmpty()
         && !progressPrivate
         && donationTier == 0
         && pokemonCount == 0
