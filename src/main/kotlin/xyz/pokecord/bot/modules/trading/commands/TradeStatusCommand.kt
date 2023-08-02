@@ -67,7 +67,8 @@ object TradeStatusCommand: Command() {
           "modules.trading.commands.status.embeds.status.title",
           "confirmator" to if(authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
         )
-      else null
+      else
+        context.translate("")
 
     context.reply(
       context.embedTemplates

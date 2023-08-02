@@ -302,7 +302,7 @@ modules:
     commands:
       profile:
         embeds:
-          title: "🎪 | {{userTag}}'s Auctions"
+          title: "{{userTag}}'s Auctions"
         errors:
           noResults: |-
             Pokecord looked far and wide, to no avail.
@@ -420,7 +420,7 @@ modules:
         title: Auction \#{{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
       auctions:
         embeds:
-          title: "🎪 | Auction House"
+          title: The 'Cord Auction House
         errors:
           noResults: |-
             You're here! But the auction you searched for is not.
@@ -458,7 +458,7 @@ modules:
     commands:
       profile:
         embeds:
-          title: "🏘️ | {{userTag}}'s Marketplace Listings"
+          title: "{{userTag}}'s Market Listings"
         errors:
           noResults: |-
             Pokecord looked far and wide, to no avail.
@@ -559,7 +559,7 @@ modules:
         title: Listing \#{{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
-          title: "🏘️ | Marketplace"
+          title: The 'Cord Marketplace
         errors:
           noResults: |-
             You're here! But the listing you searched for is not.

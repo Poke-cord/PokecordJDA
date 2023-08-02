@@ -29,7 +29,7 @@ object MarketCommand : ParentCommand() {
         val pokemonIv = listingPokemon.ivPercentage
         val pokemonLevel = listingPokemon.level
         val pokemonName = context.translator.pokemonDisplayName(listingPokemon, false)
-        "|`${it.id}`| **$pokemonName** - Lvl. **$pokemonLevel** - **$pokemonIv** IV - **${context.translator.numberFormat(it.price)}** credits"
+        "|`${it.id}`| **$pokemonName** │ **$pokemonIv** IV @ LVL **$pokemonLevel** │ **${context.translator.numberFormat(it.price)}c**"
       } else null
     }
 
@@ -62,9 +62,7 @@ object MarketCommand : ParentCommand() {
     val templateEmbedBuilder =
       EmbedBuilder()
         .setTitle(
-          context.translate(
-            "modules.market.commands.market.embeds.title"
-          )
+          context.translate("modules.market.commands.market.embeds.title")
         )
         .setColor(EmbedTemplates.Color.GREEN.code)
 
