@@ -26,7 +26,7 @@ class RewardsCommand : Command() {
       val unclaimedCatchRewards = module.bot.database.pokemonRepository.getUnclaimedPokemonCount(context.author.id)
       val catchBreakdown = module.bot.database.pokemonRepository.getSpecificUnclaimedPokemonCount(context.author.id)
       val otherCount = (
-          unclaimedCatchRewards-catchBreakdown.mythicCount.toInt()+catchBreakdown.leggyCount.toInt()+catchBreakdown.ubCount.toInt()+catchBreakdown.psLeggyCount.toInt()
+          unclaimedCatchRewards-(catchBreakdown.mythicCount.toInt()+catchBreakdown.leggyCount.toInt()+catchBreakdown.ubCount.toInt()+catchBreakdown.psLeggyCount.toInt())
           )
 
       if (unclaimedCatchRewards < 1) {
