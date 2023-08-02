@@ -8,6 +8,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 class RewardsCommand : Command() {
   override val name = "rewards"
+  override var aliases = arrayOf("rw", "rws", "reward")
 
   private val catchValues = arrayOf("catch", "pokemon", "c", "p")
   private val allValues = arrayOf("all", "a")
@@ -23,6 +24,10 @@ class RewardsCommand : Command() {
 
     if (action == null) {
       val unclaimedCatchRewards = module.bot.database.pokemonRepository.getUnclaimedPokemonCount(context.author.id)
+      val catchBreakdown = module.bot.database.pokemonRepository.getSpecificUnclaimedPokemonCount(context.author.id)
+      val otherCount = (
+          unclaimedCatchRewards-catchBreakdown.mythicCount.toInt()+catchBreakdown.leggyCount.toInt()+catchBreakdown.ubCount.toInt()+catchBreakdown.psLeggyCount.toInt()
+          )
 
       if (unclaimedCatchRewards < 1) {
         context.reply(
@@ -39,7 +44,11 @@ class RewardsCommand : Command() {
             "modules.profile.commands.rewards.embeds.available.description",
             mapOf(
               "unclaimedCatchRewards" to unclaimedCatchRewards.toString(),
-              "prefix" to context.getPrefix()
+              "mythicCount" to (catchBreakdown.mythicCount.toString()),
+              "legendaryCount" to (catchBreakdown.leggyCount.toString()),
+              "ubCount" to (catchBreakdown.ubCount.toString()),
+              "psLegendaryCount" to (catchBreakdown.psLeggyCount.toString()),
+              "otherCount" to (otherCount.toString()),
             )
           ),
           context.translate(
@@ -92,11 +101,12 @@ class RewardsCommand : Command() {
           context.translate(
             "modules.profile.commands.rewards.embed.fields.catchRewards.value",
             mapOf(
-              "credits" to context.translator.numberFormat(claimedCredits)
+              "credits" to context.translator.numberFormat(claimedCredits),
+              "user" to context.author.asMention
             )
           ),
           false
-        )
+        ).setFooter(context.translate("modules.profile.commands.rewards.embed.footer"))
       }
 
       if (rewardsClaimed < 1) {

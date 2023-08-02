@@ -65,6 +65,53 @@ class PokemonRepository(
   suspend fun getUnclaimedPokemonCount(ownerId: String) =
     collection.countDocuments(and(OwnedPokemon::ownerId eq ownerId, OwnedPokemon::rewardClaimed eq false))
 
+  suspend fun getSpecificUnclaimedPokemonCount(ownerId: String): SpecificPokemonCounts {
+    val mythicCount = collection.countDocuments(
+      and(
+        OwnedPokemon::ownerId eq ownerId,
+        OwnedPokemon::rewardClaimed eq false,
+        OwnedPokemon::id `in` Pokemon.mythicals
+      )
+    )
+
+    val legendaryCount = collection.countDocuments(
+      and(
+        OwnedPokemon::ownerId eq ownerId,
+        OwnedPokemon::rewardClaimed eq false,
+        OwnedPokemon::id `in` Pokemon.legendaries
+      )
+    )
+
+    val ubCount = collection.countDocuments(
+      and(
+        OwnedPokemon::ownerId eq ownerId,
+        OwnedPokemon::rewardClaimed eq false,
+        OwnedPokemon::id `in` Pokemon.ultraBeasts
+      )
+    )
+
+    val psLegendaryCount = collection.countDocuments(
+      and(
+        OwnedPokemon::ownerId eq ownerId,
+        OwnedPokemon::rewardClaimed eq false,
+        OwnedPokemon::id `in` Pokemon.pseudoLegendaries
+      )
+    )
+
+    return SpecificPokemonCounts(
+      mythicCount,
+      legendaryCount,
+      ubCount,
+      psLegendaryCount
+    )
+  }
+  data class SpecificPokemonCounts(
+    val mythicCount: Long,
+    val leggyCount: Long,
+    val ubCount: Long,
+    val psLeggyCount: Long,
+  )
+
   suspend fun updateOwnerId(pokemon: OwnedPokemon, newOwnerId: String, clientSession: ClientSession? = null) {
     val oldOwnerId = pokemon.ownerId
     pokemon.favorite = false

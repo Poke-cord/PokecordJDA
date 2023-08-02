@@ -1088,21 +1088,29 @@ modules:
                             before taking anything!'
       rewards:
         embed:
-          description: The rewards you have claimed are listed below.
+          description: "*Pokecord looked through the credit bank...*"
           fields:
             catchRewards:
-              name: '**Catch Rewards**: {{amount}}'
-              value: '**Credits**: {{credits}}'
-          title: '{{amount}} Rewards were Claimed'
+              name: '**__Catch Rewards__** (**{{amount}}**)'
+              value: |-
+                {{credits}} credits received
+                
+                Congratulations {{user}}!
+          title: 'Rewards Claimed!'
+          footer: The credits have been added to your balance.
         embeds:
           available:
             description: |-
-              All rewards you have earned will be available here.
+              *Since your last rewards claim...*
+              **__{{unclaimedCatchRewards}} Pokémon reward(s__)** remain unclaimed, including:
+              - {{mythicCount}} Mythics;
+              - {{legendaryCount}} Legendaries;
+              - {{ubCount}} Ultra Beasts;
+              - {{psLegendaryCount}} Pseudo Legendaries; and
+              - {{otherCount}} of everything in-between!
 
-              **Catch Rewards**: {{unclaimedCatchRewards}}
-
-              Use `@Pokecord rewards <type of reward>` or `@Pokecord rewards all` to claim rewards!
-            title: '{{totalRewards}} Reward(s) Available'
+              Use `@Pokecord rewards all` to claim rewards.
+            title: 'Unclaimed Rewards Available!'
         errors:
           noPokemonRewards: '**Suggestion**: Try catching more Pokémon to
                         earn catch rewards!'
