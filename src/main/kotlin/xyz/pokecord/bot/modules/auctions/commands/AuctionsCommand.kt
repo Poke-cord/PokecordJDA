@@ -35,7 +35,7 @@ object AuctionsCommand : ParentCommand() {
         val outbid = if (highestBid != null) highestBid.userId != context.author.id else false
         val bidStatus = if (highestBid != null) {
           if (showBids && !outbid) "" else "Top bid @ **${context.translator.numberFormat(highestBid.amount)}c**"
-        } else "Starting bid @ **${context.translator.numberFormat(it.startingBid)}c**"
+        } else "Starting @ **${context.translator.numberFormat(it.startingBid)}c**"
         val outbidStatus = if (showBids && outbid) "Outbid" else ""
         "|`${it.id}`| **$pokemonName** ($pokemonIv IV) │ $outbidStatus $bidStatus │ Ends **${TimeFormat.RELATIVE.after(it.timeLeft)}**"
       } else null
