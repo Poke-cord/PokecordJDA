@@ -4,11 +4,13 @@ import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.Permission
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
+//import xyz.pokecord.bot.modules.staff.StaffCommand
 
 object SetPrefixCommand : Command() {
   override val name = "Prefix"
 
   override var requiredUserPermissions = arrayOf(Permission.ADMINISTRATOR)
+  override var enabled = false
 
   @Executor
   suspend fun execute(
