@@ -70,11 +70,9 @@ object AuctionsCommand : ParentCommand() {
     val templateEmbedBuilder =
       EmbedBuilder()
         .setTitle(
-          context.translate(
-            "modules.auctions.commands.auctions.embeds.title"
-          )
+          context.translate("modules.auctions.commands.auctions.embeds.title")
         )
-        .setColor(EmbedTemplates.Color.GREEN.code)
+        .setColor(EmbedTemplates.Color.YELLOW.code)
 
     val searchOptions =
       PokemonRepository.PokemonSearchOptions(

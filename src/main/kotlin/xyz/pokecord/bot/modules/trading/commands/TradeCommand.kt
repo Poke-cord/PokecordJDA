@@ -85,7 +85,7 @@ object TradeCommand : ParentCommand() {
     if (confirmed) {
       context.bot.database.tradeRepository.createTrade(context.author.id, partner.id)
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.success(
           context.translate("modules.trading.commands.trade.tradeStarted.description"),
           context.translate("modules.trading.commands.trade.tradeStarted.title")
         ).build()

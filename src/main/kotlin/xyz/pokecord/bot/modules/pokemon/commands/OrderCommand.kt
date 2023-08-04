@@ -8,6 +8,8 @@ import xyz.pokecord.bot.utils.PokemonOrder
 class OrderCommand : Command() {
   override val name = "order"
 
+  override var aliases = arrayOf("o")
+
   @Executor
   suspend fun execute(
     context: ICommandContext,
@@ -31,8 +33,13 @@ class OrderCommand : Command() {
 //    }
     val effectiveOrder = if (order == null || order == PokemonOrder.DEFAULT) PokemonOrder.POKEDEX else order
     context.reply(
-      context.embedTemplates.normal(
-        context.translate("modules.pokemon.commands.order.ordering")
+      context.embedTemplates.confirmation(
+        context.translate("modules.pokemon.commands.order.ordering.description"),
+        context.translate("modules.pokemon.commands.order.ordering.title",
+          mapOf(
+            "orderType" to effectiveOrder.toString().lowercase()
+          )
+        )
       ).build()
     ).queue()
     context.bot.backgroundCoroutineScope.launch {
@@ -41,7 +48,12 @@ class OrderCommand : Command() {
       }
       context.reply(
         context.embedTemplates.normal(
-          context.translate("modules.pokemon.commands.order.ordered")
+          context.translate("modules.pokemon.commands.order.ordered.description"),
+          context.translate("modules.pokemon.commands.order.ordered.title",
+            mapOf(
+              "orderType" to effectiveOrder.toString().lowercase()
+            )
+          )
         ).build()
       ).queue()
     }

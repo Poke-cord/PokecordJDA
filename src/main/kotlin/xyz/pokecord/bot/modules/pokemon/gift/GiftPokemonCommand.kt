@@ -147,7 +147,7 @@ object GiftPokemonCommand : Command() {
           }
 
           confirmation.sentMessage!!.editMessageEmbeds(
-            context.embedTemplates.normal(
+            context.embedTemplates.success(
               context.translate(
                 "modules.pokemon.commands.gift.embeds.giftSent.pokemon",
                 mapOf(

@@ -6,6 +6,7 @@ import xyz.pokecord.bot.modules.release.ReleaseModule
 
 object ReleaseStatusCommand : Command() {
   override val name: String = "status"
+  override var aliases = arrayOf("view")
 
   @Executor
   suspend fun execute(

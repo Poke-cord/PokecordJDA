@@ -123,7 +123,7 @@ object TradeConfirmCommand : Command() {
         session.commitTransactionAndAwait()
 
         context.reply(
-          context.embedTemplates.normal(
+          context.embedTemplates.success(
               context.translate(
                 "modules.trading.commands.confirm.embeds.confirmed.description",
                 mapOf(
@@ -146,7 +146,7 @@ object TradeConfirmCommand : Command() {
       context.bot.database.tradeRepository.confirm(tradeState, context.author.id)
 
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.confirmation(
           context.translate("modules.trading.commands.confirm.embeds.partConfirmed.description"),
           context.translate("modules.trading.commands.confirm.embeds.partConfirmed.title")
         ).build()
