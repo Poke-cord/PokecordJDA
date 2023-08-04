@@ -92,7 +92,7 @@ object TradeCommand : ParentCommand() {
       ).queue()
     } else {
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.error(
           context.translate(
             "modules.trading.commands.trade.tradeCancelled.description"),
           context.translate("modules.trading.commands.trade.tradeCancelled.title")

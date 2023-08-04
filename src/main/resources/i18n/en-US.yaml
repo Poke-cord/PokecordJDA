@@ -1060,7 +1060,7 @@ modules:
           **Credits**: {{credits}}
           **Tokens**: {{tokens}}
 
-        title: '{{user}}''s Bag'
+        title: "{{user}}'s Backpack"
       item:
         errors:
           invalidTarget: '**Suggestion**: Try using another item or giving

@@ -34,7 +34,7 @@ class BagCommand : Command() {
 
     if (items.isEmpty()) {
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.menu(
           context.translate(
             "modules.profile.commands.bag.noItemsDescription",
             mapOf(
@@ -54,7 +54,7 @@ class BagCommand : Command() {
       context,
       pageCount,
       {
-        val embed = context.embedTemplates.normal(
+        val embed = context.embedTemplates.menu(
           context.translate(
             "modules.profile.commands.bag.description",
             mapOf(
