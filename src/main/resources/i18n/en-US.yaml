@@ -78,8 +78,8 @@ misc:
         Hey {{user}}! Welcome to {{botUsername}}.
         
         Read and agree to the following to continue.
-        ・ [Terms of Service]({{tosUrl}})
-        ・ [Privacy Policy]({{privacyUrl}})
+        - [Terms of Service]({{tosUrl}})
+        - [Privacy Policy]({{privacyUrl}})
         **By accessing the Service, you agree to abide by our Terms.**
       footer: Seeing this again? We've updated our Terms.
       title: Access of Services Agreement
@@ -143,7 +143,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord | {{version}}"
+      activity: "@Pokecord │ {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -255,7 +255,11 @@ modules:
               React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
       moves:
         embed:
-          title: "Pokémon Moves | Level {{level}} {{pokemon}}"
+          description: |-
+            *Duel other Pokémon with a strategic move layout. Use `@Pokecord moves teach <slot 1-4> <move name>` to learn moves.*
+            
+            **Example usage**: `@Pokecord moves teach 2 hyper beam`
+          title: "Dueling Moves │ Level {{level}} {{pokemon}}"
         teach:
           embed:
             title: A Move has been Taught
@@ -274,11 +278,11 @@ modules:
               Pokecord looked far and wide, to no avail.
               > **Specified move was not found. Search for another move.**
             moveNotSpecified: |-
-              Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
+              Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
               E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotNotSpecified: |-
-              Please follow the following format: `@Pokecord moves teach <slot number 1-4> <move name>`
+              Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
               E.g., `@Pokecord moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotOutOfRange: |-
@@ -417,7 +421,8 @@ modules:
           noAuctionFound: |-
             Pokecord looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
-        title: Auction \#{{auctionId}} | Level {{pokemonLevel}} {{pokemonName}}
+        title: Auction \#{{auctionId}} │ Level {{pokemonLevel}} {{pokemonName}}
+#        footer: "Viewing auction #{{index}} • Caught date" To add at a later date
       auctions:
         embeds:
           title: The 'Cord Auction House
@@ -556,7 +561,7 @@ modules:
           noListingFound: |-
             Pokecord looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
-        title: Listing \#{{listingId}} | Level {{pokemonLevel}} {{pokemonName}}
+        title: Listing \#{{listingId}} │ Level {{pokemonLevel}} {{pokemonName}}
       market:
         embeds:
           title: The 'Cord Marketplace
@@ -603,7 +608,8 @@ modules:
             description: The trade has ended.
           status:
             title: "{{confirmator}} has confirmed the trading session"
-            description: The trade between {{author}} and {{partner}} is pending confirmation.
+            titleNoConfirm: Both parties have not confirmed the trading session
+            description: The trade between {{author}} and {{partner}} is pending finalization.
         errors:
           noPartnerFound:
             description: |-
@@ -756,7 +762,7 @@ modules:
             **Season End**: {{currentSeasonEndTime}}
             **Next vote**... {{nextVoteTime}}!
           footer: Want more rewards? Check in every 12 hours to vote!
-          title: Pokecord Voting | Season {{season}}
+          title: The 'Cord Vote Track S{{season}}
   pokemon:
     commands:
       catch:
@@ -877,8 +883,8 @@ modules:
             > **Gain more credits to purchase a hint.**
       info:
         embed:
-          footer: 'Showing #{{index}} | Caught Date'
-          title: '{{speciesId}} | Level {{level}} {{pokemon}}'
+          footer: "Showing #{{index}} • Caught date"
+          title: "{{speciesId}} │ Level {{level}} {{pokemon}}"
       moveset:
         embed:
           footer: Credits to Dominater & SilverAQ for the movesets.
@@ -907,8 +913,12 @@ modules:
             Pokémon fraud is forbidden.
             > **Exclude :star:\'s, :large_blue_diamond:\'s, and :diamond_shape_with_a_dot_inside:\'s from nicknames.**
       order:
-        ordering: Ordering your Pokémon, please don't use any other command until this is done.
-        ordered: Finished ordering your Pokémon!
+        ordering:
+          title: Ordering Pokémon by {{orderType}}...
+          description: Do not use commands until this process is done.
+        ordered:
+          title: Ordered Pokémon by {{orderType}}
+          description: The ordering process finished successfully.
 #       tooManyPokemon: You must have {{maxPokemonCount}} or less amount of Pokémon in order to be able to use this command.
       pick:
         embed:
@@ -1142,21 +1152,21 @@ modules:
             **Gems**: {{gems}}
             **Credits**: {{credits}}
             **Tokens**: {{tokens}}
-
-            All the items are listed below, flip the page to see more items.
+            
+            *Spend currencies to your heart's desire—or so Pokecord wishes. Items purchasable for gems and tokens on pages 41-42.*
+          title: The 'Cord Shop Counter
         errors:
-          noItemsAvailable: No items available!
+          noItemsAvailable: No items are available for purchase.
         texts:
-          pokecordShop: Pokecord Shop
-          cantBePurchased: "Can't be purchased"
+          cantBePurchased: Not purchasable
           creditsCost: |
-            {{cost}} Credit(s)
+            ***{{cost}}*** *credits*
           gemsCost: |
-            {{cost}} Gem(s)
+            ***{{cost}}*** *gems*
           tokensCost: |
-            {{cost}} Token(s)
+            ***{{cost}}*** *tokens*
           cost: |
-            **Cost: `{{cost}}`**
+            {{cost}}
 
       store:
         embed:

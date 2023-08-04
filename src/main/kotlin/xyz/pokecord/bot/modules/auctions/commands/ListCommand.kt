@@ -119,7 +119,7 @@ object ListCommand : Command() {
           session.commitTransactionAndAwait()
 
           context.reply(
-            context.embedTemplates.normal(
+            context.embedTemplates.success(
               context.translate(
                 "modules.auctions.commands.list.confirmed.description",
                 mapOf(

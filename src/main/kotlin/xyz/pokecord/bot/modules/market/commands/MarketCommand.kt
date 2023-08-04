@@ -64,7 +64,7 @@ object MarketCommand : ParentCommand() {
         .setTitle(
           context.translate("modules.market.commands.market.embeds.title")
         )
-        .setColor(EmbedTemplates.Color.GREEN.code)
+        .setColor(EmbedTemplates.Color.YELLOW.code)
 
     val searchOptions =
       PokemonRepository.PokemonSearchOptions(

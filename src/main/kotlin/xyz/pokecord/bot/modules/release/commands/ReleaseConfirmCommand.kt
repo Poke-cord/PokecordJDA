@@ -9,6 +9,7 @@ import xyz.pokecord.bot.utils.Confirmation
 
 object ReleaseConfirmCommand : Command() {
   override val name: String = "confirm"
+  override var aliases = arrayOf("cf")
 
   @Executor
   suspend fun execute(
@@ -99,7 +100,7 @@ object ReleaseConfirmCommand : Command() {
       }
 
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.success(
           context.translate(
             "modules.release.embeds.released.description",
             mapOf(

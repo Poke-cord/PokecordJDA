@@ -7,10 +7,11 @@ import xyz.pokecord.bot.core.managers.I18n
 
 open class EmbedTemplates {
   enum class Color(val code: Int) {
-    GREEN(0x2ecc71), //Success
+    GREEN(0x23a55a), //Success
     RED(0xf04747), //Error
-    YELLOW(0xf0e365), //Information
-    ORANGE(0xfaa61a) //Pending
+    YELLOW(0xffcc4d), //Large menus (lighter: f0e365)
+    ORANGE(0xfaa61a), //Confirmation
+    BLUE(0x50a5e5) //Information (more vibrant: 00a8fc)
   }
 
   open suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
@@ -25,7 +26,7 @@ open class EmbedTemplates {
     return I18n.translate(null, key, default, *data)
   }
 
-  fun empty() = EmbedBuilder().setColor(Color.YELLOW.code)
+  fun empty() = EmbedBuilder().setColor(Color.BLUE.code)
 
   suspend fun error(description: String, title: String? = null): EmbedBuilder {
     val embedTitle = title ?: translate("misc.embeds.error.title")
@@ -39,6 +40,12 @@ open class EmbedTemplates {
   fun normal(description: String, title: String? = null): EmbedBuilder {
     return empty().setDescription(description).setTitle(title)
   }
+
+  fun success(description: String, title: String? = null) =
+    EmbedBuilder().setColor(Color.GREEN.code).setDescription(description).setTitle(title)
+
+  fun menu(description: String, title: String? = null) =
+    EmbedBuilder().setColor(Color.YELLOW.code).setDescription(description).setTitle(title)
 
   suspend fun progressPrivate(user: User) = error(
     translate("misc.embeds.progressPrivate.description", "user" to user.asMention),

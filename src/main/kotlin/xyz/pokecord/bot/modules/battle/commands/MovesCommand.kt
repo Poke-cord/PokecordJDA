@@ -34,12 +34,14 @@ object MovesCommand : ParentCommand() {
     } ?: emptyList()
 
     context.reply(
-      context.embedTemplates.normal(
-        "",
-        context.translate(
-          "modules.battle.commands.moves.embed.title",
-          "level" to pokemon.level.toString(),
-          "pokemon" to context.translator.pokemonDisplayName(pokemon)
+      context.embedTemplates.menu(
+        context.translate("modules.battle.commands.moves.embed.description"),
+        context.translate("modules.battle.commands.moves.embed.title",
+          mapOf(
+            "level" to pokemon.level.toString(),
+            "pokemon" to context.translator.pokemonDisplayName(pokemon),
+            "speciesId" to pokemon.data.formattedSpeciesId
+          )
         ),
       )
         .setThumbnail(pokemon.imageUrl)
@@ -47,9 +49,9 @@ object MovesCommand : ParentCommand() {
           context.translate("modules.battle.commands.moves.texts.availableMoves"),
           availableMoves.map {
             if (it == 0) {
-              "`${context.translate("modules.battle.commands.moves.texts.noMove")}`"
+              "- ${context.translate("modules.battle.commands.moves.texts.noMove")}"
             } else {
-              "`${MoveData.getById(it)?.name ?: context.translate("modules.battle.commands.moves.texts.unknownMove")}`"
+              "- ${MoveData.getById(it)?.name ?: context.translate("modules.battle.commands.moves.texts.unknownMove")}"
             }
           }.joinToString("\n").ifEmpty { context.translate("modules.battle.commands.moves.texts.noMoves") },
           true
@@ -58,9 +60,9 @@ object MovesCommand : ParentCommand() {
           context.translate("modules.battle.commands.moves.texts.learnedMoves"),
           pokemon.moves.map {
             if (it == 0) {
-              "`${context.translate("modules.battle.commands.moves.texts.noMove")}`"
+              "- ${context.translate("modules.battle.commands.moves.texts.noMove")}"
             } else {
-              "`${MoveData.getById(it)?.name ?: context.translate("modules.battle.commands.moves.texts.unknownMove")}`"
+              "- ${MoveData.getById(it)?.name ?: context.translate("modules.battle.commands.moves.texts.unknownMove")}"
             }
           }.joinToString("\n").ifEmpty { context.translate("modules.battle.commands.moves.texts.noMoves") },
           true

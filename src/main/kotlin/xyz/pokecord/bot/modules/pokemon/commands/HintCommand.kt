@@ -85,7 +85,7 @@ class HintCommand : Command() {
         ).await()
         module.bot.database.userRepository.incCredits(userData, -10)
         context.reply(
-          context.embedTemplates.normal(
+          context.embedTemplates.success(
             context.translate("modules.pokemon.commands.hint.embed.description"),
             context.translate("modules.pokemon.commands.hint.embed.title")
           ).build()

@@ -150,7 +150,7 @@ object BuyCommand : Command() {
             }
 
             context.reply(
-              context.embedTemplates.normal(
+              context.embedTemplates.success(
                 context.translate(
                   "modules.market.commands.buy.confirmed.description",
                   mapOf(

@@ -28,7 +28,7 @@ class ShopCommand : Command() {
 
     if (filteredItems.isEmpty()) {
       context.reply(
-        context.embedTemplates.normal(
+        context.embedTemplates.error(
           context.translate("modules.economy.commands.shop.errors.noItemsAvailable"),
           context.translate("modules.economy.commands.shop.texts.pokecordShop")
         ).build()
@@ -66,7 +66,7 @@ class ShopCommand : Command() {
           true
         )
       }
-      val embed = context.embedTemplates.normal(
+      val embed = context.embedTemplates.menu(
         context.translate(
           "modules.economy.commands.shop.embed.description",
           mapOf(
@@ -75,11 +75,12 @@ class ShopCommand : Command() {
             "tokens" to context.translator.numberFormat(userData.tokens)
           )
         ),
-      ).setAuthor(
-        context.translate("modules.economy.commands.shop.texts.pokecordShop"),
-        null,
-        "https://cdn.discordapp.com/attachments/719524226708668446/720936022539632680/unknown-removebg-preview.png"
-      )
+        context.translate("modules.economy.commands.shop.embed.title")
+      )//.setAuthor(
+//        context.translate("modules.economy.commands.shop.texts.pokecordShop"),
+//        null,
+//        "https://cdn.discordapp.com/attachments/719524226708668446/720936022539632680/unknown-removebg-preview.png"
+//      )
       fields::forEach { field ->
         embed.addField(field)
       }

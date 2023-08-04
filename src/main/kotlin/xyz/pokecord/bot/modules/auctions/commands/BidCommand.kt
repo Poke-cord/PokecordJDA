@@ -213,7 +213,7 @@ object BidCommand : Command() {
         }
 
         context.reply(
-          context.embedTemplates.normal(
+          context.embedTemplates.success(
             context.translate(
               "modules.auctions.commands.bid.confirmed.description",
               mapOf(

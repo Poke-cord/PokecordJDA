@@ -88,7 +88,7 @@ object UnlistCommand : Command() {
           }
 
           context.reply(
-            context.embedTemplates.normal(
+            context.embedTemplates.success(
               context.translate(
                 "modules.auctions.commands.unlist.confirmed.description",
                 mapOf(

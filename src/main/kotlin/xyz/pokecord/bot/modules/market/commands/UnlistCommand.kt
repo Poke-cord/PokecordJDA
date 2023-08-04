@@ -74,7 +74,7 @@ object UnlistCommand : Command() {
           }
 
           context.reply(
-            context.embedTemplates.normal(
+            context.embedTemplates.success(
               context.translate(
                 "modules.market.commands.unlist.confirmed.description",
                 mapOf(

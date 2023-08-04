@@ -8,6 +8,7 @@ import xyz.pokecord.bot.utils.Confirmation
 
 object TradeStatusCommand: Command() {
   override val name = "status"
+  override var aliases = arrayOf("view")
 
   @Executor
   suspend fun execute(
@@ -63,12 +64,13 @@ object TradeStatusCommand: Command() {
 
     val statusTitle =
       if(authorTradeData.confirmed || partnerTradeData.confirmed)
-        context.translate(
-          "modules.trading.commands.status.embeds.status.title",
-          "confirmator" to if(authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
+        context.translate("modules.trading.commands.status.embeds.status.title",
+          mapOf(
+            "confirmator" to if(authorTradeData.confirmed) authorUserData.tag.toString() else partnerUserData.tag.toString()
+          )
         )
       else
-        context.translate("")
+        context.translate("modules.trading.commands.status.embeds.status.titleNoConfirm")
 
     context.reply(
       context.embedTemplates

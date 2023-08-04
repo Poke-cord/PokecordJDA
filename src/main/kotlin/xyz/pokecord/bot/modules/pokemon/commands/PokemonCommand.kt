@@ -66,7 +66,7 @@ class PokemonCommand : Command() {
             "user" to targetUser.asTag
           )
         )
-        .setColor(EmbedTemplates.Color.GREEN.code)
+        .setColor(EmbedTemplates.Color.YELLOW.code)
     if (count < 1) {
       context.reply(
         templateEmbedBuilder.setDescription(context.translate("modules.pokemon.commands.pokemon.errors.noSearchResults"))
