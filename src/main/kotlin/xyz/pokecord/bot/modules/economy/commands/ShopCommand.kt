@@ -29,8 +29,7 @@ class ShopCommand : Command() {
     if (filteredItems.isEmpty()) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.economy.commands.shop.errors.noItemsAvailable"),
-          context.translate("modules.economy.commands.shop.texts.pokecordShop")
+          context.translate("misc.errors.noSearchResults")
         ).build()
       ).queue()
       return

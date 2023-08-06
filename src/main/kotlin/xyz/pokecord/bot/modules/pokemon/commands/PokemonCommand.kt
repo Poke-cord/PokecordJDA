@@ -69,7 +69,7 @@ class PokemonCommand : Command() {
         .setColor(EmbedTemplates.Color.YELLOW.code)
     if (count < 1) {
       context.reply(
-        templateEmbedBuilder.setDescription(context.translate("modules.pokemon.commands.pokemon.errors.noSearchResults"))
+        templateEmbedBuilder.setDescription(context.translate("misc.errors.noSearchResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter(context.translate("misc.embeds.error.footer")).build()
       ).queue()
       return

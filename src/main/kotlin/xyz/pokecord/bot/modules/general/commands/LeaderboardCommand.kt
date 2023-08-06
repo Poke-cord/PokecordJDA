@@ -21,7 +21,7 @@ class LeaderboardCommand : Command() {
           entries.mapIndexed { i, it ->
             "${i + 1}. ${it.tag?.dropLast(5) ?: "N/A"} - ${context.translator.numberFormat(it.credits)}"
           }.joinToString("\n"),
-          "Global Leaderboard by Amount of Credits"
+          "Global Pokéboard by Credit Amount"
         )
           .build()
       ).queue()
@@ -32,7 +32,7 @@ class LeaderboardCommand : Command() {
           entries.mapIndexed { i, it ->
             "${i + 1}. ${it.tag.dropLast(5)} - ${it.pokemonCount}"
           }.joinToString("\n"),
-          "Global Leaderboard by Number of Pokémon"
+          "Global Pokéboard by Pokémon Count"
         )
           .build()
       ).queue()

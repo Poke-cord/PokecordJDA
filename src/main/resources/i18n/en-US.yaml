@@ -122,6 +122,9 @@ misc:
       noPokemonName: |-
         It was decided you can't say nothing.
         > **Specify a Pokémon by its name.**
+    noSearchResults: |-
+      Pokecord looked far and wide, to no avail.
+      > **No results found as per your search query.**
     notASpawnChannel: |-
       You can't catch here—at least not yet.
       > **Catch in spawn channels or create new ones.**
@@ -935,10 +938,6 @@ modules:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
       pokemon:
-        errors:
-          noSearchResults: |-
-            Pokecord looked far and wide, to no avail.
-            > **No results found as per your search query.**
         embeds:
           title: "{{user}}'s Pokémon Collection"
       select:
@@ -1142,9 +1141,9 @@ modules:
         embed:
           description: |-
             **The 'Cord Shop Counter**
-            ><><><><><><><><
+            --------------------------
             - {{item}} (x{{amount}})
-            ><><><><><><><><
+            --------------------------
             Thank you for your purchase.
           title: Purchase Receipt
           footer: The items have been added to your backpack.
@@ -1155,10 +1154,8 @@ modules:
             **Credits**: {{credits}}
             **Tokens**: {{tokens}}
             
-            *Spend currencies to your heart's desire—or so Pokecord wishes. Items purchasable for gems and tokens on pages 41-42.*
+            *Items purchasable for gems and tokens are available on pages 41-42.*
           title: The 'Cord Shop Counter
-        errors:
-          noItemsAvailable: No items are available for purchase.
         texts:
           cantBePurchased: Not purchasable
           creditsCost: |
@@ -1169,7 +1166,6 @@ modules:
             ***{{cost}}*** *tokens*
           cost: |
             {{cost}}
-
       store:
         embed:
           oldOrderDescription: |-
