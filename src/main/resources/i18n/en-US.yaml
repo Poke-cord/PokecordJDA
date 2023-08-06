@@ -1143,10 +1143,10 @@ modules:
             **The 'Cord Shop Counter**
             --------------------------
             - {{item}} (x{{amount}})
+            (-{{cost}} {{type}})
             --------------------------
-            Thank you for your purchase.
+            View items in your backpack.
           title: Purchase Receipt
-          footer: The items have been added to your backpack.
       shop:
         embed:
           description: |

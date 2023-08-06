@@ -125,13 +125,20 @@ class BuyCommand : Command() {
       return
     }
 
+    val currencyType =
+      if (itemData.usesGems) ("gems")
+      else if (itemData.usesTokens) ("tokens")
+      else ("credits")
+
     context.reply(
       context.embedTemplates.normal(
         context.translate(
           "modules.economy.commands.buy.embed.description",
           mapOf(
             "amount" to effectiveAmount.toString(),
-            "item" to itemData.name
+            "item" to itemData.name,
+            "cost" to cost.toString(),
+            "type" to currencyType
           )
         ),
         context.translate("modules.economy.commands.buy.embed.title")
