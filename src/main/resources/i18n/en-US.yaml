@@ -813,7 +813,7 @@ modules:
               **Sender**: {{sender}}
               **Receiver**: {{receiver}}
 
-              **Name**: {{pokemon}}
+              **Pokémon**: {{pokemon}}
               **Level**: {{level}}
               **IV Percent**: {{ivPercentage}}
 
@@ -827,7 +827,7 @@ modules:
             pokemon: |-
               {{sender}} has gifted you a Pokémon!
 
-              **Name**: {{pokemon}}
+              **Pokémon**: {{pokemon}}
               **Level**: {{level}}
               **IV Percent**: {{ivPercentage}}
             title: You Received a Gift
@@ -841,7 +841,7 @@ modules:
             pokemon: |-
               **Receiver**: {{receiver}}
 
-              **Name**: {{pokemon}}
+              **Pokémon**: {{pokemon}}
               **Level**: {{level}}
               **IV Percent**: {{ivPercentage}}
 
@@ -864,7 +864,7 @@ modules:
         confirmation:
           embed:
             description: |-
-              Please confirm you want to purchase a Pokémon hint.
+              Confirm purchase for a Pokémon hint.
 
               React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
             title: Hint Request Pending
@@ -877,7 +877,7 @@ modules:
         errors:
           cancelled:
             description: Your Pokémon hint request was cancelled.
-            title: A Hint has been Cancelled
+            title: Hint Generation Cancelled
           dmFailed: |-
             Pokecord couldn't DM you and returned credits.
             > **Allow Pokecord#4908 to DM you.**
@@ -890,17 +890,18 @@ modules:
           title: "{{speciesId}} │ Level {{level}} {{pokemon}}"
       moveset:
         embed:
+          title: Pokémon Movesets │ {{pokemon}}
           footer: Credits to Dominater & SilverAQ for the movesets.
         errors:
-          noMoveset: No moveset available for the specified Pokémon yet. Please check back later!
+          noMoveset: No moveset available for the specified Pokémon.
           noPokemonName: No Pokémon name specified.
       nickname:
-        reset: A Nickname has been Reset
-        updated: A Nickname has been Updated
+        reset: Nickname Reset
+        updated: Nickname Updated
         embed:
           description: |-
-            **Pokémon Name**: {{pokemon}}
-            **Nickname**: {{nickname}}
+            **Display Name**: {{nickname}}
+            **Pokémon**: {{pokemon}}
             **Level**: {{level}}
             **IV Percent**: {{ivPercentage}}
 
@@ -933,7 +934,7 @@ modules:
           > **Try catching Pokémon instead of picking again.**
       pokedex:
         embed:
-          title: '{{speciesId}} | {{pokemon}} | Pokédex Info'
+          title: '{{speciesId}} │ {{pokemon}} │ Pokédex Info'
         footers:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
@@ -948,18 +949,18 @@ modules:
           inBattle: You can't select another Pokémon while you are in battle!
         embed:
           description: |-
-            **Name**: {{pokemon}}
+            **Display Name**: {{pokemon}}
             **Level**: {{level}}
             **IV Percent**: {{ivPercentage}}
             
             Your selected Pokémon has been updated!
-          title: A Pokémon has been Selected
+          title: Selected Pokémon Updated
       start:
         description: |-
           Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
           
           **Get Started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
-          **Example**: `@Pokecord pick torchic`
+          **Example usage**: `@Pokecord pick torchic`
         startingTwice: |-
           Pokecord couldn't find a time machine.
           > **Try catching Pokémon instead of starting again.**
@@ -1145,7 +1146,7 @@ modules:
             - {{item}} (x{{amount}})
             (-{{cost}} {{type}})
             --------------------------
-            View items in your backpack.
+            View items in your backpack.mo
           title: Purchase Receipt
       shop:
         embed:

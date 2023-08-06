@@ -14,6 +14,7 @@ class MovesetCommand : Command() {
   suspend fun execute(
     context: ICommandContext,
     @Argument(name = "pokemon") pokemonName: String?
+
   ) {
     if (pokemonName == null) {
       context.reply(
@@ -47,20 +48,30 @@ class MovesetCommand : Command() {
     }
 
     val suggestedMovesHeader = "**${context.translate("misc.texts.suggestedMoves")}**"
+    val baseStats = "**${context.translate("misc.texts.baseStats")}**"
 
     context.reply(
       context.embedTemplates.normal(
-        suggestedMovesHeader + "\n" + moves.joinToString("\n") + "\n\n" +
+        suggestedMovesHeader + "\n" + moves.joinToString("\n") + "\n\n" + baseStats + "\n"  +
             """
-          **${context.translate("misc.texts.baseStats")}**
-          **${context.translator.stat(Stat.hp)}**: ${Stat.hp.getBaseValue(pokemon.id)}
-          **${context.translator.stat(Stat.attack)}**: ${Stat.attack.getBaseValue(pokemon.id)}
-          **${context.translator.stat(Stat.defense)}**: ${Stat.defense.getBaseValue(pokemon.id)}
-          **${context.translator.stat(Stat.specialAttack)}**: ${Stat.specialAttack.getBaseValue(pokemon.id)}
-          **${context.translator.stat(Stat.specialDefense)}**: ${Stat.specialDefense.getBaseValue(pokemon.id)}
-          **${context.translator.stat(Stat.speed)}**: ${Stat.speed.getBaseValue(pokemon.id)}
+          `${context.translate("misc.texts.hp").padEnd(7)}| ${Stat.hp.getBaseValue(pokemon.id).toString().padEnd(4)}`
+          `${context.translate("misc.texts.attack").padEnd(7)}| ${
+              Stat.attack.getBaseValue(pokemon.id).toString().padEnd(4)
+            }`
+          `${context.translate("misc.texts.defense").padEnd(7)}| ${
+              Stat.defense.getBaseValue(pokemon.id).toString().padEnd(4)
+            }`
+          `${context.translate("misc.texts.specialAttack").padEnd(7)}| ${
+              Stat.specialAttack.getBaseValue(pokemon.id).toString().padEnd(4)
+            }`
+          `${context.translate("misc.texts.specialDefense").padEnd(7)}| ${
+              Stat.specialDefense.getBaseValue(pokemon.id).toString().padEnd(4)
+            }`
+          `${context.translate("misc.texts.speed").padEnd(7)}| ${
+              Stat.speed.getBaseValue(pokemon.id).toString().padEnd(4)
+            }`
         """.trimIndent(),
-        "${pokemon.formattedSpeciesId} | ${context.translator.pokemonName(pokemon)} | Moveset"
+        "Pokémon Movesets │ ${context.translator.pokemonName(pokemon)}"
       )
         .setThumbnail(pokemon.imageUrl)
         .setFooter(context.translate("modules.pokemon.commands.moveset.embed.footer"))
