@@ -146,7 +146,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord │ {{version}}"
+      activity: "@Pokecord • {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
