@@ -1,5 +1,17 @@
 misc:
   command_descriptions:
+    auctions:
+      auctions: View all ongoing auctions. Accepts search and filters.
+      "auctions.list": List Pokémon for auction. Include start and increment bid, and duration.
+      "auctions.bid": Bid credits on an ongoing auction.
+      "auctions.info": View specific auctioned Pokémon stats. Include auction ID.
+      "auctions.notify": Toggle auction-related DM notifications.
+      "auctions profile": View ongoing auctions that you have started.
+      "auctions.unlist": Take your Pokémon off auction. Auction must have no bids.
+    battle:
+      battle: Duel other users in epic one-versus-one Pokémon combat.
+      moves: View all teachable moves your Pokémon can learn.
+      teach: Teach your Pokémon up to four moves to use in battle.
     developer:
       eval: Evaluate JavaScript/Kotlin code.
     economy:
@@ -9,7 +21,7 @@ misc:
     general:
       faq: Search frequently asked questions by keyword.
       help: Displays all commands with descriptions.
-      invite: Invite Pokecord to other servers.
+      invite: Invite Pokecord to other servers and view quick links.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
       set: Miscellaneous setting configurations.
@@ -19,6 +31,12 @@ misc:
       "set.spawn": Sets/removes a server spawn channel.
       "set.level": Sets the server level-up messages channel.
       vote: Links Pokecord's vote page and reveals current day of vote season.
+    market:
+      market: View all market listings. Accepts search and filters.
+      "market.buy": Purchase market listings for credits.
+      "market.info": View specific listed Pokémon stats. Include listing ID.
+      "market.profile": View your currently listed Pokémon on market.
+      "market.unlist": Take your Pokémon off the market.
     pokemon:
       catch: Catch 'em all! Or someone else will.
       favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
@@ -39,6 +57,26 @@ misc:
       profile: Displays user information.
       rewards: Displays/claim all available rewards.
       start: Displays Pokecord's welcome message. This should also be your first command.
+    staff:
+      blacklist: Prevent users from executing Pokecord commands.
+      blacklists: View a full list of all blacklisted users.
+      giveredeem: Grant a specific redeem to a user.
+      giverole: Grant a secific dono role to a user.
+      logs: View auction, market, trade, and gift logs for a given user.
+      maintenance: Toggle Pokecord in or out of Maintenance Break.
+      shards: Check the status of Pokecord's shards.
+      show: View advanced spawn channel details.
+    trading:
+      trade: Initiate a trade session with another user.
+      "trade.add": Add to your trade offer. Specify either Pokémon or credits.
+      "trade.add.credits": Add credits to your trade offer.
+      "trade.add.pokemon": Add Pokémon to your trade offer.
+      "trade.cancel": Cancel your current trade session.
+      "trade.confirm": Confirm your current trade session.
+      "trade.remove": Remove from your trade offer. Specify either Pokémon or credits.
+      "trade.remove.credits": Remove credits from your trade offer.
+      "trade.remove.pokemon": Remove Pokémon from your trade offer.
+      "trade.status": View the current offerings from both trade parties.
   checks:
     hasStarted:
       embed:
@@ -51,11 +89,11 @@ misc:
     timeoutFooter: Reactions will automatically time out in 30 seconds.
   embeds:
     error:
-      footer: "Support is available at discord.gg/pkcord."
+      footer: Support is available at discord.gg/pkcord.
       title: Something went wrong...
     evolved:
       description: |-
-        **Name**: {{pokemon}}
+        **Display Name**: {{pokemon}}
         **Evolved Into**: {{evolvedPokemon}}
         **Level**: {{level}}
 
@@ -63,7 +101,7 @@ misc:
       title: A Pokémon has Evolved
     levelUp:
       description: |-
-        **Name**: {{pokemon}}
+        **Display Name**: {{pokemon}}
         **Level**: {{level}}
 
         Congratulations {{user}}!
@@ -454,14 +492,16 @@ modules:
             **Auction Item**: {{pokemon}}
             **Final Bid**: {{amount}}
             
-            Your auction has now ended.
+            Congratulations!
+          footer: The credits have been added to your balance.
         auctionWon:
-          title: You have Won an Auction
+          title: You Won an Auction
           description: |-
             **Auction Item**: {{pokemon}}
             **Your Bid**: {{amount}}
             
-            The credits have been added to your balance.
+            Congratulations!
+          footer: The Pokémon was added to your collection.
   market:
     commands:
       profile:
@@ -1146,7 +1186,7 @@ modules:
             - {{item}} (x{{amount}})
             (-{{cost}} {{type}})
             --------------------------
-            View items in your backpack.mo
+            View items in your backpack.
           title: Purchase Receipt
       shop:
         embed:
