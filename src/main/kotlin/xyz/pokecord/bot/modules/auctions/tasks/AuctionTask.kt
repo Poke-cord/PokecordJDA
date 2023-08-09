@@ -59,7 +59,7 @@ object AuctionTask : Task() {
                     )
                   ),
                   embedTemplates.translate("modules.auctions.tasks.checker.auctionSold.title")
-                ).build()
+                ).setFooter("modules.auctions.tasks.checker.auctionSold.footer").build()
               ).queue()
 
               jdaWinnerChannel.sendMessageEmbeds(
@@ -72,7 +72,7 @@ object AuctionTask : Task() {
                     )
                   ),
                   embedTemplates.translate("modules.auctions.tasks.checker.auctionWon.title")
-                ).build()
+                ).setFooter("modules.auctions.tasks.checker.auctionWon.footer").build()
               ).queue()
             } catch (_: Exception) {
             }
