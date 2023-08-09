@@ -24,7 +24,8 @@ data class ItemData(
 
     private val disabledCategoryIds = arrayOf(8, 11, 21, 32, 33, 34, 36, 39, 40, 41)
     private val disabledItemIds = arrayOf<Int>()
-    private val unusableItemIds = arrayOf(206)
+    // Everstone, Void Stone
+    private val unusableItemIds = arrayOf(206, 10030001)
 
     init {
       val stream = ItemData::class.java.getResourceAsStream("/data/items.json")
