@@ -37,7 +37,7 @@ class FAQCommand : Command() {
             val translation = faq.translations.find { translation -> translation.language == language }
               ?: faq.translations.find { translation -> translation.language == I18n.Language.EN_US }!!
             context.embedTemplates.normal(
-              "```\n${translation.answer}\n```\nKeywords:\n```\n${
+              "\n${translation.answer}\n\n**Keywords**:\n```\n${
                 listOf(
                   faq.id,
                   *faq.keywords.toTypedArray()
