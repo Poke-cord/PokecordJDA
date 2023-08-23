@@ -21,8 +21,8 @@ class LeaderboardCommand : Command() {
           entries.mapIndexed { i, it ->
             "${i + 1}. ${it.tag?.dropLast(5) ?: "N/A"} - ${context.translator.numberFormat(it.credits)}"
           }.joinToString("\n"),
-          "Global Pokéboard by Credit Amount"
-        )
+          context.translate("modules.general.commands.leaderboard.titles.credits")
+        ).setFooter(context.translate("modules.general.commands.leaderboard.footer"))
           .build()
       ).queue()
     } else {
@@ -32,8 +32,8 @@ class LeaderboardCommand : Command() {
           entries.mapIndexed { i, it ->
             "${i + 1}. ${it.tag.dropLast(5)} - ${it.pokemonCount}"
           }.joinToString("\n"),
-          "Global Pokéboard by Pokémon Count"
-        )
+          context.translate("modules.general.commands.leaderboard.titles.pokemon")
+        ).setFooter(context.translate("modules.general.commands.leaderboard.footer"))
           .build()
       ).queue()
     }

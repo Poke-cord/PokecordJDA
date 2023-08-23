@@ -44,12 +44,12 @@ misc:
       catch: Catch 'em all! Or someone else will.
       favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
       hint: Reveals the first letter of the spawned Pokémon name.
-      info: Displays individual Pokémon current stats, IVs, and EVs.
-      move: Displays individual move information.
+      info: Displays selected Pokémon's current stats, IVs, and EVs.
+      move: Displays specified move's information.
       moveset: Recommends movesets for legendary and mythical Pokémon.
-      nickname: Sets/resets the name of a Pokémon. Pokémon are searchable by nickname.
-      order: Orders your Pokémon collection by any available filter.
-      pick: Allows you to start their Pokecord journey with a Pokémon.
+      nickname: Sets/resets nickname of selected Pokémon. Pokémon are searchable by nickname.
+      order: Orders your Pokémon collection by specified filter. Defaults to Pokédex.
+      pick: Allows you to start your Pokecord journey with a Pokémon.
       pokedex: Displays Pokémon base stats and general information.
       pokemon: Displays a Pokémon collection with filters and searchability.
       release: Transfers Pokémon to Professor Zihadikarp.
@@ -766,6 +766,11 @@ modules:
             > See an overview of our bot and review the rules!
           footer: Thank you for choosing Pokecord!
           title: Pokecord Quick Links
+      leaderboard:
+        titles:
+          credits: Global Pokéboard by Credit Amount
+          pokemon: Global Pokéboard by Pokémon Count
+        footer: This Pokéboard updates at 12 AM GMT daily.
       ping:
         embed:
           description: |-
