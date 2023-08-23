@@ -6,14 +6,16 @@ misc:
       "auctions.bid": Bid credits on an ongoing auction.
       "auctions.info": View specific auctioned Pokémon stats. Include auction ID.
       "auctions.notify": Toggle auction-related DM notifications.
-      "auctions profile": View ongoing auctions that you have started.
+      "auctions.profile": View ongoing auctions that you have started.
       "auctions.unlist": Take your Pokémon off auction. Auction must have no bids.
     battle:
       battle: Duel other users in epic one-versus-one Pokémon combat.
       moves: View all teachable moves your Pokémon can learn.
-      teach: Teach your Pokémon up to four moves to use in battle.
+      "moves.teach": Teach your Pokémon up to four moves to use in battle.
     developer:
       eval: Evaluate JavaScript/Kotlin code.
+      parse-entities: What an old command.. What does it do?
+      mock: Bahahahahahahahahaha :P
     economy:
       buy: Purchase items from the shop.
       shop: Displays various in-game items.
@@ -33,6 +35,7 @@ misc:
       vote: Links Pokecord's vote page and reveals current day of vote season.
     market:
       market: View all market listings. Accepts search and filters.
+      "market.list": List Pokémon on the market. Include purchase price.
       "market.buy": Purchase market listings for credits.
       "market.info": View specific listed Pokémon stats. Include listing ID.
       "market.profile": View your currently listed Pokémon on market.
@@ -54,9 +57,12 @@ misc:
     profile:
       bag: Displays all currency and items collected.
       item: Consumes an item from your inventory. It's like eating a chocolate bar.
+      "item.give": Allows your selected Pokémon to hold items with unique perks.
+      "item.take": Revokes any item your selected Pokémon is holding.
       profile: Displays user information.
+      "profile.pokedex": Displays all Pokémon registered to Pokédex. Includes shinies.
       rewards: Displays/claim all available rewards.
-      start: Displays Pokecord's welcome message. This should also be your first command.
+      start: Displays Pokecord's welcome message. This should be your first command.
     staff:
       blacklist: Prevent users from executing Pokecord commands.
       blacklists: View a full list of all blacklisted users.
