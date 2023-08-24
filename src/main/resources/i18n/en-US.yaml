@@ -190,7 +190,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord • {{version}}"
+      activity: "@Pokecord • {{version}}p"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -1147,6 +1147,14 @@ modules:
                             server](https://discord.gg/EUYgq3Jub3) to resolve this issue!'
             notHolding: '**Suggestion**: Try giving an item to your Pokémon
                             before taking anything!'
+      profile:
+        embed:
+          info:
+            description: Pokemon Count {{count}} (does not seem global)
+            footer: Placeholder
+            title: "{{user}}'s Pokecord Info"
+        errors:
+
       rewards:
         embed:
           description: "*Pokecord looked through the credit bank...*"
