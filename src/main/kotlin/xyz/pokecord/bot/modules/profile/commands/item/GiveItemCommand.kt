@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
 object GiveItemCommand : Command() {
   override val name = "give"
 
-  override var aliases = arrayOf("g")
+  override var aliases = arrayOf("g", "hold")
 
   @Executor
   suspend fun execute(

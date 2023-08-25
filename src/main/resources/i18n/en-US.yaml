@@ -112,6 +112,8 @@ misc:
 
         Congratulations {{user}}!
       title: A Pokémon has Leveled Up
+    pokemonObtained:
+      footer: The Pokémon has been added to your collection.
     progressPrivate:
       description: |-
         Behold! {{user}}'s progress is hidden from others.
@@ -132,6 +134,7 @@ misc:
         This transaction is prohibited.
         > **DO NOT ATTEMPT THIS TRANSACTION AGAIN.**
       title: Illegal Transaction Cancelled
+
   errors:
     botInteraction:
       You interacted with a bot. Wait, you can't.
@@ -827,7 +830,6 @@ modules:
             **IV Percent**: {{ivPercentage}}
 
             Congratulations {{user}}!
-          footer: The Pokémon has been added to your collection.
           title: A Pokémon has been Caught
         errors:
           incorrectNameProvided: |-

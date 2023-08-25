@@ -97,7 +97,7 @@ class CatchCommand : Command() {
             )
           )
             .setColor(pokemon.species.color.colorCode)
-            .setFooter(context.translate("modules.pokemon.commands.catch.embed.footer"))
+            .setFooter(context.translate("misc.embeds.pokemonObtained.footer"))
             .build()
         ).queue {
           caught.labels(
