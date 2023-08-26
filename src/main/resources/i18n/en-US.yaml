@@ -1214,7 +1214,7 @@ modules:
             **Credits**: {{credits}}
             **Tokens**: {{tokens}}
             
-            *Items purchasable for gems and tokens are available on pages 41-42.*
+            *Items purchasable for gems and tokens are available on pages 27-28.*
           title: The 'Cord Shop Counter
         texts:
           cantBePurchased: Not purchasable
@@ -1357,7 +1357,7 @@ items:
     embed:
       description: |-
         *Pokecord reached into the depths of the PC...*
-        Your **{{pokemon}}** is level {{level}} and is {{ivPercentage}} IV!
+        Your **{{pokemon}}** is level **{{level}}** and is **{{ivPercentage}}** IV!
         
         Congratulations {{user}}!
       title: You opened a(n) {{redeem}}...

@@ -10,6 +10,7 @@ object ItemFactory {
     items.putAll(EVItem.evsMap)
     items.putAll(RedeemItem.redeemMap)
     items[EventsRedeemItem.id] = EventsRedeemItem
+    items[ChaosRedeemItem.id] = ChaosRedeemItem
 
     items.putAll(
       ItemData.getByCategoryId(EvolutionItem.categoryId).map {
