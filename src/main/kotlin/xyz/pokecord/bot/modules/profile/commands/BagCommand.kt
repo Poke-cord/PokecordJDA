@@ -49,7 +49,7 @@ class BagCommand : Command() {
       return
     }
 
-    val pageCount = ceil((items.size.toDouble() / 15)).toInt()
+    val pageCount = ceil((items.size.toDouble() / 9)).toInt()
     EmbedPaginator(
       context,
       pageCount,
@@ -65,7 +65,7 @@ class BagCommand : Command() {
           ),
           context.translate("modules.profile.commands.bag.title", "user" to targetUser.asTag)
         )
-        items.drop(it * 15).take(15).forEach(embed::addField)
+        items.drop(it * 9).take(9).forEach(embed::addField)
         embed
       }
     ).start()
