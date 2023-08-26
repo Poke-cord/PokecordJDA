@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.SpecialEvents
 import kotlin.random.Random
 
-object EventsRedeemItem : Item(10009999, false) {
+object EventsRedeemItem : Item(10000007, false) {
   const val categoryId = RedeemItem.categoryId
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
@@ -47,7 +47,7 @@ object EventsRedeemItem : Item(10009999, false) {
     id,
     "events-redeem",
     "Events Redeem",
-    RedeemItem.categoryId,
+    categoryId,
     250,
     0,
     0,
