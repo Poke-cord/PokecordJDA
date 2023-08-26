@@ -1150,8 +1150,8 @@ modules:
       profile:
         embed:
           info:
-            description: Pokemon Count {{count}} (does not seem global)
-            footer: Placeholder
+            description: Stat posting is currently unavailable.
+            footer: Some stats may update sooner than others.
             title: "{{user}}'s Pokecord Info"
         errors:
 
