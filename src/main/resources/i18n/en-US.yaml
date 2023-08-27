@@ -1313,12 +1313,12 @@ items:
       unknownMachine: An Unknown Machine has been Used
   mints:
     embed:
-      title: You used a Nature Mint...
       description: |-
         *You watch as your Pokémon's nature changes...*
         Your **{{pokemon}}** is now **{{nature}}** in nature.
         
         Congratulations {{user}}!
+      title: You used a Nature Mint...
     errors:
       invalidTarget: |-
         That didn't work quite right.
@@ -1328,30 +1328,30 @@ items:
         > **Nature mints may not be used in battle.**
   glimmeringCandy:
     embed:
-      title: You consumed a Glimmering Candy...
       description: |-
         *You feel the power of the Pokecord shiny gods...*
         Your current shiny rate has increased to **1/{{rate}}**.
         
         Congratulations {{user}}!
+      title: You consumed a Glimmering Candy...
       footer: Shiny rate resets to 1/4908 upon shiny catch.
   natureCandy:
     embed:
-      title: You used a Nature Candy...
       description: |-
         *You feel the power of the Pokecord RNG gods...*
         You give into the RNG and receive a **{{natureMint}}**.
         
         Congratulations {{user}}!
+      title: You used a Nature Candy...
       footer: The mint was added to your inventory.
   rareCandy:
     embed:
-      title: You used Rare Candies...
       description: |-
         *You watch as your Pokémon's level increases...*
         Your **{{pokemon}}** is now level **{{level}}**.
         
         Congratulations {{user}}!
+      title: You used Rare Candies...
     errors:
       alreadyMaxLevel: |-
         Your {{pokemon}} is already at max level.

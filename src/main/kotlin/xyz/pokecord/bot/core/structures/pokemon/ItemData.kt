@@ -22,7 +22,7 @@ data class ItemData(
   companion object {
     var items: MutableList<ItemData>
 
-    private val disabledCategoryIds = arrayOf(8, 11, 21, 32, 33, 34, 36, 39, 40, 41, 1002)
+    private val disabledCategoryIds = arrayOf(8, 11, 21, 32, 33, 34, 36, 39, 40, 41)
     private val disabledItemIds = arrayOf<Int>()
     // Everstone, Void Stone
     private val unusableItemIds = arrayOf(206, 10030001)
