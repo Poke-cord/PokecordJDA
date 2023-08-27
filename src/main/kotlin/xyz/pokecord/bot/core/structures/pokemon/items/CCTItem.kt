@@ -8,7 +8,7 @@ import xyz.pokecord.bot.utils.Confirmation
 object CCTItem : Item(10010001, false) {
   const val categoryId = 1001
 
-  private const val usageCost = 100_000
+  private const val usageCost = 45_000
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val tokenCount = args.firstOrNull()?.toIntOrNull() ?: 1
@@ -17,16 +17,14 @@ object CCTItem : Item(10010001, false) {
     val confirmation = Confirmation(context)
     val confirmed = confirmation.result(
       context.embedTemplates.normal(
-        context.translate(
-          "items.cct.confirmation.description",
-          "count" to tokenCount.toString(),
-          "credits" to cost.toString(),
+        context.translate("items.cct.confirmation.description",
+          mapOf(
+            "count" to tokenCount.toString(),
+            "credits" to cost.toString()
+          )
         ),
-        context.translate(
-          "items.cct.confirmation.title",
-        )
+        context.translate("items.cct.confirmation.title")
       ),
-      true
     )
 
     if (confirmed) {
@@ -49,9 +47,7 @@ object CCTItem : Item(10010001, false) {
         return UsageResult(
           false,
           context.embedTemplates.error(
-            context.translate(
-              "items.cct.errors.notEnoughCCT"
-            )
+            context.translate("items.cct.errors.notEnoughCCT")
           )
         )
       }
@@ -82,7 +78,8 @@ object CCTItem : Item(10010001, false) {
     return UsageResult(
       false,
       context.embedTemplates.error(
-        context.translate("items.cct.errors.cancelled")
+        context.translate("items.cct.errors.cancelled.description"),
+        context.translate("items.cct.errors.cancelled.title")
       )
     )
   }
