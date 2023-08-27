@@ -41,7 +41,7 @@ object ChaosRedeemItem : Item(10000006, false) {
     "chaos-redeem",
     "Chaos Redeem",
     categoryId,
-    100,
+    50,
     0,
     0,
     true
