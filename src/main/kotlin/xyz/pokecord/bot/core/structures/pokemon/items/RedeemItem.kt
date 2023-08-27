@@ -21,7 +21,7 @@ class RedeemItem(
     if (pokemonName.isEmpty()) {
       return UsageResult(
         false,
-        context.embedTemplates.error(context.translate("items.redeem.errors.noPokemonName"))
+        context.embedTemplates.error(context.translate("misc.errors.missingArguments.noPokemonName"))
       )
     }
     val pokemon = Pokemon.getByName(pokemonName)

@@ -80,8 +80,7 @@ class EVItem(id: Int, val type: String) : Item(id) {
             "points" to count.toString()
           )
         ),
-        context.translate(
-          "items.ev.embed.title",
+        context.translate("items.ev.embed.title",
           mapOf(
             "vitamin" to evItemData.itemName
           )
