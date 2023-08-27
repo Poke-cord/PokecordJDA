@@ -193,7 +193,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord • {{version}}p"
+      activity: "@Pokecord • {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -1337,7 +1337,7 @@ items:
       footer: Shiny rate resets to 1/4908 upon shiny catch.
   natureCandy:
     embed:
-      title: You offered Nature Candy...
+      title: You used a Nature Candy...
       description: |-
         *You feel the power of the Pokecord RNG gods...*
         You give into the RNG and receive a **{{natureMint}}**.
@@ -1421,4 +1421,3 @@ items:
     description: |-
       Pokecord says this isn't a consumable item.
       > **Use `@Pokecord item give` or use another item.**
-    title: Item Unusable
