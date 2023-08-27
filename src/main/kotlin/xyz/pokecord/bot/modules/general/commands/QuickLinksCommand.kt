@@ -1,12 +1,11 @@
 package xyz.pokecord.bot.modules.general.commands
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-class InviteCommand : Command() {
-  override val name = "Invite"
-  override var aliases = arrayOf("inv", "donate", "support")
+class QuickLinksCommand : Command() {
+  override val name = "QuickLinks"
+  override var aliases = arrayOf("l", "link", "links", "ql", "qls", "quicklink", "quick link", "quick links", "inv", "donate", "support")
 
   @Executor
   suspend fun execute(

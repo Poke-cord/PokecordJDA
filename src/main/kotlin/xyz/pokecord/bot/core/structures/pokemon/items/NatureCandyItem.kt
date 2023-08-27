@@ -16,7 +16,12 @@ object NatureCandyItem : Item(10010002, false) {
     return UsageResult(
       true,
       context.embedTemplates.normal(
-        context.translate("items.natureCandy.embed.description", "natureMint" to randomNatureMint.data.name),
+        context.translate("items.natureCandy.embed.description",
+          mapOf(
+            "natureMint" to randomNatureMint.data.name,
+            "user" to context.author.asMention
+          )
+        ),
         context.translate("items.natureCandy.embed.title")
       )
     )

@@ -56,11 +56,11 @@ object RareCandyItem : Item(50, false) {
     return UsageResult(
       false,
       context.embedTemplates.normal(
-        context.translate(
-          "items.rareCandy.embed.description",
+        context.translate("items.rareCandy.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(pokemon),
-            "level" to pokemon.level.toString()
+            "level" to pokemon.level.toString(),
+            "user" to context.author.asMention
           )
         ),
         context.translate("items.rareCandy.embed.title")

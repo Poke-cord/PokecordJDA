@@ -21,7 +21,7 @@ class RedeemItem(
     if (pokemonName.isEmpty()) {
       return UsageResult(
         false,
-        context.embedTemplates.error(context.translate("items.redeem.errors.noPokemonName"))
+        context.embedTemplates.error(context.translate("misc.errors.missingArguments.noPokemonName"))
       )
     }
     val pokemon = Pokemon.getByName(pokemonName)
@@ -97,9 +97,10 @@ class RedeemItem(
     Common(10000000, "common-redeem", "Common Redeem", 100),
     Rare(10000001, "rare-redeem", "Rare Redeem", 125),
     Epic(10000002, "epic-redeem", "Epic Redeem", 175),
-    Legendary(10000003, "legendary-redeem", "Legendary Redeem", 200),
-    Fabled(10000004, "fabled-redeem", "Fabled Redeem", 250),
-    Chromatic(10000005, "chromatic-redeem", "Chromatic Redeem", 150),
+    Chromatic(10000003, "chromatic-redeem", "Chromatic Redeem", 150),
+    Legendary(10000004, "legendary-redeem", "Legendary Redeem", 200),
+    Fabled(10000005, "fabled-redeem", "Fabled Redeem", 250)
+
   }
 
   companion object {

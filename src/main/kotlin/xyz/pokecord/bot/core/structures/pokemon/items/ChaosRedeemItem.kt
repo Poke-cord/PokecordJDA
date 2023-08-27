@@ -2,27 +2,20 @@ package xyz.pokecord.bot.core.structures.pokemon.items
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
-import xyz.pokecord.bot.core.structures.pokemon.SpecialEvents
+import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import kotlin.random.Random
 
-object EventsRedeemItem : Item(10000007, false) {
+object ChaosRedeemItem : Item(10000006, false) {
   const val categoryId = RedeemItem.categoryId
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
-    val events = SpecialEvents.getCurrentEvents()
-    val eventPokemon = events.flatMap { it.customPokemon.values }.flatten()
+    val pokemon = Pokemon.getById(Random.nextInt(1, Pokemon.maxId + 1))
 
-    val randomEventPokemon = eventPokemon.randomOrNull()
-      ?: return UsageResult(
-        false,
-        context.embedTemplates.error(
-          context.translate("items.redeem.errors.noCurrentEvents")
-        )
-      )
-
-    val shiny = Random.nextInt(100) < 2
     val ownedPokemon =
-      context.bot.database.userRepository.givePokemon(context.getUserData(), randomEventPokemon.id, shiny = shiny)
+      context.bot.database.userRepository.givePokemon(
+        context.getUserData(),
+        pokemon!!.id
+        )
 
     return UsageResult(
       true,
@@ -30,7 +23,7 @@ object EventsRedeemItem : Item(10000007, false) {
         context.translate(
           "items.redeem.embed.description",
           mapOf(
-            "pokemon" to randomEventPokemon.name,
+            "pokemon" to pokemon.name,
             "level" to ownedPokemon.level.toString(),
             "ivPercentage" to ownedPokemon.ivPercentage,
             "user" to context.author.asMention
@@ -45,10 +38,10 @@ object EventsRedeemItem : Item(10000007, false) {
 
   val itemData = ItemData(
     id,
-    "events-redeem",
-    "Events Redeem",
+    "chaos-redeem",
+    "Chaos Redeem",
     categoryId,
-    250,
+    100,
     0,
     0,
     true

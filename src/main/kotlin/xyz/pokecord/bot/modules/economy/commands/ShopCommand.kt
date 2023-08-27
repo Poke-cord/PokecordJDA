@@ -39,8 +39,8 @@ class ShopCommand : Command() {
 
     val multiplier = userData.getShopDiscount()
 
-    val embedPaginator = EmbedPaginator(context, ceil(filteredItems.size / 6.0).toInt(), {
-      val fields = filteredItems.drop(it * 6).take(6).map { itemData ->
+    val embedPaginator = EmbedPaginator(context, ceil(filteredItems.size / 9.0).toInt(), {
+      val fields = filteredItems.drop(it * 9).take(9).map { itemData ->
         val cost = when {
           itemData.usesGems -> context.translate(
             "modules.economy.commands.shop.texts.gemsCost",

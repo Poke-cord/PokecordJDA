@@ -23,7 +23,7 @@ misc:
     general:
       faq: Search frequently asked questions by keyword.
       help: Displays all commands with descriptions.
-      invite: Invite Pokecord to other servers and view quick links.
+      quicklinks: View quick links including Pokecord's invite, donations, and more.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
       set: Miscellaneous setting configurations.
@@ -161,13 +161,13 @@ misc:
       > **Enter a valid amount.**
     missingArguments:
       noUser: |-
-        The question is not what, but who.
+        Pokecord says you missed or mistook a detail.
         > **Check user mentioned or specify one.**
       noPokemon: |-
-        It was decided you can't say nothing
+        Pokecord says you missed a detail.
         > **Specify a Pokémon by collection ID.**
       noPokemonName: |-
-        It was decided you can't say nothing.
+        Pokecord says you missed a detail.
         > **Specify a Pokémon by its name.**
     noSearchResults: |-
       Pokecord looked far and wide, to no avail.
@@ -193,7 +193,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord • {{version}}"
+      activity: "@Pokecord • {{version}}p"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -1149,6 +1149,17 @@ modules:
                             server](https://discord.gg/EUYgq3Jub3) to resolve this issue!'
             notHolding: '**Suggestion**: Try giving an item to your Pokémon
                             before taking anything!'
+      profile:
+        embed:
+          info:
+            description: |-
+              More stats will be added later.
+              
+              **Shiny Rate**: 1/{{rate}}
+
+            footer: Some stats may update sooner than others.
+            title: "{{user}}'s Pokecord Info"
+#        errors: add some later
       rewards:
         embed:
           description: "*Pokecord looked through the credit bank...*"
@@ -1208,7 +1219,7 @@ modules:
             **Credits**: {{credits}}
             **Tokens**: {{tokens}}
             
-            *Items purchasable for gems and tokens are available on pages 41-42.*
+            *Items purchasable for gems and tokens are available on pages 27-28.*
           title: The 'Cord Shop Counter
         texts:
           cantBePurchased: Not purchasable
@@ -1302,56 +1313,91 @@ items:
       unknownMachine: An Unknown Machine has been Used
   mints:
     embed:
-      title: A Nature Mint has been Used
-      description: Your **{{pokemon}}** now has the nature **{{nature}}**!
+      title: You used a Nature Mint...
+      description: |-
+        *You watch as your Pokémon's nature changes...*
+        Your **{{pokemon}}** is now **{{nature}}** in nature.
+        
+        Congratulations {{user}}!
     errors:
-      invalidTarget: '**Suggestion**: Try using another nature mint or using
-                        the specified nature mint on a different Pokémon!'
-      inBattle: You can't use a nature mint during a battle!
+      invalidTarget: |-
+        That didn't work quite right.
+        > **Use a different mint or select another Pokémon.**
+      inBattle: |-
+        Pokecord smells a hint of trickery.
+        > **Nature mints may not be used in battle.**
   glimmeringCandy:
     embed:
-      title: A Glimmering Candy was Used
-      description: Your shiny chance has been increased until the next shiny.
+      title: You consumed a Glimmering Candy...
+      description: |-
+        *You feel the power of the Pokecord shiny gods...*
+        Your current shiny rate has increased to **1/{{rate}}**.
+        
+        Congratulations {{user}}!
+      footer: Shiny rate resets to 1/4908 upon shiny catch.
   natureCandy:
     embed:
-      title: A Nature Candy was Used
-      description: Congratulations, you received a **{{natureMint}}**!
+      title: You offered Nature Candy...
+      description: |-
+        *You feel the power of the Pokecord RNG gods...*
+        You give into the RNG and receive a **{{natureMint}}**.
+        
+        Congratulations {{user}}!
+      footer: The mint was added to your inventory.
   rareCandy:
     embed:
-      title: Rare Candy was Used
-      description: Your **{{pokemon}}** is now at **Level {{level}}**.
+      title: You used Rare Candies...
+      description: |-
+        *You watch as your Pokémon's level increases...*
+        Your **{{pokemon}}** is now level **{{level}}**.
+        
+        Congratulations {{user}}!
     errors:
-      alreadyMaxLevel: Your **{{pokemon}}** is already at max level!
+      alreadyMaxLevel: |-
+        Your {{pokemon}} is already at max level.
+        > **Try selecting another Pokémon to level.**
   cct:
     embed:
-      title: "Credit Conversion Token was Used"
-      description: "**{{cost}}** credits has been converted to **{{token}}** token(s)."
+      description: |-
+        **Credits Converted**: {{cost}}
+        **Tokens Received**: {{token}}
+        
+        The conversion finished successfully.
+      title: Consume CCT Confirmed
+      footer: The tokens were added to your balance.
     confirmation:
-      title: "Credit Conversion Token Usage Confirmation"
-      description: |
-        Using **{{count}}** Credit Conversion Tokens will consume **{{credits}}** credits in exchange of **{{count}}** tokens.
-        Are you sure you want to continue?
+      description: |-
+        **Credits to Convert**: {{credits}}
+        **Tokens to Receive**: {{count}}
+        
+        React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+      title: Consume CCT Confirmation
     errors:
       notEnoughCredits: |-
-        You don't have enough credits to use this item.
-        Required Credits: **{{cost}}**
-      notEnoughCCT: "You don't have enough Credit Conversion Tokens."
-      cancelled: "Credit Conversion Token usage has been cancelled."
+        Got spare credits lying around?
+        > **Gain a total of {{cost}} credits to use this item.**
+      notEnoughCCT: |-
+        Pokecord says get more Credit Conversion Tokens.
+        > **Use `@Pokecord vote` to obtain CCTs on select days.**
+      cancelled:
+        description: The Credit Conversion Token was not consumed.
+        title: Consume CCT Cancelled
   credits:
     embed:
       title: Credits Received!
       description: You received **{{credits}}** credits from the credits package!
   redeem:
     errors:
-      disallowedPokemon: '**Suggestion**: Try redeeming a Pokémon you
-                    can get with your redeem!'
-      noPokemonName: '**Suggestion**: Try specifying a Pokémon name
-                    to redeem!'
-      noCurrentEvents: 'There are no ongoing events right now, try again later!'
+      disallowedPokemon: |-
+        You can't redeem this Pokémon with this type of redeem.
+        > **See `@Pokecord faq redeems` for further detail.**
+      noCurrentEvents: |-
+        There are no ongoing events right now.
+        > **Use this redeem during an event.**
     embed:
       description: |-
         *Pokecord reached into the depths of the PC...*
-        Your **{{pokemon}}** is level {{level}} and is {{ivPercentage}} IV!
+        Your **{{pokemon}}** is level **{{level}}** and is **{{ivPercentage}}** IV!
         
         Congratulations {{user}}!
       title: You opened a(n) {{redeem}}...
@@ -1364,14 +1410,15 @@ items:
         Too many {{stat}} vitamins!
         > **Pokémon may only have 252 EVs in a single stat.**
     embed:
-      title: "{{vitamin}} Vitamin was Used" # I guess it needs quotes if it starts with {
+      title: You used {{vitamin}} Vitamins... # I guess it needs quotes if it starts with {
       description: |-
-        **Name**: {{pokemon}} 
+        **Pokémon**: {{pokemon}} 
         **Stat Buffed**: {{statName}} 
         **EVs Applied**: {{points}}
         
-        Congratulations!
+        The vitamins were applied successfully.
   unusable:
-    description: '**Suggestion**: Try using `@Pokecord give` or use another
-                      item!'
-    title: An Item is Unusable
+    description: |-
+      Pokecord says this isn't a consumable item.
+      > **Use `@Pokecord item give` or use another item.**
+    title: Item Unusable

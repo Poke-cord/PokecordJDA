@@ -37,7 +37,8 @@ class NatureMintItem(
           "items.mints.embed.description",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(selectedPokemon),
-            "nature" to targetNature.name.name
+            "nature" to targetNature.name.name,
+            "user" to context.author.asMention
           )
         ),
         context.translate("items.mints.embed.title"),
