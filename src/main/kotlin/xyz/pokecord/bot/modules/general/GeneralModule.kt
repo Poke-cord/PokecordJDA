@@ -11,7 +11,7 @@ class GeneralModule(bot: Bot) : Module(
   arrayOf(
     HelpCommand(),
     PingCommand(),
-    InviteCommand(),
+    QuickLinksCommand(),
     FAQCommand(),
     LeaderboardCommand(),
     VoteCommand(),
