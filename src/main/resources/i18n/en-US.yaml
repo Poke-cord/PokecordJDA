@@ -23,7 +23,7 @@ misc:
     general:
       faq: Search frequently asked questions by keyword.
       help: Displays all commands with descriptions.
-      invite: Invite Pokecord to other servers and view quick links.
+      quicklinks: View quick links including Pokecord's invite, donations, and more.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
       set: Miscellaneous setting configurations.
