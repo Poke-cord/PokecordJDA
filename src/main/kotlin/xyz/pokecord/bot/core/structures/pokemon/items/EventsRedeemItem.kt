@@ -39,7 +39,7 @@ object EventsRedeemItem : Item(10000007, false) {
         context.translate(
           "items.redeem.embed.title", "redeem" to data.name
         ),
-      )
+      ).setFooter(context.translate("misc.embeds.pokemonObtained.footer"))
     )
   }
 
