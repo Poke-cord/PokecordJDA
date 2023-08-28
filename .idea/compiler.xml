@@ -13,6 +13,6 @@
       <entry name="!?*.aj" />
       <entry name="!?*.lang" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="15" />
   </component>
 </project>
