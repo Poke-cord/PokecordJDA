@@ -21,7 +21,8 @@ class PokemonModule(bot: Bot) : Module(
     MovesetCommand(),
     MoveCommand(),
     PokedexCommand(),
-    OrderCommand()
+    OrderCommand(),
+    breedPokemonCommand()
   ),
   arrayOf(
     SpawnerEvent(),
