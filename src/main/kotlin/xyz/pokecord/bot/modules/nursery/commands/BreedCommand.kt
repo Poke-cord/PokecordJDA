@@ -80,5 +80,18 @@ class BreedCommand : Command() {
     return gson.fromJson(jsonString, Array<Pokemon>::class.java).toList()
 
   }
+  fun canBreedWith(other: Pokemon): Boolean {
 
-}
+    // Check if in the same egg group
+    if(this.eggGroup != other.eggGroup) {
+      return false
+    }
+
+    // Check if opposite genders
+    if(this.gender == other.gender) {
+      return false
+    }
+    return true
+  }
+
+  }
