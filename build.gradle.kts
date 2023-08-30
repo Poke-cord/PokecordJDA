@@ -40,6 +40,7 @@ dependencies {
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
 
+  implementation ("com.google.code.gson:gson:2.9.0")
   implementation("ch.qos.logback:logback-classic:$logbackVersion")
   implementation("io.sentry:sentry-logback:$sentryLogbackVersion")
 

@@ -1,36 +1,59 @@
 package xyz.pokecord.bot.modules.nursery.commands
 
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.nursery.commands.PokemonBreeder
 import xyz.pokecord.bot.api.ICommandContext
+import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+import xyz.pokecord.bot.utils.PokemonResolvable
+import java.io.File
+import com.google.gson.Gson
 
 class BreedCommand : Command() {
   override val name = "breed"
   suspend fun execute(
 
     context: ICommandContext,
-    @Argument  (name = "pokemon") pokemonName: String?,
-    @Argument  (name = "pokemon") pokemonName2: String?
+    @Argument   pokemonName: PokemonResolvable?,
+    @Argument   partnerName: PokemonResolvable?,
   ) {
-    if (pokemonName == null) {
+
+    if (pokemonName == null || partnerName == null) {
+      context.reply(
+        context.embedTemplates.error(context.translate("modules.pokemon.commands.pick.noNameProvided")).build()
+      ).queue()
+      return
+    }
+
+    val pokemon = Pokemon.getByName(pokemonName.toString())
+    val pokemon2 = Pokemon.getByName(partnerName.toString())
+
+    if (pokemon == null || pokemon2 == null) {
       context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
         .queue()
       return
     }
-    else if (pokemonName2 == null) {
-      context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
-        .queue()
-      return
-    }
+ else {
+      val pokemonNameSearch = pokemonName.toString()
+      val partnerNameSearch = partnerName.toString()
+      val pokemonData = readJson("/data/pokemon.json")
+      val pokemonObj = pokemonData.find { it.name == pokemonNameSearch }
+      val partnerObj = pokemonData.find { it.name == partnerNameSearch }
 
-    val pokemon1Id = args[0]
-    val pokemon2Id = args[1]
+// Get the speciesId
+      val speciesId = pokemonObj?.speciesId
+      val partnerSpcId = partnerObj?.speciesId
 
-    // Lookup pokemon
-    val pokemon1 = pokemonStorage.getPokemon(pokemon1Id)
-    val pokemon2 = pokemonStorage.getPokemon(pokemon2Id)
+      if(speciesId != null && partnerSpcId != null) {
+        // do something with speciesId
+      }
+        else
+       {
+        // Pokemon not found
+      }}
 
-    if(!pokemon1.canBreedWith(pokemon2)) {
+
+
+
+    if(!pokemon.canBreedWith(pokemon2)) {
       respond {
         content = "These pokemon are not compatible for breeding!"
       }
@@ -46,4 +69,16 @@ class BreedCommand : Command() {
       content = "You bred a new ${newPokemon.name}!"
     }
   }
+
+  fun readJson(path: String): List<Pokemon> {
+
+    // Read the file
+    val jsonString = File(path).readText()
+
+    // Parse JSON into Pokemon list
+    val gson = Gson()
+    return gson.fromJson(jsonString, Array<Pokemon>::class.java).toList()
+
+  }
+
 }
