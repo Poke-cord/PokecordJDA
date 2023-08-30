@@ -12,8 +12,8 @@ class BreedCommand : Command() {
   suspend fun execute(
 
     context: ICommandContext,
-    @Argument   pokemonName: PokemonResolvable?,
-    @Argument   partnerName: PokemonResolvable?,
+    @Argument   pokemonName: String?,
+    @Argument   partnerName: String?,
   ) {
 
     if (pokemonName == null || partnerName == null) {
@@ -23,10 +23,10 @@ class BreedCommand : Command() {
       return
     }
 
-    val pokemon = Pokemon.getByName(pokemonName.toString())
-    val pokemon2 = Pokemon.getByName(partnerName.toString())
+    val pokemon = Pokemon.getByName(pokemonName)
+    val partner = Pokemon.getByName(partnerName)
 
-    if (pokemon == null || pokemon2 == null) {
+    if (pokemon == null || partner == null) {
       context.reply(context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build())
         .queue()
       return
@@ -50,10 +50,14 @@ class BreedCommand : Command() {
         // Pokemon not found
       }}
 
+    val pokemonResolvable = PokemonResolvable(pokemon)
+    val partnerResolvable = PokemonResolvable(partner)
+    val resolvedPokemon = pokemonResolvable.resolve()
+    val resolvedPartner = partnerResolvable.resolve()
 
 
 
-    if(!pokemon.canBreedWith(pokemon2)) {
+    if(!pokemon.canBreedWith(partner)) {
       respond {
         content = "These pokemon are not compatible for breeding!"
       }
