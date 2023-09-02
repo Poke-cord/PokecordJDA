@@ -9,6 +9,7 @@ import com.google.gson.Gson
 
 class BreedCommand : Command() {
   override val name = "breed"
+  @Executor
   suspend fun execute(
 
     context: ICommandContext,
@@ -50,28 +51,28 @@ class BreedCommand : Command() {
         // Pokemon not found
       }}
 
-    val pokemonResolvable = PokemonResolvable(pokemon)
-    val partnerResolvable = PokemonResolvable(partner)
-    val resolvedPokemon = pokemonResolvable.resolve()
-    val resolvedPartner = partnerResolvable.resolve()
+   // val pokemonResolvable = PokemonResolvable(pokemon)
+   // val partnerResolvable = PokemonResolvable(partner)
+   // val resolvedPokemon = pokemonResolvable.resolve()
+  //  val resolvedPartner = partnerResolvable.resolve()
 
 
 
-    if(!pokemon.canBreedWith(partner)) {
-      respond {
-        content = "These pokemon are not compatible for breeding!"
-      }
+   // if(!pokemon.canBreedWith(partner)) {
+   //   respond {
+    //    content = "These pokemon are not compatible for breeding!"
+    //  }
       return
     }
-    val newPokemon = PokemonBreeder.breed(pokemon1, pokemon2)
+    //val newPokemon = PokemonBreeder.breed(pokemon1, pokemon2)
 
     // Save new pokemon
-    pokemonStorage.savePokemon(newPokemon)
+   // pokemonStorage.savePokemon(newPokemon)
 
     // Send confirmation message
-    respond {
-      content = "You bred a new ${newPokemon.name}!"
-    }
+  //  respond {
+  //    content = "You bred a new ${newPokemon.name}!"
+   // }
   }
 
   fun readJson(path: String): List<Pokemon> {
@@ -87,15 +88,15 @@ class BreedCommand : Command() {
   fun canBreedWith(other: Pokemon): Boolean {
 
     // Check if in the same egg group
-    if(this.eggGroup != other.eggGroup) {
-      return false
-    }
+  //  if(this.eggGroup != other.eggGroup) {
+   //   return false
+   // }
 
     // Check if opposite genders
-    if(this.gender == other.gender) {
-      return false
-    }
+   // if(this.gender == other.gender) {
+   //   return false
+   // }
     return true
-  }
+  //}
 
   }

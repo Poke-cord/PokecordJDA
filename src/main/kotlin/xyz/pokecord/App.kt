@@ -36,9 +36,9 @@ object App {
       Migration.main(args)
     } else {
       try {
-        val token = System.getenv("BOT_TOKEN")
+        val token = System.getenv("BOT_TOKEN") ?: "MTE0Njc1MzI1MTYzMTQ0ODEzNA.GPWG9C.33LL2fWCM1L9x8tA3dnbVMQ1I4CNe_EDafcfNE"
         val topggToken = System.getenv("TOPGG_TOKEN")
-        val encryptionKey = System.getenv("ENCRYPTION_KEY")
+        val encryptionKey = System.getenv("ENCRYPTION_KEY") ?: "ADH"
         if (token.isNullOrBlank()) {
           logger.error("Token was not provided. Exiting...")
           exitProcess(1)

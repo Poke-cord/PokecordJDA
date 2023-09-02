@@ -38,7 +38,7 @@ class Cache {
     val clusterServersData = System.getenv("REDIS_CLUSTERS")
     val sentinelAddressesData = System.getenv("REDIS_SENTINEL_ADDRESSES")
     val sentinelMasterName = System.getenv("REDIS_SENTINEL_MASTER_NAME")
-    val redisUrl = System.getenv("REDIS_URL")
+    val redisUrl = System.getenv("REDIS_URL") ?: "redis://localhost:6379/"
     val redisPassword = System.getenv("REDIS_PASSWORD")
 
     val config = Config()

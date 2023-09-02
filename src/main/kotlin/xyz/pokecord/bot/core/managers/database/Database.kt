@@ -57,7 +57,7 @@ class Database(cache: Cache) {
   val tradeRepository: TradeRepository
 
   init {
-    val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb://localhost/main")
+    val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb+srv://ADH:8032160ammy@cluster0.vpyplhr.mongodb.net/")
     client = KMongo.createClient(connectionString).coroutine
     database = client.getDatabase(connectionString.database ?: "main")
 

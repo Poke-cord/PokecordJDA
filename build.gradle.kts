@@ -40,7 +40,6 @@ dependencies {
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
 
-  implementation ("com.google.code.gson:gson:2.9.0")
   implementation("ch.qos.logback:logback-classic:$logbackVersion")
   implementation("io.sentry:sentry-logback:$sentryLogbackVersion")
 
@@ -77,7 +76,7 @@ dependencies {
   implementation("io.ktor:ktor-server-core:$ktorVersion")
   implementation("io.ktor:ktor-server-jetty:$ktorVersion")
   implementation("io.ktor:ktor-auth:$ktorVersion")
-
+  implementation ("com.google.code.gson:gson:2.9.0")
   implementation("io.ktor:ktor-serialization:$ktorVersion")
 
   implementation("io.prometheus:simpleclient:$prometheusVersion")

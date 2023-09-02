@@ -52,8 +52,8 @@ class HTTPServer(val bot: Bot) {
     val username: String,
   )
 
-  private val topggSecret = System.getenv("TOPGG_SECRET") ?: throw Exception("top.gg secret is required.")
-  private val donateBotSecret = System.getenv("DONATEBOT_SECRET") ?: throw Exception("donatebot secret is required.")
+  private val topggSecret = System.getenv("TOPGG_SECRET")
+  private val donateBotSecret = System.getenv("DONATEBOT_SECRET")
 
   private val publicNotificationWebhookClient =
     Config.publicNotificationWebhook?.let { WebhookClientBuilder(it).buildJDA() }
@@ -163,8 +163,8 @@ class HTTPServer(val bot: Bot) {
         )
       }
 
-      val basicAuthUsername = System.getenv("BASIC_AUTH_USERNAME")
-      val basicAuthPassword = System.getenv("BASIC_AUTH_PASSWORD")
+      val basicAuthUsername = System.getenv("BASIC_AUTH_USERNAME") ?: "ADH"
+      val basicAuthPassword = System.getenv("BASIC_AUTH_PASSWORD") ?: "ADH"
       if (basicAuthUsername != null && basicAuthPassword != null) {
         install(Authentication) {
           basic("private-api") {
