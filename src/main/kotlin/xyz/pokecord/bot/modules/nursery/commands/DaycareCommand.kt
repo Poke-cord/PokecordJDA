@@ -13,18 +13,19 @@ class DaycareCommand : Command() {
   suspend fun execute(
 
     context: ICommandContext,
-    @Argument   pokemonName: String?,
+    @Argument(name = "pokemon", consumeRest = true) pokemonNameOrId: String?
    // @Argument   partnerName: String?,
   ) {
 
-    if (pokemonName == null  ) {
+    if (pokemonNameOrId == null  ) {
       context.reply(
         context.embedTemplates.error("Put Pokemon name Dumbshit").build()
       ).queue()
       return
     }
 
-    val pokemon = Pokemon.getByName(pokemonName)
+    val id = pokemonNameOrId.toIntOrNull()
+    val pokemon = if (id != null) Pokemon.getById(id) else Pokemon.getByName(pokemonNameOrId)
   //  val partner = Pokemon.getByName(partnerName)
 
     if (pokemon == null ) {
@@ -32,7 +33,8 @@ class DaycareCommand : Command() {
         .queue()
       return
     }
-    else {
+
+      val id = pokemonNameOrId.toIntOrNull()
       val pokemonNameSearch = pokemonName.toString()
       //val partnerNameSearch = partnerName.toString()
       val pokemonData = readJson("/data/pokemon.json")
@@ -85,18 +87,6 @@ fun readJson(path: String): List<Pokemon> {
   return gson.fromJson(jsonString, Array<Pokemon>::class.java).toList()
 
 }
-fun canBreedWith(other: Pokemon): Boolean {
 
-  // Check if in the same egg group
-  //  if(this.eggGroup != other.eggGroup) {
-  //   return false
-  // }
-
-  // Check if opposite genders
-  // if(this.gender == other.gender) {
-  //   return false
-  // }
-  return true
-  //}
 
 }

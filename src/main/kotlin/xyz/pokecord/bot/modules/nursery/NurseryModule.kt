@@ -12,6 +12,6 @@ class NurseryModule (bot: Bot) : Module(
 )
 
 {
-  override val name = "Pokémon"
+  override val name = "Nursery"
 }
 
