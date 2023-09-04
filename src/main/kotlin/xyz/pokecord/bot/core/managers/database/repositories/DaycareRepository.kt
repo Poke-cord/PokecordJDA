@@ -1,8 +1,11 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
+import org.litote.kmongo.eq
+import xyz.pokecord.bot.core.structures.pokemon.Pokemon
+
 class DaycareRepository {
 
-  private val collection = mongoDatabase.getCollection<Pokemon>("daycare")
+  private val collection = KMongoCollection.getCollection<Pokemon>("daycare")
 
   suspend fun addPokemon(pokemon: Pokemon) {
     collection.insertOne(pokemon)
