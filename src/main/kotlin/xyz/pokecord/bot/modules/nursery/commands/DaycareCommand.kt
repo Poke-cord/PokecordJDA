@@ -5,6 +5,7 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import java.io.File
 import com.google.gson.Gson
+import xyz.pokecord.bot.utils.PokemonResolvable
 
 class DaycareCommand : Command() {
   override val name = "daycare"
@@ -13,7 +14,7 @@ class DaycareCommand : Command() {
   suspend fun execute(
 
     context: ICommandContext,
-    @Argument(name = "pokemon", consumeRest = true) pokemonNameOrId: String?
+    @Argument(name = "pokemon", consumeRest = true) pokemonNameOrId: PokemonResolvable?
    // @Argument   partnerName: String?,
   ) {
 
@@ -24,8 +25,10 @@ class DaycareCommand : Command() {
       return
     }
 
-    val id = pokemonNameOrId.toIntOrNull()
-    val pokemon = if (id != null) Pokemon.getById(id) else Pokemon.getByName(pokemonNameOrId)
+    val id = pokemonNameOrId
+    val pokemon = if (id != null) Pokemon.getById(id)
+    else
+      Pokemon.getByName(pokemonNameOrId.toString())
   //  val partner = Pokemon.getByName(partnerName)
 
     if (pokemon == null ) {
@@ -33,9 +36,22 @@ class DaycareCommand : Command() {
         .queue()
       return
     }
+    var userData = context.getUserData()
+    val ownPokemon = context.resolvePokemon(context.author, userData, pokemonNameOrId)
 
-      val id = pokemonNameOrId.toIntOrNull()
-      val pokemonNameSearch = pokemonName.toString()
+
+    if (ownPokemon == null) {
+      context.reply(
+        context.embedTemplates.error(
+          context.translate("misc.errors.pokemonNotFound")
+        ).build()
+      ).queue()
+      return
+    }
+
+
+
+    val pokemonNameSearch = pokemonName.toString()
       //val partnerNameSearch = partnerName.toString()
       val pokemonData = readJson("/data/pokemon.json")
       val pokemonObj = pokemonData.find { it.name == pokemonNameSearch }
