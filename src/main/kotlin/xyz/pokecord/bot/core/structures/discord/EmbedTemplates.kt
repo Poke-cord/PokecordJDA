@@ -44,7 +44,7 @@ open class EmbedTemplates {
   fun success(description: String, title: String? = null) =
     EmbedBuilder().setColor(Color.GREEN.code).setDescription(description).setTitle(title)
 
-  fun menu(description: String, title: String? = null) =
+  fun menu(description: String, title: () -> Unit = null) =
     EmbedBuilder().setColor(Color.YELLOW.code).setDescription(description).setTitle(title)
 
   suspend fun progressPrivate(user: User) = error(

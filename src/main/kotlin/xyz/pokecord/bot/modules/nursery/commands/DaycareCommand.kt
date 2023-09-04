@@ -5,6 +5,8 @@ import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import java.io.File
 import com.google.gson.Gson
+import com.sun.tools.javac.code.TypeAnnotationPosition.field
+import xyz.pokecord.bot.core.managers.database.repositories.DaycareRepository
 import xyz.pokecord.bot.utils.PokemonResolvable
 
 class DaycareCommand : Command() {
@@ -47,6 +49,31 @@ class DaycareCommand : Command() {
         ).build()
       ).queue()
       return
+    }
+
+
+
+
+    // check ---
+
+    val daycareRepo = DaycareRepository()
+
+
+    val pokemons = daycareRepo.getPokemonsForUser(user)
+
+    // Build embed with pokemon list
+    val embed = context.embedTemplates.menu("Your Pokemons in Daycare") {
+
+
+      for (pokemon in pokemons) {
+        field {
+          name = pokemon.name
+          var value = "Level: ${pokemon.level}"
+        }
+      }
+    }
+    context.reply {
+      embed(embed)
     }
 
 
