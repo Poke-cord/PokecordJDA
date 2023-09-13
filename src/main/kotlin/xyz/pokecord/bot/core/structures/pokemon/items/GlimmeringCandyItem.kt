@@ -7,9 +7,11 @@ object GlimmeringCandyItem : Item(10010000, false) {
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
     val userData = context.getUserData()
-    val shinyRate = context.bot.database.userRepository.getUser(context.author).shinyRate
 
     context.bot.database.userRepository.incShinyRate(userData, -10)
+
+    val shinyRate = context.bot.database.userRepository.getUser(context.author).shinyRate
+
     return UsageResult(
       true,
       context.embedTemplates.normal(

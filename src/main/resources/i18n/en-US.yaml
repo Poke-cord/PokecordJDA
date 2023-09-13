@@ -153,7 +153,7 @@ misc:
     notYourButton: |-
       You pressed someone else's button. It didn't work.
       > **Use buttons that belong to your own commands.**
-    inState:
+    inState: |-
       You used a command while busy. It didn't work.
       > **Cancel current trade, battle, or release first.**
     invalidAmount: |-
@@ -1384,7 +1384,7 @@ items:
         title: Consume CCT Cancelled
   credits:
     embed:
-      title: Credits Received!
+      title: Credits Receivped!
       description: You received **{{credits}}** credits from the credits package!
   redeem:
     errors:
