@@ -47,7 +47,6 @@ class RedeemItem(
     val ownedPokemon = context.bot.database.userRepository.givePokemon(
       context.getUserData(),
       pokemon.id,
-      false,
       ivs = getIvs()
     )
     return UsageResult(
