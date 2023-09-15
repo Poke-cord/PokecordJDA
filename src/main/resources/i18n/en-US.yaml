@@ -771,9 +771,9 @@ modules:
           title: Pokecord Quick Links
       leaderboard:
         titles:
-          credits: Global Pokéboard by Credit Amount
-          pokemon: Global Pokéboard by Pokémon Count
-        footer: This Pokéboard updates at 12 AM GMT daily.
+          credits: Global 'Cord Board by Credit Amount
+          pokemon: Global 'Cord Board by Pokémon Count
+        footer: This 'Cord Board updates every few minutes.
       ping:
         embed:
           description: |-
@@ -1207,11 +1207,11 @@ modules:
           description: |-
             **The 'Cord Shop Counter**
             --------------------------
-            - {{item}} (x{{amount}})
-            (-{{cost}} {{type}})
+            {{item}} (x{{amount}})
+            - (-{{cost}} {{type}})
             --------------------------
             View items in your backpack.
-          title: Purchase Receipt
+          title: Item Purchase Receipt
       shop:
         embed:
           description: |

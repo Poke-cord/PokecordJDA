@@ -6,7 +6,6 @@ object CustomPokemon {
     val charizard = Pokemon.getByName("Charizard")!!
     val pidgey = Pokemon.getByName("Pidgey")!!
     val pikachu = Pokemon.getByName("Pikachu")!!
-    //Should be fine
     val nidoranF = Pokemon.getById(29)!!
     val venomoth = Pokemon.getByName("Venomoth")!!
     val mankey = Pokemon.getByName("Mankey")!!
