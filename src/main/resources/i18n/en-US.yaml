@@ -14,6 +14,8 @@ misc:
       "moves.teach": Teach your Pokémon up to four moves to use in battle.
     developer:
       eval: Evaluate JavaScript/Kotlin code.
+      giveredeem: Grant a specific redeem to a user.
+      giverole: Grant a secific dono role to a user.
       parse-entities: What an old command.. What does it do?
       mock: Bahahahahahahahahaha :P
     economy:
@@ -64,10 +66,9 @@ misc:
       rewards: Displays/claim all available rewards.
       start: Displays Pokecord's welcome message. This should be your first command.
     staff:
+      bigleaderboard: It's a big leaderboard :O
       blacklist: Prevent users from executing Pokecord commands.
       blacklists: View a full list of all blacklisted users.
-      giveredeem: Grant a specific redeem to a user.
-      giverole: Grant a secific dono role to a user.
       logs: View auction, market, trade, and gift logs for a given user.
       maintenance: Toggle Pokecord in or out of Maintenance Break.
       shards: Check the status of Pokecord's shards.

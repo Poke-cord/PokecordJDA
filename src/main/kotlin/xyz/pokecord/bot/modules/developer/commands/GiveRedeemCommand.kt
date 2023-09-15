@@ -1,11 +1,9 @@
-package xyz.pokecord.bot.modules.staff.commands
+package xyz.pokecord.bot.modules.developer.commands
 
 import net.dv8tion.jda.api.entities.User
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.pokemon.items.RedeemItem
-import xyz.pokecord.bot.core.structures.store.packages.RolesPackage
 import xyz.pokecord.bot.modules.developer.DeveloperCommand
-// import xyz.pokecord.bot.modules.staff.StaffCommand
 
 object GiveRedeemCommand : DeveloperCommand() {
   override val name = "GiveRedeem"

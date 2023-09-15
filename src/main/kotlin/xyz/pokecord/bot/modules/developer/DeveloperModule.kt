@@ -1,18 +1,18 @@
 package xyz.pokecord.bot.modules.developer
 
 import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.core.structures.discord.base.Module
-import xyz.pokecord.bot.modules.developer.commands.EvalCommand
-import xyz.pokecord.bot.modules.developer.commands.MockCommand
-import xyz.pokecord.bot.modules.developer.commands.ParseEntitiesCommand
+import xyz.pokecord.bot.modules.developer.commands.*
 import xyz.pokecord.bot.modules.developer.tasks.StatsSyncTask
+import xyz.pokecord.bot.core.structures.discord.base.Module
 
 class DeveloperModule(bot: Bot) : Module(
   bot,
   arrayOf(
     EvalCommand(),
-    ParseEntitiesCommand(),
-    MockCommand()
+    GiveRedeemCommand,
+    GiveRoleCommand,
+    MockCommand(),
+    ParseEntitiesCommand()
   ),
   tasks = arrayOf(
     StatsSyncTask()
