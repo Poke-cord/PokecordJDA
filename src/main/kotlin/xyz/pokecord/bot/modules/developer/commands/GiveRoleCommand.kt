@@ -8,7 +8,7 @@ import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
 object GiveRoleCommand : DeveloperCommand() {
   override val name = "GiveRole"
-  override var aliases = arrayOf("gr")
+  override var aliases = arrayOf("grl")
 
   @Executor
   suspend fun execute(
@@ -30,7 +30,7 @@ object GiveRoleCommand : DeveloperCommand() {
     }
 
     if (roleItem == null) {
-      context.reply(context.embedTemplates.error("role is not a valid package").build()).queue()
+      context.reply(context.embedTemplates.error("No dono role or perks found with the given role.").build()).queue()
       return
     }
 
@@ -38,7 +38,7 @@ object GiveRoleCommand : DeveloperCommand() {
     RolesPackage.giveReward(context.bot, userData, roleItem)
 
     context.reply(
-      context.embedTemplates.normal("${user.asMention} has been given the rewards of role ${role.asMention}").build()
+      context.embedTemplates.normal("${user.asMention} has been granted the ${role.asMention} role and its rewards.").build()
     ).queue()
   }
 }

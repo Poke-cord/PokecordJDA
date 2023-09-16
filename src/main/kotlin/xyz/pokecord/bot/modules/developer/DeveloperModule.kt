@@ -8,6 +8,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Module
 class DeveloperModule(bot: Bot) : Module(
   bot,
   arrayOf(
+    BigLeaderboardCommand(),
     EvalCommand(),
     GiveRedeemCommand,
     GiveRoleCommand,

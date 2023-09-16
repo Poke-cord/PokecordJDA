@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.staff.commands
+package xyz.pokecord.bot.modules.developer.commands
 
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.modules.staff.StaffCommand
+import xyz.pokecord.bot.modules.developer.DeveloperCommand
 
-class BigLeaderboardCommand : StaffCommand() {
+class BigLeaderboardCommand : DeveloperCommand() {
   override val name = "BigLeaderboard"
 
   override var aliases = arrayOf("blb")
@@ -15,7 +15,7 @@ class BigLeaderboardCommand : StaffCommand() {
   ) {
     val selfUserId = context.jda.selfUser.id
     if (credits == true) {
-      val entries = module.bot.database.userRepository.getCreditLeaderboard(selfUserId, 30)
+      val entries = module.bot.database.userRepository.getCreditLeaderboard(selfUserId, 60)
       context.reply(
         context.embedTemplates.normal(
           entries.mapIndexed { i, it ->
@@ -26,7 +26,7 @@ class BigLeaderboardCommand : StaffCommand() {
           .build()
       ).queue()
     } else {
-      val entries = module.bot.database.userRepository.getPokemonCountLeaderboard(selfUserId, 30)
+      val entries = module.bot.database.userRepository.getPokemonCountLeaderboard(selfUserId, 60)
       context.reply(
         context.embedTemplates.normal(
           entries.mapIndexed { i, it ->

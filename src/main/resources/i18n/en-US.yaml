@@ -13,6 +13,7 @@ misc:
       moves: View all teachable moves your Pokémon can learn.
       "moves.teach": Teach your Pokémon up to four moves to use in battle.
     developer:
+      bigleaderboard: It's a big leaderboard :O
       eval: Evaluate JavaScript/Kotlin code.
       giveredeem: Grant a specific redeem to a user.
       giverole: Grant a secific dono role to a user.
@@ -66,7 +67,6 @@ misc:
       rewards: Displays/claim all available rewards.
       start: Displays Pokecord's welcome message. This should be your first command.
     staff:
-      bigleaderboard: It's a big leaderboard :O
       blacklist: Prevent users from executing Pokecord commands.
       blacklists: View a full list of all blacklisted users.
       logs: View auction, market, trade, and gift logs for a given user.

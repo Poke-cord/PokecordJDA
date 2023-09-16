@@ -8,7 +8,6 @@ import xyz.pokecord.bot.modules.staff.tasks.StaffSyncTask
 class StaffModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    BigLeaderboardCommand(),
     MaintenanceCommand(),
     ShardsCommand(),
     BlacklistCommand(),

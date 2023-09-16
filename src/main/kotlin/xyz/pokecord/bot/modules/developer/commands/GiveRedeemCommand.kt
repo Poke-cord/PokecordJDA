@@ -29,7 +29,7 @@ object GiveRedeemCommand : DeveloperCommand() {
     }
 
     if (redeemItem == null) {
-      context.reply(context.embedTemplates.error("no redeem found with that name").build()).queue()
+      context.reply(context.embedTemplates.error("No redeem found with the given name.").build()).queue()
       return
     }
 
@@ -37,7 +37,7 @@ object GiveRedeemCommand : DeveloperCommand() {
     context.bot.database.userRepository.addInventoryItem(userData.id, redeemItem.id, 1)
 
     context.reply(
-      context.embedTemplates.normal("${user.asMention} has been given the ${redeemItem.data.name}").build()
+      context.embedTemplates.normal("${user.asMention} has been granted a ${redeemItem.data.name}.").build()
     ).queue()
   }
 }
