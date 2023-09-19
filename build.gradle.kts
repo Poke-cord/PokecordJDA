@@ -22,15 +22,14 @@ val snakeYamlVersion = "1.29"
 val trove4jVersion = "3.0.3"
 
 plugins {
-  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("com.github.johnrengelman.shadow") version "8.1.1"
   java
-  kotlin("jvm") version "1.5.10"
-  kotlin("plugin.serialization") version "1.5.10"
+  kotlin("jvm") version "1.9.10"
+  kotlin("plugin.serialization") version "1.9.10"
 }
 
 repositories {
   mavenCentral()
-  jcenter()
   maven("https://jitpack.io/")
   maven("https://m2.dv8tion.net/releases")
 }
@@ -108,13 +107,13 @@ tasks {
 
   compileKotlin {
     kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_11.toString()
+      jvmTarget = JavaVersion.VERSION_20.toString()
     }
   }
 
   compileTestKotlin {
     kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_11.toString()
+      jvmTarget = JavaVersion.VERSION_20.toString()
     }
   }
 }
