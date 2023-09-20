@@ -7,7 +7,8 @@ import xyz.pokecord.bot.modules.nursery.commands.*
 class NurseryModule (bot: Bot) : Module(
   bot,
   arrayOf(
-    DaycareCommand()
+    DaycareCommand(),
+    BreedCommands()
   )
 )
 

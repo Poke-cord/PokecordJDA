@@ -8,7 +8,7 @@ import xyz.pokecord.bot.core.managers.database.models.VoteReward
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
 class DaycareRepository(
-  database: Database,private val voteRewardCollection: CoroutineCollection<daycare>
+  database: Database,private val daycareCollection: CoroutineCollection<daycare>
 ): Repository(database){
 
   private val collection = KMongo
