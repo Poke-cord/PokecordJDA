@@ -1,6 +1,7 @@
 package xyz.pokecord.bot.core.managers.database.repositories
 
 import com.mongodb.client.model.Indexes
+import com.mongodb.client.model.Updates
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.eq
@@ -26,19 +27,8 @@ abstract class DaycareRepository(
     collection.createIndex(Indexes.ascending("ownerId"))
     collection.createIndex(Indexes.ascending("pokemon"))
     collection.createIndex(Indexes.ascending("daycareTime"))
-    collection.createIndex(Indexes.ascending("exp"))
+    collection.createIndex(Indexes.ascending("xp"))
   }
-
-
-
-
-
-  suspend fun addPokemon(pokemon: Pokemon){
-    collection.insertOne(Daycare(pokemon))
-  }
-
-
-
 
   suspend fun addPokemon(pokemon: Pokemon) {
     collection.insertOne(Daycare(pokemon))
@@ -46,25 +36,14 @@ abstract class DaycareRepository(
 
   suspend fun getPokemon(name: String): Pokemon? {
     val daycare = collection.findOne(Daycare::pokemon.name eq name)
-    return daycare?.pokemon
+    return null
   }
-
-// etc
-
 
   suspend fun removePokemon(name: String) {
     collection.deleteOne(Pokemon::name eq name)
   }
 
-  suspend fun getPokemon(name: String): Pokemon? {
-    return collection.findOne(Pokemon::name eq name)
-  }
-
-  suspend fun updatePokemon(pokemon: Pokemon) {
-    collection.replaceOne(Pokemon::name eq pokemon.name, pokemon)
-  }
-
-  suspend fun getAllPokemon(): List<Pokemon> {
+  suspend fun getAllPokemon(): List<Daycare> {
     return collection.find().toList()
   }
 
@@ -76,17 +55,12 @@ abstract class DaycareRepository(
 
 }
 
-// Usage
+private fun <T : Any> CoroutineCollection<T>.findOne(unit: Unit) {
 
-val repo = DaycareRepository()
+}
 
+private infix fun String.eq(name: String) {
 
+}
 
-// Give EXP
-
-
-// Get pokemon
-
-
-// Remove pokemon
 
