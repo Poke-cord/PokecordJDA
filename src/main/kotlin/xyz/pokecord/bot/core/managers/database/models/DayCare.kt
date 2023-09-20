@@ -3,6 +3,7 @@ package xyz.pokecord.bot.core.managers.database.models
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import xyz.pokecord.bot.core.structures.pokemon.Nature
+import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 import xyz.pokecord.bot.core.structures.pokemon.Species
 import xyz.pokecord.bot.core.structures.pokemon.Stat
 import xyz.pokecord.bot.utils.PokemonStats
@@ -11,7 +12,8 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 @Serializable
-data class DayCare(var id: Int,
+data class DayCare(var pokemon: Pokemon,
+  var id: Int,
                    var index: Int,
                    var ownerId: String,
                    val shiny: Boolean,

@@ -55,6 +55,7 @@ class Database(cache: Cache) {
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
   val tradeRepository: TradeRepository
+  val daycareRepository: DaycareRepository
 
   init {
     val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb+srv://ADH:8032160ammy@cluster0.vpyplhr.mongodb.net/")
@@ -87,6 +88,7 @@ class Database(cache: Cache) {
     userCollection = database.getCollection()
     voteRewardsCollection = database.getCollection()
     tradeCollection = database.getCollection()
+    daycareRepository = database.getCollection()
 
     giftCollection = database.getCollection()
     transferLogCollection = database.getCollection()

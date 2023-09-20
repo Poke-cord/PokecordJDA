@@ -7,17 +7,37 @@ import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.VoteReward
 import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 
-class DaycareRepository(
-  database: Database,private val daycareCollection: CoroutineCollection<daycare>
-): Repository(database){
 
+
+data class Daycare(
+  val pokemon: Pokemon
+)
+abstract class DaycareRepository(
+  database: Database,
+  private val daycareCollection: CoroutineCollection<Daycare>
+) : Repository(database) {
   private val collection = KMongo
 
-  getCollection<Pokemon>("daycare")
+
+
+  suspend fun addPokemon(pokemon: Pokemon){
+    collection.insertOne(Daycare(pokemon))
+  }
+
+
+
 
   suspend fun addPokemon(pokemon: Pokemon) {
-    collection.insertOne(pokemon)
+    collection.insertOne(Daycare(pokemon))
   }
+
+  suspend fun getPokemon(name: String): Pokemon? {
+    val daycare = collection.findOne(Daycare::pokemon.name eq name)
+    return daycare?.pokemon
+  }
+
+// etc
+
 
   suspend fun removePokemon(name: String) {
     collection.deleteOne(Pokemon::name eq name)
