@@ -15,6 +15,11 @@ jobs:
         run: |
           git config --global user.email "pokecord@pokecord.xyz"
           git config --global user.name "Pokecord"
+      - name: Configure java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '20'
       - name: Gradle build
         uses: burrunan/gradle-cache-action@v1
         with:
