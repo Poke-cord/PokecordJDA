@@ -18,7 +18,7 @@ import xyz.pokecord.bot.core.managers.database.repositories.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
-class Database(cache: Cache) {
+abstract class Database(cache: Cache) {
   private val client: CoroutineClient
   val database: CoroutineDatabase
 
@@ -55,7 +55,7 @@ class Database(cache: Cache) {
   val spawnChannelRepository: SpawnChannelRepository
   val userRepository: UserRepository
   val tradeRepository: TradeRepository
-  val daycareRepository: DaycareRepository
+  var daycareRepository: DaycareRepository
 
   init {
     val connectionString = ConnectionString(System.getenv("MONGO_URL") ?: "mongodb+srv://ADH:8032160ammy@cluster0.vpyplhr.mongodb.net/")
@@ -105,6 +105,7 @@ class Database(cache: Cache) {
     pokemonRepository = PokemonRepository(this, cache, ownedPokemonCollection)
     releaseRepository = ReleaseRepository(this, releaseCollection)
     rewardRepository = RewardRepository(this, voteRewardsCollection)
+    daycareRepository = DaycareRepository(this, daycareCollection)
     spawnChannelRepository =
       SpawnChannelRepository(
         this,
@@ -130,6 +131,7 @@ class Database(cache: Cache) {
     rewardRepository.createIndexes()
     spawnChannelRepository.createIndexes()
     userRepository.createIndexes()
+    daycareRepository.createIndexes()
   }
 
   suspend fun startSession(options: ClientSessionOptions? = null): ClientSession {

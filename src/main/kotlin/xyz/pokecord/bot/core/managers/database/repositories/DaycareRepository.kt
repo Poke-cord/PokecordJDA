@@ -15,11 +15,12 @@ import xyz.pokecord.bot.core.structures.pokemon.Pokemon
 data class Daycare(
   val pokemon: Pokemon
 )
-abstract class DaycareRepository(
+ class DaycareRepository(
   database: Database,
   private val collection: CoroutineCollection<Daycare>
 ) : Repository(database) {
-  private val releasedPokemonCollection: CoroutineCollection<Daycare> =
+
+   private val daycareCollection: CoroutineCollection<Daycare> =
     database.database.getCollection("daycarePokemon")
 
   override suspend fun createIndexes() {
@@ -32,11 +33,6 @@ abstract class DaycareRepository(
 
   suspend fun addPokemon(pokemon: Pokemon) {
     collection.insertOne(Daycare(pokemon))
-  }
-
-  suspend fun getPokemon(name: String): Pokemon? {
-    val daycare = collection.findOne(Daycare::pokemon.name eq name)
-    return null
   }
 
   suspend fun removePokemon(name: String) {
@@ -55,12 +51,8 @@ abstract class DaycareRepository(
 
 }
 
-private fun <T : Any> CoroutineCollection<T>.findOne(unit: Unit) {
 
-}
 
-private infix fun String.eq(name: String) {
 
-}
 
 
