@@ -788,6 +788,7 @@ modules:
           disabled: Your progress is now viewable by other players.
         prefix:
           current: The current prefix is `{{prefix}}`.
+          noAdmin: Ask a user with administrator privileges to execute this command.
           tooLarge: Prefix can't be longer than 10 characters.
           updated: Prefix updated to {{prefix}}.
         silence:

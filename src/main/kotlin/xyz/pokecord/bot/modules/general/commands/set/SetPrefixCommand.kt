@@ -27,7 +27,9 @@ object SetPrefixCommand : Command() {
     if (!context.guild!!.retrieveMember(context.author).await().hasPermission(Permission.ADMINISTRATOR)) {
       // TODO: say you're not admin PROPERLY
       context.reply(
-        context.embedTemplates.error("Please ask a server administrator to use this command instead.").build()
+        context.embedTemplates.error(
+          context.translate("modules.general.commands.set.prefix.noAdmin")
+        ).build()
       ).queue()
       return
     }
