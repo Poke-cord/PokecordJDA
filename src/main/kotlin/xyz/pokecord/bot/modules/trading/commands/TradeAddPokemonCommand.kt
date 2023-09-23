@@ -14,7 +14,7 @@ object TradeAddPokemonCommand : Command() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument pokemon: PokemonResolvable?
+    @Argument (name = "pokemonId") pokemon: PokemonResolvable?
   ) {
     if (!context.hasStarted(true)) return
 
