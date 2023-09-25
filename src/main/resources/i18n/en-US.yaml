@@ -536,29 +536,29 @@ modules:
             **Price**: {{price}} credits
             
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-          title: A Listing Post is Pending
+          title: Market Listing Confirmation
         confirmed:
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
             **Price**: {{price}} credits
             
             Your listing has been posted.
-          title: A Listing has been Posted
+          title: Market Listing Posted
       unlist:
         confirmation:
-          title: A Listing is Pending Removal
+          title: Listing Removal Confirmation
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
             
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
         confirmed:
-          title: A Listing has been Removed
+          title: Market Listing Removed
           description: |-
             **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
             
             Your Pokémon has been returned to your collection.
         errors:
-          noListingId: Please provide a valid listing ID.
+          noListingId: Please provide a valid market listing ID.
           noListingFound: |-
             Pokecord looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
@@ -570,7 +570,7 @@ modules:
             > **Unlist listings that haven't been purchased.**
       buy:
         sold:
-          title: A Listing has been Sold
+          title: Market Listing Sold
           description: |-
             **Listing Item**: {{ivPercentage}} {{pokemonName}}
             **Buyer**: {{buyer}}
@@ -578,12 +578,14 @@ modules:
             
             The credits have been added to your balance.
         confirmed:
-          title: A Listing has been Purchased
+          title: Market Purchase Receipt
           description: |-
-            **Listing Item**: {{pokemonIV}} {{pokemonName}}
-            **Price**: {{price}} credits
-            
-            The Pokémon has been added to your collection.
+            **The 'Cord Marketplace
+            -------------------------
+            {{pokemonIV}} {{pokemonName}}
+            - -{{price}} credits
+            -------------------------
+            See your collection for details.
         confirmation:
           description: |-
             **Listing Item**: {{pokemonIV}} {{pokemonName}}
@@ -1014,7 +1016,7 @@ modules:
         description: |-
           Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
           
-          **Get Started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
+          **Get started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
           **Example usage**: `@Pokecord pick torchic`
         startingTwice: |-
           Pokecord couldn't find a time machine.

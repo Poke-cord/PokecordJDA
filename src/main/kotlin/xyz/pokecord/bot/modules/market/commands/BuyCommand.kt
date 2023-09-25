@@ -160,6 +160,7 @@ object BuyCommand : Command() {
                   )
                 ),
                 context.translate("modules.market.commands.buy.confirmed.title")
+              ).setFooter(context.translate("misc.embeds.pokemonObtained.footer")
               ).build()
             ).queue()
           }
