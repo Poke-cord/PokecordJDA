@@ -580,7 +580,7 @@ modules:
         confirmed:
           title: Market Purchase Receipt
           description: |-
-            **The 'Cord Marketplace
+            **The 'Cord Marketplace**
             -------------------------
             {{pokemonIV}} {{pokemonName}}
             - -{{price}} credits
@@ -592,7 +592,7 @@ modules:
             **Price**: {{price}} credits
             
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-          title: A Listing is Pending Purchase
+          title: Listing Purchase Confirmation
         errors:
           alreadySold: |-
             Pokecord couldn't find a time machine.
@@ -1212,7 +1212,7 @@ modules:
             **The 'Cord Shop Counter**
             --------------------------
             {{item}} (x{{amount}})
-            - (-{{cost}} {{type}})
+            - -{{cost}} {{type}}
             --------------------------
             View items in your backpack.
           title: Item Purchase Receipt
