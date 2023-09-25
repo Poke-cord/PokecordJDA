@@ -25,6 +25,7 @@ import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 import xyz.pokecord.bot.core.managers.I18n
 import xyz.pokecord.bot.core.managers.database.models.DonateBotTransaction
 import xyz.pokecord.bot.core.structures.discord.Bot
+import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.core.structures.discord.ShardStatus
 import xyz.pokecord.bot.core.structures.pokemon.items.CCTItem
 import xyz.pokecord.bot.core.structures.store.packages.Package
@@ -63,12 +64,12 @@ class HTTPServer(val bot: Bot) {
   private suspend fun sendVoteNotification(userId: String) {
     publicNotificationWebhookClient?.send(
       EmbedBuilder {
-        color = 0xf0e365
+        color = EmbedTemplates.Color.BLUE.code
         description =
-          "Big thanks to <@${userId}> for voting over at [top.gg](https://top.gg/bot/705016654341472327/vote)!"
-        title = "Thank You for Voting!"
+          "<@${userId}> voted for [Pokecord on top.gg](https://top.gg/bot/705016654341472327/vote)!"
+        title = "Thanks for the vote!"
 
-        footer("Support us by using the p!donate command.")
+        footer("Check in for more rewards in 12 hours.")
       }.build()
     )?.await()
   }
@@ -76,12 +77,12 @@ class HTTPServer(val bot: Bot) {
   suspend fun sendBoostNotification(userId: String, redeemName: String) {
     publicNotificationWebhookClient?.send(
       EmbedBuilder {
-        color = 0xf0e365
+        color = EmbedTemplates.Color.BLUE.code
         description =
-          "Thank you to <@${userId}> for boosting, they were rewarded with a **$redeemName**!"
-        title = "Thank You for Boosting!"
+          "<@${userId}> boosted the server and were awarded a **$redeemName**!"
+        title = "Thanks for the boost!"
 
-        footer("Support us by using the p!donate command.")
+        footer("Renew your boost in 30 days for another redeem.")
       }.build()
     )?.await()
   }
@@ -96,18 +97,18 @@ class HTTPServer(val bot: Bot) {
     if (!privateOnly) {
       publicNotificationWebhookClient?.send(
         EmbedBuilder {
-          color = 0xf0e365
-          description = "Big thanks to <@${userId}> for donating!"
-          title = "Thank You for Donating!"
+          color = EmbedTemplates.Color.BLUE.code
+          description = "<@${userId}> made a donation to Pokecord!"
+          title = "Thanks for the donation!"
 
-          footer("Support us by using the p!donate command.")
+          footer("Rewards have been automatically applied.")
         }.build()
       )?.await()
     }
 
     donationNotificationWebhookClient?.send(
       EmbedBuilder {
-        color = 0xf0e365
+        color = EmbedTemplates.Color.BLUE.code
         description = """            
           **User**: <@${userId}> [${userId}]
           **Amount**: $price
@@ -125,7 +126,7 @@ class HTTPServer(val bot: Bot) {
     val day = VoteUtils.getSeasonDay()
 
     val (credits, tokens, cct) =
-      if (day % 5 == 0) Triple(10_000, 1, 1)
+      if (day % 5 == 0) Triple(5_000, 1, 1)
       else Triple(5_000, 1, 0)
 
     val session = bot.database.startSession()
