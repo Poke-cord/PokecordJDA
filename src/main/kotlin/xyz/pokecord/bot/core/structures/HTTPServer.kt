@@ -66,7 +66,7 @@ class HTTPServer(val bot: Bot) {
       EmbedBuilder {
         color = EmbedTemplates.Color.BLUE.code
         description =
-          "<@${userId}> voted for [Pokecord on top.gg](https://top.gg/bot/705016654341472327/vote)!"
+          "<@${userId}> voted for [**Pokecord on top.gg**](https://top.gg/bot/705016654341472327/vote)!"
         title = "Thanks for the vote!"
 
         footer("Check in for more rewards in 12 hours.")
