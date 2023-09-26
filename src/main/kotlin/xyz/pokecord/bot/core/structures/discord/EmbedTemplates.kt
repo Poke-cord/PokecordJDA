@@ -7,11 +7,11 @@ import xyz.pokecord.bot.core.managers.I18n
 
 open class EmbedTemplates {
   enum class Color(val code: Int) {
-    GREEN(0x23a55a), //Success
-    RED(0xf04747), //Error
-    YELLOW(0xffcc4d), //Large menus (lighter: f0e365)
-    ORANGE(0xfaa61a), //Confirmation
-    BLUE(0x50a5e5) //Information (more vibrant: 00a8fc)
+    GREEN(0x00a85a), //Success
+    RED(0xe6302f), //Error (prev: f04747)
+    YELLOW(0xf0c90f), //Large menus (lighter: f0e365) (current: ffcc4d)
+    ORANGE(0xf99004), //Confirmation (prev: faa61a)
+    BLUE(0x00a8fc) //Information (more vibrant: 00a8fc) (current: 50a5e5)
   }
 
   open suspend fun translate(key: String, data: Map<String, String>, default: String? = null): String {
