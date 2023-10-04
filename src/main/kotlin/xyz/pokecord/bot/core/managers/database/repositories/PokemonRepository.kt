@@ -367,6 +367,31 @@ class PokemonRepository(
     return true
   }
 
+  @Suppress("unused")
+  suspend fun resetEffort(
+    pokemon: OwnedPokemon,
+    stat: Stat,
+  ) {
+    val statField = when (stat.id) {
+      Stat.hp.id -> PokemonStats::hp
+      Stat.attack.id -> PokemonStats::attack
+      Stat.defense.id -> PokemonStats::defense
+      Stat.specialAttack.id -> PokemonStats::specialAttack
+      Stat.specialDefense.id -> PokemonStats::specialDefense
+      Stat.speed.id -> PokemonStats::speed
+      else -> throw IllegalArgumentException("Unknown stat found: ${stat.id}")
+    }
+
+    statField.set(pokemon.evs, 0)
+
+    collection.updateOne(
+      OwnedPokemon::_id eq pokemon._id,
+      set(
+        OwnedPokemon::evs setTo pokemon.evs
+      )
+    )
+  }
+
   suspend fun levelUpAndEvolveIfPossible(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
