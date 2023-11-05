@@ -799,7 +799,7 @@ modules:
             **Channel Mention**: {{channelMention}}
             **Channel ID**: {{channelId}}
           list:
-            title: Spawn Details have been Requested
+            title: Server Spawn Status
           noChannelsSet: No spawn channels set.
           title:
             added: A Spawn has been Added
