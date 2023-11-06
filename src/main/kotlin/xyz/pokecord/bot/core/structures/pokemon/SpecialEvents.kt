@@ -199,8 +199,9 @@ object SpecialEvents {
   }
 
   fun isEventPokemon(pokemon: Pokemon): Boolean {
-    return catchableEventList.any { e -> e.catchableCustomPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
-  }
+    val catchables = catchableEventList.any { e -> e.catchableCustomPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+    val redeemables = redeemableEventList.any { e -> e.redeemableCustomPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+    return catchables and redeemables  }
 
   fun getCurrentCatchableEvents(): List<EventPokemon> {
     val now = System.currentTimeMillis()
