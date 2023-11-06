@@ -159,7 +159,7 @@ object SpecialEvents {
     listOf(
       RedeemExclusivePokemon(
         parseDateTime("2022-11-01 00:00:00"),
-        parseDateTime("2022-01-01 00:00:00"),
+        parseDateTime("2023-01-01 00:00:00"),
         mapOf(
           Pokemon.getByName("Bulbasaur")!!.species to listOf(
             Pokemon.getByName("Winter Bulbasaur")!!,
