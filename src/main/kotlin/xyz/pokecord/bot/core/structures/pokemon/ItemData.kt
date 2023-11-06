@@ -110,7 +110,7 @@ data class ItemData(
       )
       items.add(EventsRedeemItem.itemData)
       items.add(ChaosRedeemItem.itemData)
-      items.add(CollectorsRedeemItem.itemData)
+      //items.add(CollectorsRedeemItem.itemData)
 
       // Glimmering Candy
       items.add(

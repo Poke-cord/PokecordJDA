@@ -11,7 +11,7 @@ object ItemFactory {
     items.putAll(RedeemItem.redeemMap)
     items[EventsRedeemItem.id] = EventsRedeemItem
     items[ChaosRedeemItem.id] = ChaosRedeemItem
-    items[CollectorsRedeemItem.id] = CollectorsRedeemItem
+    //items[CollectorsRedeemItem.id] = CollectorsRedeemItem
 
     items.putAll(
       ItemData.getByCategoryId(EvolutionItem.categoryId).map {
