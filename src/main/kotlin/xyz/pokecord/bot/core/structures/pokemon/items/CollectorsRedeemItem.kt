@@ -5,12 +5,12 @@ import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.SpecialEvents
 import kotlin.random.Random
 
-object EventsRedeemItem : Item(10000007, false) {
+object CollectorsRedeemItem : Item(10000008, false) {
   const val categoryId = RedeemItem.categoryId
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
-    val events = SpecialEvents.getCurrentCatchableEvents()
-    val eventPokemon = events.flatMap { it.catchableCustomPokemon.values }.flatten()
+    val events = SpecialEvents.getCurrentRedeemableEvents()
+    val eventPokemon = events.flatMap { it.redeemableCustomPokemon.values }.flatten()
 
     val randomEventPokemon = eventPokemon.randomOrNull()
       ?: return UsageResult(
@@ -45,10 +45,10 @@ object EventsRedeemItem : Item(10000007, false) {
 
   val itemData = ItemData(
     id,
-    "events-redeem",
-    "Events Redeem",
+    "collectors-redeem",
+    "Collectors Redeem",
     categoryId,
-    250,
+    1000000,
     0,
     0,
     true

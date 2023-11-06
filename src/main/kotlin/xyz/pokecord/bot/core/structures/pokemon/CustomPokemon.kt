@@ -38,6 +38,8 @@ object CustomPokemon {
     val boltund = Pokemon.getByName("Boltund")!!
     val runerigus = Pokemon.getByName("Runerigus")!!
     val arctovish = Pokemon.getByName("Arctovish")!!
+    //Redeemable below
+    val coalossal = Pokemon.getByName("Coalossal")!!
 
     //Create copy with some updated attributes
     val prideCharizardV1 = charizard.copy(
@@ -529,6 +531,21 @@ object CustomPokemon {
       name = "Pride Arctovish V2",
       isDefault = false,
       formName = "Pride Arctovish V2",
+    )
+    //Redeemable exclusives below
+    val winterCoalossal = coalossal.copy(
+      id = 200000001,
+      identifier = "winter-coalossal",
+      name = "Winter Coalossal",
+      isDefault = false,
+      formName = "Winter Coalossal",
+    )
+    val holidayCoalossal = arctovish.copy(
+      id = 200000002,
+      identifier = "holiday-coalossal",
+      name = "Holiday Coalossal",
+      isDefault = false,
+      formName = "Holiday Coalossal",
     )
     //Register custom Pokémon (use updated attributes)
     registerCustomPokemon(
@@ -1159,6 +1176,24 @@ object CustomPokemon {
       PokemonType(prideArctovishV2.id, arctovish.types.map { it.id }),
       PokemonStat.getByPokemonId(arctovish.id).map {
         it.copy(id = prideArctovishV2.id)
+      }
+    )
+    registerCustomPokemon(
+      winterCoalossal,
+      winterCoalossal.identifier,
+      winterCoalossal.name,
+      PokemonType(winterCoalossal.id, coalossal.types.map { it.id }),
+      PokemonStat.getByPokemonId(coalossal.id).map {
+        it.copy(id = winterCoalossal.id)
+      }
+    )
+    registerCustomPokemon(
+      holidayCoalossal,
+      holidayCoalossal.identifier,
+      holidayCoalossal.name,
+      PokemonType(holidayCoalossal.id, coalossal.types.map { it.id }),
+      PokemonStat.getByPokemonId(coalossal.id).map {
+        it.copy(id = holidayCoalossal.id)
       }
     )
   }
