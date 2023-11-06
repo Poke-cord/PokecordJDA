@@ -9,8 +9,8 @@ object EventsRedeemItem : Item(10000007, false) {
   const val categoryId = RedeemItem.categoryId
 
   override suspend fun use(context: ICommandContext, args: List<String>): UsageResult {
-    val events = SpecialEvents.getCurrentEvents()
-    val eventPokemon = events.flatMap { it.customPokemon.values }.flatten()
+    val events = SpecialEvents.getCurrentCatchableEvents()
+    val eventPokemon = events.flatMap { it.catchableCustomPokemon.values }.flatten()
 
     val randomEventPokemon = eventPokemon.randomOrNull()
       ?: return UsageResult(

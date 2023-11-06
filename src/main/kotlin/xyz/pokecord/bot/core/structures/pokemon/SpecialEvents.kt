@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 object SpecialEvents {
-  private val eventPokemonList by lazy {
+  private val catchableEventList by lazy {
     listOf(
       EventPokemon(
         parseDateTime("2023-06-30 00:00:00"),
@@ -155,11 +155,31 @@ object SpecialEvents {
       )
     )
   }
+  private val redeemableEventList by lazy {
+    listOf(
+      RedeemExclusivePokemon(
+        parseDateTime("2022-11-01 00:00:00"),
+        parseDateTime("2023-01-01 00:00:00"),
+        mapOf(
+          Pokemon.getByName("Bulbasaur")!!.species to listOf(
+            Pokemon.getByName("Winter Bulbasaur")!!,
+            Pokemon.getByName("Holiday Bulbasaur")!!
+          ),
+        )
+      )
+    )
+  }
 
   data class EventPokemon(
     val startsAt: Long,
     val endsAt: Long,
-    val customPokemon: Map<Species, List<Pokemon>>,
+    val catchableCustomPokemon: Map<Species, List<Pokemon>>,
+  )
+
+  data class RedeemExclusivePokemon(
+    val startsAt: Long,
+    val endsAt: Long,
+    val redeemableCustomPokemon: Map<Species,List<Pokemon>>
   )
 
   private fun parseDateTime(text: String): Long {
@@ -168,9 +188,9 @@ object SpecialEvents {
 
   fun handleCatching(spawnedSpecies: Species): Int? {
     val now = System.currentTimeMillis()
-    for (eventPokemon in eventPokemonList) {
+    for (eventPokemon in catchableEventList) {
       if (now in eventPokemon.startsAt..eventPokemon.endsAt) {
-        eventPokemon.customPokemon[spawnedSpecies]?.let {
+        eventPokemon.catchableCustomPokemon[spawnedSpecies]?.let {
           return it.randomOrNull()?.id
         }
       }
@@ -179,12 +199,18 @@ object SpecialEvents {
   }
 
   fun isEventPokemon(pokemon: Pokemon): Boolean {
-    return eventPokemonList.any { e -> e.customPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+    val catchables = catchableEventList.any { e -> e.catchableCustomPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+    val redeemables = redeemableEventList.any { e -> e.redeemableCustomPokemon.any { (_, v) -> v.any { it.id == pokemon.id } } }
+    return catchables and redeemables  }
+
+  fun getCurrentCatchableEvents(): List<EventPokemon> {
+    val now = System.currentTimeMillis()
+    return catchableEventList.filter { now in it.startsAt..it.endsAt }
   }
 
-  fun getCurrentEvents(): List<EventPokemon> {
+  fun getCurrentRedeemableEvents(): List<RedeemExclusivePokemon> {
     val now = System.currentTimeMillis()
-    return eventPokemonList.filter { now in it.startsAt..it.endsAt }
+    return redeemableEventList.filter {now in it.startsAt..it.endsAt}
   }
 
   private val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
