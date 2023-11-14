@@ -82,7 +82,7 @@ class SpawnerEvent : Event() {
         if (randomSpawnChannel.sentMessages >= randomSpawnChannel.requiredMessages) {
           try {
             randomSpawnChannel.sentMessages = 0
-            randomSpawnChannel.requiredMessages = Random.nextInt(10, 31)
+            randomSpawnChannel.requiredMessages = Random.nextInt(10, 21)
             randomSpawnChannel.spawned = getNextSpawn()
 
             context.bot.database.spawnChannelRepository.updateDetails(
