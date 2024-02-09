@@ -1,6 +1,6 @@
-# Pokecord - Open Source is HERE! Sort of.
+# Pokecord - Open Source is HERE!
 
-| Notice ❗ | Pokecord is currently cleaning up and optimizing the project for open source and we're looking for help!|
+| Notice ❗ | Pokecord is currently cleaning up and optimizing the project for development and we're looking for help!|
 | :--------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 [![Discord](https://img.shields.io/discord/718872125490069534?logo=discord&style=for-the-badge)](https://discord.gg/EUYgq3Jub3)
@@ -11,14 +11,14 @@ The source code provided is purely for developmental purpose. We kindly ask you 
 
 ## Contributions
 
-Please contact us via our Discord server to get started (click the "Chat" icon above).
+Please contact us via our Discord server (see our #develop channel) to get started. (click the "Chat" icon above.)
 Check out our latest post in the #bot-updates channel to stay up to date.
 
 ## Roadmap
-*This roadmap is broad. For details, please review our dev channel via our Discord server.*
+*This roadmap is broad. For details, please see our #develop channel via our Discord server.*
 
 **1.** Various improvements to the project to make it easier to restart separate parts of the bot
 
 **2.** Translations over the entire project could be made better (e.g., [Fluent](https://projectfluent.org/))
 
-**3.** "The project is too connected." Many parts are connected, but it's not obvious that they are. This makes it hard to make changes without changing a whole bunch of other things.
+**3.** "The project is too connected." Many parts are connected, but it's not obvious that they are. This makes it hard to make changes without changing a whole bunch of other things first.
