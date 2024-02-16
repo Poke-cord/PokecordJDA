@@ -46,13 +46,14 @@ class PickCommand : Command() {
 
       context.reply(
         context.embedTemplates.normal(
-          context.translate("modules.pokemon.commands.pick.embed.description", "pokemon" to translatedPokemonName),
-          "$translatedPokemonName | ${
-            context.translate(
-              "misc.texts.starterPokemon"
-            )
-          }"
-        )
+          context.translate("modules.pokemon.commands.pick.embed.description",
+            mapOf(
+              "pokemon" to translatedPokemonName,
+              "user" to context.author.asMention)
+            ),
+          context.translate("modules.pokemon.commands.pick.embed.title",
+            "pokemon" to translatedPokemonName)
+        )/*
           .addField(context.translate("misc.texts.name"), translatedPokemonName, false)
           .addField(context.translate("misc.texts.evolution"), context.translator.evolution(pokemon), true)
           .addField(
@@ -69,7 +70,7 @@ class PickCommand : Command() {
           .addField(context.translate("misc.texts.gender"), context.translator.gender(ownedPokemon), true)
           .addField(context.translate("misc.texts.weight"), "${pokemon.weight / 10.0} kg", true)
           .setThumbnail(ownedPokemon.imageUrl)
-          .setColor(pokemon.species.color.colorCode)
+          .setColor(pokemon.species.color.colorCode)*/
           .build()
       ).queue()
     }

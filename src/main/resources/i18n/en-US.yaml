@@ -250,7 +250,6 @@ misc:
       Server command only. 
       > **Navigate to a server to continue.**
     special: Special
-    starterPokemon: Starter Pokémon
     status: Status
     suggestedMoves: Suggested Moves
     hp: HP
@@ -984,8 +983,11 @@ modules:
       pick:
         embed:
           description: |-
-            You chose {{pokemon}} as your starter Pokémon!
-            > Try using `@Pokecord info latest` to view even more stats!
+            Congratulations, and welcome to Pokecord {{user}}!
+            
+            Let's get you acquainted with our systems, and you'll be well on your way for your journey to come.
+            > **Use `@Pokecord profile cl` to view your introductory checklist!**
+          title: "{{pokemon}} joined your adventure!"
         pickingTwice: |-
           Pokecord couldn't find a time machine.
           > **Try catching Pokémon instead of picking again.**
@@ -1163,10 +1165,26 @@ modules:
 
             footer: Some stats may update sooner than others.
             title: "{{user}}'s Pokecord Info"
+          checklist:
+            description: Complete every task on this checklist to claim a reward!
+            title: {{user}} Intro Checklist
+            #footer: Progress: 1/3 tasks complete
+            fields:
+              firstTime:
+                key: For the First Time in Forever
+                value: |-
+                  - Test
+                  - Test
+              commands:
+                key: Relevant Commands
+                value: |-
+                  - Testo
+                  - Testp
+                  - Testr
 #        errors: add some later
       rewards:
         embed:
-          description: "*Pokecord looked through the credit bank...*"
+          description: "*Pokecord gathered your rewards down to the credit...*"
           fields:
             catchRewards:
               name: '**__Catch Rewards__** (**{{amount}}**)'
