@@ -20,6 +20,7 @@ object GiftPokemonCommand : Command() {
     context: ICommandContext,
     @Argument receiver: User?,
     @Argument(name = "pokemon") pokemonResolvable: PokemonResolvable?
+    @RemainingArguments message: String? // Allow users to optionally enter a message
   ) {
     if (!context.hasStarted(true)) return
 
@@ -108,7 +109,8 @@ object GiftPokemonCommand : Command() {
                 "receiver" to receiver.asMention,
                 "level" to pokemon.level.toString(),
                 "ivPercentage" to pokemon.ivPercentage,
-                "pokemon" to context.translator.pokemonDisplayName(pokemon, false)
+                "pokemon" to context.translator.pokemonDisplayName(pokemon, false),
+                "message" to message.orEmpty() //Add the message to the confirmation embed
               )
             ),
             context.translate("modules.pokemon.commands.gift.embeds.confirmation.title")
@@ -137,7 +139,8 @@ object GiftPokemonCommand : Command() {
                     "sender" to context.author.asMention,
                     "ivPercentage" to pokemon.ivPercentage,
                     "level" to pokemon.level.toString(),
-                    "pokemon" to context.translator.pokemonDisplayName(pokemon, false)
+                    "pokemon" to context.translator.pokemonDisplayName(pokemon, false),
+                    "message" to message.orEmpty() //add the message to receive gift embed
                   )
                 ),
                 context.translate("modules.pokemon.commands.gift.embeds.giftReceived.title")
@@ -155,7 +158,8 @@ object GiftPokemonCommand : Command() {
                   "receiver" to receiver.asMention,
                   "level" to pokemon.level.toString(),
                   "ivPercentage" to pokemon.ivPercentage,
-                  "pokemon" to context.translator.pokemonDisplayName(pokemon, false)
+                  "pokemon" to context.translator.pokemonDisplayName(pokemon, false),
+                  "message" to message.orEmpty() //Add the message to received embed
                 )
               ),
               context.translate("modules.pokemon.commands.gift.embeds.giftSent.title")
