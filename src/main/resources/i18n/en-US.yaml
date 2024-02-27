@@ -212,7 +212,7 @@ misc:
     commands: Commands
     commandTimedOut: |-
       Too powerful! Command execution timed out. 
-      > **Report this error [here](https://discord.gg/EUYgq3Jub3) if it recurs.**
+      > **Report this error [here](https://discord.gg/UWUpfpR) if it recurs.**
     criticalRate: Critical Rate
     damageClass: Damage Class
     evolution: Evolution
@@ -669,7 +669,7 @@ modules:
           noPartnerFound:
             description: |-
               Partner not found.
-              > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
+              > **Report this error [here](https://discord.gg/UWUpfpR).**
       cancel:
         embeds:
           cancelTrade:
@@ -1150,7 +1150,7 @@ modules:
             title: An Item has been Taken
           errors:
             holdingUnknownItem: '**Suggestion**: Try joining our [support
-                            server](https://discord.gg/EUYgq3Jub3) to resolve this issue!'
+                            server](https://discord.gg/UWUpfpR) to resolve this issue!'
             notHolding: '**Suggestion**: Try giving an item to your Pokémon
                             before taking anything!'
       profile:
@@ -1256,7 +1256,7 @@ modules:
             orderCancelled: The order has been cancelled or the session timed out.
           failedToCancelOrder: |-
             An error occurred when creating your order.
-            > **Contact us [here](https://discord.gg/EUYgq3Jub3) to resolve this issue.**
+            > **Contact us [here](https://discord.gg/UWUpfpR) to resolve this issue.**
           dmsClosed: |-
             Pokecord couldn't DM you!
             > **Allow Pokecord to DM you before ordering again.**
@@ -1284,7 +1284,7 @@ store:
         6750_gems: 6750 Gems
     roles:
       name: Roles
-      description: Purchase a trainer role for our **[official server](https://discord.gg/EUYgq3Jub3)** to receive shop discounts and XP boosts.
+      description: Purchase a trainer role for our **[official server](https://discord.gg/UWUpfpR)** to receive shop discounts and XP boosts.
       embed:
         title: Purchase Roles
         description: Select a desired role for purchase.
