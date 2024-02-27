@@ -96,7 +96,7 @@ misc:
     timeoutFooter: Reactions will automatically time out in 30 seconds.
   embeds:
     error:
-      footer: Support is available at discord.gg/pkcord.
+      footer: Support is available at discord.gg/UWUpfpR.
       title: Something went wrong...
     evolved:
       description: |-
@@ -144,7 +144,7 @@ misc:
       commandExecutionFailed:
         description: |-
           Failed to execute the {{command}} command. 
-          > **Report this error [here](https://discord.gg/EUYgq3Jub3) if it recurs.**
+          > **Report this error [here](https://discord.gg/UWUpfpR) if it recurs.**
         title: Command Execution Failure
       commandRateLimitReached:
         description: |-
@@ -184,7 +184,7 @@ misc:
       > **Check Pokémon name, ID, and spelling.**
     pokemonDoesNotExist: |-
       Pokémon does not exist.
-      > **Report this error [here](https://discord.gg/EUYgq3Jub3).**
+      > **Report this error [here](https://discord.gg/UWUpfpR).**
     userHasNotStarted: |-
       The user you mentioned hasn't started yet.
       > **Ask them to use `@Pokecord start`.**
@@ -794,7 +794,7 @@ modules:
           tooLarge: Prefix can't be longer than 10 characters.
           updated: Prefix updated to {{prefix}}.
         silence:
-          title: Level-Up Message Toggle
+          title: Level-Up Messages Toggled
           enabled: Level-up messages have been enabled.
           disabled: Level-up messages have been disabled.
         spawn:
@@ -849,7 +849,7 @@ modules:
             Your favorites have been updated.
       gift:
         toggle:
-          title: Toggle Incoming Gifts
+          title: Toggled Incoming Gifts
           enabled: |-
             You are eligible to receive gifts from other users. Swell!
           disabled: |-
