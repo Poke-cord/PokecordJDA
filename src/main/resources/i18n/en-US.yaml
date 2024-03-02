@@ -780,12 +780,13 @@ modules:
       ping:
         embed:
           description: |-
-            **API Ping**: {{apiPing}}
-            **Ping**: {{ping}}
+            **To API**: {{apiPing}}
+            **To Client**: {{ping}}
           title: Pong!
+          footer: Values start from BOT.
       set:
         private:
-          title: Progress Privacy
+          title: Progress Privacy Toggled
           enabled: Your progress is now hidden from other players.
           disabled: Your progress is now viewable by other players.
         prefix:

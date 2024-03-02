@@ -21,6 +21,7 @@ class PingCommand : Command() {
           )
         ),
         context.translate("modules.general.commands.ping.embed.title")
+      ).setFooter(context.translate("modules.general.commands.ping.embed.footer")
       ).build()
     ).queue()
   }
