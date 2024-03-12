@@ -31,8 +31,8 @@ class QuickLinksCommand : Command() {
           "modules.general.commands.invite.embed.description",
           mapOf(
             "serverLink" to "https://discord.gg/EUYgq3Jub3",
-            "inviteLink" to "https://pokecord.zihad.dev/invite",
-            "websiteLink" to "https://pokecord.zihad.dev",
+            "inviteLink" to "https://discord.com/oauth2/authorize?client_id=705016654341472327&scope=bot&permissions=388160",
+            "websiteLink" to "https://pokesaur.net",
             "tosLink" to "https://sites.google.com/view/pokecord4908/english/terms"
           )
         ),
