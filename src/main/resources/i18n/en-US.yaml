@@ -26,7 +26,7 @@ misc:
     general:
       faq: Search frequently asked questions by keyword.
       help: Displays all commands with descriptions.
-      quicklinks: View quick links including Pokecord's invite, donations, and more.
+      quicklinks: View quick links including Pokésaur's invite, donations, and more.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
       set: Miscellaneous setting configurations.
@@ -35,7 +35,7 @@ misc:
       "set.silence": Toggles server Pokémon level-up messages.
       "set.spawn": Sets/removes a server spawn channel.
       "set.level": Sets the server level-up messages channel.
-      vote: Links Pokecord's vote page and reveals current day of vote season.
+      vote: Links Pokésaur's vote page and reveals current day of vote season.
     market:
       market: View all market listings. Accepts search and filters.
       "market.list": List Pokémon on the market. Include purchase price.
@@ -52,7 +52,7 @@ misc:
       moveset: Recommends movesets for legendary and mythical Pokémon.
       nickname: Sets/resets nickname of selected Pokémon. Pokémon are searchable by nickname.
       order: Orders your Pokémon collection by specified filter. Defaults to Pokédex.
-      pick: Allows you to start your Pokecord journey with a Pokémon.
+      pick: Allows you to start your Pokésaur journey with a Pokémon.
       pokedex: Displays Pokémon base stats and general information.
       pokemon: Displays a Pokémon collection with filters and searchability.
       release: Transfers Pokémon to Professor Zihadikarp.
@@ -65,13 +65,13 @@ misc:
       profile: Displays user information.
       "profile.pokedex": Displays all Pokémon registered to Pokédex. Includes shinies.
       rewards: Displays/claim all available rewards.
-      start: Displays Pokecord's welcome message. This should be your first command.
+      start: Displays Pokésaur's welcome message. This should be your first command.
     staff:
-      blacklist: Prevent users from executing Pokecord commands.
+      blacklist: Prevent users from executing Pokésaur commands.
       blacklists: View a full list of all blacklisted users.
       logs: View auction, market, trade, and gift logs for a given user.
-      maintenance: Toggle Pokecord in or out of Maintenance Break.
-      shards: Check the status of Pokecord's shards.
+      maintenance: Toggle Pokésaur in or out of Maintenance Break.
+      shards: Check the status of Pokésaur's shards.
       show: View advanced spawn channel details.
     trading:
       trade: Initiate a trade session with another user.
@@ -88,10 +88,10 @@ misc:
     hasStarted:
       embed:
         description: |-
-          Hey there! Welcome to Pokecord.
+          Hey there! Welcome to Pokésaur.
           
-          Get started with `@Pokecord start` before you use other commands.
-        title: Start your Pokecord Journey
+          Get started with `@Pokesaur start` before you use other commands.
+        title: Start your Pokésaur Journey
   confirmation:
     timeoutFooter: Reactions will automatically time out in 30 seconds.
   embeds:
@@ -162,16 +162,16 @@ misc:
       > **Enter a valid amount.**
     missingArguments:
       noUser: |-
-        Pokecord says you missed or mistook a detail.
+        Pokésaur says you missed or mistook a detail.
         > **Check user mentioned or specify one.**
       noPokemon: |-
-        Pokecord says you missed a detail.
+        Pokésaur says you missed a detail.
         > **Specify a Pokémon by collection ID.**
       noPokemonName: |-
-        Pokecord says you missed a detail.
+        Pokésaur says you missed a detail.
         > **Specify a Pokémon by its name.**
     noSearchResults: |-
-      Pokecord looked far and wide, to no avail.
+      Pokésaur looked far and wide, to no avail.
       > **No results found as per your search query.**
     notASpawnChannel: |-
       You can't catch here—at least not yet.
@@ -180,21 +180,21 @@ misc:
       You're here! But Pokémon are not.
       > **Wait for a Pokémon to spawn.**
     pokemonNotFound: |-
-      Pokecord looked far and wide, to no avail.
+      Pokésaur looked far and wide, to no avail.
       > **Check Pokémon name, ID, and spelling.**
     pokemonDoesNotExist: |-
       Pokémon does not exist.
       > **Report this error [here](https://discord.gg/UWUpfpR).**
     userHasNotStarted: |-
       The user you mentioned hasn't started yet.
-      > **Ask them to use `@Pokecord start`.**
+      > **Ask them to use `@Pokesaur start`.**
   presence:
     maintenance:
       activity: Maintenance Break
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord • {{version}}"
+      activity: "@Pokésaur • {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -307,9 +307,9 @@ modules:
       moves:
         embed:
           description: |-
-            *Duel other Pokémon with a strategic move layout. Use `@Pokecord moves teach <slot 1-4> <move name>` to learn moves.*
+            *Duel other Pokémon with a strategic move layout. Use `@Pokesaur moves teach <slot 1-4> <move name>` to learn moves.*
             
-            **Example usage**: `@Pokecord moves teach 2 hyper beam`
+            **Example usage**: `@Pokesaur moves teach 2 hyper beam`
           title: "Dueling Moves │ Level {{level}} {{pokemon}}"
         teach:
           embed:
@@ -326,18 +326,18 @@ modules:
               > **Finish your current duel first.**
             cancelled: Move teaching has been cancelled.
             moveNotFound: |-
-              Pokecord looked far and wide, to no avail.
+              Pokésaur looked far and wide, to no avail.
               > **Specified move was not found. Search for another move.**
             moveNotSpecified: |-
-              Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
-              E.g., `@Pokecord moves teach 2 hyper beam`
+              Please follow the following format: `@Pokesaur moves teach <slot 1-4> <move name>`
+              E.g., `@Pokesaur moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotNotSpecified: |-
-              Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
-              E.g., `@Pokecord moves teach 2 hyper beam`
+              Please follow the following format: `@Pokesaur moves teach <slot 1-4> <move name>`
+              E.g., `@Pokesaur moves teach 2 hyper beam`
               You may only teach moves to your selected Pokémon.
             slotOutOfRange: |-
-              Pokecord couldn't find your slot number.
+              Pokésaur couldn't find your slot number.
               > **Specify a slot number between 1 and 4.**
           replaceConfirmation:
             title: A Move Replacement is Pending
@@ -360,7 +360,7 @@ modules:
           title: "{{userTag}}'s Auctions"
         errors:
           noResults: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **You have no current auctions. Create one to get started.**
       list:
         errors:
@@ -368,10 +368,10 @@ modules:
             Two you? No. Two things at once? Also no.
             > **Finish your current trade first.**
           startingBidPrice: |-
-            Pokecord couldn't enter your starting bid.
+            Pokésaur couldn't enter your starting bid.
             > **Specify starting bid between 1,000 and 10 million credits.**
           minimumTime: |-
-            Pokecord couldn't enter your auction time.
+            Pokésaur couldn't enter your auction time.
             > **Specify time between 4 hours and 30 days.**
         confirmation:
           description: |-
@@ -409,16 +409,16 @@ modules:
         errors:
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
           notYourAuction: |-
             You tried to unlisted someone else's auction. It didn't work. 
             > **Unlist your own auctions.**
           bidsActive: |-
-            Too much finance! Pokecord can't figure it out.
+            Too much finance! Pokésaur can't figure it out.
             > **Unlist auctions that have no bids.**
           auctionSold: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Auction was sold or has ended. Unlist another auction.**
       bid:
         bidNotification:
@@ -447,11 +447,11 @@ modules:
           title: A Bid is Pending
         errors:
           alreadyEnded: |-
-            Pokecord couldn't find a time machine.
+            Pokésaur couldn't find a time machine.
             > **Specified auction has ended.**
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
           selfBid: |-
             You bid on your own auction. Wait, you can't.
@@ -470,7 +470,7 @@ modules:
         errors:
           noAuctionId: Please provide a valid auction ID.
           noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find auction {{id}}. Search for another auction.**
         title: Auction \#{{auctionId}} │ Level {{pokemonLevel}} {{pokemonName}}
 #        footer: "Viewing auction #{{index}} • Caught date" To add at a later date
@@ -519,7 +519,7 @@ modules:
           title: "{{userTag}}'s Market Listings"
         errors:
           noResults: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **You have no current listings. Create one to get started.**
       list:
         errors:
@@ -528,7 +528,7 @@ modules:
             > **Finish your current trade first.**
           noPriceProvided: Please provide the price you would like to list your Pokémon for.
           startingBidPrice: |-
-            Pokecord couldn't enter your listing price.
+            Pokésaur couldn't enter your listing price.
             > **Specify listing price between 1,000 and 10 million credits.**
         confirmation:
           description: |-
@@ -560,13 +560,13 @@ modules:
         errors:
           noListingId: Please provide a valid market listing ID.
           noListingFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
           notYourListing: |-
             You tried to unlisted someone else's listing. It didn't work. 
             > **Unlist your own listings.**
           bidsActive: |-
-            Too much finance! Pokecord can't figure it out.
+            Too much finance! Pokésaur can't figure it out.
             > **Unlist listings that haven't been purchased.**
       buy:
         sold:
@@ -595,11 +595,11 @@ modules:
           title: Listing Purchase Confirmation
         errors:
           alreadySold: |-
-            Pokecord couldn't find a time machine.
+            Pokésaur couldn't find a time machine.
             > **Specified listing has been sold.**
           noListingId: Please provide a valid listing ID.
           noListingFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
           selfBuy: |-
             You purchased your own listing. Wait, you can't.
@@ -608,13 +608,13 @@ modules:
             Got spare credits lying around?
             > **Gain more credits to purchase this listing.**
           unlisted: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Listing has been unlisted. Search for another listing.**
       info:
         errors:
           noListingId: Please provide a valid listing ID.
           noListingFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Could not find listing {{id}}. Search for another listing.**
         title: Listing \#{{listingId}} │ Level {{pokemonLevel}} {{pokemonName}}
       market:
@@ -684,10 +684,10 @@ modules:
             You tried to add air. That didn't work.
             > **Specify credit amount to add.**
           notEnoughCredits: |-
-            Pokecord couldn't enter your credit amount.
+            Pokésaur couldn't enter your credit amount.
             > **Check current credit balance.**
           maxPokemonCount: |-
-            Too many Pokémon! Pokecord can't count.
+            Too many Pokémon! Pokésaur can't count.
             > **You may only specify 20 Pokémon IDs.**
         embeds:
           title: Trade Session Updated
@@ -713,7 +713,7 @@ modules:
             Got spare credits lying around?
             > **Gain {{credits}} more credits to add this amount.**
           notAdded: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **Specified Pokémon is not in trade.**
         embeds:
           title: Trade Session Revised
@@ -751,7 +751,7 @@ modules:
       faq:
         errors:
           noFaqFound: |-
-            Pokecord looked far and wide, to no avail.
+            Pokésaur looked far and wide, to no avail.
             > **No FAQ found matching specified keyword.**
         list:
           embed:
@@ -760,18 +760,18 @@ modules:
         embed:
           description: |-
             Community and Support: [[**Join Server**]]({{serverLink}})
-            > Receive support and play Pokecord with us!
+            > Receive support and play Pokésaur with us!
             
-            Invite Pokecord: [[**Invite**]]({{inviteLink}})
-            > Play Pokecord in your own server!
+            Invite Pokésaur: [[**Invite**]]({{inviteLink}})
+            > Play Pokésaur in your own server!
             
             Make a Donation: [[**Go**]]({{serverLink}})
-            > Once in Official Pokecord, see <#774049980058697738>.
+            > Once in Pokésaur Official, see <#774049980058697738>.
             
             Official Websites: [[**Main**]]({{websiteLink}}) [[**Terms of Service**]]({{tosLink}})
             > See an overview of our bot and review the rules!
-          footer: Thank you for choosing Pokecord!
-          title: Pokecord Quick Links
+          footer: Thank you for choosing Pokésaur!
+          title: Pokésaur Quick Links
       leaderboard:
         titles:
           credits: Global 'Cord Board by Credit Amount
@@ -820,7 +820,7 @@ modules:
         now: now
         embed:
           description: |-
-            **Vote for Pokecord**: [top.gg page]({{voteLink}})
+            **Vote for Pokésaur**: [top.gg page]({{voteLink}})
             **Season End**: {{currentSeasonEndTime}}
             **Next vote**... {{nextVoteTime}}!
           footer: Want more rewards? Check in every 12 hours to vote!
@@ -916,7 +916,7 @@ modules:
             You sent a gift to yourself. Wait, you can't.
             > **You may only send gifts to other users.**
           giftsDisabled: |-
-            Pokecord couldn't deliver the gift. 
+            Pokésaur couldn't deliver the gift. 
             > **The receiver is not accepting gifts.**
       hint:
         confirmation:
@@ -937,8 +937,8 @@ modules:
             description: Your Pokémon hint request was cancelled.
             title: Hint Generation Cancelled
           dmFailed: |-
-            Pokecord couldn't DM you and returned credits.
-            > **Allow Pokecord#4908 to DM you.**
+            Pokésaur couldn't DM you and returned credits.
+            > **Allow Pokésaur#4908 to DM you.**
           notEnoughCredits: |-
             Got spare credits lying around?
             > **Gain more credits to purchase a hint.**
@@ -969,7 +969,7 @@ modules:
             Identity theft is real. No stealing!
             > **Do not include another Pokémon's name.**
           charLimit: |-
-            Too long! Pokecord can't handle it.
+            Too long! Pokésaur can't handle it.
             > **Limit nickname to 64 characters.**
           emojiNotAllowed: |-
             Pokémon fraud is forbidden.
@@ -986,9 +986,9 @@ modules:
         embed:
           description: |-
             You chose {{pokemon}} as your starter Pokémon!
-            > Try using `@Pokecord info latest` to view even more stats!
+            > Try using `@Pokesaur info latest` to view even more stats!
         pickingTwice: |-
-          Pokecord couldn't find a time machine.
+          Pokésaur couldn't find a time machine.
           > **Try catching Pokémon instead of picking again.**
       pokedex:
         embed:
@@ -1015,19 +1015,19 @@ modules:
           title: Selected Pokémon Updated
       start:
         description: |-
-          Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
+          Come join us by collecting Pokémon and immersing yourself in the world of Pokésaur! Start by picking a Pokémon to carry on your journey.
           
-          **Get started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
-          **Example usage**: `@Pokecord pick torchic`
+          **Get started**: Use `@Pokesaur pick <Pokémon Name>` to choose a Pokémon.
+          **Example usage**: `@Pokesaur pick torchic`
         startingTwice: |-
-          Pokecord couldn't find a time machine.
+          Pokésaur couldn't find a time machine.
           > **Try catching Pokémon instead of starting again.**
-        welcomeToPokeWorld: Welcome to the World of Pokecord!
+        welcomeToPokeWorld: Welcome to the World of Pokésaur!
     events:
       spawner:
         embeds:
           spawn:
-            description: Use `@Pokecord catch <Pokémon Name>` to catch it!
+            description: Use `@Pokesaur catch <Pokémon Name>` to catch it!
             footer: The next Pokémon will replace this one.
             title: A Wild Pokémon has Appeared
   release:
@@ -1036,11 +1036,11 @@ modules:
         embed:
           description: |-
             **Try using**:
-            `@Pokecord release add <pokemon number(s)>`
+            `@Pokesaur release add <pokemon number(s)>`
             
             **Example usage**:
-            `@Pokecord release add 11,22,33`
-            `@Pokecord release add 1-20`
+            `@Pokesaur release add 11,22,33`
+            `@Pokesaur release add 1-20`
           title: Release Add Usage
         releaseStarted:
           title: A Release Session has Started
@@ -1102,7 +1102,7 @@ modules:
         Two you? No. Two release sessions? Also no.
         > **Finish your current release session first.**
       notInRange: |-
-        Pokecord couldn't 
+        Pokésaur couldn't add all the Pokémon for transfer.
         > **Specify up to a maximum of 50 Pokémon.**
   profile:
     commands:
@@ -1163,11 +1163,11 @@ modules:
               **Shiny Rate**: 1/{{rate}}
 
             footer: Some stats may update sooner than others.
-            title: "{{user}}'s Pokecord Info"
+            title: "{{user}}'s Pokésaur Info"
 #        errors: add some later
       rewards:
         embed:
-          description: "*Pokecord looked through the credit bank...*"
+          description: "*Pokésaur reached into the credit bank...*"
           fields:
             catchRewards:
               name: '**__Catch Rewards__** (**{{amount}}**)'
@@ -1188,7 +1188,7 @@ modules:
               - {{psLegendaryCount}} Pseudo Legendaries; and
               - {{otherCount}} of everything in-between!
 
-              Use `@Pokecord rewards all` to claim rewards.
+              Use `@Pokesaur rewards all` to claim rewards.
             title: 'Unclaimed Rewards Available!'
         errors:
           noPokemonRewards: '**Suggestion**: Try catching more Pokémon to
@@ -1250,8 +1250,8 @@ modules:
           orderCreated:
             title: An Order has been Opened
             description: Order information has been sent to your DMs.
-          description: Welcome to the Pokecord Store! Select a category to get started.
-          title: Pokecord Store
+          description: Welcome to the Pokésaur Store! Select a category to get started.
+          title: Pokésaur Store
         errors:
           cancelOldOrder:
             orderCancelled: The order has been cancelled or the session timed out.
@@ -1259,11 +1259,11 @@ modules:
             An error occurred when creating your order.
             > **Contact us [here](https://discord.gg/UWUpfpR) to resolve this issue.**
           dmsClosed: |-
-            Pokecord couldn't DM you!
-            > **Allow Pokecord to DM you before ordering again.**
+            Pokésaur couldn't DM you!
+            > **Allow Pokésaur to DM you before ordering again.**
         dm:
           embed:
-            title: Thanks for Supporting Pokecord!
+            title: Thanks for Supporting Pokésaur!
             description: |-
               **Order Item**: {{item}}
               
@@ -1329,12 +1329,12 @@ items:
         That didn't work quite right.
         > **Use a different mint or select another Pokémon.**
       inBattle: |-
-        Pokecord smells a hint of trickery.
+        Pokésaur smells a hint of trickery.
         > **Nature mints may not be used in battle.**
   glimmeringCandy:
     embed:
       description: |-
-        *You feel the power of the Pokecord shiny gods...*
+        *You feel the power of the Pokésaur shiny gods...*
         Your current shiny rate has increased to **1/{{rate}}**.
         
         Congratulations {{user}}!
@@ -1343,7 +1343,7 @@ items:
   natureCandy:
     embed:
       description: |-
-        *You feel the power of the Pokecord RNG gods...*
+        *You feel the power of the Pokésaur RNG gods...*
         You give into the RNG and receive a **{{natureMint}}**.
         
         Congratulations {{user}}!
@@ -1382,8 +1382,8 @@ items:
         Got spare credits lying around?
         > **Gain a total of {{cost}} credits to use this item.**
       notEnoughCCT: |-
-        Pokecord says get more Credit Conversion Tokens.
-        > **Use `@Pokecord vote` to obtain CCTs on select days.**
+        Pokésaur says get more Credit Conversion Tokens.
+        > **Use `@Pokesaur vote` to obtain CCTs on select days.**
       cancelled:
         description: The Credit Conversion Token was not consumed.
         title: Consume CCT Cancelled
@@ -1395,13 +1395,13 @@ items:
     errors:
       disallowedPokemon: |-
         You can't redeem this Pokémon with this type of redeem.
-        > **See `@Pokecord faq redeems` for further detail.**
+        > **See `@Pokesaur faq redeems` for further detail.**
       noCurrentEvents: |-
         There are no ongoing events right now.
         > **Use this redeem during an event.**
     embed:
       description: |-
-        *Pokecord reached into the depths of the PC...*
+        *Pokésaur reached into the depths of the PC...*
         Your **{{pokemon}}** is level **{{level}}** and is **{{ivPercentage}}** IV!
         
         Congratulations {{user}}!
@@ -1424,5 +1424,5 @@ items:
         The vitamins were applied successfully.
   unusable:
     description: |-
-      Pokecord says this isn't a consumable item.
-      > **Use `@Pokecord item give` or use another item.**
+      Pokésaur says this isn't a consumable item.
+      > **Use `@Pokesaur item give` or use another item.**
