@@ -12,6 +12,7 @@ import kotlin.math.ceil
 
 class ShardsCommand : StaffCommand() {
   override val name = "Shards"
+  override var aliases = arrayOf("sds")
 
   @Executor
   suspend fun execute(
@@ -30,7 +31,7 @@ class ShardsCommand : StaffCommand() {
       val startingIndex = it * 10
       val items = shardStatusSet.drop(startingIndex).take(10)
       val shardList = items.joinToString("\n") { status ->
-        "${status.id}/${status.count} - ${status.gatewayPing}ms - ${status.hostname} - ${
+        "${status.id}/${status.count - 1} - ${status.gatewayPing}ms - ${status.hostname} - ${
           (System.currentTimeMillis() - status.updatedAt).humanizeMs()
         } - ${status.guildCacheSize}"
       }

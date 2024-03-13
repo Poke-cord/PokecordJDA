@@ -783,7 +783,7 @@ modules:
             **To API**: {{apiPing}}
             **To Client**: {{ping}}
           title: Pong!
-          footer: Values start from BOT.
+          footer: Ping starts in-client.
       set:
         private:
           title: Progress Privacy Toggled
@@ -1250,8 +1250,10 @@ modules:
           orderCreated:
             title: An Order has been Opened
             description: Order information has been sent to your DMs.
-          description: Welcome to the Pokecord Store! Select a category to get started.
-          title: Pokecord Store
+          description: |-
+            Welcome to The 'Cord Seaside Store! Browse for gems, perks, and more!
+            *This is Pokecord's official store. Items are purchased with genuine currency.*
+          title: The 'Cord Seaside Store
         errors:
           cancelOldOrder:
             orderCancelled: The order has been cancelled or the session timed out.
