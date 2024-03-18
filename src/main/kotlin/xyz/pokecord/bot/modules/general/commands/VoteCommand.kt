@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit
 
 class VoteCommand : Command() {
   override val name = "Vote"
+  override var aliases = arrayOf("v", "vt")
 
   @Executor
   suspend fun execute(

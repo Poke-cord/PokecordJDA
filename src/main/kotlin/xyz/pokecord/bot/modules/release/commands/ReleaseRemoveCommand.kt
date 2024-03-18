@@ -8,7 +8,7 @@ import xyz.pokecord.bot.utils.Config
 
 object ReleaseRemoveCommand : Command() {
   override val name: String = "remove"
-  override var aliases = arrayOf("r")
+  override var aliases = arrayOf("r", "rm")
 
   @Executor
   suspend fun execute(

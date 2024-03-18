@@ -5,7 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 class QuickLinksCommand : Command() {
   override val name = "QuickLinks"
-  override var aliases = arrayOf("l", "link", "links", "ql", "qls", "quicklink", "quick link", "quick links", "inv", "donate", "support")
+  override var aliases = arrayOf("invite", "link", "links", "ql", "qls", "quicklink", "quick link", "quick links", "donate", "support")
 
   @Executor
   suspend fun execute(
