@@ -61,14 +61,17 @@ object BattleActionEvent : Event() {
           val partnerPokemon = module.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
 
           event.hook.sendMessageEmbeds(Embed {
-            title = "${event.interaction.user.name} vs. ${partnerUser.name}"
+            title = "Battle │ You VS. ${partnerUser.name}"
             // TODO: use translator somehow
             description = """
-                  **${pokemon.displayName}** (lv. ${pokemon.level}): ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
-                  **${partnerPokemon.displayName}** (lv. ${partnerPokemon.level}): ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
+                  **Your** ${pokemon.displayName}
+                  Level ${pokemon.level}) │ ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
+                  
+                  ***${partnerUser.name}'s*** ${partnerPokemon.displayName}
+                  Level ${partnerPokemon.level} │ ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
                   
                   > **Select a move to execute.**
-                """.trimIndent()
+                  """.trimIndent()
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
           }).addActionRow(pokemon.moves.toSet().mapNotNull {
@@ -205,7 +208,8 @@ object BattleActionEvent : Event() {
                 ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
                 ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
                 """.trimIndent()
-              } else {
+              }
+              else {
                 """
                 ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
                 ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
@@ -219,23 +223,17 @@ object BattleActionEvent : Event() {
             event.hook.sendMessageEmbeds(Embed {
               title = "${event.interaction.user.name} vs. ${partnerUser.name}"
               description = """
-                **${selfPokemon.displayName}** (lv. ${selfPokemon.level}): ${self.pokemonStats.hp}/${selfPokemon.stats.hp} HP
-                **${partnerPokemon.displayName}** (lv. ${partnerPokemon.level}): ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
-                
                 ${getMoveResultTexts()}
                 ${
-                if (winner != null) """
-                    **${if (winner.id == self.id) event.user.name else partnerUser.name}** won the battle! **${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName}** gained **${gainedXp}** XP!                    
-                    **${
-                  if (winner.id == self.id) partnerUser.name else event.user.name
-                }** lost the battle! **${
-                  (if (winner.id == self.id) partnerPokemon else selfPokemon).displayName
-                }** fainted!
+                  if (winner != null) """
+                  **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
+                  ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
+                  —
+                  ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!
                   """.trimIndent()
                 else ""
-              }
+                }
                 """.trimIndent()
-
               image = "attachment://battle.png"
             })
               .addFile(
@@ -297,11 +295,13 @@ object BattleActionEvent : Event() {
     if (moveResult.isMissed) return "**${selfPokemon.displayName}** used **${moveData.name}**, but it missed!"
     if (moveResult.nothingHappened) return "**${selfPokemon.displayName}** used **${moveData.name}**, but nothing happened."
     val sb = StringBuilder()
-    sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
-    sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
-    if (moveResult.isCritical) sb.appendLine("It's a critical hit!")
-    if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!")
-    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective...")
+    //sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
+    //sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
+    sb.append("${selfPokemon.displayName} used ${moveData.name}!\n***${moveData.name} dealt")
+    sb.appendLine("${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.")
+    if (moveResult.isCritical) sb.appendLine("It's a critical hit!***")
+    if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!***")
+    else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective...***")
     return sb.toString()
   }
 }

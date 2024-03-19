@@ -299,9 +299,9 @@ modules:
           battleRequest:
             title: Battle Request
             description: |-
-              Dear {{partner}},
+              Attention {{partner}}!
             
-              {{initiator}} wishes to have a battle.
+              {{initiator}} has requested a battle.
             
               React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
       moves:
@@ -630,9 +630,9 @@ modules:
         confirmation:
           title: Trade Request Pending
           description: |-
-            Dear {{partner}},
+            Attention {{partner}}!
             
-            {{trader}} wishes to trade with you.
+            {{trader}} has requested a trade.
             
             React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
         tradeStarted:
