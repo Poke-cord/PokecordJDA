@@ -221,15 +221,15 @@ object BattleActionEvent : Event() {
             val opponentPokemon = if (self.id == battle.initiator.id) partnerPokemon else selfPokemon
 
             event.hook.sendMessageEmbeds(Embed {
-              title = "${event.interaction.user.name} vs. ${partnerUser.name}"
+              title = "Battle │ ${event.interaction.user.name} VS. ${partnerUser.name}"
               description = """
                 ${getMoveResultTexts()}
                 ${
                   if (winner != null) """
-                  **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
-                  **Their** ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
+                  > **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
+                  Their ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
                   —
-                  ***${if (winner.id == self.id) partnerUser.name else event.user.name}***'s ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!
+                  *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!
                   """.trimIndent()
                 else ""
                 }
@@ -298,8 +298,8 @@ object BattleActionEvent : Event() {
     //sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
     //sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
     sb.append("${selfPokemon.displayName} used ${moveData.name}!\n***${moveData.name} dealt")
-    sb.appendLine("${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.***" +
-        (if (moveResult.isCritical)" ***It's a critical hit!***" else "") +
+    sb.appendLine("${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.*** " +
+        (if (moveResult.isCritical)"***It's a critical hit!*** " else "") +
         (if (moveResult.typeEffectiveness >= 2)"***It's super effective!***" else "") +
         (if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25)"***It's not very effective...***" else "")
     )
