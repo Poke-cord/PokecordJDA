@@ -204,16 +204,12 @@ object BattleActionEvent : Event() {
 
             val getMoveResultTexts: () -> String = {
               if (selfMoveFirst) {
-                """
-                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
-                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
-                """.trimIndent()
+                """${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
+                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}""".trimIndent()
               }
               else {
-                """
-                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
-                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
-                """.trimIndent()
+                """${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
+                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}""".trimIndent()
               }
             }
 
@@ -225,7 +221,7 @@ object BattleActionEvent : Event() {
               description = """
                 ${getMoveResultTexts()}
                 
-                ${if (winner != null)"""> **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
+                ${if (winner != null)"""**${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
                   Their ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
                   —
                   *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!""".trimIndent()
@@ -298,12 +294,21 @@ object BattleActionEvent : Event() {
   private fun getMoveResultText(
     moveResult: Battle.MoveResult, selfPokemon: OwnedPokemon, partnerPokemon: OwnedPokemon, moveData: MoveData
   ): String {
-    if (moveResult.isMissed) return "${selfPokemon.displayName} used ${moveData.name}, ***but it missed!***"
-    if (moveResult.nothingHappened) return "${selfPokemon.displayName} used ${moveData.name}, ***but nothing happened...***"
+    if (moveResult.isMissed) return "${selfPokemon.displayName} used ${moveData.name}!\n> ***${moveData.name} missed!***"
+    if (moveResult.nothingHappened) return "${selfPokemon.displayName} used ${moveData.name}!\n> ***Nothing happened...***"
+
+    val moveHit = "${selfPokemon.displayName} used ${moveData.name}!\n> ***${moveData.name} dealt " +
+        "${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.*** " +
+        (if (moveResult.isCritical)"***It's a critical hit!*** " else "") +
+        (if (moveResult.typeEffectiveness >= 2)"***It's super effective!***" else "") +
+        (if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25)"***It's not very effective...***" else "")
+    return moveHit
+
+    /*
     val sb = StringBuilder()
     //sb.append("**${selfPokemon.displayName}** dealt **${moveResult.defenderDamage}** damage to **${partnerPokemon.displayName}**")
     //sb.appendLine("${if (moveResult.selfDamage > 0)" and **${ moveResult.selfDamage}** damage to itself" else ""} using **${moveData.name}**!")
-    sb.append("${selfPokemon.displayName} used ${moveData.name}!\n***${moveData.name} dealt")
+    sb.append("${selfPokemon.displayName} used ${moveData.name}!\n> ***${moveData.name} dealt")
     sb.appendLine("${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.*** " +
         (if (moveResult.isCritical)"***It's a critical hit!*** " else "") +
         (if (moveResult.typeEffectiveness >= 2)"***It's super effective!***" else "") +
@@ -313,5 +318,6 @@ object BattleActionEvent : Event() {
     //if (moveResult.typeEffectiveness >= 2) sb.appendLine("It's super effective!") //Moved up
     //else if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25) sb.appendLine("It's not very effective...***") //Moved up
     return sb.toString()
+    */
   }
 }
