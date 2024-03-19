@@ -224,17 +224,23 @@ object BattleActionEvent : Event() {
               title = "Battle │ ${event.interaction.user.name} VS. ${partnerUser.name}"
               description = """
                 ${getMoveResultTexts()}
-                ${
-                  if (winner != null) """
-                  > **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
+                
+                ${if (winner != null)"""> **${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
                   Their ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
                   —
-                  *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!
-                  """.trimIndent()
-                else ""
-                }
-                """.trimIndent()
+                  *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!""".trimIndent()
+                else """""".trimIndent()}""".trimIndent()
               image = "attachment://battle.png"
+              field(
+                "*${event.interaction.user.name}'s* ${selfPokemon.displayName}",
+                "Level ${selfPokemon.level} │ ${self.pokemonStats.hp}/${selfPokemon.stats.hp} HP",
+                true
+              )
+              field(
+                "*${partnerUser.name}'s* ${partnerPokemon.displayName}",
+                "Level ${partnerPokemon.level} │ ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP",
+                true
+              )
             })
               .addFile(
                 BattleModule.getBattleImage(
