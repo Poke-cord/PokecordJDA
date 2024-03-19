@@ -10,7 +10,7 @@ import kotlin.math.ceil
 
 class BagCommand : Command() {
   override val name = "Bag"
-  override var aliases = arrayOf("bal", "balance", "inv", "inventory", "bp", "backpack")
+  override var aliases = arrayOf("bal", "bp", "inv", "balance", "backpack", "inventory")
 
   @Executor
   suspend fun execute(

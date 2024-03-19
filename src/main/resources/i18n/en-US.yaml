@@ -783,7 +783,7 @@ modules:
             **To API**: {{apiPing}}
             **To Client**: {{ping}}
           title: Pong!
-          footer: Ping starts in-client.
+          footer: Ping starts in client.
       set:
         private:
           title: Progress Privacy Toggled

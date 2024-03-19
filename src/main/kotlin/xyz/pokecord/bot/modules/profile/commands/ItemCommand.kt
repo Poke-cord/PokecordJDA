@@ -10,6 +10,7 @@ import xyz.pokecord.bot.modules.profile.commands.item.TakeItemCommand
 class ItemCommand : ParentCommand() {
   override val childCommands = mutableListOf(GiveItemCommand, TakeItemCommand)
   override val name = "Item"
+  override var aliases = arrayOf("it")
 
   @Executor
   suspend fun execute(

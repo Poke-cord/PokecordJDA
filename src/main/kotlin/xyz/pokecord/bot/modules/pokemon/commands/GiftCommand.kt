@@ -10,6 +10,7 @@ import xyz.pokecord.bot.modules.pokemon.gift.GiftToggleCommand
 object GiftCommand : ParentCommand() {
   override val childCommands = mutableListOf(GiftCreditCommand, GiftPokemonCommand, GiftToggleCommand)
   override val name = "Gift"
+  override var aliases = arrayOf("g")
 
   override var excludeFromHelp = true
 
