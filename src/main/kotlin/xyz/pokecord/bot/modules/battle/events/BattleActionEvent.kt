@@ -61,7 +61,7 @@ object BattleActionEvent : Event() {
           val partnerPokemon = module.bot.database.pokemonRepository.getPokemonById(partnerData.selected!!)!!
 
           event.hook.sendMessageEmbeds(Embed {
-            title = "Battle │ You VS. ${partnerUser.name}"
+            title = "Battle featuring ***You*** VS. ***${partnerUser.name}***"
             // TODO: use translator somehow
             description = """
                   **Your** ${pokemon.displayName}
@@ -203,13 +203,17 @@ object BattleActionEvent : Event() {
             }
 
             val getMoveResultTexts: () -> String = {
-              if (selfMoveFirst) {
-                """${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
-                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}""".trimIndent()
+              if (selfMoveFirst) { """
+                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
+                
+                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
+                """.trimIndent()
               }
-              else {
-                """${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
-                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}""".trimIndent()
+              else { """
+                ${getMoveResultText(partnerMoveResult, partnerPokemon, selfPokemon, partnerMoveData)}
+                
+                ${getMoveResultText(moveResult, selfPokemon, partnerPokemon, moveData)}
+                """.trimIndent()
               }
             }
 
@@ -217,14 +221,16 @@ object BattleActionEvent : Event() {
             val opponentPokemon = if (self.id == battle.initiator.id) partnerPokemon else selfPokemon
 
             event.hook.sendMessageEmbeds(Embed {
-              title = "Battle │ ${event.interaction.user.name} VS. ${partnerUser.name}"
+              title = "Battle featuring ***${event.interaction.user.name}*** VS. ***${partnerUser.name}***"
               description = """
                 ${getMoveResultTexts()}
                 
-                ${if (winner != null)"""**${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!**
-                  Their ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
-                  —
-                  *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!""".trimIndent()
+                ${if (winner != null)"""**${if (winner.id == self.id) event.user.name else partnerUser.name} won the battle!!**
+                —
+                Their ${(if (winner.id == self.id) selfPokemon else partnerPokemon).displayName} gained $gainedXp XP!
+                *${if (winner.id == self.id) partnerUser.name else event.user.name}'s* ${(if (winner.id == self.id) partnerPokemon else selfPokemon).displayName} fainted!
+                —
+                """.trimIndent()
                 else """""".trimIndent()}""".trimIndent()
               image = "attachment://battle.png"
               field(
