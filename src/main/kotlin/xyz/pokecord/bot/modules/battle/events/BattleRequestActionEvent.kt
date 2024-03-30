@@ -57,7 +57,7 @@ object BattleRequestActionEvent : Event() {
         // TODO: use context-less EmbedTemplates here when it's available after merge
         event.hook.sendMessage("<@${battleRequest.initiatorId}>").addEmbeds(
           Embed {
-            title = "Battle │ ${initiator.name} VS. ${partner.name}"
+            title = "Battle featuring ***${initiator.name}*** VS. ***${partner.name}***"
             // TODO: use translator somehow
             image = "attachment://battle.png"
             timestamp = Instant.ofEpochMilli(battle.startedAtMillis)
