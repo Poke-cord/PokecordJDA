@@ -1186,7 +1186,7 @@ modules:
               - {{legendaryCount}} Legendaries;
               - {{ubCount}} Ultra Beasts;
               - {{psLegendaryCount}} Pseudo Legendaries; and
-              - {{otherCount}} of everything in-between!
+              - {{otherCount}} of everything diversely!
 
               Use `@Pokecord rewards all` to claim rewards.
             title: 'Unclaimed Rewards Available!'
