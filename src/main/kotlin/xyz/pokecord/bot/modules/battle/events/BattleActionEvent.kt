@@ -65,7 +65,7 @@ object BattleActionEvent : Event() {
             // TODO: use translator somehow
             description = """
                   **Your** ${pokemon.displayName}
-                  Level ${pokemon.level}) │ ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
+                  Level ${pokemon.level} │ ${self.pokemonStats.hp}/${pokemon.stats.hp} HP
                   
                   ***${partnerUser.name}'s*** ${partnerPokemon.displayName}
                   Level ${partnerPokemon.level} │ ${partner.pokemonStats.hp}/${partnerPokemon.stats.hp} HP
