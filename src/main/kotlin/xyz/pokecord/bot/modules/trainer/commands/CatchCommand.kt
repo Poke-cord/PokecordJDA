@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.pokemon.commands
+package xyz.pokecord.bot.modules.trainer.commands
 
 import io.prometheus.client.Counter
 import kotlinx.coroutines.sync.withLock

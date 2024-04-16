@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.profile.commands
+package xyz.pokecord.bot.modules.trainer.commands
 
 import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait

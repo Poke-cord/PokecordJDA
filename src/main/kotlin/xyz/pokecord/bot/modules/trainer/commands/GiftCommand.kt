@@ -1,11 +1,11 @@
-package xyz.pokecord.bot.modules.pokemon.commands
+package xyz.pokecord.bot.modules.trainer.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.User
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
-import xyz.pokecord.bot.modules.pokemon.gift.GiftCreditCommand
-import xyz.pokecord.bot.modules.pokemon.gift.GiftPokemonCommand
-import xyz.pokecord.bot.modules.pokemon.gift.GiftToggleCommand
+import xyz.pokecord.bot.modules.trainer.gift.GiftCreditCommand
+import xyz.pokecord.bot.modules.trainer.gift.GiftPokemonCommand
+import xyz.pokecord.bot.modules.trainer.gift.GiftToggleCommand
 
 object GiftCommand : ParentCommand() {
   override val childCommands = mutableListOf(GiftCreditCommand, GiftPokemonCommand, GiftToggleCommand)

@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.pokemon.gift
+package xyz.pokecord.bot.modules.trainer.gift
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command

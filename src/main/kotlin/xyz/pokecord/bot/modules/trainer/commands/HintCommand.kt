@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.pokemon.commands
+package xyz.pokecord.bot.modules.trainer.commands
 
 import dev.minn.jda.ktx.await
 import xyz.pokecord.bot.api.ICommandContext

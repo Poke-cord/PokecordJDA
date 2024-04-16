@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.pokemon.gift
+package xyz.pokecord.bot.modules.trainer.gift
 
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.entities.User
@@ -6,7 +6,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.pokemon.commands.GiftCommand
+import xyz.pokecord.bot.modules.trainer.commands.GiftCommand
 import xyz.pokecord.bot.utils.Confirmation
 import xyz.pokecord.bot.utils.PokemonResolvable
 
