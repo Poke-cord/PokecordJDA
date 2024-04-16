@@ -1,13 +1,13 @@
 misc:
   command_descriptions:
-    auctions:
-      auctions: View all ongoing auctions. Accepts search and filters.
-      "auctions.list": List Pokémon for auction. Include start and increment bid, and duration.
-      "auctions.bid": Bid credits on an ongoing auction.
-      "auctions.info": View specific auctioned Pokémon stats. Include auction ID.
-      "auctions.notify": Toggle auction-related DM notifications.
-      "auctions.profile": View ongoing auctions that you have started.
-      "auctions.unlist": Take your Pokémon off auction. Auction must have no bids.
+    auction:
+      auction: View all ongoing auctions. Accepts search and filters.
+      "auction.bid": Bid credits on an ongoing auction.
+      "auction.info": View specific auctioned Pokémon stats. Include auction ID.
+      "auction.list": List Pokémon for auction. Include start and increment bid, and duration.
+      "auction.unlist": Take your Pokémon off auction. Auction must have no bids.
+      "auction.profile": View ongoing auctions that you have started.
+      "auction.remind": Toggle auction-related DM notifications.
     battle:
       battle: Duel other users in epic one-versus-one Pokémon combat.
       moves: View all teachable moves your Pokémon can learn.
@@ -26,46 +26,44 @@ misc:
     general:
       faq: Search frequently asked questions by keyword.
       help: Displays all commands with descriptions.
-      quicklinks: View quick links including Pokecord's invite, donations, and more.
       leaderboard: Shows who’s boss around here B)
       ping: Ping, pong!
+      quicklinks: View quick links including Pokecord's invite, donations, and more.
+      vote: Links Pokecord's vote page and reveals current day of vote season.
+    management:
       set: Miscellaneous setting configurations.
+      "set.level": Sets the server level-up messages channel.
       "set.prefix": Sets the server prefix.
-      "set.private": Toggles your progress visibility to public/private.
       "set.silence": Toggles server Pokémon level-up messages.
       "set.spawn": Sets/removes a server spawn channel.
-      "set.level": Sets the server level-up messages channel.
-      vote: Links Pokecord's vote page and reveals current day of vote season.
     market:
       market: View all market listings. Accepts search and filters.
-      "market.list": List Pokémon on the market. Include purchase price.
       "market.buy": Purchase market listings for credits.
       "market.info": View specific listed Pokémon stats. Include listing ID.
-      "market.profile": View your currently listed Pokémon on market.
+      "market.list": List Pokémon on the market. Include purchase price.
       "market.unlist": Take your Pokémon off the market.
+      "market.profile": View your currently listed Pokémon on market.
     pokemon:
-      catch: Catch 'em all! Or someone else will.
       favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
-      hint: Reveals the first letter of the spawned Pokémon name.
       info: Displays selected Pokémon's current stats, IVs, and EVs.
-      move: Displays specified move's information.
-      moveset: Recommends movesets for legendary and mythical Pokémon.
-      nickname: Sets/resets nickname of selected Pokémon. Pokémon are searchable by nickname.
-      order: Orders your Pokémon collection by specified filter. Defaults to Pokédex.
-      pick: Allows you to start your Pokecord journey with a Pokémon.
-      pokedex: Displays Pokémon base stats and general information.
-      pokemon: Displays a Pokémon collection with filters and searchability.
-      release: Transfers Pokémon to Professor Zihadikarp.
-      select: Selects a Pokémon, becoming your active Pokémon.
-    profile:
-      bag: Displays all currency and items collected.
       item: Consumes an item from your inventory. It's like eating a chocolate bar.
       "item.give": Allows your selected Pokémon to hold items with unique perks.
       "item.take": Revokes any item your selected Pokémon is holding.
+      nickname: Sets/resets nickname of selected Pokémon. Pokémon are searchable by nickname.
+      order: Orders your Pokémon collection by specified filter. Defaults to Pokédex.
+      pokemon: Displays a Pokémon collection with filters and searchability.
+      #release: Transfers Pokémon to Professor Zihadikarp.
+      select: Selects a Pokémon, becoming your active Pokémon.
+    pokepedia:
+      move: Displays specified move's information.
+      moveset: Recommends movesets for legendary and mythical Pokémon.
+      pokedex: Displays Pokémon base stats and general information.
+    profile:
+      bag: Displays all currency and items collected.
       profile: Displays user information.
+      "profile.info": Displays user statistics.
       "profile.pokedex": Displays all Pokémon registered to Pokédex. Includes shinies.
-      rewards: Displays/claim all available rewards.
-      start: Displays Pokecord's welcome message. This should be your first command.
+      private: Toggles your progress visibility to public/private.
     staff:
       blacklist: Prevent users from executing Pokecord commands.
       blacklists: View a full list of all blacklisted users.
@@ -84,13 +82,22 @@ misc:
       "trade.remove.credits": Remove credits from your trade offer.
       "trade.remove.pokemon": Remove Pokémon from your trade offer.
       "trade.status": View the current offerings from both trade parties.
+    trainer:
+      catch: Catch 'em all! Or someone else will.
+      gift credit: Gift credits to another user.
+      gift pokemon: Gift a Pokémon to another user.
+      gift toggle: Toggles whether you can receive incoming gifts.
+      hint: Reveals the first letter of the spawned Pokémon name.
+      pick: Allows you to start your Pokecord journey with a Pokémon.
+      rewards: Displays/claim all available rewards.
+      start: Displays Pokecord's welcome message. This should be your first command.
   checks:
     hasStarted:
       embed:
         description: |-
           Hey there! Welcome to Pokecord.
           
-          Get started with `@Pokecord start` before you use other commands.
+          Use `@Pokecord start` before attempting other commands.
         title: Start your Pokecord Journey
   confirmation:
     timeoutFooter: Reactions will automatically time out in 30 seconds.

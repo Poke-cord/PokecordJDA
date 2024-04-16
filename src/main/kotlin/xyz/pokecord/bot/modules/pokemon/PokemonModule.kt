@@ -9,24 +9,18 @@ import xyz.pokecord.bot.modules.pokemon.events.XPGainEvent
 class PokemonModule(bot: Bot) : Module(
   bot,
   arrayOf(
-    CatchCommand(),
-    PickCommand(),
-    PokemonCommand(),
-    InfoCommand(),
     FavoriteCommand(),
-    HintCommand(),
+    InfoCommand(),
+    ItemCommand(),
     NicknameCommand(),
+    OrderCommand(),
+    PokemonCommand(),
     SelectCommand(),
-    GiftCommand,
-    MovesetCommand(),
-    MoveCommand(),
-    PokedexCommand(),
-    OrderCommand()
   ),
   arrayOf(
     SpawnerEvent(),
     XPGainEvent()
   )
 ) {
-  override val name = "Pokémon"
+  override val name = "Pokémon Collection"
 }
