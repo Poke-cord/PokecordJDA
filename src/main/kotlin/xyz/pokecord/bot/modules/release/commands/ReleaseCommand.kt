@@ -5,8 +5,8 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 object ReleaseCommand : ParentCommand() {
   override val childCommands =
     mutableListOf(
-      ReleaseStartCommand, ReleaseAddCommand, ReleaseRemoveCommand,
-      ReleaseCancelCommand, ReleaseConfirmCommand, ReleaseStatusCommand
+      ReleaseAddCommand, ReleaseRemoveCommand, ReleaseCancelCommand,
+      ReleaseConfirmCommand, ReleaseStartCommand, ReleaseStatusCommand
     )
   override val name = "Release"
 

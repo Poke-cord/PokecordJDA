@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 object TradeCommand : ParentCommand() {
   override val childCommands =
-    mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeStatusCommand, TradeConfirmCommand)
+    mutableListOf(TradeAddCommand, TradeRemoveCommand, TradeCancelCommand, TradeConfirmCommand, TradeStatusCommand)
   override val name = "Trade"
   override var aliases = arrayOf("t")
 
