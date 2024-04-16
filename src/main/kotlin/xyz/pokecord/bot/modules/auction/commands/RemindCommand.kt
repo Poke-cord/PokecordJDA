@@ -1,11 +1,11 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object NotifyCommand : Command() {
-  override val name = "Notify"
-  override var aliases = arrayOf("notification", "notif")
+object RemindCommand : Command() {
+  override val name = "Remind"
+  override var aliases = arrayOf("rm", "rmd", "reminder")
 
   @Executor
   suspend fun execute(context: ICommandContext) {

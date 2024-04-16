@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.User
@@ -67,7 +67,7 @@ object ProfileCommand : Command() {
       )
       templateEmbedBuilder.clearFields().setFooter(null)
       templateEmbedBuilder.setDescription(
-        AuctionsCommand.formatAuctions(context, auctionsList, showBids)
+        AuctionCommand.formatAuctions(context, auctionsList, showBids)
       )
       templateEmbedBuilder
     }, if (page == null) 0 else page - 1)

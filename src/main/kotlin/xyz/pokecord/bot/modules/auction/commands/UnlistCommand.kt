@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext

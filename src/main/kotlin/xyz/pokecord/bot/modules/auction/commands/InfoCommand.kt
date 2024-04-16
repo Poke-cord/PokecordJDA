@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command

@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.utils.TimeFormat
@@ -14,11 +14,18 @@ import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.utils.EmbedPaginator
 import kotlin.math.ceil
 
-object AuctionsCommand : ParentCommand() {
-  override val name = "Auctions"
-  override var aliases = arrayOf("ah", "auction", "au")
+object AuctionCommand : ParentCommand() {
+  override val name = "Auction"
+  override var aliases = arrayOf("ah", "au", "auctions")
   override val childCommands: MutableList<Command> =
-    mutableListOf(ListCommand, UnlistCommand, BidCommand, InfoCommand, ProfileCommand, NotifyCommand)
+    mutableListOf(
+      BidCommand,
+      InfoCommand,
+      ListCommand,
+      UnlistCommand,
+      ProfileCommand,
+      RemindCommand,
+    )
 
   suspend fun formatAuctions(
     context: ICommandContext,

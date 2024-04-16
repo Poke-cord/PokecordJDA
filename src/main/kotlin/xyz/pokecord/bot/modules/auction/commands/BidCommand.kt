@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import dev.minn.jda.ktx.await
 import org.litote.kmongo.coroutine.abortTransactionAndAwait

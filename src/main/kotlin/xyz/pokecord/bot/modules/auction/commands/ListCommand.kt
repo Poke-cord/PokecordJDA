@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.auctions.commands
+package xyz.pokecord.bot.modules.auction.commands
 
 import net.dv8tion.jda.api.utils.TimeFormat
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
