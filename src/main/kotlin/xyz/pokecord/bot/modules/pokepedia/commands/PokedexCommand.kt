@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.pokemon.commands
+package xyz.pokecord.bot.modules.pokepedia.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
