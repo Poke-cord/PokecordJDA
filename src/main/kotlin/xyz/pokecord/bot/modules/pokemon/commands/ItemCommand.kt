@@ -1,11 +1,11 @@
-package xyz.pokecord.bot.modules.profile.commands
+package xyz.pokecord.bot.modules.pokemon.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.ParentCommand
 import xyz.pokecord.bot.core.structures.pokemon.ItemData
 import xyz.pokecord.bot.core.structures.pokemon.items.ItemFactory
-import xyz.pokecord.bot.modules.profile.commands.item.GiveItemCommand
-import xyz.pokecord.bot.modules.profile.commands.item.TakeItemCommand
+import xyz.pokecord.bot.modules.pokemon.commands.item.GiveItemCommand
+import xyz.pokecord.bot.modules.pokemon.commands.item.TakeItemCommand
 
 class ItemCommand : ParentCommand() {
   override val childCommands = mutableListOf(GiveItemCommand, TakeItemCommand)
