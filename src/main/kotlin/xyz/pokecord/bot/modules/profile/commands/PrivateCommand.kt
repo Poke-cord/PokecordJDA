@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.general.commands.set
+package xyz.pokecord.bot.modules.profile.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
 
-object SetPrivateCommand : Command() {
+object PrivateCommand : Command() {
   override val name = "Private"
 
   @Executor
