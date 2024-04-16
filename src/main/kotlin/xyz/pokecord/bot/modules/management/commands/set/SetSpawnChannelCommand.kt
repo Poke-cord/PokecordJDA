@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.general.commands.set
+package xyz.pokecord.bot.modules.management.commands.set
 
 import dev.minn.jda.ktx.await
 import net.dv8tion.jda.api.Permission
