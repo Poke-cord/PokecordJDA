@@ -18,14 +18,7 @@ object AuctionCommand : ParentCommand() {
   override val name = "Auction"
   override var aliases = arrayOf("ah", "au", "auctions")
   override val childCommands: MutableList<Command> =
-    mutableListOf(
-      BidCommand,
-      InfoCommand,
-      ListCommand,
-      UnlistCommand,
-      ProfileCommand,
-      RemindCommand,
-    )
+    mutableListOf(BidCommand, InfoCommand, ListCommand, UnlistCommand, ProfileCommand, RemindCommand)
 
   suspend fun formatAuctions(
     context: ICommandContext,

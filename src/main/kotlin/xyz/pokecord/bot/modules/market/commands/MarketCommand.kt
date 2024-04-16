@@ -15,15 +15,9 @@ import kotlin.math.ceil
 
 object MarketCommand : ParentCommand() {
   override val name = "Market"
-  override var aliases = arrayOf("markets", "mk")
+  override var aliases = arrayOf("mk", "marketplace")
   override val childCommands: MutableList<Command> =
-    mutableListOf(
-      BuyCommand,
-      InfoCommand,
-      ListCommand,
-      UnlistCommand,
-      ProfileCommand,
-    )
+    mutableListOf(BuyCommand, InfoCommand, ListCommand, UnlistCommand, ProfileCommand)
 
   suspend fun formatListings(
     context: ICommandContext,
