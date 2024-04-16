@@ -5,6 +5,7 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 object PrivateCommand : Command() {
   override val name = "Private"
+  override var aliases = arrayOf("pv")
 
   @Executor
   suspend fun execute(context: ICommandContext) {

@@ -30,7 +30,7 @@ misc:
       ping: Ping, pong!
       quicklinks: View quick links including Pokecord's invite, donations, and more.
       vote: Links Pokecord's vote page and reveals current day of vote season.
-    management:
+    server management:
       set: Miscellaneous setting configurations.
       "set.level": Sets the server level-up messages channel.
       "set.prefix": Sets the server prefix.
@@ -43,7 +43,7 @@ misc:
       "market.list": List Pokémon on the market. Include purchase price.
       "market.unlist": Take your Pokémon off the market.
       "market.profile": View your currently listed Pokémon on market.
-    pokemon:
+    pokemon collection:
       favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
       info: Displays selected Pokémon's current stats, IVs, and EVs.
       item: Consumes an item from your inventory. It's like eating a chocolate bar.
@@ -71,7 +71,7 @@ misc:
       maintenance: Toggle Pokecord in or out of Maintenance Break.
       shards: Check the status of Pokecord's shards.
       show: View advanced spawn channel details.
-    trading:
+    trade:
       trade: Initiate a trade session with another user.
       "trade.add": Add to your trade offer. Specify either Pokémon or credits.
       "trade.add.credits": Add credits to your trade offer.
@@ -84,9 +84,9 @@ misc:
       "trade.status": View the current offerings from both trade parties.
     trainer:
       catch: Catch 'em all! Or someone else will.
-      gift credit: Gift credits to another user.
-      gift pokemon: Gift a Pokémon to another user.
-      gift toggle: Toggles whether you can receive incoming gifts.
+      "gift.credit": Gift credits to another user.
+      "gift.pokemon": Gift a Pokémon to another user.
+      "gift.toggle": Toggles whether you can receive incoming gifts.
       hint: Reveals the first letter of the spawned Pokémon name.
       pick: Allows you to start your Pokecord journey with a Pokémon.
       rewards: Displays/claim all available rewards.
