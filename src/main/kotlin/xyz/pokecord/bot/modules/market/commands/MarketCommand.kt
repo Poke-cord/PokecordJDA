@@ -17,7 +17,13 @@ object MarketCommand : ParentCommand() {
   override val name = "Market"
   override var aliases = arrayOf("markets", "mk")
   override val childCommands: MutableList<Command> =
-    mutableListOf(ListCommand, UnlistCommand, BuyCommand, InfoCommand, ProfileCommand)
+    mutableListOf(
+      BuyCommand,
+      InfoCommand,
+      ListCommand,
+      UnlistCommand,
+      ProfileCommand,
+    )
 
   suspend fun formatListings(
     context: ICommandContext,

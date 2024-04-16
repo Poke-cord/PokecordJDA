@@ -9,17 +9,20 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
 import xyz.pokecord.bot.core.structures.discord.Bot
-import xyz.pokecord.bot.modules.auctions.AuctionsModule
+import xyz.pokecord.bot.modules.auction.AuctionModule
 import xyz.pokecord.bot.modules.battle.BattleModule
 import xyz.pokecord.bot.modules.developer.DeveloperModule
 import xyz.pokecord.bot.modules.economy.EconomyModule
 import xyz.pokecord.bot.modules.general.GeneralModule
+import xyz.pokecord.bot.modules.management.ManagementModule
 import xyz.pokecord.bot.modules.market.MarketModule
 import xyz.pokecord.bot.modules.pokemon.PokemonModule
+import xyz.pokecord.bot.modules.pokepedia.PokepediaModule
 import xyz.pokecord.bot.modules.profile.ProfileModule
+import xyz.pokecord.bot.modules.trainer.TrainerModule
 import xyz.pokecord.bot.modules.release.ReleaseModule
 import xyz.pokecord.bot.modules.staff.StaffModule
-import xyz.pokecord.bot.modules.trading.TradingModule
+import xyz.pokecord.bot.modules.trade.TradeModule
 import xyz.pokecord.migration.Migration
 import kotlin.system.exitProcess
 
@@ -57,17 +60,29 @@ object App {
 
         bot = Bot(token, topggToken)
         val modules = listOf(
-          PokemonModule(bot),
-          GeneralModule(bot),
+          //user
+          TrainerModule(bot),
           ProfileModule(bot),
-          EconomyModule(bot),
+
+          //collection
+          PokemonModule(bot),
+          PokepediaModule(bot),
+
+          //features
           BattleModule(bot),
-          AuctionsModule(bot),
+          AuctionModule(bot),
           MarketModule(bot),
-          TradingModule(bot),
+          TradeModule(bot),
+          ReleaseModule(bot),
+
+          //misc
+          EconomyModule(bot),
+          GeneralModule(bot),
+          ManagementModule(bot),
+
+          //tools
           StaffModule(bot),
           DeveloperModule(bot),
-          ReleaseModule(bot),
         )
         modules.forEach {
           bot.modules[it.name.lowercase()] = it

@@ -9,13 +9,12 @@ import xyz.pokecord.bot.modules.general.events.ReadyEvent
 class GeneralModule(bot: Bot) : Module(
   bot,
   arrayOf(
+    FAQCommand(),
     HelpCommand(),
+    LeaderboardCommand(),
     PingCommand(),
     QuickLinksCommand(),
-    FAQCommand(),
-    LeaderboardCommand(),
     VoteCommand(),
-    SetCommand()
   ),
   arrayOf(
     ReadyEvent(),
