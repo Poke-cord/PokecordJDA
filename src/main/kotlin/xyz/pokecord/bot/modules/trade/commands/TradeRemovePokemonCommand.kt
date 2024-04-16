@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.trading.commands
+package xyz.pokecord.bot.modules.trade.commands
 
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext

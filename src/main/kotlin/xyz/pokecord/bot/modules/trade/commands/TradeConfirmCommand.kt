@@ -1,10 +1,10 @@
-package xyz.pokecord.bot.modules.trading.commands
+package xyz.pokecord.bot.modules.trade.commands
 
 import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.trading.TradingModule
+import xyz.pokecord.bot.modules.trade.TradeModule
 
 object TradeConfirmCommand : Command() {
   override val name = "confirm"
@@ -96,14 +96,14 @@ object TradeConfirmCommand : Command() {
         val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
         val authorPokemonText =
-          TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, true, session)
+          TradeModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, true, session)
         authorPokemon.map { pokemon ->
           context.bot.database.pokemonRepository.updateOwnerId(pokemon, partnerUserData.id, session)
           context.bot.database.userRepository.addDexCatchEntry(authorUserData, pokemon, session)
         }
 
         val partnerPokemonText =
-          TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, true, session)
+          TradeModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, true, session)
         partnerPokemon.map { pokemon ->
           context.bot.database.pokemonRepository.updateOwnerId(pokemon, authorUserData.id, session)
           context.bot.database.userRepository.addDexCatchEntry(partnerUserData, pokemon, session)

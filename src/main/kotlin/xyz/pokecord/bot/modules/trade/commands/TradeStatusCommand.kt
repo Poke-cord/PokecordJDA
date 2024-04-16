@@ -1,9 +1,9 @@
-package xyz.pokecord.bot.modules.trading.commands
+package xyz.pokecord.bot.modules.trade.commands
 
 import dev.minn.jda.ktx.await
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.modules.trading.TradingModule
+import xyz.pokecord.bot.modules.trade.TradeModule
 import xyz.pokecord.bot.utils.Confirmation
 
 object TradeStatusCommand: Command() {
@@ -59,8 +59,8 @@ object TradeStatusCommand: Command() {
     val authorPokemon = context.bot.database.pokemonRepository.getPokemonByIds(authorTradeData.pokemon)
     val partnerPokemon = context.bot.database.pokemonRepository.getPokemonByIds(partnerTradeData.pokemon)
 
-    val authorPokemonText = TradingModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, false)
-    val partnerPokemonText = TradingModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, false)
+    val authorPokemonText = TradeModule.getTradeStatePokemonText(context, authorPokemon, partnerPokemon.map { it.id }, false)
+    val partnerPokemonText = TradeModule.getTradeStatePokemonText(context, partnerPokemon, authorPokemon.map { it.id }, false)
 
     val statusTitle =
       if(authorTradeData.confirmed || partnerTradeData.confirmed)

@@ -1,4 +1,4 @@
-package xyz.pokecord.bot.modules.trading.commands
+package xyz.pokecord.bot.modules.trade.commands
 
 import dev.minn.jda.ktx.await
 import xyz.pokecord.bot.api.ICommandContext

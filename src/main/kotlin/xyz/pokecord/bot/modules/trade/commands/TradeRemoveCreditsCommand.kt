@@ -1,12 +1,12 @@
-package xyz.pokecord.bot.modules.trading.commands
+package xyz.pokecord.bot.modules.trade.commands
 
 import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
-import xyz.pokecord.bot.core.structures.discord.base.Command
-// import xyz.pokecord.bot.modules.staff.StaffCommand
+// import xyz.pokecord.bot.core.structures.discord.base.Command
+import xyz.pokecord.bot.modules.staff.StaffCommand
 
-object TradeAddCreditsCommand : Command() {
+object TradeRemoveCreditsCommand: StaffCommand() {
   override val name = "credits"
   override var aliases = arrayOf("c", "creds", "credits", "credit")
 
@@ -27,20 +27,23 @@ object TradeAddCreditsCommand : Command() {
       return
     }
 
-    if (amount == null || amount < 0) {
+    if (amount == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.noNumberCredits")
+          context.translate("modules.trading.commands.remove.errors.noNumberCredits")
         ).build()
       ).queue()
       return
     }
 
-    val userData = context.getUserData()
-    if (amount > userData.credits) {
+    val authorTradeState = if(tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
+    if(authorTradeState.credits < amount) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.trading.commands.add.errors.notEnoughCredits")
+          context.translate(
+            "modules.trading.commands.remove.errors.notEnoughCredits",
+            "credits" to amount.toString()
+          )
         ).build()
       ).queue()
       return
@@ -49,14 +52,14 @@ object TradeAddCreditsCommand : Command() {
     val session = context.bot.database.startSession()
     session.use {
       session.startTransaction()
-      if (!context.bot.database.userRepository.incCredits(userData, -amount, session)) {
+      if (!context.bot.database.userRepository.incCredits(context.getUserData(), amount, session)) {
         session.abortTransactionAndAwait()
         context.reply(
           context.embedTemplates.normal(
             context.translate(
               "misc.embeds.transactionCancelled.description",
               mapOf(
-                "type" to "trade add credits"
+                "type" to "trade remove credits"
               )
             ),
             context.translate("misc.embeds.transactionCancelled.title")
@@ -64,7 +67,7 @@ object TradeAddCreditsCommand : Command() {
         ).queue()
         return
       }
-      context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, amount, session)
+      context.bot.database.tradeRepository.incCredits(tradeState, context.author.id, -amount, session)
       context.bot.database.tradeRepository.clearConfirmState(tradeState, session)
       session.commitTransactionAndAwait()
     }
@@ -72,10 +75,10 @@ object TradeAddCreditsCommand : Command() {
     context.reply(
       context.embedTemplates.normal(
         context.translate(
-          "modules.trading.commands.add.embeds.addCredits.description",
+          "modules.trading.commands.remove.embeds.removeCredits.description",
           "credits" to amount.toString()
         ),
-        context.translate("modules.trading.commands.add.embeds.title")
+        context.translate("modules.trading.commands.remove.embeds.title")
       ).build()
     ).queue()
   }
