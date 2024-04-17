@@ -15,7 +15,7 @@ class BagCommand : Command() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument user: User?
+    @Argument(optional = true) user: User?
   ) {
     if (!context.hasStarted(true)) return
     val targetUser = user ?: context.author
