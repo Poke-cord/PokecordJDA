@@ -22,6 +22,7 @@ import xyz.pokecord.bot.core.structures.pokemon.*
 import xyz.pokecord.bot.core.structures.pokemon.items.VoidStoneItem
 import xyz.pokecord.bot.utils.*
 import xyz.pokecord.utils.withCoroutineLock
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 class PokemonRepository(
@@ -417,7 +418,7 @@ class PokemonRepository(
       }
     }
 
-    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) { // 206 - everstone
+    if (pokemon.id !in Pokemon.dontEvolveFrom && pokemon.heldItemId != 206) { // 206 = everstone
       val evolution = pokemon.data.nextEvolutions.map { EvolutionChain.details(it) }.find { evolutionDetails ->
         if (evolutionDetails?.evolvedSpeciesId in Pokemon.dontEvolveInto) return@find false
 
@@ -427,9 +428,14 @@ class PokemonRepository(
           if (evolutionDetails?.heldItemId != 0) evolutionDetails?.heldItemId == pokemon.heldItemId else true
         val isKnownMoveOk =
           if (evolutionDetails?.knownMoveId != 0) pokemon.moves.contains(evolutionDetails?.knownMoveId) else true
-        val isLevelUpOk = if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
-        val isMinimumLevelOk = (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
-        val isTradeStateOk = if (evolutionDetails?.evolutionTriggerId == 2)
+        val isLevelUpOk =
+          if (evolutionDetails?.evolutionTriggerId == 1) leveledUp else true
+        val isMinimumLevelOk =
+          (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
+        val isTimeOk =
+          if (evolutionDetails?.timeOfDay != "") evolutionDetails?.timeOfDay == DayNightUtils.getCurrentTime(LocalDateTime.now()) else true
+        val isTradeStateOk =
+          if (evolutionDetails?.evolutionTriggerId == 2)
           if (evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
           else beingTradedFor != null
         else true
@@ -441,6 +447,7 @@ class PokemonRepository(
             isKnownMoveOk &&
             isLevelUpOk &&
             isMinimumLevelOk &&
+            isTimeOk &&
             isTradeStateOk &&
             isTriggerItemOk &&
             evolutionDetails?.knownMoveTypeId == 0 &&
@@ -448,7 +455,7 @@ class PokemonRepository(
             evolutionDetails.partySpeciesId == 0 &&
             evolutionDetails.partyTypeId == 0 &&
             evolutionDetails.relativePhysicalStats == 0 &&
-            evolutionDetails.timeOfDay == "" &&
+            //evolutionDetails.timeOfDay == "" &&
             evolutionDetails.minimumAffection == 0 &&
             evolutionDetails.minimumBeauty == 0 &&
             evolutionDetails.minimumHappiness == 0
