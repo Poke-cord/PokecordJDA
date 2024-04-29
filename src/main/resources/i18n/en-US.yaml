@@ -1008,7 +1008,7 @@ modules:
           *Today's weather forecast is unknown! Please check in later.*
           It is currently **{{timeOfDay}}**.
         title: Saurdia Forecast
-        footer: This forecast updates every hour.
+        footer: This forecast updates at the top of the hour.
       pokemon:
         embeds:
           title: "{{user}}'s Pokémon Collection"
