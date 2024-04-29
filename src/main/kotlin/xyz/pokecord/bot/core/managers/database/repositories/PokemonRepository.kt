@@ -397,6 +397,7 @@ class PokemonRepository(
     pokemon: OwnedPokemon,
     usedItemId: Int? = null,
     gainedXp: Int? = null,
+    //gainedHappiness: Int? = null,
     beingTradedFor: List<Int>? = null,
     updateInDb: Boolean = true,
     clientSession: ClientSession? = null
@@ -424,6 +425,8 @@ class PokemonRepository(
 
         val isGenderOk =
           if (evolutionDetails?.genderId != 0) if (evolutionDetails?.genderId == 1) pokemon.gender == 0 else if (evolutionDetails?.genderId == 2) pokemon.gender == 1 else true else true
+        //val isHappinessOk =
+          //(evolutionDetails?.minimumHappiness ?: 0) <= pokemon.happiness
         val isHeldItemOk =
           if (evolutionDetails?.heldItemId != 0) evolutionDetails?.heldItemId == pokemon.heldItemId else true
         val isKnownMoveOk =
@@ -443,6 +446,7 @@ class PokemonRepository(
           if (evolutionDetails?.evolutionTriggerId == 3) evolutionDetails.triggerItemId == usedItemId else true
 
         isGenderOk &&
+            //isHappinessOk &&
             isHeldItemOk &&
             isKnownMoveOk &&
             isLevelUpOk &&

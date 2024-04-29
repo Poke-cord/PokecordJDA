@@ -36,6 +36,7 @@ data class OwnedPokemon(
   val sticky: Boolean = false,
   var nickname: String? = null,
   val formId: Int? = null,
+  //var happiness: Int = 0,
   @Contextual val _id: Id<OwnedPokemon> = newId(),
   @Contextual val originalId: Id<OwnedPokemon>? = null
 ) {
