@@ -7,6 +7,7 @@ import xyz.pokecord.bot.modules.pokepedia.commands.*
 class PokepediaModule(bot: Bot): Module(
   bot,
   arrayOf(
+    ForecastCommand,
     MoveCommand(),
     MovesetCommand(),
     PokedexCommand(),
