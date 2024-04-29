@@ -17,11 +17,11 @@ object ForecastCommand : Command() {
 
     context.reply(
       context.embedTemplates.normal(
-        context.translate("modules.pokemon.commands.forecast.embed.description",
+        context.translate("modules.pokemon.commands.forecast.description",
           mapOf("timeOfDay" to time)
         ),
-        context.translate("modules.pokemon.commands.forecast.embed.title")
-      ).setFooter(context.translate("modules.pokemon.commands.forecast.embed.footer"))
+        context.translate("modules.pokemon.commands.forecast.title")
+      ).setFooter(context.translate("modules.pokemon.commands.forecast.footer"))
         .build()
     ).queue()
   }
