@@ -1003,6 +1003,12 @@ modules:
         footers:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
+      forecast:
+        description: |-
+          *Today's weather forecast is unknown! Please check in later.*
+          It is currently **{{timeOfDay}}**.
+        title: Saurdia Forecast
+        footer: This forecast updates every hour.
       pokemon:
         embeds:
           title: "{{user}}'s Pokémon Collection"
