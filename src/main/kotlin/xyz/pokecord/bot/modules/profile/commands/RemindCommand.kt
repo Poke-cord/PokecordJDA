@@ -15,12 +15,20 @@ object RemindCommand : Command() {
     @Argument(name = "vote", optional = true) reminder: String?
   ) {
     val userData = context.getUserData()
+    val enabled = "Enabled"
+    val disabled = "Disabled"
 
     if (reminder == null) {
       context.reply(
         context.embedTemplates.normal(
-          context.translate("modules.profile.commands.remind.embed.description.base"),
-          context.translate("modules.profile.commands.remind.embed.title")
+          context.translate("modules.profile.commands.remind.embed.description.base",
+            mapOf(
+              "vote" to if (userData.voteReminder) enabled else disabled
+            )
+          ),
+          context.translate("modules.profile.commands.remind.embed.title",
+            "user" to context.author.asTag
+          )
         ).build()
       ).queue()
     }

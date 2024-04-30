@@ -1182,7 +1182,8 @@ modules:
         embed:
           description:
             base: |-
-              **Vote**: {{voteStatus}}
+              **Vote**: {{vote}}
+              
               More reminders will be added soon!
             disabled: You will no longer receive DMs when your next votes are ready.
             enabled: You will now be DMed when your next votes are ready.
