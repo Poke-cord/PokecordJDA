@@ -230,6 +230,8 @@ class HTTPServer(val bot: Bot) {
           } else {
             call.respond(HttpStatusCode.BadRequest)
           }
+          val userData = bot.database.userRepository.getUser(voteArgs.user)
+          bot.database.userRepository.voteTask(userData) //vote reminder
         }
 
         get("/api/orders/id/{orderId?}") {
