@@ -11,6 +11,7 @@ class ProfileModule(bot: Bot): Module(
     BagCommand(),
     PrivateCommand,
     ProfileCommand(),
+    RemindCommand,
   )
 ) {
   override val name = "Profile"
