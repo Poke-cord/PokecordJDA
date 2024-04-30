@@ -1172,6 +1172,15 @@ modules:
             footer: Some stats may update sooner than others.
             title: "{{user}}'s Pokecord Info"
 #        errors: add some later
+      remind:
+        embed:
+          description:
+            base: |-
+              **Vote**: {{voteStatus}}
+              More reminders will be added soon!
+            disabled: You will no longer receive DMs when your next votes are ready.
+            enabled: You will now be DMed when your next votes are ready.
+          title: "{{user}}'s Reminders"
       rewards:
         embed:
           description: "*Pokecord looked through the credit bank...*"

@@ -32,7 +32,8 @@ data class User(
   var bidNotifications: Boolean = false,
   var giftsEnabled: Boolean = true,
   @Contextual val _id: Id<User> = newId(),
-  @Transient var _isNew: Boolean = false
+  @Transient var _isNew: Boolean = false,
+  var voteReminder: Boolean = true
 ) {
   fun getShopDiscount(): Double {
     return when (donationTier) {
