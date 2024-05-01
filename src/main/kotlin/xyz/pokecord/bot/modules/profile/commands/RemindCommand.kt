@@ -26,10 +26,10 @@ object RemindCommand : Command() {
               "vote" to if (userData.voteReminder) enabled else disabled
             )
           ),
-          context.translate("modules.profile.commands.remind.embed.title",
+          context.translate("modules.profile.commands.remind.embed.title.base",
             "user" to context.author.asTag
           )
-        ).build()
+        ).setFooter(context.translate("modules.profile.commands.remind.embed.footer")).build()
       ).queue()
     }
     else {
@@ -44,8 +44,9 @@ object RemindCommand : Command() {
               if (userData.voteReminder) "modules.profile.commands.remind.embed.description.enabled"
               else "modules.profile.commands.remind.embed.description.disabled"
             ),
-            context.translate("modules.profile.commands.remind.embed.title")
-          ).setFooter(context.translate("modules.profile.commands.remind.embed.footer")).build()
+            context.translate("modules.profile.commands.remind.title.toggle",
+              "reminderType" to "Vote")
+          ).build()
         ).queue()
         return
       }

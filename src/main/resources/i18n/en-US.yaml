@@ -1187,7 +1187,9 @@ modules:
               **Next Vote Reminder**: {{vote}}
             disabled: You will no longer receive DMs when your next votes are ready.
             enabled: You will now be DMed when your next votes are ready.
-          title: "{{user}}'s Reminders"
+          title:
+            base: "{{user}}'s Reminders"
+            toggle: {{reminderType}} Reminder Toggled
           footer: Enabled reminders will notify you via DMs.
         dm:
           vote:
