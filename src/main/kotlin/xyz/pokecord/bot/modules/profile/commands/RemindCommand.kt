@@ -5,9 +5,9 @@ import xyz.pokecord.bot.core.structures.discord.base.Command
 
 object RemindCommand : Command() {
   override val name = "Remind"
-  override var aliases = arrayOf("rm", "rmd", "reminder", "reminders")
+  override var aliases = arrayOf("rm", "rms", "rmd", "reminder", "reminders")
 
-  private val voteAliases = arrayOf("vote", "v", "vt", "next vote reminder")
+  private val voteAliases = arrayOf("vote", "v", "next vote reminder")
 
   @Executor
   suspend fun execute(
@@ -44,7 +44,7 @@ object RemindCommand : Command() {
               if (userData.voteReminder) "modules.profile.commands.remind.embed.description.enabled"
               else "modules.profile.commands.remind.embed.description.disabled"
             ),
-            context.translate("modules.profile.commands.remind.title.toggle",
+            context.translate("modules.profile.commands.remind.embed.title.toggle",
               "reminderType" to "Vote")
           ).build()
         ).queue()
