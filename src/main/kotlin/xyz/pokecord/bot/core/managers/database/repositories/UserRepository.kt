@@ -2,7 +2,6 @@ package xyz.pokecord.bot.core.managers.database.repositories
 
 import com.mongodb.client.model.*
 import com.mongodb.reactivestreams.client.ClientSession
-import dev.minn.jda.ktx.await
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -13,13 +12,11 @@ import org.litote.kmongo.coroutine.CoroutineFindPublisher
 import org.litote.kmongo.coroutine.abortTransactionAndAwait
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.redisson.api.RMapCacheAsync
-import xyz.pokecord.App.bot
 import xyz.pokecord.bot.core.managers.database.Database
 import xyz.pokecord.bot.core.managers.database.models.Gift
 import xyz.pokecord.bot.core.managers.database.models.InventoryItem
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.managers.database.models.User
-import xyz.pokecord.bot.core.structures.discord.EmbedTemplates
 import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.PokemonStats
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
@@ -493,33 +490,6 @@ class UserRepository(
       return credits.asInt64().value
     }
     return 0
-  }
-
-  suspend fun voteTask(user: User) {
-    if (!user.voteReminder) return
-
-    val embedTemplates = EmbedTemplates()
-    var timeRemaining = user.lastVoteAt?: return
-
-    timeRemaining -= System.currentTimeMillis()
-
-    try {
-      val voteeChannel = bot.shardManager
-      .retrieveUserById(user.id).await()
-      .openPrivateChannel().await()
-
-      voteeChannel.sendMessageEmbeds(
-        embedTemplates.normal(
-          embedTemplates.translate(
-            "modules.auctions.tasks.checker.auctionSold.description",
-            mapOf(
-            )
-          ),
-          embedTemplates.translate("modules.auctions.tasks.checker.auctionSold.title")
-        ).setFooter("modules.auctions.tasks.checker.auctionSold.footer").build()
-      ).queueAfter(timeRemaining, TimeUnit.MILLISECONDS)
-    } catch (_: Exception) {
-    }
   }
 
   suspend fun toggleVoteReminder(userData: User) {

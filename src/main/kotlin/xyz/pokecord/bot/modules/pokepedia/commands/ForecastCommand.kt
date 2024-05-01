@@ -2,7 +2,7 @@ package xyz.pokecord.bot.modules.pokepedia.commands
 
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.structures.discord.base.Command
-import xyz.pokecord.bot.utils.DayNightUtils
+import xyz.pokecord.bot.utils.EvolutionUtils
 import java.time.LocalDateTime
 
 object ForecastCommand : Command() {
@@ -13,7 +13,7 @@ object ForecastCommand : Command() {
   suspend fun execute(
     context: ICommandContext
   ) {
-    val time = if (DayNightUtils.getCurrentTime(LocalDateTime.now()) == "day") "daytime" else "nighttime"
+    val time = if (EvolutionUtils.getCurrentTime(LocalDateTime.now()) == "day") "daytime" else "nighttime"
 
     context.reply(
       context.embedTemplates.normal(

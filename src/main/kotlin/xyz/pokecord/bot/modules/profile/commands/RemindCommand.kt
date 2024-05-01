@@ -7,16 +7,16 @@ object RemindCommand : Command() {
   override val name = "Remind"
   override var aliases = arrayOf("rm", "rmd", "reminder", "reminders")
 
-  private val voteAliases = arrayOf("vote", "v", "vt")
+  private val voteAliases = arrayOf("vote", "v", "vt", "next vote reminder")
 
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument(name = "vote", optional = true) reminder: String?
+    @Argument(name = "reminder name", optional = true) reminder: String?
   ) {
     val userData = context.getUserData()
-    val enabled = "Enabled"
-    val disabled = "Disabled"
+    val enabled = "`ENABLED`"
+    val disabled = "`DISABLED`"
 
     if (reminder == null) {
       context.reply(
@@ -45,8 +45,9 @@ object RemindCommand : Command() {
               else "modules.profile.commands.remind.embed.description.disabled"
             ),
             context.translate("modules.profile.commands.remind.embed.title")
-          ).build()
+          ).setFooter(context.translate("modules.profile.commands.remind.embed.footer")).build()
         ).queue()
+        return
       }
     }
   }

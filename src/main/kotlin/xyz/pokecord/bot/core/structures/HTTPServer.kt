@@ -35,6 +35,7 @@ import xyz.pokecord.bot.utils.Json
 import xyz.pokecord.bot.utils.VoteUtils
 import xyz.pokecord.bot.utils.api.PayPal
 import xyz.pokecord.bot.utils.extensions.awaitSuspending
+import xyz.pokecord.bot.utils.ReminderUtils
 
 class HTTPServer(val bot: Bot) {
   @Serializable
@@ -126,13 +127,14 @@ class HTTPServer(val bot: Bot) {
     val day = VoteUtils.getSeasonDay()
 
     val (credits, tokens, cct) =
-      if (day % 5 == 0) Triple(5_000, 1, 1)
+      if (day % 5 == 0) Triple(10_000, 1, 1)
       else Triple(5_000, 1, 0)
+
+    val userData = bot.database.userRepository.getUser(args.user)
 
     val session = bot.database.startSession()
     session.use { clientSession ->
       clientSession.startTransaction()
-      val userData = bot.database.userRepository.getUser(args.user)
       bot.database.userRepository.setLastVoteTime(userData, session = clientSession)
       if (!bot.database.userRepository.incCredits(userData, credits, clientSession)) {
         clientSession.abortTransactionAndAwait()
@@ -146,6 +148,7 @@ class HTTPServer(val bot: Bot) {
       clientSession.commitTransactionAndAwait()
     }
     sendVoteNotification(args.user)
+    ReminderUtils.sendVoteReminder(userData)
   }
 
   suspend fun ApplicationCall.respond(statusCode: HttpStatusCode) {
@@ -230,8 +233,6 @@ class HTTPServer(val bot: Bot) {
           } else {
             call.respond(HttpStatusCode.BadRequest)
           }
-          val userData = bot.database.userRepository.getUser(voteArgs.user)
-          bot.database.userRepository.voteTask(userData) //vote reminder
         }
 
         get("/api/orders/id/{orderId?}") {

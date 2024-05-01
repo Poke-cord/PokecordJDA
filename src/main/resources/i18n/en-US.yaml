@@ -1182,12 +1182,18 @@ modules:
         embed:
           description:
             base: |-
-              **Vote**: {{vote}}
-              
               More reminders will be added soon!
+              
+              **Next Vote Reminder**: {{vote}}
             disabled: You will no longer receive DMs when your next votes are ready.
             enabled: You will now be DMed when your next votes are ready.
           title: "{{user}}'s Reminders"
+          footer: Enabled reminders will notify you via DMs.
+        dm:
+          vote:
+            description: Reminder to [vote again on top.gg]({{voteLink}}).
+            title: Your vote cooldown is up!
+            footer: This reminder repeats every 12 hours.
       rewards:
         embed:
           description: "*Pokecord looked through the credit bank...*"

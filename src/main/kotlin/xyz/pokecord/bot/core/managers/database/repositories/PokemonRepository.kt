@@ -433,7 +433,7 @@ class PokemonRepository(
         val isMinimumLevelOk =
           (evolutionDetails?.minimumLevel ?: 0) <= pokemon.level
         val isTimeOk =
-          if (evolutionDetails?.timeOfDay != "") evolutionDetails?.timeOfDay == DayNightUtils.getCurrentTime(LocalDateTime.now()) else true
+          if (evolutionDetails?.timeOfDay != "") evolutionDetails?.timeOfDay == EvolutionUtils.getCurrentTime(LocalDateTime.now()) else true
         val isTradeStateOk =
           if (evolutionDetails?.evolutionTriggerId == 2)
           if (evolutionDetails.tradeSpeciesId != 0 && beingTradedFor != null) beingTradedFor.contains(evolutionDetails.tradeSpeciesId)
