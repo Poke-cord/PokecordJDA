@@ -1189,7 +1189,7 @@ modules:
             enabled: You will now be DMed when your next votes are ready.
           title:
             base: "{{user}}'s Reminders"
-            toggle: {{reminderType}} Reminder Toggled
+            toggle: "{{reminderType}} Reminder Toggled"
           footer: Enabled reminders will notify you via DMs.
         dm:
           vote:
