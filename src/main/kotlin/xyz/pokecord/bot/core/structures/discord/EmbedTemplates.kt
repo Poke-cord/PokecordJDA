@@ -48,13 +48,13 @@ open class EmbedTemplates {
     EmbedBuilder().setColor(Color.YELLOW.code).setDescription(description).setTitle(title)
 
   suspend fun progressPrivate(user: User) = error(
-    translate("misc.embeds.progressPrivate.description", "user" to user.asMention),
-    translate("misc.embeds.progressPrivate.title")
+    translate("misc.embeds.privacyEnabled.description", "user" to user.asMention),
+    translate("misc.embeds.privacyEnabled.title")
   )
 
   open suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description"),
-    translate("misc.checks.hasStarted.embed.title")
+    translate("misc.embeds.checks.hasStarted.description"),
+    translate("misc.embeds.checks.hasStarted.title")
   )
 }
 
@@ -72,13 +72,13 @@ class ContextEmbedTemplates(private val context: ICommandContext) : EmbedTemplat
   }
 
   override suspend fun start() = normal(
-    translate("misc.checks.hasStarted.embed.description"//,
+    translate("misc.embeds.checks.hasStarted.description"//,
 //      mapOf(
 //        "user" to context.author.asMention,
 //        "prefix" to context.getPrefix()
 //       )
       ),
-    translate("misc.checks.hasStarted.embed.title")
+    translate("misc.embeds.checks.hasStarted.title")
   )
     .setFooter(translate("misc.embeds.error.footer"))
 }

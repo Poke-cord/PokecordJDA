@@ -304,7 +304,7 @@ object BattleActionEvent : Event() {
     if (moveResult.nothingHappened) return "${selfPokemon.displayName} used ${moveData.name}!\n> ***Nothing happened...***"
 
     val moveHit = "${selfPokemon.displayName} used ${moveData.name}!\n> ***${moveData.name} dealt " +
-        "${if (moveResult.selfDamage > 0)" ${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.*** " +
+        "${if (moveResult.selfDamage > 0)"${moveResult.selfDamage} damage to the dealer and" else ""} ${moveResult.defenderDamage} damage to the opponent.*** " +
         (if (moveResult.isCritical)"***It's a critical hit!*** " else "") +
         (if (moveResult.typeEffectiveness >= 2)"***It's super effective!***" else "") +
         (if (moveResult.typeEffectiveness == 0.5 || moveResult.typeEffectiveness == 0.25)"***It's not very effective...***" else "")

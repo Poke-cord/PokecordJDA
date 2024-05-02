@@ -146,10 +146,10 @@ abstract class BaseCommandContext(override val bot: Bot) : ICommandContext {
       bot.cache.setRunningCommand(author.id, false)
       errorEmbed = embedTemplates.error(
         translate(
-          "misc.errors.embeds.commandExecutionFailed.description",
+          "misc.errors.overrides.commandExecutionFailed.description",
           "command" to command.name
         ),
-        translate("misc.errors.embeds.commandExecutionFailed.title")
+        translate("misc.errors.overrides.commandExecutionFailed.title")
       )
         .build()
     }

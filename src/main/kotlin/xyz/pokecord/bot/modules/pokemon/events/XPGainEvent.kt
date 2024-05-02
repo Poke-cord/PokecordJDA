@@ -89,7 +89,7 @@ class XPGainEvent : Event() {
       when {
         evolved -> context.embedTemplates.normal(
           context.translate(
-            "misc.embeds.evolved.description",
+            "misc.embeds.evolution.description",
             mapOf(
               "user" to context.author.asMention,
               "pokemon" to oldPokemonName,
@@ -97,7 +97,7 @@ class XPGainEvent : Event() {
               "level" to selectedPokemon.level.toString()
             )
           ),
-          context.translate("misc.embeds.evolved.title")
+          context.translate("misc.embeds.evolution.title")
         )
 
         leveledUp -> context.embedTemplates.normal(

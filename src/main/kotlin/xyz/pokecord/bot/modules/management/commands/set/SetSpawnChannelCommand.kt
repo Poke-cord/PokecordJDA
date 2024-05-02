@@ -18,7 +18,7 @@ object SetSpawnChannelCommand : Command() {
   ) {
     if (!context.isFromGuild) {
       context.reply(
-        context.translate("misc.texts.serverOnlyCommand")
+        context.translate("misc.errors.serverOnlyCommand")
       ).queue()
       return
     }

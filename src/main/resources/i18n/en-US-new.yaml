@@ -1,0 +1,1440 @@
+misc:
+  command_descriptions:
+    auction:
+      auction: View all ongoing auctions. Accepts search and filters.
+      "auction.bid": Bid credits on an ongoing auction.
+      "auction.info": View specific auctioned Pokémon stats. Include auction ID.
+      "auction.list": List Pokémon for auction. Include start and increment bid, and duration.
+      "auction.unlist": Take your Pokémon off auction. Auction must have no bids.
+      "auction.profile": View ongoing auctions that you have started.
+      "auction.remind": Toggle auction-related DM notifications.
+    battle:
+      battle: Duel other users in epic one-versus-one Pokémon combat.
+      moves: View all teachable moves your Pokémon can learn.
+      "moves.teach": Teach your Pokémon up to four moves to use in battle.
+    developer:
+      bigleaderboard: It's a big leaderboard :O
+      eval: Evaluate JavaScript/Kotlin code.
+      giveredeem: Grant a specific redeem to a user.
+      giverole: Grant a secific dono role to a user.
+      parse-entities: What an old command.. What does it do?
+      mock: Bahahahahahahahahaha :P
+    economy:
+      buy: Purchase items from the shop.
+      shop: Displays various in-game items.
+      store: Purchase official server Trainer Roles or Gem Packages.
+    general:
+      faq: Search frequently asked questions by keyword.
+      help: Displays all commands with descriptions.
+      leaderboard: Shows who’s boss around here B)
+      ping: Ping, pong!
+      quicklinks: View quick links including Pokecord's invite, donations, and more.
+      vote: Links Pokecord's vote page and reveals current day of vote season.
+    server management:
+      set: Miscellaneous setting configurations.
+      "set.level": Sets the server level-up messages channel.
+      "set.prefix": Sets the server prefix.
+      "set.silence": Toggles server Pokémon level-up messages.
+      "set.spawn": Sets/removes a server spawn channel.
+    market:
+      market: View all market listings. Accepts search and filters.
+      "market.buy": Purchase market listings for credits.
+      "market.info": View specific listed Pokémon stats. Include listing ID.
+      "market.list": List Pokémon on the market. Include purchase price.
+      "market.unlist": Take your Pokémon off the market.
+      "market.profile": View your currently listed Pokémon on market.
+    pokemon collection:
+      favorite: Prevents Pokémon from being traded, transferred, sold, or auctioned.
+      info: Displays selected Pokémon's current stats, IVs, and EVs.
+      item: Consumes an item from your inventory. It's like eating a chocolate bar.
+      "item.give": Allows your selected Pokémon to hold items with unique perks.
+      "item.take": Revokes any item your selected Pokémon is holding.
+      nickname: Sets/resets nickname of selected Pokémon. Pokémon are searchable by nickname.
+      order: Orders your Pokémon collection by specified filter. Defaults to Pokédex.
+      pokemon: Displays a Pokémon collection with filters and searchability.
+      #release: Transfers Pokémon to Professor Zihadikarp.
+      select: Selects a Pokémon, becoming your active Pokémon.
+    pokepedia:
+      move: Displays specified move's information.
+      moveset: Recommends movesets for legendary and mythical Pokémon.
+      pokedex: Displays Pokémon base stats and general information.
+    profile:
+      bag: Displays all currency and items collected.
+      profile: Displays user information.
+      "profile.info": Displays user statistics.
+      "profile.pokedex": Displays all Pokémon registered to Pokédex. Includes shinies.
+      private: Toggles your progress visibility to public/private.
+    staff:
+      blacklist: Prevent users from executing Pokecord commands.
+      blacklists: View a full list of all blacklisted users.
+      logs: View auction, market, trade, and gift logs for a given user.
+      maintenance: Toggle Pokecord in or out of Maintenance Break.
+      shards: Check the status of Pokecord's shards.
+      show: View advanced spawn channel details.
+    trade:
+      trade: Initiate a trade session with another user.
+      "trade.add": Add to your trade offer. Specify either Pokémon or credits.
+      "trade.add.credits": Add credits to your trade offer.
+      "trade.add.pokemon": Add Pokémon to your trade offer.
+      "trade.cancel": Cancel your current trade session.
+      "trade.confirm": Confirm your current trade session.
+      "trade.remove": Remove from your trade offer. Specify either Pokémon or credits.
+      "trade.remove.credits": Remove credits from your trade offer.
+      "trade.remove.pokemon": Remove Pokémon from your trade offer.
+      "trade.status": View the current offerings from both trade parties.
+    trainer:
+      catch: Catch 'em all! Or someone else will.
+      "gift.credit": Gift credits to another user.
+      "gift.pokemon": Gift a Pokémon to another user.
+      "gift.toggle": Toggles whether you can receive incoming gifts.
+      hint: Reveals the first letter of the spawned Pokémon name.
+      pick: Allows you to start your Pokecord journey with a Pokémon.
+      rewards: Displays/claim all available rewards.
+      start: Displays Pokecord's welcome message. This should be your first command.
+  embeds:
+    checks:
+      hasStarted:
+        description: |-
+          Hey there! Welcome to Pokecord.
+
+          Use `@Pokecord start` before attempting other commands.
+        title: Start your Pokecord Journey
+    confirmation:
+      footer: Buttons will automatically time out in 30 seconds.
+    error:
+      title: Something went wrong...
+      footer: Support is available at discord.gg/UWUpfpR.
+    evolution:
+      description: |-
+        **Display Name**: {{pokemon}}
+        **Evolved Into**: {{evolvedPokemon}}
+        **Level**: {{level}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has Evolved
+    levelUp:
+      description: |-
+        **Display Name**: {{pokemon}}
+        **Level**: {{level}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has Leveled Up
+    moveLearned: |- #TODO: Support teach command here
+      **Name**: {{pokemon}}
+      **Move**: {{move}}
+
+      Congratulations {{user}}!
+    pokemonObtained:
+      footer: The Pokémon has been added to your collection.
+    privacyEnabled:
+      description: |-
+        Behold! {{user}}'s progress is hidden from others.
+        > **That includes you too** :)
+      title: User Progress is Private
+    rules:
+      description: |-
+        Hey {{user}}! Welcome to {{botUsername}}.
+        
+        Read and agree to the following to continue.
+        - [Terms of Service]({{tosUrl}})
+        - [Privacy Policy]({{privacyUrl}})
+        **By accessing the Service, you agree to abide by our Terms.**
+      title: Access of Services Agreement
+      footer: Seeing this again? We've updated our Terms.
+    transactionCancelled:
+      description: |-
+        This transaction is prohibited.
+        > **DO NOT ATTEMPT THIS TRANSACTION AGAIN.**
+      title: Illegal Transaction Cancelled
+  errors: #descriptions only excl. overrides section
+    overrides:
+      commandExecutionFailed:
+        description: |-
+          Failed to execute the {{command}} command. 
+          > **Report this error [here](https://discord.gg/UWUpfpR) if it recurs.**
+        title: Command Execution Failure
+      commandRateLimitReached:
+        description: |-
+          Look at you go! Wait.. we can't see you.
+          > **You're using commands too fast.**
+        title: Chill Out
+    botInteraction:
+      You interacted with a bot. Wait, you can't.
+      > **Mention a user instead of a bot.**
+    commandTimedOut: |-
+      Too powerful! Command execution timed out. 
+      > **Report this error [here](https://discord.gg/UWUpfpR) if it recurs.**
+    notYourButton: |-
+      You pressed someone else's button. It didn't work.
+      > **Use buttons that belong to your own commands.**
+    inState: |-
+      You used a command while busy. It didn't work.
+      > **Cancel current trade, battle, or release first.**
+    invalidAmount: |-
+      You entered an invalid amount.
+      > **Enter a valid amount.**
+    missingArguments:
+      noUser: |-
+        Pokecord says you missed or mistook a detail.
+        > **Check user mentioned or specify one.**
+      noPokemon: |-
+        Pokecord says you missed a detail.
+        > **Specify a Pokémon by collection ID.**
+      noPokemonName: |-
+        Pokecord says you missed a detail.
+        > **Specify a Pokémon by its name.**
+    noSearchResults: |-
+      Pokecord looked far and wide, to no avail.
+      > **No results found as per your search query.**
+    notASpawnChannel: |-
+      You can't catch here—at least not yet.
+      > **Catch in spawn channels or create new ones.**
+    nothingSpawned: |-
+      You're here! But Pokémon are not.
+      > **Wait for a Pokémon to spawn.**
+    pokemonNotFound: |-
+      Pokecord looked far and wide, to no avail.
+      > **Check Pokémon name, ID, and spelling.**
+    pokemonDoesNotExist: |-
+      Pokémon does not exist.
+      > **Report this error [here](https://discord.gg/UWUpfpR).**
+    serverOnlyCommand: |-
+      Command must be used in a server. 
+      > **Navigate to a server to continue.**
+    userHasNotStarted: |-
+      The user you mentioned hasn't started yet.
+      > **Ask them to use `@Pokecord start`.**
+  presence:
+    maintenance:
+      activity: Maintenance Break
+      status: DO_NOT_DISTURB
+      type: DEFAULT
+    regular:
+      activity: "@Pokecord • {{version}}"
+      status: ONLINE
+      type: DEFAULT
+  texts:
+    accuracy: Accuracy
+    ailmentChance: Ailment Chance
+    altNames: Alternative Identifiers
+    formNames: Alternative Forms
+    appearance: Appearance
+    argument_aliases: Argument Aliases
+    argument_names: Argument Names
+    availableFaqs: Available FAQ
+    baseStats: Base Stats
+    command: Command
+    command_aliases: Aliases
+    commands: Commands
+    criticalRate: Critical Rate
+    damageClass: Damage Class
+    evolution: Evolution
+    female: Female
+    firstStage: First Stage
+    gender: Gender
+    genderRate: Gender Rate
+    genderless: Genderless
+    generation: Generation
+    genus: Genus
+    habitat: Habitat
+    height: Height
+    heldItem: Held Item
+    ivSpread: IV Spread
+    lastStage: Last Stage
+    male: Male
+    moveInfo: Move Info
+    name: Name
+    nature: Nature
+    nextEvolution: Evolves Into
+    noEvolution: No Evolution
+    obtained: Obtained
+    originalTrainerID: Original ID
+    physical: Physical
+    power: Power
+    pp: PP
+    prevEvolution: Pre-Evolution
+    priority: Priority
+    special: Special
+    starterPokemon: Starter Pokémon
+    status: Status
+    suggestedMoves: Suggested Moves
+    hp: HP
+    attack: Atk
+    defense: Def
+    specialAttack: Sp Atk
+    specialDefense: Sp Def
+    speed: Spe
+    totalIv: Total IV
+    trainerID: Trainer ID
+    type: Type
+    types: Types
+    unknown: Unknown
+    usage: Usage
+    weight: Weight
+    xp: XP
+    auctionId: Auction ID
+    startingBid: Starting Bid
+    bidCount: Bid Count
+    timeLeft: Time Left
+    currentBid: Current Bid
+    noBids: No Bids
+    listingId: Listing ID
+    price: Listing Price
+modules:
+  battle:
+    embeds: #by command
+      battle:
+        battleRequest:
+          title: Battle Request
+          description: |-
+            Attention {{partner}}!
+            
+            {{initiator}} has requested a battle.
+            
+            React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
+      moves:
+        base: #parent command
+          description: |-
+            *Duel other Pokémon with a strategic move layout. Use `@Pokecord moves teach <slot 1-4> <move name>` to learn moves.*
+          
+            **Example usage**: `@Pokecord moves teach 2 hyper beam`
+          title: "Dueling Moves │ Level {{level}} {{pokemon}}"
+        teach: #child command
+          cancelled: Move teaching has been cancelled. #specify embed name when > 1 embed per command
+          confirmation:
+            title: A Move Replacement is Pending
+            description: |-
+              **Current Move**: {{move}}
+              **Slot Number**: {{slot}}
+              Specified move will replace the current move in slot {{slot}}.
+              
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          success:
+            description: |-
+              **Move**: {{move}}
+              **Pokémon**: {{pokemon}}
+              **Slot Number**: {{slot}}
+              
+              Congratulations {{user}}!
+            title: A Move has been Taught
+    errors: #also by command
+      general: #used across commands
+        inBattle: |-
+          Two you? No. Two duels? Also no.
+          > **Finish your current duel first.**
+      battle:
+        alreadyBattling: |-
+          Two you? No. Two duels? Also no.
+          > **Finish your current duel first.**
+        partnerAlreadyBattling: |-
+          {{partner}} is in combat!
+          > **Wait for their duel to finish.**
+        noMoves: |-
+          Doing nothing is not an option in battles.
+          > **Teach your Pokémon moves.**
+        noPartnerMoves: |-
+          Doing nothing is not an option in battles.
+          > **Opponent must teach their Pokémon move(s).**
+        selfBattle: |-
+          You battled yourself. Wait, you can't. 
+          > **Mention another user to battle with.**
+      moves:
+        teach:
+          inBattle: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current duel first.**
+          moveNotFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Specified move was not found. Search for another move.**
+          moveNotSpecified: |-
+            Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
+            E.g., `@Pokecord moves teach 2 hyper beam`
+            You may only teach moves to your selected Pokémon.
+          slotNotSpecified: |-
+            Please follow the following format: `@Pokecord moves teach <slot 1-4> <move name>`
+            E.g., `@Pokecord moves teach 2 hyper beam`
+            You may only teach moves to your selected Pokémon.
+          slotOutOfRange: |-
+            Pokecord couldn't find your slot number.
+            > **Specify a slot number between 1 and 4.**
+    texts:
+      availableMoves: Available Moves
+      learnedMoves: Learned Moves
+      noMove: No Move
+      noMoves: No Moves
+      unknownMove: Unknown Move
+  auctions:
+    commands:
+      profile:
+        embeds:
+          title: "{{userTag}}'s Auctions"
+        errors:
+          noResults: |-
+            Pokecord looked far and wide, to no avail.
+            > **You have no current auctions. Create one to get started.**
+      list:
+        errors:
+          inTrade: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current trade first.**
+          startingBidPrice: |-
+            Pokecord couldn't enter your starting bid.
+            > **Specify starting bid between 1,000 and 10 million credits.**
+          minimumTime: |-
+            Pokecord couldn't enter your auction time.
+            > **Specify time between 4 hours and 30 days.**
+        confirmation:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **End Time**: {{formattedDate}}
+            
+            **Starting Bid**: {{startingBid}}
+            **Bid Increment**: {{bidIncrement}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: An Auction Post is Pending
+        confirmed:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **End Time**: {{formattedDate}}
+            
+            **Starting Bid**: {{startingBid}}
+            **Bid Increment**: {{bidIncrement}}
+            
+            Your auction has been posted.
+          title: An Auction has been Posted
+      unlist:
+        confirmation:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: An Auction is Pending Removal
+        confirmed:
+          description: |-
+            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
+            
+            Your Pokémon has been returned to your collection.
+          title: An Auction has been Removed
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find auction {{id}}. Search for another auction.**
+          notYourAuction: |-
+            You tried to unlisted someone else's auction. It didn't work. 
+            > **Unlist your own auctions.**
+          bidsActive: |-
+            Too much finance! Pokecord can't figure it out.
+            > **Unlist auctions that have no bids.**
+          auctionSold: |-
+            Pokecord looked far and wide, to no avail.
+            > **Auction was sold or has ended. Unlist another auction.**
+      bid:
+        bidNotification:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **Amount**: {{amount}} credits
+          title: You Received a Bid
+        outbid:
+          description: |-
+            **Auction ID**: {{ID}}
+            **Auction Item**: {{pokemonName}}
+            
+            **Bid Difference**: {{bidDifference}} credits
+          title: You have been Outbid
+        confirmed:
+          title: A Bid has been Sent
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **Amount**: {{bid}}
+        confirmation:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+            **Amount**: {{bid}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: A Bid is Pending
+        errors:
+          alreadyEnded: |-
+            Pokecord couldn't find a time machine.
+            > **Specified auction has ended.**
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find auction {{id}}. Search for another auction.**
+          selfBid: |-
+            You bid on your own auction. Wait, you can't.
+            > **Bid on another user's auction.**
+          noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to bid {{amount}} credits.**
+          topBid: |-
+            Two you? No. Two top bids? Also no.
+            > **You already have the top bid of {{bid}} credits.**
+          bidTooLow: |-
+            You must bid at least **{{bid}} credits** on this auction.
+            The bid increment is currently set to **{{bidIncrement}} credits**.
+      info:
+        errors:
+          noAuctionId: Please provide a valid auction ID.
+          noAuctionFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find auction {{id}}. Search for another auction.**
+        title: Auction \#{{auctionId}} │ Level {{pokemonLevel}} {{pokemonName}}
+#        footer: "Viewing auction #{{index}} • Caught date" To add at a later date
+      auctions:
+        embeds:
+          title: The 'Cord Auction House
+        errors:
+          noResults: |-
+            You're here! But the auction you searched for is not.
+            > **Wait for an auction to start.**
+      notify:
+        toggledOn:
+          title: Activity has been Toggled On
+          description: You will receive DM notifications for auction activity.
+        toggledOff:
+          title: Activity has been Toggled Off
+          description: You will stop receiving DM notifications for auction activity.
+    tasks:
+      checker:
+        auctionEnded:
+          title: Your Auction has Ended
+          description: |-
+            **Auction Item**: {{pokemon}}
+            
+            Your auction ended with no bids. Your {{pokemon}} has been returned to your collection.
+        auctionSold:
+          title: Your Auction has been Sold
+          description: |-
+            **Auction Item**: {{pokemon}}
+            **Final Bid**: {{amount}}
+            
+            Congratulations!
+          footer: The credits have been added to your balance.
+        auctionWon:
+          title: You Won an Auction
+          description: |-
+            **Auction Item**: {{pokemon}}
+            **Your Bid**: {{amount}}
+            
+            Congratulations!
+          footer: The Pokémon was added to your collection.
+  market:
+    commands:
+      profile:
+        embeds:
+          title: "{{userTag}}'s Market Listings"
+        errors:
+          noResults: |-
+            Pokecord looked far and wide, to no avail.
+            > **You have no current listings. Create one to get started.**
+      list:
+        errors:
+          inTrade: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current trade first.**
+          noPriceProvided: Please provide the price you would like to list your Pokémon for.
+          startingBidPrice: |-
+            Pokecord couldn't enter your listing price.
+            > **Specify listing price between 1,000 and 10 million credits.**
+        confirmation:
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: Market Listing Confirmation
+        confirmed:
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            Your listing has been posted.
+          title: Market Listing Posted
+      unlist:
+        confirmation:
+          title: Listing Removal Confirmation
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+        confirmed:
+          title: Market Listing Removed
+          description: |-
+            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
+            
+            Your Pokémon has been returned to your collection.
+        errors:
+          noListingId: Please provide a valid market listing ID.
+          noListingFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find listing {{id}}. Search for another listing.**
+          notYourListing: |-
+            You tried to unlisted someone else's listing. It didn't work. 
+            > **Unlist your own listings.**
+          bidsActive: |-
+            Too much finance! Pokecord can't figure it out.
+            > **Unlist listings that haven't been purchased.**
+      buy:
+        sold:
+          title: Market Listing Sold
+          description: |-
+            **Listing Item**: {{ivPercentage}} {{pokemonName}}
+            **Buyer**: {{buyer}}
+            **Price**: {{price}} credits
+            
+            The credits have been added to your balance.
+        confirmed:
+          title: Market Purchase Receipt
+          description: |-
+            **The 'Cord Marketplace**
+            -------------------------
+            {{pokemonIV}} {{pokemonName}}
+            - -{{price}} credits
+            -------------------------
+            See your collection for details.
+        confirmation:
+          description: |-
+            **Listing Item**: {{pokemonIV}} {{pokemonName}}
+            **Price**: {{price}} credits
+            
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: Listing Purchase Confirmation
+        errors:
+          alreadySold: |-
+            Pokecord couldn't find a time machine.
+            > **Specified listing has been sold.**
+          noListingId: Please provide a valid listing ID.
+          noListingFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find listing {{id}}. Search for another listing.**
+          selfBuy: |-
+            You purchased your own listing. Wait, you can't.
+            > **Purchase another user's listing.**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase this listing.**
+          unlisted: |-
+            Pokecord looked far and wide, to no avail.
+            > **Listing has been unlisted. Search for another listing.**
+      info:
+        errors:
+          noListingId: Please provide a valid listing ID.
+          noListingFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **Could not find listing {{id}}. Search for another listing.**
+        title: Listing \#{{listingId}} │ Level {{pokemonLevel}} {{pokemonName}}
+      market:
+        embeds:
+          title: The 'Cord Marketplace
+        errors:
+          noResults: |-
+            You're here! But the listing you searched for is not.
+            > **Wait for a listing to be posted.**
+  trading:
+    commands:
+      trade:
+        confirmation:
+          title: Trade Request Pending
+          description: |-
+            Attention {{partner}}!
+            
+            {{trader}} has requested a trade.
+            
+            React with :white_check_mark: to accept or :negative_squared_cross_mark: to decline.
+        tradeStarted:
+          title: Trade Session Initiated
+          description: |-
+            The trade request has been accepted.
+            > **You may only trade 20 Pokémon per session.**
+        tradeCancelled:
+          title: Trade Request Terminated
+          description: The trade request has expired or been declined.
+        errors:
+          noPartnerTagged: |-
+            You traded with nobody. Wait, you can't.
+            > **Mention a user to trade with.**
+          tradingYourself: |-
+            You traded with yourself. Wait, you can't.
+            > **Mention another user to trade with.**
+          alreadyInTrade: |-
+            Two you? No. Two things at once? Also no.
+            > **Finish your current trade first.**
+          alreadyRequested: |-
+            Two you? No. Two things at once? Also no.
+            > **Wait for your current trade request to be accepted.**
+      status:
+        embeds:
+          tradeEnded:
+            title: Trade Session Terminated
+            description: The trade has ended.
+          status:
+            title: "{{confirmator}} has confirmed the trading session"
+            titleNoConfirm: Both parties have not confirmed the trading session
+            description: The trade between {{author}} and {{partner}} is pending finalization.
+        errors:
+          noPartnerFound:
+            description: |-
+              Partner not found.
+              > **Report this error [here](https://discord.gg/UWUpfpR).**
+      cancel:
+        embeds:
+          cancelTrade:
+            title: Trade Session Terminated
+            description: The trade between {{author}} and {{partner}} has ended.
+      add:
+        errors:
+          noNumberPokemon: |-
+            You tried to add air. That didn't work.
+            > **Specify up to 20 Pokémon IDs.**
+          noNumberCredits: |-
+            You tried to add air. That didn't work.
+            > **Specify credit amount to add.**
+          notEnoughCredits: |-
+            Pokecord couldn't enter your credit amount.
+            > **Check current credit balance.**
+          maxPokemonCount: |-
+            Too many Pokémon! Pokecord can't count.
+            > **You may only specify 20 Pokémon IDs.**
+        embeds:
+          title: Trade Session Updated
+          addCredits:
+            description: |-
+              **Credits Added**: {{credits}}
+              
+              Your offer has been updated.
+          addPokemon:
+            description: |-
+              **Pokémon Added**: {{pokemon}}
+              
+              Your offer has been updated.
+      remove:
+        errors:
+          noNumberPokemon: |-
+            You tried to remove air. That didn't work.
+            > **Specify up to 20 Pokémon IDs.**
+          noNumberCredits: |-
+            You tried to remove air. That didn't work.
+            > **Specify credit amount to remove.**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain {{credits}} more credits to add this amount.**
+          notAdded: |-
+            Pokecord looked far and wide, to no avail.
+            > **Specified Pokémon is not in trade.**
+        embeds:
+          title: Trade Session Revised
+          removeCredits:
+            description: |-
+              **Credits Removed**: {{credits}}
+              
+              Your offer has been revised.
+          removePokemon:
+            description: |-
+              **Pokémon Removed**: {{pokemon}}
+              
+              Your offer has been revised.
+      confirm:
+        errors:
+          emptyTrade: |-
+            You don't need a trade to trade nothing.
+            > **Both trade partners must add credits or Pokémon.**
+        embeds:
+          partConfirmed:
+            title: Trade Confirmation Pending
+            description: |-
+              You confirmed the trading session. 
+              > **Trade will be executed when your partner confirms.**
+            #Replace "your partner" with {{partner}}. Could not implement in TradeConfirmCommand.kt.
+          confirmed:
+            title: Trade Session Confirmed
+            description: The trade between {{author}} and {{partner}} has been executed.
+    errors:
+      notInTrade: |-
+        You tried to trade with air. That didn't work.
+        > **Initiate a trade session first.**
+  general:
+    commands:
+      faq:
+        errors:
+          noFaqFound: |-
+            Pokecord looked far and wide, to no avail.
+            > **No FAQ found matching specified keyword.**
+        list:
+          embed:
+            title: Frequently Asked Questions
+      invite:
+        embed:
+          description: |-
+            Community and Support: [[**Join Server**]]({{serverLink}})
+            > Receive support and play Pokecord with us!
+            
+            Invite Pokecord: [[**Invite**]]({{inviteLink}})
+            > Play Pokecord in your own server!
+            
+            Make a Donation: [[**Go**]]({{serverLink}})
+            > Once in Official Pokecord, see <#774049980058697738>.
+            
+            Official Websites: [[**Main**]]({{websiteLink}}) [[**Terms of Service**]]({{tosLink}})
+            > See an overview of our bot and review the rules!
+          footer: Thank you for choosing Pokecord!
+          title: Pokecord Quick Links
+      leaderboard:
+        titles:
+          credits: Global 'Cord Board by Credit Amount
+          pokemon: Global 'Cord Board by Pokémon Count
+        footer: This 'Cord Board updates every few minutes.
+      ping:
+        embed:
+          description: |-
+            **To API**: {{apiPing}}
+            **To Client**: {{ping}}
+          title: Pong!
+          footer: Ping starts in client.
+      set:
+        private:
+          title: Progress Privacy Toggled
+          enabled: Your progress is now hidden from other players.
+          disabled: Your progress is now viewable by other players.
+        prefix:
+          current: The current prefix is `{{prefix}}`.
+          noAdmin: Ask a user with administrator privileges to execute this command.
+          tooLarge: Prefix can't be longer than 10 characters.
+          updated: Prefix updated to {{prefix}}.
+        silence:
+          title: Level-Up Messages Toggled
+          enabled: Level-up messages have been enabled.
+          disabled: Level-up messages have been disabled.
+        spawn:
+          description: |-
+            **Channel Name**: {{channelName}}
+            **Channel Mention**: {{channelMention}}
+            **Channel ID**: {{channelId}}
+          list:
+            title: Server Spawn Status
+          noChannelsSet: No spawn channels set.
+          title:
+            added: A Spawn has been Added
+            removed: A Spawn has been Removed
+        level:
+          description:
+            updated: Level-up messages will be redirected to {{channel}}.
+            removed: Level-up messages will be shown upon level up.
+          title:
+            updated: Level-Up Channel Updated
+            removed: Level-Up Channel Removed
+      vote:
+        now: now
+        embed:
+          description: |-
+            **Vote for Pokecord**: [top.gg page]({{voteLink}})
+            **Season End**: {{currentSeasonEndTime}}
+            **Next vote**... {{nextVoteTime}}!
+          footer: Want more rewards? Check in every 12 hours to vote!
+          title: The 'Cord Vote Track S{{season}}
+  pokemon:
+    commands:
+      catch:
+        embed:
+          description: |-
+            **Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Congratulations {{user}}!
+          title: A Pokémon has been Caught
+        errors:
+          incorrectNameProvided: |-
+            The great Pokédex says you're wrong.
+            > **Check Pokémon name or spelling.**
+      favorite:
+        added: Added to Favorites
+        removed: Removed from Favorites
+        embed:
+          description: |-
+            **Display Name**: {{pokemon}}
+
+            Your favorites have been updated.
+      gift:
+        toggle:
+          title: Toggled Incoming Gifts
+          enabled: |-
+            You are eligible to receive gifts from other users. Swell!
+          disabled: |-
+            You won't receive gifts from other users. Sad trombone.
+        embeds:
+          cancelled:
+            description: The gift was not sent.
+            title: Gift Sending Cancelled
+          confirmation:
+            credits: |-
+              **Sender**: {{sender}}
+              **Receiver**: {{receiver}}
+
+              **Credit Amount**: {{amount}}
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            pokemon: |-
+              **Sender**: {{sender}}
+              **Receiver**: {{receiver}}
+
+              **Pokémon**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: Gift Sending Confirmation
+          giftReceived:
+            credits: |-
+              {{sender}} has gifted you credits!
+
+              **Amount**: {{amount}}
+            pokemon: |-
+              {{sender}} has gifted you a Pokémon!
+
+              **Pokémon**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+            title: You Received a Gift
+          giftSent:
+            credits: |-
+              **Receiver**: {{receiver}}
+
+              **Credit Amount**: {{amount}}
+
+              Your gift has been sent.
+            pokemon: |-
+              **Receiver**: {{receiver}}
+
+              **Pokémon**: {{pokemon}}
+              **Level**: {{level}}
+              **IV Percent**: {{ivPercentage}}
+
+              Your gift has been sent.
+            title: Gift Sending Confirmed
+        errors:
+          botReceiver: |-
+            You sent a gift to a bot. Wait, you can't.
+            > **You may only send gifts to users.**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to gift this amount.**
+          selfReceiver: |-
+            You sent a gift to yourself. Wait, you can't.
+            > **You may only send gifts to other users.**
+          giftsDisabled: |-
+            Pokecord couldn't deliver the gift. 
+            > **The receiver is not accepting gifts.**
+      hint:
+        confirmation:
+          embed:
+            description: |-
+              Confirm purchase for a Pokémon hint.
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: Hint Request Pending
+        dm:
+          embed:
+            title: Pokémon Hint
+        embed:
+          description: The hint has been sent to your DMs.
+          title: Hint Generated
+        errors:
+          cancelled:
+            description: Your Pokémon hint request was cancelled.
+            title: Hint Generation Cancelled
+          dmFailed: |-
+            Pokecord couldn't DM you and returned credits.
+            > **Allow Pokecord#4908 to DM you.**
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase a hint.**
+      info:
+        embed:
+          footer: "Showing #{{index}} • Caught date"
+          title: "{{speciesId}} │ Level {{level}} {{pokemon}}"
+      moveset:
+        embed:
+          title: Pokémon Movesets │ {{pokemon}}
+          footer: Credits to Dominater & SilverAQ for the movesets.
+        errors:
+          noMoveset: No moveset available for the specified Pokémon.
+          noPokemonName: No Pokémon name specified.
+      nickname:
+        reset: Nickname Reset
+        updated: Nickname Updated
+        embed:
+          description: |-
+            **Display Name**: {{nickname}}
+            **Pokémon**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+
+            Your Pokémon's nickname has been updated!
+        errors:
+          pokemonName: |-
+            Identity theft is real. No stealing!
+            > **Do not include another Pokémon's name.**
+          charLimit: |-
+            Too long! Pokecord can't handle it.
+            > **Limit nickname to 64 characters.**
+          emojiNotAllowed: |-
+            Pokémon fraud is forbidden.
+            > **Exclude :star:\'s, :large_blue_diamond:\'s, and :diamond_shape_with_a_dot_inside:\'s from nicknames.**
+      order:
+        ordering:
+          title: Ordering Pokémon by {{orderType}}...
+          description: Do not use commands until this process is done.
+        ordered:
+          title: Ordered Pokémon by {{orderType}}
+          description: The ordering process finished successfully.
+#       tooManyPokemon: You must have {{maxPokemonCount}} or less amount of Pokémon in order to be able to use this command.
+      pick:
+        embed:
+          description: |-
+            You chose {{pokemon}} as your starter Pokémon!
+            > Try using `@Pokecord info latest` to view even more stats!
+        pickingTwice: |-
+          Pokecord couldn't find a time machine.
+          > **Try catching Pokémon instead of picking again.**
+      pokedex:
+        embed:
+          title: '{{speciesId}} │ {{pokemon}} │ Pokédex Info'
+        footers:
+          caught: This Pokémon is registered to your Pokédex!
+          uncaught: This Pokémon has not been registered to your Pokédex!
+      pokemon:
+        embeds:
+          title: "{{user}}'s Pokémon Collection"
+      select:
+        errors:
+          alreadySelected: |-
+            The selector couldn't select. Sad face.
+            > **Select a Pokémon by your collection ID.**
+          inBattle: You can't select another Pokémon while you are in battle!
+        embed:
+          description: |-
+            **Display Name**: {{pokemon}}
+            **Level**: {{level}}
+            **IV Percent**: {{ivPercentage}}
+            
+            Your selected Pokémon has been updated!
+          title: Selected Pokémon Updated
+      start:
+        description: |-
+          Come join us by collecting Pokémon and immersing yourself in the world of Pokecord! Start by picking a Pokémon to carry on your journey.
+          
+          **Get started**: Use `@Pokecord pick <Pokémon Name>` to choose a Pokémon.
+          **Example usage**: `@Pokecord pick torchic`
+        startingTwice: |-
+          Pokecord couldn't find a time machine.
+          > **Try catching Pokémon instead of starting again.**
+        welcomeToPokeWorld: Welcome to the World of Pokecord!
+    events:
+      spawner:
+        embeds:
+          spawn:
+            description: Use `@Pokecord catch <Pokémon Name>` to catch it!
+            footer: The next Pokémon will replace this one.
+            title: A Wild Pokémon has Appeared
+  release:
+    embeds:
+      center:
+        embed:
+          description: |-
+            **Try using**:
+            `@Pokecord release add <pokemon number(s)>`
+            
+            **Example usage**:
+            `@Pokecord release add 11,22,33`
+            `@Pokecord release add 1-20`
+          title: Release Add Usage
+        releaseStarted:
+          title: A Release Session has Started
+          description: "Release session has been initiated.\n> **You can only release 50 Pokémon per session.**"
+        removePokemon:
+          title: A Pokémon has been Removed
+          description: |-
+            **Name(s)**: 
+            {{pokemon}}
+
+            Pokémon were removed from release.
+      confirmation:
+        embed:
+          description: |-
+            **Name(s)**:
+            {{pokemon}}
+            
+            Confirm release of the Pokémon above.
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: Pokémon Releasing is Pending
+        embedNoConfirm:
+          description: |-
+            **Name(s)**:
+            {{pokemon}}
+            
+            Pokémon were successfully added to release.
+          title: Pokémon have been Added
+        errors:
+          emptyRelease: |-
+            You released nothing. Wait, you can't.
+            > **Add Pokémon to your release session before releasing.**
+      released:
+        description: |-
+          **Name(s)**:
+          {{pokemon}}
+          
+          **Rewards**: 
+          {{rewards}}
+        title: Pokémons have been Released
+      cancelled:
+        description: |-
+          Success!
+          > **The release session was cancelled.**
+        title: Release Session has been Cancelled
+    errors:
+      selectedPokemon: |-
+        This Pokémon is favorited.
+        > **Unfavorite the Pokémon before transferring.**
+      favoritePokemon: |-
+        This Pokémon is selected.
+        > **Select another Pokémon before transferring.**
+      notInRelease: |-
+        Priorities!
+        > **Start a release session first.**
+      inTrade: |-
+        Two you? No. Two things at once? Also no.
+        > **Finish your current trade first.**
+      alreadyInRelease: |-
+        Two you? No. Two release sessions? Also no.
+        > **Finish your current release session first.**
+      notInRange: |-
+        Pokecord couldn't 
+        > **Specify up to a maximum of 50 Pokémon.**
+  profile:
+    commands:
+      bag:
+        noItemsDescription: |-
+          **Gems**: {{gems}}
+          **Credits**: {{credits}}
+          **Tokens**: {{tokens}}
+
+          You don't have any items right now.
+        description: |-
+          **Gems**: {{gems}}
+          **Credits**: {{credits}}
+          **Tokens**: {{tokens}}
+
+        title: "{{user}}'s Backpack"
+      item:
+        errors:
+          invalidTarget: '**Suggestion**: Try using another item or giving
+                        the specified item!'
+          itemNotFound: '**Suggestion**: Try using a valid item!'
+          itemNotOwned:
+            description: '**Suggestion**: Try purchasing the item you
+                            want to use or use one you have!'
+            title: An Item is Missing
+          noItemName: '**Suggestion**: Try specifying an item name!'
+          notAvailable: '**Suggestion**: Try using an item that''s available
+                        or wait for updates!'
+        give:
+          embed:
+            description: |-
+              **Item Name**: {{item}}
+
+              Your {{pokemon}} is now holding a {{item}}!
+            title: An Item has been Given
+          errors:
+            alreadyHolding: '**Suggestion**: Try taking the current item
+                            before giving it another!'
+            canNotBeGiven: '**Suggestion**: Try giving another item to your Pokémon!'
+        take:
+          embed:
+            description: |-
+              **Item Name**: {{item}}
+
+              Your {{pokemon}} is now holding nothing!
+            title: An Item has been Taken
+          errors:
+            holdingUnknownItem: '**Suggestion**: Try joining our [support
+                            server](https://discord.gg/UWUpfpR) to resolve this issue!'
+            notHolding: '**Suggestion**: Try giving an item to your Pokémon
+                            before taking anything!'
+      profile:
+        embed:
+          info:
+            description: |-
+              More stats will be added later.
+              
+              **Shiny Rate**: 1/{{rate}}
+
+            footer: Some stats may update sooner than others.
+            title: "{{user}}'s Pokecord Info"
+#        errors: add some later
+      rewards:
+        embed:
+          description: "*Pokecord looked through the credit bank...*"
+          fields:
+            catchRewards:
+              name: '**__Catch Rewards__** (**{{amount}}**)'
+              value: |-
+                {{credits}} credits received
+                
+                Congratulations {{user}}!
+          title: 'Rewards Claimed!'
+          footer: The credits have been added to your balance.
+        embeds:
+          available:
+            description: |-
+              *Since your last rewards claim...*
+              **__{{unclaimedCatchRewards}} Pokémon reward(s__)** remain unclaimed, including:
+              - {{mythicCount}} Mythics;
+              - {{legendaryCount}} Legendaries;
+              - {{ubCount}} Ultra Beasts;
+              - {{psLegendaryCount}} Pseudo Legendaries; and
+              - {{otherCount}} of everything diversely!
+
+              Use `@Pokecord rewards all` to claim rewards.
+            title: 'Unclaimed Rewards Available!'
+        errors:
+          noPokemonRewards: '**Suggestion**: Try catching more Pokémon to
+                        earn catch rewards!'
+          noRewards: '**Suggestion**: Try earning a few rewards before checking
+                        in!'
+  economy:
+    commands:
+      buy:
+        errors:
+          itemNotFound: '**Suggestion**: Try buying a valid item!'
+          cannotBePurchased: '**Suggestion**: Try buying a purchasable item!'
+          noItemName: '**Suggestion**: Try specifying an item name!'
+          invalidAmount: '**Suggestion**: Try specifying an amount between 1 and 1024!'
+          notEnoughCredits: |-
+            Got spare credits lying around?
+            > **Gain more credits to purchase this item.**
+          notEnoughGems: "You don't have enough gems to buy this item."
+          notEnoughTokens: "You don't have enough tokens to buy this item."
+        embed:
+          description: |-
+            **The 'Cord Shop Counter**
+            --------------------------
+            {{item}} (x{{amount}})
+            - -{{cost}} {{type}}
+            --------------------------
+            View items in your backpack.
+          title: Item Purchase Receipt
+      shop:
+        embed:
+          description: |
+            **Gems**: {{gems}}
+            **Credits**: {{credits}}
+            **Tokens**: {{tokens}}
+            
+            *Items purchasable for gems and tokens are available on pages 27-28.*
+          title: The 'Cord Shop Counter
+        texts:
+          cantBePurchased: Not purchasable
+          creditsCost: |
+            ***{{cost}}*** *credits*
+          gemsCost: |
+            ***{{cost}}*** *gems*
+          tokensCost: |
+            ***{{cost}}*** *tokens*
+          cost: |
+            {{cost}}
+      store:
+        embed:
+          oldOrderDescription: |-
+            **Order Item**: {{item}}
+            
+            Your previous order can be paid for [here]({{link}}).
+          confirmation:
+            cancelOldOrder: |-
+              Cancel your current open order?
+              
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          orderCreated:
+            title: An Order has been Opened
+            description: Order information has been sent to your DMs.
+          description: |-
+            Welcome to The 'Cord Seaside Store! Browse for gems, perks, and more!
+            *This is Pokecord's official store. Items are purchased with genuine currency.*
+          title: The 'Cord Seaside Store
+        errors:
+          cancelOldOrder:
+            orderCancelled: The order has been cancelled or the session timed out.
+          failedToCancelOrder: |-
+            An error occurred when creating your order.
+            > **Contact us [here](https://discord.gg/UWUpfpR) to resolve this issue.**
+          dmsClosed: |-
+            Pokecord couldn't DM you!
+            > **Allow Pokecord to DM you before ordering again.**
+        dm:
+          embed:
+            title: Thanks for Supporting Pokecord!
+            description: |-
+              **Order Item**: {{item}}
+              
+              Your order may be accessed and paid for **[here]({{link}})**.
+store:
+  packages:
+    gems:
+      name: Gems
+      description: Purchase gems to buy exclusive redeems in our shop.
+      embed:
+        title: Purchase Gems
+        description: Select a desired package for purchase.
+      items:
+        100_gems: 100 Gems
+        525_gems: 525 Gems
+        1100_gems: 1100 Gems
+        1680_gems: 1680 Gems
+        3000_gems: 3000 Gems
+        6750_gems: 6750 Gems
+    roles:
+      name: Roles
+      description: Purchase a trainer role for our **[official server](https://discord.gg/UWUpfpR)** to receive shop discounts and XP boosts.
+      embed:
+        title: Purchase Roles
+        description: Select a desired role for purchase.
+      items:
+        apprentice_trainer: Apprentice Trainer
+        intermediate_trainer: Intermediate Trainer
+        experienced_trainer: Experienced Trainer
+        master_trainer: Master Trainer
+        legendary_trainer: Legendary Trainer
+        mythical_trainer: Mythical Trainer
+items:
+  evolution:
+    embed:
+      description: |-
+        **Name**: {{pokemon}}
+        **Evolved Into**: {{evolvedPokemon}}
+
+        Congratulations {{user}}!
+      title: A Pokémon has Evolved
+  machine:
+    embed:
+      title: A Machine has been Used
+    errors:
+      invalidTarget: '**Suggestion**: Try using another machine or using
+                        the specified machine on a different Pokémon!'
+      inBattle: You can't use a machine during a battle!
+      invalidSlotSpecified: '**Suggestion**: Try specifying a valid
+                    move slot number!'
+      noSlotSpecified: '**Suggestion**: Try specifying a move slot number!'
+      unknownMachine: An Unknown Machine has been Used
+  mints:
+    embed:
+      description: |-
+        *You watch as your Pokémon's nature changes...*
+        Your **{{pokemon}}** is now **{{nature}}** in nature.
+        
+        Congratulations {{user}}!
+      title: You used a Nature Mint...
+    errors:
+      invalidTarget: |-
+        That didn't work quite right.
+        > **Use a different mint or select another Pokémon.**
+      inBattle: |-
+        Pokecord smells a hint of trickery.
+        > **Nature mints may not be used in battle.**
+  glimmeringCandy:
+    embed:
+      description: |-
+        *You feel the power of the Pokecord shiny gods...*
+        Your current shiny rate has increased to **1/{{rate}}**.
+        
+        Congratulations {{user}}!
+      title: You consumed a Glimmering Candy...
+      footer: Shiny rate resets to 1/4908 upon shiny catch.
+  natureCandy:
+    embed:
+      description: |-
+        *You feel the power of the Pokecord RNG gods...*
+        You give into the RNG and receive a **{{natureMint}}**.
+        
+        Congratulations {{user}}!
+      title: You used a Nature Candy...
+      footer: The mint was added to your inventory.
+  rareCandy:
+    embed:
+      description: |-
+        *You watch as your Pokémon's level increases...*
+        Your **{{pokemon}}** is now level **{{level}}**.
+        
+        Congratulations {{user}}!
+      title: You used Rare Candies...
+    errors:
+      alreadyMaxLevel: |-
+        Your {{pokemon}} is already at max level.
+        > **Try selecting another Pokémon to level.**
+  cct:
+    embed:
+      description: |-
+        **Credits Converted**: {{cost}}
+        **Tokens Received**: {{token}}
+        
+        The conversion finished successfully.
+      title: Consume CCT Confirmed
+      footer: The tokens were added to your balance.
+    confirmation:
+      description: |-
+        **Credits to Convert**: {{credits}}
+        **Tokens to Receive**: {{count}}
+        
+        React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+      title: Consume CCT Confirmation
+    errors:
+      notEnoughCredits: |-
+        Got spare credits lying around?
+        > **Gain a total of {{cost}} credits to use this item.**
+      notEnoughCCT: |-
+        Pokecord says get more Credit Conversion Tokens.
+        > **Use `@Pokecord vote` to obtain CCTs on select days.**
+      cancelled:
+        description: The Credit Conversion Token was not consumed.
+        title: Consume CCT Cancelled
+  credits:
+    embed:
+      title: Credits Receivped!
+      description: You received **{{credits}}** credits from the credits package!
+  redeem:
+    errors:
+      disallowedPokemon: |-
+        You can't redeem this Pokémon with this type of redeem.
+        > **See `@Pokecord faq redeems` for further detail.**
+      noCurrentEvents: |-
+        There are no ongoing events right now.
+        > **Use this redeem during an event.**
+    embed:
+      description: |-
+        *Pokecord reached into the depths of the PC...*
+        Your **{{pokemon}}** is level **{{level}}** and is **{{ivPercentage}}** IV!
+        
+        Congratulations {{user}}!
+      title: You opened a(n) {{redeem}}...
+  ev:
+    errors:
+      alreadyMaxTotalEv: |-
+        Too many vitamins!
+        > **Pokémon may only have 510 EVs in total.**
+      alreadyMaxStat: |-
+        Too many {{stat}} vitamins!
+        > **Pokémon may only have 252 EVs in a single stat.**
+    embed:
+      title: You used {{vitamin}} Vitamins... # I guess it needs quotes if it starts with {
+      description: |-
+        **Pokémon**: {{pokemon}} 
+        **Stat Buffed**: {{statName}} 
+        **EVs Applied**: {{points}}
+        
+        The vitamins were applied successfully.
+  unusable:
+    description: |-
+      Pokecord says this isn't a consumable item.
+      > **Use `@Pokecord item give` or use another item.**

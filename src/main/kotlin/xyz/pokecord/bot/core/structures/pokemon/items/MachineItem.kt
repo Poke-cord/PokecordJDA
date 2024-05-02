@@ -61,7 +61,7 @@ class MachineItem(
       true,
       context.embedTemplates.normal(
         context.translate(
-          "misc.texts.moveLearned",
+          "misc.embeds.moveLearned",
           mapOf(
             "pokemon" to context.translator.pokemonDisplayName(selectedPokemon),
             "move" to (MoveData.getById(move.id)?.name ?: "N/A"),

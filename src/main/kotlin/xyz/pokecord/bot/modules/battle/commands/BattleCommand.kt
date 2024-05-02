@@ -39,7 +39,7 @@ object BattleCommand : Command() {
         )
         .reply(
           context.embedTemplates.error(
-            context.translate("modules.battle.commands.battle.errors.alreadyBattling")
+            context.translate("modules.battle.errors.general.inBattle")
           )
             .setImage("attachment://battle.png")
             .build()
@@ -60,7 +60,7 @@ object BattleCommand : Command() {
     if (partner.id == context.author.id) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.selfBattle")
+          context.translate("modules.battle.errors.battle.selfBattle")
         ).build()
       ).queue()
       return
@@ -71,7 +71,7 @@ object BattleCommand : Command() {
       context.reply(
         context.embedTemplates.error(
           context.translate(
-            "modules.battle.commands.battle.errors.partnerAlreadyBattling",
+            "modules.battle.errors.battle.partnerAlreadyBattling",
             "partner" to partner.asMention
           )
         ).build()
@@ -115,7 +115,7 @@ object BattleCommand : Command() {
     if (pokemon.moves.all { it == 0 }) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.battle.errors.noPokemonMoves")
+          context.translate("modules.battle.errors.battle.noMoves")
         ).build()
       ).queue()
       return
@@ -125,7 +125,7 @@ object BattleCommand : Command() {
       context.reply(
         context.embedTemplates.error(
           context.translate(
-            "modules.battle.commands.battle.errors.noPartnerPokemonMoves",
+            "modules.battle.errors.battle.noPartnerMoves",
             "partner" to partner.asMention
           )
         ).build()
@@ -142,15 +142,14 @@ object BattleCommand : Command() {
     context.channel.sendMessageEmbeds(
       context.embedTemplates.normal(
         context.translate(
-          "modules.battle.commands.battle.embeds.battleRequest.description",
+          "modules.battle.embeds.battle.battleRequest.description",
           mapOf(
             "initiator" to context.author.asMention,
             "partner" to partner.asMention,
           )
         ),
-        context.translate("modules.battle.commands.battle.embeds.battleRequest.title")
-      ).setFooter(context.translate("misc.confirmation.timeoutFooter"))
-        .build()
+        context.translate("modules.battle.embeds.battle.battleRequest.title")
+      ).setFooter(context.translate("misc.embeds.confirmation.footer")).build()
     ).setActionRow(
       BattleModule.Buttons.getBattleRequestActionRow(battleRequest)
     ).queue()

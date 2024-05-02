@@ -478,7 +478,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
                 commandJob.cancelAndJoin()
                 context.reply(
                   context.embedTemplates.error(
-                    context.translate("misc.texts.commandTimedOut")
+                    context.translate("misc.errors.commandTimedOut")
                   ).build()
                 ).queue()
                 break

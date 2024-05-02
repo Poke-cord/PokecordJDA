@@ -55,7 +55,7 @@ object ReleaseConfirmCommand : Command() {
         )
           .setFooter(
             context.translate(
-              "misc.confirmation.timeoutFooter",
+              "misc.embeds.confirmation.footer",
               "timeout" to (confirmation.timeout / 1_000).toString()
             )
           )

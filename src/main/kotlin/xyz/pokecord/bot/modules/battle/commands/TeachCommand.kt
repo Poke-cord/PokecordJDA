@@ -29,7 +29,7 @@ object TeachCommand : Command() {
     if (selfCurrentBattle != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.teach.errors.inBattle")
+          context.translate("modules.battle.errors.general.inBattle")
         ).build()
       ).queue()
       return
@@ -48,7 +48,7 @@ object TeachCommand : Command() {
     if (slot == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.teach.errors.slotNotSpecified")
+          context.translate("modules.battle.errors.moves.teach.slotNotSpecified")
         ).build()
       ).queue()
       return
@@ -57,7 +57,7 @@ object TeachCommand : Command() {
     if (slot < 1 || slot > 4) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.teach.errors.slotOutOfRange")
+          context.translate("modules.battle.errors.moves.teach.slotOutOfRange")
         ).build()
       ).queue()
       return
@@ -66,7 +66,7 @@ object TeachCommand : Command() {
     if (move == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.teach.errors.moveNotSpecified")
+          context.translate("modules.battle.errors.moves.teach.moveNotSpecified")
         ).build()
       ).queue()
       return
@@ -86,7 +86,7 @@ object TeachCommand : Command() {
     if (targetMove == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.battle.commands.moves.teach.errors.moveNotFound")
+          context.translate("modules.battle.errors.moves.teach.moveNotFound")
         ).build()
       ).queue()
       return
@@ -97,20 +97,19 @@ object TeachCommand : Command() {
       val confirmed = confirmation.result(
         context.embedTemplates.confirmation(
           context.translate(
-            "modules.battle.commands.moves.teach.replaceConfirmation.description",
+            "modules.battle.embeds.moves.teach.confirmation.description",
             mapOf(
               "slot" to slot.toString(),
               "move" to MoveData.getById(pokemon.moves[slot - 1])!!.name
             )
           ),
-          context.translate("modules.battle.commands.moves.teach.replaceConfirmation.title"),
-        ),
-        mentionRepliedUser = true
+          context.translate("modules.battle.embeds.moves.teach.confirmation.title"),
+        )
       )
       if (!confirmed) {
         val embed = context.embedTemplates.normal(
           "",
-          context.translate("modules.battle.commands.moves.teach.errors.cancelled"),
+          context.translate("modules.battle.embeds.moves.teach.cancelled"),
         ).setFooter(null).build()
 
         confirmation.sentMessage?.editMessageEmbeds(embed)?.queue() ?: context.reply(embed).queue()
@@ -122,16 +121,16 @@ object TeachCommand : Command() {
 
     context.reply(
       context.embedTemplates.normal(
-        context.translate(
-          "modules.battle.commands.moves.teach.embed.description",
+        context.translate("modules.battle.embeds.moves.teach.success.description",
+          mapOf(
           "move" to targetMove.moveData.name,
           "pokemon" to context.translator.pokemonDisplayName(pokemon),
           "user" to context.author.asMention,
           "slot" to slot.toString()
+          )
         ),
-        context.translate("modules.battle.commands.moves.teach.embed.title")
-      )
-        .build()
+        context.translate("modules.battle.embeds.moves.teach.success.title")
+      ).build()
     ).queue()
   }
 }
