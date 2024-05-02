@@ -11,8 +11,7 @@ object ReminderUtils {
     if (!user.voteReminder) return
 
     val embedTemplates = EmbedTemplates()
-    var timeRemaining = user.lastVoteAt?: return
-    timeRemaining += TimeUnit.HOURS.toMillis(12)
+    val timeRemaining = TimeUnit.HOURS.toMillis(12)
 
     try {
       val voterChannel = bot.shardManager
