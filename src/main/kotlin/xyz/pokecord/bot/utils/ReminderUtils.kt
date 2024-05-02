@@ -24,7 +24,7 @@ object ReminderUtils {
             "voteLink" to "https://top.gg/bot/705016654341472327/vote"
           ),
           embedTemplates.translate("modules.profile.commands.remind.dm.vote.title")
-        ).setFooter("modules.profile.commands.remind.dm.vote.footer").build()
+        ).setFooter(embedTemplates.translate("modules.profile.commands.remind.dm.vote.footer")).build()
       ).queueAfter(timeRemaining, TimeUnit.MILLISECONDS)
     } catch (_: Exception) {
     }
