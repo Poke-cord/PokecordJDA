@@ -14,7 +14,7 @@ object MovesCommand : ParentCommand() {
   @Executor
   suspend fun execute(
     context: ICommandContext,
-    @Argument(name = "pokemon") pokemonResolvable: PokemonResolvable?
+    @Argument(name = "pokemon", optional = true) pokemonResolvable: PokemonResolvable?
   ) {
     if (!context.hasStarted(true)) return
 

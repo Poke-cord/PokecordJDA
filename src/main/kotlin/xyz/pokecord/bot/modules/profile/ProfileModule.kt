@@ -10,7 +10,7 @@ class ProfileModule(bot: Bot): Module(
   arrayOf(
     BagCommand(),
     PrivateCommand,
-    ProfileCommand(),
+    ProfileCommand,
     RemindCommand,
   )
 ) {

@@ -1173,6 +1173,7 @@ modules:
             description: |-
               More stats will be added later.
               
+              **Pokémon Count**: {{pokemonCount}}
               **Shiny Rate**: 1/{{rate}}
 
             footer: Some stats may update sooner than others.
