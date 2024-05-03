@@ -1176,7 +1176,7 @@ modules:
               **Shiny Rate**: 1/{{rate}}
 
             footer: Some stats may update sooner than others.
-            title: "{{user}}'s Pokecord Info"
+            title: "{{user}}'s Statistics"
 #        errors: add some later
       remind:
         embed:

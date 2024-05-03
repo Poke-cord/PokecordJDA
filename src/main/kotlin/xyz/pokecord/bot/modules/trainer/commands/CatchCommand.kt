@@ -73,10 +73,15 @@ class CatchCommand : Command() {
       val pokemon = Pokemon.getByName(pokemonName)
       if (pokemon != null && spawnChannel.spawned == pokemon.id) {
         val eventPokemonId = SpecialEvents.handleCatching(pokemon.species)
-        val shiny = eventPokemonId?.let {
-          Random.nextInt(100) < 2
-        }
         val finalPokemonId = eventPokemonId ?: pokemon.id
+
+        val finalPokemon = Pokemon.getById(finalPokemonId)
+        val shiny = if (finalPokemon?.hasShiny == true) {
+          eventPokemonId?.let {
+            Random.nextInt(100) < 2
+          }
+        } else null //set to null for normal shiny calculation in givePokemon()
+
         val ownedPokemon =
           module.bot.database.userRepository.givePokemon(context.getUserData(), finalPokemonId, shiny = shiny) {
             module.bot.database.spawnChannelRepository.despawn(spawnChannel, it)

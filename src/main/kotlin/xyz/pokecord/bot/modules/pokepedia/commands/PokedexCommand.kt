@@ -28,7 +28,7 @@ class PokedexCommand : Command() {
     val id = pokemonNameOrId.toIntOrNull()
     val pokemon = if (id != null) Pokemon.getById(id) else Pokemon.getByName(pokemonNameOrId)
 
-    if (pokemon == null) {
+    if (pokemon == null || !pokemon.hasShiny) {
       context.reply(
         context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build()
       ).queue()
@@ -38,9 +38,7 @@ class PokedexCommand : Command() {
     val genderRate =
       if (pokemon.species.genderRate == -1) context.translate("misc.texts.genderless")
       else "${100 - pokemon.species.genderRate * 12.5}% ${context.translate("misc.texts.male")}, ${pokemon.species.genderRate * 12.5}% ${
-        context.translate(
-          "misc.texts.female"
-        )
+        context.translate("misc.texts.female")
       }"
 
     val nextEvolution = context.translator.evolution(pokemon)

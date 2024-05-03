@@ -31,7 +31,7 @@ object ProfileStatisticsCommand : Command() {
           )
         ),
         context.translate("modules.profile.commands.profile.embed.info.title",
-          "user" to context.author.asTag
+          "user" to userData.tag.toString()
         )
       ).setFooter(context.translate("modules.profile.commands.profile.embed.info.footer"))
         .build()

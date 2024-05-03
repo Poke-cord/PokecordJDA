@@ -1206,6 +1206,7 @@ object CustomPokemon {
     stats: List<PokemonStat>,
     isBattleOnly: Boolean = false,
     isMega: Boolean = false,
+    hasShiny: Boolean = true
   ) {
     // Custom Pokemon Entry
     Pokemon.addEntry(pokemon)
