@@ -1173,7 +1173,6 @@ modules:
             description: |-
               More stats will be added later.
               
-              **Pokémon Count**: {{pokemonCount}}
               **Shiny Rate**: 1/{{rate}}
 
             footer: Some stats may update sooner than others.
@@ -1191,7 +1190,7 @@ modules:
           title:
             base: "{{user}}'s Reminders"
             toggle: "{{reminderType}} Reminder Toggled"
-          footer: Enabled reminders will notify you via DMs.
+          footer: Enabled reminders will notify you via DM.
         dm:
           vote:
             description: Reminder to [vote again on top.gg]({{voteLink}}).
