@@ -6,7 +6,6 @@ import java.time.ZoneOffset
 
 object Config {
   const val version = "2.2.22"
-  const val botMention = "<@705016654341472327>"
 
   val voteSeasonStartDate: LocalDate = Instant.ofEpochMilli(1609459200000).atZone(ZoneOffset.UTC).toLocalDate()
 

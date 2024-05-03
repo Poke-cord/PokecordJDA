@@ -4,7 +4,7 @@ import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import xyz.pokecord.bot.api.ICommandContext
 import xyz.pokecord.bot.core.managers.database.models.OwnedPokemon
 import xyz.pokecord.bot.core.structures.discord.base.Command
-// import xyz.pokecord.bot.modules.staff.StaffCommand
+import xyz.pokecord.bot.utils.Config
 import xyz.pokecord.bot.utils.PokemonResolvable
 
 object TradeAddPokemonCommand : Command() {
@@ -47,7 +47,7 @@ object TradeAddPokemonCommand : Command() {
       } else {
         val authorTradeState =
           if (tradeState.initiator.userId == context.author.id) tradeState.initiator else tradeState.receiver
-        if (authorTradeState.pokemon.size >= 20) {
+        if (authorTradeState.pokemon.size >= Config.maxTradeSessionPokemon) {
           context.reply(
             context.embedTemplates.error(
               context.translate("modules.trading.commands.add.errors.maxPokemonCount")

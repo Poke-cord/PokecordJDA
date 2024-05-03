@@ -32,6 +32,7 @@ class CommandHandler(val bot: Bot) : CoroutineEventListener {
   private val logger = LoggerFactory.getLogger(CommandHandler::class.java)
 
   var prefix: String = if (bot.maintenance) "!" else "p!"
+  val botMention = "<@705016654341472327>"
 
   private val commandUsages = Counter
     .build("bot_commands_usages", "Total number of command usages.")

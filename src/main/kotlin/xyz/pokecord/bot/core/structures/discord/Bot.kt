@@ -97,14 +97,14 @@ class Bot constructor(private val token: String, private val topggToken: String?
     val name =
       (if (command.parentCommand != null) "${command.parentCommand!!.name} ${command.name}" else command.name).lowercase()
     val commandDescription = getCommandDescription(context, command)
-    return "**${prefix}${name}**${if (command.usage.isEmpty()) "" else " `${command.usage}` "}${if (commandDescription.isEmpty()) "" else " - $commandDescription "}"
+    return "**${prefix} ${name}**${if (command.usage.isEmpty()) "" else " `${command.usage}` "}${if (commandDescription.isEmpty()) "" else " - $commandDescription "}"
   }
 
   private suspend fun getCommandDescription(context: ICommandContext, command: Command): String {
     return context.translate(command.descriptionI18nKey, "")
   }
 
-  suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = "p!"): EmbedBuilder? {
+  suspend fun getHelpEmbed(context: ICommandContext, module: Module, prefix: String = commandHandler.botMention): EmbedBuilder? {
     if (!module.enabled) return null
     val commandEntries = mutableListOf<String>()
     for (command in module.commands) {
@@ -164,7 +164,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
     )
   }
 
-  suspend fun getHelpEmbeds(context: ICommandContext, prefix: String = "p!"): List<EmbedBuilder> {
+  suspend fun getHelpEmbeds(context: ICommandContext, prefix: String = commandHandler.botMention): List<EmbedBuilder> {
     return modules.mapNotNull { getHelpEmbed(context, it.value, prefix) }
   }
 
@@ -176,7 +176,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
     context: ICommandContext,
     parentCommand: ParentCommand,
     commands: List<Command>,
-    prefix: String = "p!"
+    prefix: String = commandHandler.botMention
   ): EmbedBuilder? {
     val commandEntries = mutableListOf<String>()
     for (command in commands) {
@@ -203,7 +203,7 @@ class Bot constructor(private val token: String, private val topggToken: String?
 
   fun updatePresence() {
     val activityTextData = mapOf(
-      "prefix" to (commandHandler.prefix),
+      //"prefix" to (commandHandler.prefix),
       "version" to (if (devEnv) "vBETA" else "v$version")
     )
 
