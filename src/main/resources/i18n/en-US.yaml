@@ -55,6 +55,7 @@ misc:
       #release: Transfers Pokémon to Professor Zihadikarp.
       select: Selects a Pokémon, becoming your active Pokémon.
     pokepedia:
+      forecast: Displays current weather, events, and time of day.
       move: Displays specified move's information.
       moveset: Recommends movesets for legendary and mythical Pokémon.
       pokedex: Displays Pokémon base stats and general information.
@@ -64,6 +65,7 @@ misc:
       "profile.info": Displays user statistics.
       "profile.pokedex": Displays all Pokémon registered to Pokédex. Includes shinies.
       private: Toggles your progress visibility to public/private.
+      remind: Displays all reminders. Specify reminder type for toggling.
     staff:
       blacklist: Prevent users from executing Pokecord commands.
       blacklists: View a full list of all blacklisted users.
@@ -1003,6 +1005,10 @@ modules:
         footers:
           caught: This Pokémon is registered to your Pokédex!
           uncaught: This Pokémon has not been registered to your Pokédex!
+        errors:
+          noShiny: |-
+            Pokecord triple checked the records, to no avail.
+            > **This Pokémon forme/variant has no shiny.**
       forecast:
         description: |-
           *Pokecord is currently detecting no anomalies.*
@@ -1192,8 +1198,8 @@ modules:
               More reminders will be added soon!
               
               **Next Vote Reminder**: {{vote}}
-            disabled: You will no longer receive DMs when your next votes are ready.
-            enabled: You will now be DMed when your next votes are ready.
+            disabled: You will no longer be DMed regarding these notifications.
+            enabled: You will now be DMed when these notifications are due.
           title:
             base: "{{user}}'s Reminders"
             toggle: "{{reminderType}} Reminder Toggled"

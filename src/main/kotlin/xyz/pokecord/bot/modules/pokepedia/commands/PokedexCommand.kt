@@ -28,9 +28,16 @@ class PokedexCommand : Command() {
     val id = pokemonNameOrId.toIntOrNull()
     val pokemon = if (id != null) Pokemon.getById(id) else Pokemon.getByName(pokemonNameOrId)
 
-    if (pokemon == null || !pokemon.hasShiny) {
+    if (pokemon == null) {
       context.reply(
         context.embedTemplates.error(context.translate("misc.errors.pokemonNotFound")).build()
+      ).queue()
+      return
+    }
+
+    if (!pokemon.hasShiny) {
+      context.reply(
+        context.embedTemplates.error(context.translate("modules.pokemon.commands.pokedex.errors.noShiny")).build()
       ).queue()
       return
     }

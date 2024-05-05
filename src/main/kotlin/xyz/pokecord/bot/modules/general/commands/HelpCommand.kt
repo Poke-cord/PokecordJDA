@@ -7,7 +7,7 @@ import xyz.pokecord.bot.utils.EmbedPaginator
 class HelpCommand : Command() {
   override val name = "Help"
 
-  override var aliases = arrayOf("h", "commands", "command")
+  override var aliases = arrayOf("h", "cmds", "commands", "command", "cmd")
 
   private suspend fun getCommands(
     context: ICommandContext,

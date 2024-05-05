@@ -18,7 +18,7 @@ object AuctionCommand : ParentCommand() {
   override val name = "Auction"
   override var aliases = arrayOf("ah", "au", "auctions")
   override val childCommands: MutableList<Command> =
-    mutableListOf(BidCommand, InfoCommand, ListCommand, UnlistCommand, ProfileCommand, RemindCommand)
+    mutableListOf(BidCommand, InfoCommand, ListCommand, UnlistCommand, ProfileCommand)
 
   suspend fun formatAuctions(
     context: ICommandContext,
@@ -69,9 +69,7 @@ object AuctionCommand : ParentCommand() {
 
     val templateEmbedBuilder =
       EmbedBuilder()
-        .setTitle(
-          context.translate("modules.auctions.commands.auctions.embeds.title")
-        )
+        .setTitle(context.translate("modules.auction.embeds.auction.title"))
         .setColor(EmbedTemplates.Color.YELLOW.code)
 
     val searchOptions =
@@ -103,8 +101,8 @@ object AuctionCommand : ParentCommand() {
     val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(
-        templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
-          .setColor(EmbedTemplates.Color.RED.code).build()
+        templateEmbedBuilder.setDescription(context.translate("modules.auction.errors.auction.noAuctions"))
+          .setColor(EmbedTemplates.Color.RED.code).setFooter("misc.embeds.error.footer").build()
       ).queue()
       return
     }
@@ -112,8 +110,8 @@ object AuctionCommand : ParentCommand() {
     val pageCount = ceil((count.toDouble() / 10)).toInt()
     val paginator = EmbedPaginator(context, pageCount, { pageIndex ->
       if (pageIndex >= pageCount) {
-        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
-          .setColor(EmbedTemplates.Color.RED.code).setFooter("")
+        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auction.errors.auction.noResults"))
+          .setColor(EmbedTemplates.Color.RED.code).setFooter("misc.embeds.error.footer")
       }
       val auctionsList = context.bot.database.auctionRepository.getAuctionList(
         skip = pageIndex * 10,
