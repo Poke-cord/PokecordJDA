@@ -12,7 +12,13 @@ object Config {
   val officialServerOnlyMode = System.getenv("OFFICIAL_SERVER_ONLY") != null
 
   val devs =
-    mutableListOf("584915458302672916", "574951722645192734", "693914342625771551", "610861621287583752", "341282855625818122", "312135171656646658", "730225189756862476")
+    mutableListOf(
+      "574951722645192734", //Zihad
+      "693914342625771551", //Mystic
+      "312135171656646658", //Blue
+      "610861621287583752", //Zihad
+      "730225189756862476", //Mystic
+    )
 
   const val mainServer = "718872125490069534"
   const val testingServer = "757972619986337823"
