@@ -52,27 +52,27 @@ object AuctionTask : Task() {
               jdaOwnerChannel.sendMessageEmbeds(
                 embedTemplates.normal(
                   embedTemplates.translate(
-                    "modules.auctions.tasks.checker.auctionSold.description",
+                    "modules.auction.tasks.embeds.auctionSold.description",
                     mapOf(
                       "pokemon" to pokemon.displayName,
                       "amount" to highestBid.amount.toString()
                     )
                   ),
-                  embedTemplates.translate("modules.auctions.tasks.checker.auctionSold.title")
-                ).setFooter("modules.auctions.tasks.checker.auctionSold.footer").build()
+                  embedTemplates.translate("modules.auction.tasks.embeds.auctionSold.title")
+                ).setFooter("modules.auction.tasks.embeds.auctionSold.footer").build()
               ).queue()
 
               jdaWinnerChannel.sendMessageEmbeds(
                 embedTemplates.normal(
                   embedTemplates.translate(
-                    "modules.auctions.tasks.checker.auctionWon.description",
+                    "modules.auction.tasks.embeds.auctionWon.description",
                     mapOf(
                       "pokemon" to pokemon.displayName,
                       "amount" to highestBid.amount.toString()
                     )
                   ),
-                  embedTemplates.translate("modules.auctions.tasks.checker.auctionWon.title")
-                ).setFooter("modules.auctions.tasks.checker.auctionWon.footer").build()
+                  embedTemplates.translate("modules.auction.tasks.embeds.auctionWon.title")
+                ).setFooter("modules.auction.tasks.embeds.auctionWon.footer").build()
               ).queue()
             } catch (_: Exception) {
             }
@@ -94,10 +94,10 @@ object AuctionTask : Task() {
               jdaOwnerChannel.sendMessageEmbeds(
                 embedTemplates.normal(
                   embedTemplates.translate(
-                    "modules.auctions.tasks.checker.auctionEnded.description",
+                    "modules.auction.tasks.embeds.auctionEnded.description",
                     "pokemon" to pokemon.displayName
                   ),
-                  embedTemplates.translate("modules.auctions.tasks.checker.auctionEnded.title")
+                  embedTemplates.translate("modules.auction.tasks.embeds.auctionEnded.title")
                 ).build()
               ).queue()
             } catch (_: Exception) {

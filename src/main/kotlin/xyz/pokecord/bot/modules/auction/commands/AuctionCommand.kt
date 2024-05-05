@@ -70,7 +70,7 @@ object AuctionCommand : ParentCommand() {
     val templateEmbedBuilder =
       EmbedBuilder()
         .setTitle(
-          context.translate("modules.auctions.commands.auctions.embeds.title")
+          context.translate("modules.auction.embeds.auction.title")
         )
         .setColor(EmbedTemplates.Color.YELLOW.code)
 
@@ -103,7 +103,7 @@ object AuctionCommand : ParentCommand() {
     val count = context.bot.database.auctionRepository.getAuctionCount(aggregation = aggregation.toMutableList())
     if (count < 1) {
       context.reply(
-        templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
+        templateEmbedBuilder.setDescription(context.translate("modules.auction.errors.auction.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).build()
       ).queue()
       return
@@ -112,7 +112,7 @@ object AuctionCommand : ParentCommand() {
     val pageCount = ceil((count.toDouble() / 10)).toInt()
     val paginator = EmbedPaginator(context, pageCount, { pageIndex ->
       if (pageIndex >= pageCount) {
-        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auctions.commands.auctions.errors.noResults"))
+        return@EmbedPaginator templateEmbedBuilder.setDescription(context.translate("modules.auction.errors.auction.noResults"))
           .setColor(EmbedTemplates.Color.RED.code).setFooter("")
       }
       val auctionsList = context.bot.database.auctionRepository.getAuctionList(

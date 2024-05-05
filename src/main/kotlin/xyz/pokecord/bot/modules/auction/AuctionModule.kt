@@ -8,7 +8,7 @@ import xyz.pokecord.bot.modules.auction.tasks.AuctionTask
 class AuctionModule(bot: Bot): Module(
   bot,
   arrayOf(AuctionCommand),
-  arrayOf(),
+  arrayOf(), //TODO: What is this for?
   arrayOf(AuctionTask)
 ) {
   override val name = "Auction"

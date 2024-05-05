@@ -363,143 +363,138 @@ modules:
       noMove: No Move
       noMoves: No Moves
       unknownMove: Unknown Move
-  auctions:
-    commands:
-      profile:
-        embeds:
-          title: "{{userTag}}'s Auctions"
-        errors:
-          noResults: |-
-            Pokecord looked far and wide, to no avail.
-            > **You have no current auctions. Create one to get started.**
+  auction:
+    embeds:
+      auction:
+        title: The 'Cord Auction House
+      bid:
+        dms: #dm notifications
+          bidReceived:
+            description: |-
+              **Auction Item**: {{pokemonIV}} {{pokemonName}}
+              **Amount**: {{amount}} credits
+            title: You received a bid
+          outbid:
+            description: |-
+              **Auction ID**: {{ID}}
+              **Auction Item**: {{pokemonName}}
+  
+              **Bid Difference**: {{bidDifference}} credits
+            title: You have been outbid
+        all: #used everywhere
+          confirmation:
+            description: |-
+              **Auction Item**: {{pokemonIV}} {{pokemonName}}
+              **Amount**: {{bid}}
+
+              React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+            title: Bidding is Pending
+          confirmed:
+            description: |-
+              **Auction Item**: {{pokemonIV}} {{pokemonName}}
+              **Amount**: {{bid}}
+            title: Your bid has been sent
+      info:
+        title: Auction \#{{auctionId}} │ Level {{pokemonLevel}} {{pokemonName}}
+        #footer: "Viewing auction #{{index}} • Caught date" #To add at a later date
       list:
-        errors:
-          inTrade: |-
-            Two you? No. Two things at once? Also no.
-            > **Finish your current trade first.**
-          startingBidPrice: |-
-            Pokecord couldn't enter your starting bid.
-            > **Specify starting bid between 1,000 and 10 million credits.**
-          minimumTime: |-
-            Pokecord couldn't enter your auction time.
-            > **Specify time between 4 hours and 30 days.**
         confirmation:
           description: |-
             **Auction Item**: {{pokemonIV}} {{pokemonName}}
             **End Time**: {{formattedDate}}
-            
+
             **Starting Bid**: {{startingBid}}
             **Bid Increment**: {{bidIncrement}}
-            
+
             React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
           title: An Auction Post is Pending
         confirmed:
           description: |-
             **Auction Item**: {{pokemonIV}} {{pokemonName}}
             **End Time**: {{formattedDate}}
-            
+
             **Starting Bid**: {{startingBid}}
             **Bid Increment**: {{bidIncrement}}
-            
+
             Your auction has been posted.
           title: An Auction has been Posted
-      unlist:
-        confirmation:
-          description: |-
-            **Auction Item**: {{pokemonIV}} {{pokemonName}}
-            
-            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-          title: An Auction is Pending Removal
-        confirmed:
-          description: |-
-            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
-            
-            Your Pokémon has been returned to your collection.
-          title: An Auction has been Removed
-        errors:
-          noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
-            > **Could not find auction {{id}}. Search for another auction.**
-          notYourAuction: |-
-            You tried to unlisted someone else's auction. It didn't work. 
-            > **Unlist your own auctions.**
-          bidsActive: |-
-            Too much finance! Pokecord can't figure it out.
-            > **Unlist auctions that have no bids.**
-          auctionSold: |-
-            Pokecord looked far and wide, to no avail.
-            > **Auction was sold or has ended. Unlist another auction.**
-      bid:
-        bidNotification:
-          description: |-
-            **Auction Item**: {{pokemonIV}} {{pokemonName}}
-            **Amount**: {{amount}} credits
-          title: You Received a Bid
-        outbid:
-          description: |-
-            **Auction ID**: {{ID}}
-            **Auction Item**: {{pokemonName}}
-            
-            **Bid Difference**: {{bidDifference}} credits
-          title: You have been Outbid
-        confirmed:
-          title: A Bid has been Sent
-          description: |-
-            **Auction Item**: {{pokemonIV}} {{pokemonName}}
-            **Amount**: {{bid}}
-        confirmation:
-          description: |-
-            **Auction Item**: {{pokemonIV}} {{pokemonName}}
-            **Amount**: {{bid}}
-            
-            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
-          title: A Bid is Pending
-        errors:
-          alreadyEnded: |-
-            Pokecord couldn't find a time machine.
-            > **Specified auction has ended.**
-          noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
-            > **Could not find auction {{id}}. Search for another auction.**
-          selfBid: |-
-            You bid on your own auction. Wait, you can't.
-            > **Bid on another user's auction.**
-          noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
-          notEnoughCredits: |-
-            Got spare credits lying around?
-            > **Gain more credits to bid {{amount}} credits.**
-          topBid: |-
-            Two you? No. Two top bids? Also no.
-            > **You already have the top bid of {{bid}} credits.**
-          bidTooLow: |-
-            You must bid at least **{{bid}} credits** on this auction.
-            The bid increment is currently set to **{{bidIncrement}} credits**.
-      info:
-        errors:
-          noAuctionId: Please provide a valid auction ID.
-          noAuctionFound: |-
-            Pokecord looked far and wide, to no avail.
-            > **Could not find auction {{id}}. Search for another auction.**
-        title: Auction \#{{auctionId}} │ Level {{pokemonLevel}} {{pokemonName}}
-#        footer: "Viewing auction #{{index}} • Caught date" To add at a later date
-      auctions:
+      profile: #TODO: Move or reformat?
         embeds:
-          title: The 'Cord Auction House
+          title: "{{userTag}}'s Auctions"
         errors:
           noResults: |-
-            You're here! But the auction you searched for is not.
-            > **Wait for an auction to start.**
-      notify:
+            Pokecord looked far and wide, to no avail.
+            > **You have no current auctions. Create one to get started.**
+      notify: #TODO: Move or reformat?
         toggledOn:
           title: Activity has been Toggled On
           description: You will receive DM notifications for auction activity.
         toggledOff:
           title: Activity has been Toggled Off
           description: You will stop receiving DM notifications for auction activity.
+      unlist:
+        confirmation:
+          description: |-
+            **Auction Item**: {{pokemonIV}} {{pokemonName}}
+
+            React with :white_check_mark: to confirm or :negative_squared_cross_mark: to cancel.
+          title: An Auction is Pending Removal
+        confirmed:
+          description: |-
+            **Pokémon Returned**: {{pokemonIV}} {{pokemonName}}
+
+            Your Pokémon has been returned to your collection.
+          title: An Auction has been Removed
+    errors:
+      general:
+        alreadyEnded: |-
+          Pokecord couldn't find a time machine.
+          > **Specified auction has ended.**
+        noAuctionFound: |-
+          Pokecord looked far and wide, to no avail.
+          > **Could not find auction {{id}}. Search for another.**
+        noAuctionId: |-
+          Pokecord thinks you missed something!
+          > **Specify an auction ID to continue.**
+      auction:
+        noResults: |-
+          You're here! But the auction you searched for is not.
+          > **Wait for an auction to start.**
+      bid:
+        bidTooLow: |-
+          You must bid at least **{{bid}} credits** on this auction.
+          The bid increment is currently set to **{{bidIncrement}} credits**.
+        noAuctionId: Please provide a valid auction ID.
+        noBidAmount: Provide the amount you would like to bid on **IV{{pokemonIV}} {{pokemonName}}**.
+        notEnoughCredits: |-
+          Got spare credits lying around?
+          > **Gain more credits to bid {{amount}} credits.**
+        selfBid: |-
+          You bid on your own auction. Wait, you can't.
+          > **Bid on another user's auction.**
+        topBid: |-
+          Two you? No. Two top bids? Also no.
+          > **You already have the top bid of {{bid}} credits.**
+      list:
+        inTrade: |-
+          Two you? No. Two things at once? Also no.
+          > **Finish your current trade first.**
+        minimumTime: |-
+          Pokecord couldn't enter your auction time.
+          > **Specify time between 4 hours and 30 days.**
+        startBidTooLow: |-
+          Pokecord couldn't enter your starting bid.
+          > **Specify bid between 1k and 10m credits.**
+      #TODO: If profile and remind reformatted, place errors here
+      unlist:
+        bidsActive: |-
+          Too much finance! Pokecord can't figure it out.
+          > **Unlist auctions that have no bids.**
+        notYourAuction: |-
+          You tried to unlist another user's auction. It didn't work.
+          > **Unlist your own auctions.**
     tasks:
-      checker:
+      embeds:
         auctionEnded:
           title: Your Auction has Ended
           description: |-

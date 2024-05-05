@@ -23,7 +23,7 @@ object BidCommand : Command() {
     if (auctionId == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.bid.errors.noAuctionId")
+          context.translate("modules.auction.errors.general.noAuctionId")
         ).build()
       ).queue()
       return
@@ -35,7 +35,7 @@ object BidCommand : Command() {
         context.reply(
           context.embedTemplates.error(
             context.translate(
-              "modules.auctions.commands.bid.errors.noAuctionFound",
+              "modules.auction.errors.general.noAuctionFound",
               "id" to auctionId.toString()
             )
           ).build()
@@ -44,14 +44,14 @@ object BidCommand : Command() {
       } else if (auction.ownerId == context.author.id) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.bid.errors.selfBid")
+            context.translate("modules.auction.errors.bid.selfBid")
           ).build()
         ).queue()
         return@withCoroutineLock
       } else if (auction.ended) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.bid.errors.alreadyEnded")
+            context.translate("modules.auction.errors.general.alreadyEnded")
           ).build()
         ).queue()
         return@withCoroutineLock
@@ -71,7 +71,7 @@ object BidCommand : Command() {
         context.reply(
           context.embedTemplates.error(
             context.translate(
-              "modules.auctions.commands.bid.errors.noBidAmount",
+              "modules.auction.errors.bid.noBidAmount",
               mapOf(
                 "pokemonIV" to pokemon.ivPercentage,
                 "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
@@ -87,7 +87,10 @@ object BidCommand : Command() {
       if (bidAmount > userData.credits) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.bid.errors.notEnoughCredits", "amount" to bidAmount.toString())
+            context.translate(
+              "modules.auction.errors.bid.notEnoughCredits",
+              "amount" to bidAmount.toString()
+            )
           ).build()
         ).queue()
         return@withCoroutineLock
@@ -96,7 +99,7 @@ object BidCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               context.translate(
-                "modules.auctions.commands.bid.errors.notEnoughCredits",
+                "modules.auction.errors.bid.notEnoughCredits",
                 "bid" to highestBid.amount.toString()
               )
             ).build()
@@ -106,7 +109,7 @@ object BidCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               context.translate(
-                "modules.auctions.commands.bid.errors.topBid",
+                "modules.auction.errors.bid.topBid",
                 "bid" to highestBid.amount.toString()
               )
             ).build()
@@ -116,7 +119,7 @@ object BidCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               context.translate(
-                "modules.auctions.commands.bid.errors.bidTooLow",
+                "modules.auction.errors.bid.bidTooLow",
                 mapOf(
                   "bid" to (highestBid.amount + auction.bidIncrement).toString(),
                   "bidIncrement" to auction.bidIncrement.toString()
@@ -131,7 +134,7 @@ object BidCommand : Command() {
           context.reply(
             context.embedTemplates.error(
               context.translate(
-                "modules.auctions.commands.bid.errors.bidTooLow",
+                "modules.auction.errors.bid.bidTooLow",
                 mapOf(
                   "bid" to auction.startingBid.toString(),
                   "bidIncrement" to auction.bidIncrement.toString()
@@ -147,14 +150,14 @@ object BidCommand : Command() {
       val confirmed = confirmation.result(
         context.embedTemplates.confirmation(
           context.translate(
-            "modules.auctions.commands.bid.confirmation.description",
+            "modules.auction.embeds.bid.all.confirmation.description",
             mapOf(
               "bid" to bidAmount.toString(),
               "pokemonIV" to pokemon.ivPercentage,
               "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
             )
           ),
-          context.translate("modules.auctions.commands.bid.confirmation.title")
+          context.translate("modules.auction.embeds.bid.all.confirmation.title")
         )
       )
 
@@ -175,14 +178,14 @@ object BidCommand : Command() {
             highestBidUser.openPrivateChannel().await().sendMessageEmbeds(
               context.embedTemplates.normal(
                 context.translate(
-                  "modules.auctions.commands.bid.outbid.description",
+                  "modules.auction.embeds.bid.dm.outbid.description",
                   mapOf(
                     "ID" to auction.id.toString(),
                     "pokemonName" to context.translator.pokemonDisplayName(pokemon, false),
                     "bidDifference" to (bidAmount - highestBid.amount).toString()
                   )
                 ),
-                context.translate("modules.auctions.commands.bid.outbid.title")
+                context.translate("modules.auction.embeds.dm.bid.outbid.title")
               ).build()
             ).queue()
           }
@@ -200,12 +203,7 @@ object BidCommand : Command() {
         if (cancelled) {
           context.reply(
             context.embedTemplates.normal(
-              context.translate(
-                "misc.embeds.transactionCancelled.description",
-                mapOf(
-                  "type" to "bid"
-                )
-              ),
+              context.translate("misc.embeds.transactionCancelled.description"),
               context.translate("misc.embeds.transactionCancelled.title")
             ).build()
           ).queue()
@@ -215,14 +213,14 @@ object BidCommand : Command() {
         context.reply(
           context.embedTemplates.success(
             context.translate(
-              "modules.auctions.commands.bid.confirmed.description",
+              "modules.auction.embeds.bid.all.confirmed.description",
               mapOf(
                 "bid" to bidAmount.toString(),
                 "pokemonIV" to pokemon.ivPercentage,
                 "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
               )
             ),
-            context.translate("modules.auctions.commands.bid.confirmed.title")
+            context.translate("modules.auction.embeds.bid.all.confirmed.title")
           ).build()
         ).queue()
 
@@ -233,7 +231,7 @@ object BidCommand : Command() {
           ownerDmChannel.sendMessageEmbeds(
             context.embedTemplates.normal(
               context.translate(
-                "modules.auctions.commands.bid.bidNotification.description",
+                "modules.auction.embeds.bid.dms.bidReceived.description",
                 mapOf(
                   "bidderTag" to context.author.asTag,
                   "amount" to bidAmount.toString(),
@@ -241,7 +239,7 @@ object BidCommand : Command() {
                   "pokemonName" to context.translator.pokemonDisplayName(pokemon, false)
                 )
               ),
-              context.translate("modules.auctions.commands.bid.bidNotification.title")
+              context.translate("modules.auction.embeds.bid.dms.bidReceived.title")
             ).build()
           ).queue()
         }

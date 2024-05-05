@@ -20,7 +20,7 @@ object UnlistCommand : Command() {
     if (auctionId == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.unlist.errors.noAuctionId")
+          context.translate("modules.auction.errors.general.noAuctionId")
         ).build()
       ).queue()
       return
@@ -31,28 +31,28 @@ object UnlistCommand : Command() {
       if (auction == null) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.unlist.errors.noAuctionFound")
+            context.translate("modules.auction.errors.general.noAuctionFound")
           ).build()
         ).queue()
         return@withCoroutineLock
       } else if (auction.ownerId != context.author.id) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.unlist.errors.notYourAuction")
+            context.translate("modules.auction.errors.unlist.notYourAuction")
           ).build()
         ).queue()
         return@withCoroutineLock
       } else if (auction.bids.isNotEmpty()) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.unlist.errors.bidsActive")
+            context.translate("modules.auction.errors.unlist.bidsActive")
           ).build()
         ).queue()
         return@withCoroutineLock
       } else if(auction.ended) {
         context.reply(
           context.embedTemplates.error(
-            context.translate("modules.auctions.commands.unlist.errors.auctionEnded")
+            context.translate("modules.auction.errors.general.auctionEnded")
           ).build()
         ).queue()
         return@withCoroutineLock
@@ -65,13 +65,13 @@ object UnlistCommand : Command() {
         val confirmed = confirmation.result(
           context.embedTemplates.confirmation(
             context.translate(
-              "modules.auctions.commands.unlist.confirmation.description",
+              "modules.auction.embeds.unlist.confirmation.description",
               mapOf(
                 "pokemonIV" to pokemon.ivPercentage,
                 "pokemonName" to context.translator.pokemonDisplayName(pokemon)
               )
             ),
-            context.translate("modules.auctions.commands.unlist.confirmation.title")
+            context.translate("modules.auction.embeds.unlist.confirmation.title")
           )
         )
 
@@ -90,13 +90,13 @@ object UnlistCommand : Command() {
           context.reply(
             context.embedTemplates.success(
               context.translate(
-                "modules.auctions.commands.unlist.confirmed.description",
+                "modules.auction.embeds.unlist.confirmed.description",
                 mapOf(
                   "pokemonIV" to pokemon.ivPercentage,
                   "pokemonName" to context.translator.pokemonDisplayName(pokemon)
                 )
               ),
-              context.translate("modules.auctions.commands.unlist.confirmed.title")
+              context.translate("modules.auction.embeds.unlist.confirmed.title")
             ).build()
           ).queue()
         }

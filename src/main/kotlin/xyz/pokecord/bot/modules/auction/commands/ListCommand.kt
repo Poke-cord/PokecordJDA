@@ -28,7 +28,7 @@ object ListCommand : Command() {
     if (context.getTradeState() != null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.list.errors.inTrade")
+          context.translate("modules.auction.errors.list.inTrade")
         ).build()
       ).queue()
       return
@@ -57,7 +57,7 @@ object ListCommand : Command() {
     if (startingBid != null && (startingBid < 10 || startingBid > 10000000)) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.list.errors.startingBidPrice")
+          context.translate("modules.auction.errors.list.startBidTooLow")
         ).build()
       ).queue()
       return
@@ -67,7 +67,7 @@ object ListCommand : Command() {
     if(auctionTime < Config.minAuctionTime || auctionTime > Config.maxAuctionTime) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.list.errors.minimumTime"),
+          context.translate("modules.auction.errors.list.minimumTime"),
         ).build()
       ).queue()
       return
@@ -85,7 +85,7 @@ object ListCommand : Command() {
     val confirmed = confirmation.result(
       context.embedTemplates.confirmation(
         context.translate(
-          "modules.auctions.commands.list.confirmation.description",
+          "modules.auction.embeds.list.confirmation.description",
           mapOf(
             "pokemonIV" to pokemon.ivPercentage,
             "pokemonName" to context.translator.pokemonDisplayName(pokemon),
@@ -94,7 +94,7 @@ object ListCommand : Command() {
             "bidIncrement" to (bidIncrement ?: Config.defaultBidIncrement).toString()
           )
         ),
-        context.translate("modules.auctions.commands.list.confirmation.title")
+        context.translate("modules.auction.embeds.list.confirmation.title")
       )
     )
 
@@ -121,7 +121,7 @@ object ListCommand : Command() {
           context.reply(
             context.embedTemplates.success(
               context.translate(
-                "modules.auctions.commands.list.confirmed.description",
+                "modules.auction.embeds.list.confirmed.description",
                 mapOf(
                   "pokemonIV" to pokemon.ivPercentage,
                   "pokemonName" to context.translator.pokemonDisplayName(pokemon),
@@ -130,7 +130,7 @@ object ListCommand : Command() {
                   "bidIncrement" to auction.bidIncrement.toString()
                 )
               ),
-              context.translate("modules.auctions.commands.list.confirmed.title"),
+              context.translate("modules.auction.embeds.list.confirmed.title"),
             ).build()
           ).queue()
         }

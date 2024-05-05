@@ -20,7 +20,7 @@ object InfoCommand : Command() {
     if (auctionId == null) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.info.errors.noAuctionId")
+          context.translate("modules.auction.errors.general.noAuctionId")
         ).build()
       ).queue()
       return
@@ -30,7 +30,10 @@ object InfoCommand : Command() {
     if (auction == null || auction.ended) {
       context.reply(
         context.embedTemplates.error(
-          context.translate("modules.auctions.commands.info.errors.noAuctionFound", "id" to auctionId.toString())
+          context.translate(
+            "modules.auction.errors.general.noAuctionFound",
+            "id" to auctionId.toString()
+          )
         ).build()
       ).queue()
     } else {
@@ -81,7 +84,7 @@ object InfoCommand : Command() {
             .normal(
               auInfoSection + "\n\n" + infoSection + "\n\n" + statSection,
               context.translate(
-                "modules.auctions.commands.info.title",
+                "modules.auction.embeds.info.title",
                 mapOf(
                   "pokemonLevel" to auctionPokemon.level.toString(),
                   "pokemonName" to context.translator.pokemonDisplayName(auctionPokemon, false),
