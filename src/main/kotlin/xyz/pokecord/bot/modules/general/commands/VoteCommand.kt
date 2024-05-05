@@ -18,9 +18,10 @@ class VoteCommand : Command() {
   ) {
     val lastVoteAt = context.getUserData().lastVoteAt
     val nextVoteTime =
-      if (lastVoteAt == null || lastVoteAt + TimeUnit.HOURS.toMillis(12) < System.currentTimeMillis()) context.translate(
-        "modules.general.commands.vote.now"
-      ) else TimeFormat.RELATIVE.format(lastVoteAt + TimeUnit.HOURS.toMillis(12))
+      if (lastVoteAt == null || lastVoteAt + TimeUnit.HOURS.toMillis(12) < System.currentTimeMillis())
+        context.translate("modules.general.commands.vote.now")
+      else TimeFormat.RELATIVE.format(lastVoteAt + TimeUnit.HOURS.toMillis(12))
+
     context.reply(
       context.embedTemplates.normal(
         context.translate(

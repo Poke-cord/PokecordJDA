@@ -201,7 +201,7 @@ misc:
       status: DO_NOT_DISTURB
       type: DEFAULT
     regular:
-      activity: "@Pokecord • {{version}}"
+      activity: "@Pokecord help • {{version}}"
       status: ONLINE
       type: DEFAULT
   texts:
@@ -1005,8 +1005,15 @@ modules:
           uncaught: This Pokémon has not been registered to your Pokédex!
       forecast:
         description: |-
-          *Today's weather forecast is unknown! Please check in later.*
-          It is currently **{{timeOfDay}}**.
+          *Pokecord is currently detecting no anomalies.*
+          —
+          It is currently **__{{timeOfDay}}__** and the weather is unknown.
+        eventdesc: |-
+          > **Pokecord has detected a spawn anomaly!**
+          They're calling it in as **__{{eventName}}__!**
+          This event is predicted to last until {{eventEndTime}}.
+          —
+          It is currently **__{{timeOfDay}}__** and the weather is unknown.
         title: Saurdia Forecast
         footer: This forecast updates at the top of the hour.
       pokemon:
