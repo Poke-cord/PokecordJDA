@@ -18,7 +18,7 @@ data class Pokemon(
   val order: Int?,
   val isDefault: Boolean,
   val formName: String? = null,
-  val hasShiny: Boolean = true,
+  //val hasShiny: Boolean = true,
 ) {
   val moves by lazy {
     PokemonMove.getById(id)!!

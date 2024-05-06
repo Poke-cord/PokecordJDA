@@ -35,12 +35,12 @@ class PokedexCommand : Command() {
       return
     }
 
-    if (!pokemon.hasShiny) {
+    /*if (!pokemon.hasShiny) {
       context.reply(
         context.embedTemplates.error(context.translate("modules.pokemon.commands.pokedex.errors.noShiny")).build()
       ).queue()
       return
-    }
+    }*/
 
     val genderRate =
       if (pokemon.species.genderRate == -1) context.translate("misc.texts.genderless")
