@@ -50,7 +50,7 @@ object CustomPokemon {
     val gible = Pokemon.getByName("Gible")!!
     val krookodile = Pokemon.getByName("Krookodile")!!
     val zorua = Pokemon.getByName("Zorua")!!
-    val mienfoo = Pokemon.getByName("Meinfoo")!!
+    val mienfoo = Pokemon.getByName("Mienfoo")!!
     val thundurus = Pokemon.getByName("Thundurus")!!
     val swirlix = Pokemon.getByName("Swirlix")!!
     val clawitzer = Pokemon.getByName("Clawitzer")!!
