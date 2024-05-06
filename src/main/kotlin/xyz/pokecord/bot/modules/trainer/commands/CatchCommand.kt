@@ -76,7 +76,7 @@ class CatchCommand : Command() {
         val finalPokemonId = eventPokemonId ?: pokemon.id
 
         val finalPokemon = Pokemon.getById(finalPokemonId)
-        val shiny = if (finalPokemon?.hasShiny == true) {
+        val shiny = if (finalPokemon!!.hasShiny) {
           eventPokemonId?.let {
             Random.nextInt(100) < 2
           }
