@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter
 object SpecialEvents {
   private val catchableEventList by lazy {
     listOf(
-      EventPokemon(
+      EventPokemon( //pride 2023
+        "Pride 2023",
         parseDateTime("2023-06-30 00:00:00"),
         parseDateTime("2023-07-31 00:00:00"),
         mapOf(
@@ -152,7 +153,389 @@ object SpecialEvents {
             Pokemon.getByName("Pride Arctovish V2")!!
           ),
         )
-      )
+      ),
+      EventPokemon( //mayflowers 2024 week 1 - awareness
+        "Mayflowers 2024",
+        parseDateTime("2024-05-06 07:00:00"),
+        parseDateTime("2024-05-13 06:59:59"),
+        mapOf(
+          Pokemon.getByName("Wartortle")!!.species to listOf(
+            Pokemon.getByName("Awareness Wartortle V1")!!,
+            Pokemon.getByName("Awareness Wartortle V2")!!
+          ),
+          Pokemon.getByName("Pidgeotto")!!.species to listOf(
+            Pokemon.getByName("Awareness Pidgeotto V1")!!,
+            Pokemon.getByName("Awareness Pidgeotto V2")!!
+          ),
+          Pokemon.getByName("Grimer")!!.species to listOf(
+            Pokemon.getByName("Awareness Grimer V1")!!,
+            Pokemon.getByName("Awareness Grimer V2")!!
+          ),
+          Pokemon.getByName("Kingler")!!.species to listOf(
+            Pokemon.getByName("Awareness Kingler V1")!!,
+            Pokemon.getByName("Awareness Kingler V2")!!
+          ),
+          Pokemon.getByName("Elekid")!!.species to listOf(
+            Pokemon.getByName("Awareness Elekid V1")!!,
+            Pokemon.getByName("Awareness Elekid V2")!!
+          ),
+          Pokemon.getByName("Trapinch")!!.species to listOf(
+            Pokemon.getByName("Awareness Trapinch V1")!!,
+            Pokemon.getByName("Awareness Trapinch V2")!!
+          ),
+          Pokemon.getByName("Glalie")!!.species to listOf(
+            Pokemon.getByName("Awareness Glalie V1")!!,
+            Pokemon.getByName("Awareness Glalie V2")!!
+          ),
+          Pokemon.getByName("Staraptor")!!.species to listOf(
+            Pokemon.getByName("Awareness Staraptor V1")!!,
+            Pokemon.getByName("Awareness Staraptor V2")!!
+          ),
+          Pokemon.getByName("Kricketot")!!.species to listOf(
+            Pokemon.getByName("Awareness Kricketot V1")!!,
+            Pokemon.getByName("Awareness Kricketot V2")!!
+          ),
+          Pokemon.getByName("Gible")!!.species to listOf(
+            Pokemon.getByName("Awareness Gible V1")!!,
+            Pokemon.getByName("Awareness Gible V2")!!
+          ),
+          Pokemon.getByName("Krookodile")!!.species to listOf(
+            Pokemon.getByName("Awareness Krookodile V1")!!,
+            Pokemon.getByName("Awareness Krookodile V2")!!
+          ),
+          Pokemon.getByName("Zorua")!!.species to listOf(
+            Pokemon.getByName("Awareness Zorua V1")!!,
+            Pokemon.getByName("Awareness Zorua V2")!!
+          ),
+          Pokemon.getByName("Mienfoo")!!.species to listOf(
+            Pokemon.getByName("Awareness Mienfoo V1")!!,
+            Pokemon.getByName("Awareness Mienfoo V2")!!
+          ),
+          Pokemon.getByName("Thundurus")!!.species to listOf(
+            Pokemon.getByName("Awareness Thundurus V1")!!,
+            Pokemon.getByName("Awareness Thundurus V2")!!
+          ),
+          Pokemon.getByName("Swirlix")!!.species to listOf(
+            Pokemon.getByName("Awareness Swirlix V1")!!,
+            Pokemon.getByName("Awareness Swirlix V2")!!
+          ),
+          Pokemon.getByName("Clawitzer")!!.species to listOf(
+            Pokemon.getByName("Awareness Clawitzer V1")!!,
+            Pokemon.getByName("Awareness Clawitzer V2")!!
+          ),
+          Pokemon.getByName("Diancie")!!.species to listOf(
+            Pokemon.getByName("Awareness Diancie V1")!!,
+            Pokemon.getByName("Awareness Diancie V2")!!
+          ),
+          Pokemon.getByName("Rowlet")!!.species to listOf(
+            Pokemon.getByName("Awareness Rowlet V1")!!,
+            Pokemon.getByName("Awareness Rowlet V2")!!
+          ),
+          Pokemon.getByName("Toxapex")!!.species to listOf(
+            Pokemon.getByName("Awareness Toxapex V1")!!,
+            Pokemon.getByName("Awareness Toxapex V2")!!
+          ),
+          Pokemon.getByName("Dhelmise")!!.species to listOf(
+            Pokemon.getByName("Awareness Dhelmise V1")!!,
+            Pokemon.getByName("Awareness Dhelmise V2")!!
+          ),
+          Pokemon.getByName("Cramorant")!!.species to listOf(
+            Pokemon.getByName("Awareness Cramorant V1")!!,
+            Pokemon.getByName("Awareness Cramorant V2")!!
+          ),
+          Pokemon.getById(866)!!.species to listOf(
+            Pokemon.getByName("Awareness Mr. Rime V1")!!,
+            Pokemon.getByName("Awareness Mr. Rime V2")!!
+          ),
+        )
+      ),
+      /*
+      EventPokemon( //mayflowers 2024 week 2 - mother's day
+        "Mayflowers 2024",
+        parseDateTime("2024-05-13 07:00:00"),
+        parseDateTime("2024-05-20 06:59:59"),
+        mapOf(
+          Pokemon.getByName("Wartortle")!!.species to listOf(
+            Pokemon.getByName("Awareness Wartortle V1")!!,
+            Pokemon.getByName("Awareness Wartortle V2")!!
+          ),
+          Pokemon.getByName("Pidgeotto")!!.species to listOf(
+            Pokemon.getByName("Awareness Pidgeotto V1")!!,
+            Pokemon.getByName("Awareness Pidgeotto V2")!!
+          ),
+          Pokemon.getByName("Grimer")!!.species to listOf(
+            Pokemon.getByName("Awareness Grimer V1")!!,
+            Pokemon.getByName("Awareness Grimer V2")!!
+          ),
+          Pokemon.getByName("Kingler")!!.species to listOf(
+            Pokemon.getByName("Awareness Kingler V1")!!,
+            Pokemon.getByName("Awareness Kingler V2")!!
+          ),
+          Pokemon.getByName("Elekid")!!.species to listOf(
+            Pokemon.getByName("Awareness Elekid V1")!!,
+            Pokemon.getByName("Awareness Elekid V2")!!
+          ),
+          Pokemon.getByName("Trapinch")!!.species to listOf(
+            Pokemon.getByName("Awareness Trapinch V1")!!,
+            Pokemon.getByName("Awareness Trapinch V2")!!
+          ),
+          Pokemon.getByName("Glalie")!!.species to listOf(
+            Pokemon.getByName("Awareness Glalie V1")!!,
+            Pokemon.getByName("Awareness Glalie V2")!!
+          ),
+          Pokemon.getByName("Staraptor")!!.species to listOf(
+            Pokemon.getByName("Awareness Staraptor V1")!!,
+            Pokemon.getByName("Awareness Staraptor V2")!!
+          ),
+          Pokemon.getByName("Kricketot")!!.species to listOf(
+            Pokemon.getByName("Awareness Kricketot V1")!!,
+            Pokemon.getByName("Awareness Kricketot V2")!!
+          ),
+          Pokemon.getByName("Gible")!!.species to listOf(
+            Pokemon.getByName("Awareness Gible V1")!!,
+            Pokemon.getByName("Awareness Gible V2")!!
+          ),
+          Pokemon.getByName("Krookodile")!!.species to listOf(
+            Pokemon.getByName("Awareness Krookodile V1")!!,
+            Pokemon.getByName("Awareness Krookodile V2")!!
+          ),
+          Pokemon.getByName("Zorua")!!.species to listOf(
+            Pokemon.getByName("Awareness Zorua V1")!!,
+            Pokemon.getByName("Awareness Zorua V2")!!
+          ),
+          Pokemon.getByName("Mienfoo")!!.species to listOf(
+            Pokemon.getByName("Awareness Mienfoo V1")!!,
+            Pokemon.getByName("Awareness Mienfoo V2")!!
+          ),
+          Pokemon.getByName("Thundurus")!!.species to listOf(
+            Pokemon.getByName("Awareness Thundurus V1")!!,
+            Pokemon.getByName("Awareness Thundurus V2")!!
+          ),
+          Pokemon.getByName("Swirlix")!!.species to listOf(
+            Pokemon.getByName("Awareness Swirlix V1")!!,
+            Pokemon.getByName("Awareness Swirlix V2")!!
+          ),
+          Pokemon.getByName("Clawitzer")!!.species to listOf(
+            Pokemon.getByName("Awareness Clawitzer V1")!!,
+            Pokemon.getByName("Awareness Clawitzer V2")!!
+          ),
+          Pokemon.getByName("Diancie")!!.species to listOf(
+            Pokemon.getByName("Awareness Diancie V1")!!,
+            Pokemon.getByName("Awareness Diancie V2")!!
+          ),
+          Pokemon.getByName("Rowlet")!!.species to listOf(
+            Pokemon.getByName("Awareness Rowlet V1")!!,
+            Pokemon.getByName("Awareness Rowlet V2")!!
+          ),
+          Pokemon.getByName("Toxapex")!!.species to listOf(
+            Pokemon.getByName("Awareness Toxapex V1")!!,
+            Pokemon.getByName("Awareness Toxapex V2")!!
+          ),
+          Pokemon.getByName("Dhelmise")!!.species to listOf(
+            Pokemon.getByName("Awareness Dhelmise V1")!!,
+            Pokemon.getByName("Awareness Dhelmise V2")!!
+          ),
+          Pokemon.getByName("Cramorant")!!.species to listOf(
+            Pokemon.getByName("Awareness Cramorant V1")!!,
+            Pokemon.getByName("Awareness Cramorant V2")!!
+          ),
+          Pokemon.getById(866)!!.species to listOf(
+            Pokemon.getByName("Awareness Mr. Rime V1")!!,
+            Pokemon.getByName("Awareness Mr. Rime V2")!!
+          ),
+        )
+      ),
+      EventPokemon( //mayflowers 2024 week 3 - space
+        "Mayflowers 2024",
+        parseDateTime("2024-05-20 07:00:00"),
+        parseDateTime("2024-05-27 06:59:59"),
+        mapOf(
+          Pokemon.getByName("Wartortle")!!.species to listOf(
+            Pokemon.getByName("Awareness Wartortle V1")!!,
+            Pokemon.getByName("Awareness Wartortle V2")!!
+          ),
+          Pokemon.getByName("Pidgeotto")!!.species to listOf(
+            Pokemon.getByName("Awareness Pidgeotto V1")!!,
+            Pokemon.getByName("Awareness Pidgeotto V2")!!
+          ),
+          Pokemon.getByName("Grimer")!!.species to listOf(
+            Pokemon.getByName("Awareness Grimer V1")!!,
+            Pokemon.getByName("Awareness Grimer V2")!!
+          ),
+          Pokemon.getByName("Kingler")!!.species to listOf(
+            Pokemon.getByName("Awareness Kingler V1")!!,
+            Pokemon.getByName("Awareness Kingler V2")!!
+          ),
+          Pokemon.getByName("Elekid")!!.species to listOf(
+            Pokemon.getByName("Awareness Elekid V1")!!,
+            Pokemon.getByName("Awareness Elekid V2")!!
+          ),
+          Pokemon.getByName("Trapinch")!!.species to listOf(
+            Pokemon.getByName("Awareness Trapinch V1")!!,
+            Pokemon.getByName("Awareness Trapinch V2")!!
+          ),
+          Pokemon.getByName("Glalie")!!.species to listOf(
+            Pokemon.getByName("Awareness Glalie V1")!!,
+            Pokemon.getByName("Awareness Glalie V2")!!
+          ),
+          Pokemon.getByName("Staraptor")!!.species to listOf(
+            Pokemon.getByName("Awareness Staraptor V1")!!,
+            Pokemon.getByName("Awareness Staraptor V2")!!
+          ),
+          Pokemon.getByName("Kricketot")!!.species to listOf(
+            Pokemon.getByName("Awareness Kricketot V1")!!,
+            Pokemon.getByName("Awareness Kricketot V2")!!
+          ),
+          Pokemon.getByName("Gible")!!.species to listOf(
+            Pokemon.getByName("Awareness Gible V1")!!,
+            Pokemon.getByName("Awareness Gible V2")!!
+          ),
+          Pokemon.getByName("Krookodile")!!.species to listOf(
+            Pokemon.getByName("Awareness Krookodile V1")!!,
+            Pokemon.getByName("Awareness Krookodile V2")!!
+          ),
+          Pokemon.getByName("Zorua")!!.species to listOf(
+            Pokemon.getByName("Awareness Zorua V1")!!,
+            Pokemon.getByName("Awareness Zorua V2")!!
+          ),
+          Pokemon.getByName("Mienfoo")!!.species to listOf(
+            Pokemon.getByName("Awareness Mienfoo V1")!!,
+            Pokemon.getByName("Awareness Mienfoo V2")!!
+          ),
+          Pokemon.getByName("Thundurus")!!.species to listOf(
+            Pokemon.getByName("Awareness Thundurus V1")!!,
+            Pokemon.getByName("Awareness Thundurus V2")!!
+          ),
+          Pokemon.getByName("Swirlix")!!.species to listOf(
+            Pokemon.getByName("Awareness Swirlix V1")!!,
+            Pokemon.getByName("Awareness Swirlix V2")!!
+          ),
+          Pokemon.getByName("Clawitzer")!!.species to listOf(
+            Pokemon.getByName("Awareness Clawitzer V1")!!,
+            Pokemon.getByName("Awareness Clawitzer V2")!!
+          ),
+          Pokemon.getByName("Diancie")!!.species to listOf(
+            Pokemon.getByName("Awareness Diancie V1")!!,
+            Pokemon.getByName("Awareness Diancie V2")!!
+          ),
+          Pokemon.getByName("Rowlet")!!.species to listOf(
+            Pokemon.getByName("Awareness Rowlet V1")!!,
+            Pokemon.getByName("Awareness Rowlet V2")!!
+          ),
+          Pokemon.getByName("Toxapex")!!.species to listOf(
+            Pokemon.getByName("Awareness Toxapex V1")!!,
+            Pokemon.getByName("Awareness Toxapex V2")!!
+          ),
+          Pokemon.getByName("Dhelmise")!!.species to listOf(
+            Pokemon.getByName("Awareness Dhelmise V1")!!,
+            Pokemon.getByName("Awareness Dhelmise V2")!!
+          ),
+          Pokemon.getByName("Cramorant")!!.species to listOf(
+            Pokemon.getByName("Awareness Cramorant V1")!!,
+            Pokemon.getByName("Awareness Cramorant V2")!!
+          ),
+          Pokemon.getById(866)!!.species to listOf(
+            Pokemon.getByName("Awareness Mr. Rime V1")!!,
+            Pokemon.getByName("Awareness Mr. Rime V2")!!
+          ),
+        )
+      ),
+      EventPokemon( //mayflowers 2024 week 4 - pets
+        "Mayflowers 2024",
+        parseDateTime("2024-05-27 07:00:00"),
+        parseDateTime("2024-06-03 06:59:59"),
+        mapOf(
+          Pokemon.getByName("Wartortle")!!.species to listOf(
+            Pokemon.getByName("Awareness Wartortle V1")!!,
+            Pokemon.getByName("Awareness Wartortle V2")!!
+          ),
+          Pokemon.getByName("Pidgeotto")!!.species to listOf(
+            Pokemon.getByName("Awareness Pidgeotto V1")!!,
+            Pokemon.getByName("Awareness Pidgeotto V2")!!
+          ),
+          Pokemon.getByName("Grimer")!!.species to listOf(
+            Pokemon.getByName("Awareness Grimer V1")!!,
+            Pokemon.getByName("Awareness Grimer V2")!!
+          ),
+          Pokemon.getByName("Kingler")!!.species to listOf(
+            Pokemon.getByName("Awareness Kingler V1")!!,
+            Pokemon.getByName("Awareness Kingler V2")!!
+          ),
+          Pokemon.getByName("Elekid")!!.species to listOf(
+            Pokemon.getByName("Awareness Elekid V1")!!,
+            Pokemon.getByName("Awareness Elekid V2")!!
+          ),
+          Pokemon.getByName("Trapinch")!!.species to listOf(
+            Pokemon.getByName("Awareness Trapinch V1")!!,
+            Pokemon.getByName("Awareness Trapinch V2")!!
+          ),
+          Pokemon.getByName("Glalie")!!.species to listOf(
+            Pokemon.getByName("Awareness Glalie V1")!!,
+            Pokemon.getByName("Awareness Glalie V2")!!
+          ),
+          Pokemon.getByName("Staraptor")!!.species to listOf(
+            Pokemon.getByName("Awareness Staraptor V1")!!,
+            Pokemon.getByName("Awareness Staraptor V2")!!
+          ),
+          Pokemon.getByName("Kricketot")!!.species to listOf(
+            Pokemon.getByName("Awareness Kricketot V1")!!,
+            Pokemon.getByName("Awareness Kricketot V2")!!
+          ),
+          Pokemon.getByName("Gible")!!.species to listOf(
+            Pokemon.getByName("Awareness Gible V1")!!,
+            Pokemon.getByName("Awareness Gible V2")!!
+          ),
+          Pokemon.getByName("Krookodile")!!.species to listOf(
+            Pokemon.getByName("Awareness Krookodile V1")!!,
+            Pokemon.getByName("Awareness Krookodile V2")!!
+          ),
+          Pokemon.getByName("Zorua")!!.species to listOf(
+            Pokemon.getByName("Awareness Zorua V1")!!,
+            Pokemon.getByName("Awareness Zorua V2")!!
+          ),
+          Pokemon.getByName("Mienfoo")!!.species to listOf(
+            Pokemon.getByName("Awareness Mienfoo V1")!!,
+            Pokemon.getByName("Awareness Mienfoo V2")!!
+          ),
+          Pokemon.getByName("Thundurus")!!.species to listOf(
+            Pokemon.getByName("Awareness Thundurus V1")!!,
+            Pokemon.getByName("Awareness Thundurus V2")!!
+          ),
+          Pokemon.getByName("Swirlix")!!.species to listOf(
+            Pokemon.getByName("Awareness Swirlix V1")!!,
+            Pokemon.getByName("Awareness Swirlix V2")!!
+          ),
+          Pokemon.getByName("Clawitzer")!!.species to listOf(
+            Pokemon.getByName("Awareness Clawitzer V1")!!,
+            Pokemon.getByName("Awareness Clawitzer V2")!!
+          ),
+          Pokemon.getByName("Diancie")!!.species to listOf(
+            Pokemon.getByName("Awareness Diancie V1")!!,
+            Pokemon.getByName("Awareness Diancie V2")!!
+          ),
+          Pokemon.getByName("Rowlet")!!.species to listOf(
+            Pokemon.getByName("Awareness Rowlet V1")!!,
+            Pokemon.getByName("Awareness Rowlet V2")!!
+          ),
+          Pokemon.getByName("Toxapex")!!.species to listOf(
+            Pokemon.getByName("Awareness Toxapex V1")!!,
+            Pokemon.getByName("Awareness Toxapex V2")!!
+          ),
+          Pokemon.getByName("Dhelmise")!!.species to listOf(
+            Pokemon.getByName("Awareness Dhelmise V1")!!,
+            Pokemon.getByName("Awareness Dhelmise V2")!!
+          ),
+          Pokemon.getByName("Cramorant")!!.species to listOf(
+            Pokemon.getByName("Awareness Cramorant V1")!!,
+            Pokemon.getByName("Awareness Cramorant V2")!!
+          ),
+          Pokemon.getById(866)!!.species to listOf(
+            Pokemon.getByName("Awareness Mr. Rime V1")!!,
+            Pokemon.getByName("Awareness Mr. Rime V2")!!
+          ),
+        )
+      ),
+      */
     )
   }
 //  private val redeemableEventList by lazy {
@@ -171,8 +554,9 @@ object SpecialEvents {
 //  }
 
   data class EventPokemon(
-    val startsAt: Long,
-    val endsAt: Long,
+    val eventName: String,
+    val startsAt: Long, //YYYY-MM-DD
+    val endsAt: Long, //YYYY-MM-DD
     val catchableCustomPokemon: Map<Species, List<Pokemon>>,
   )
 
@@ -205,6 +589,16 @@ object SpecialEvents {
   fun getCurrentCatchableEvents(): List<EventPokemon> {
     val now = System.currentTimeMillis()
     return catchableEventList.filter { now in it.startsAt..it.endsAt }
+  }
+
+  fun getCurrentEvent(): EventPokemon? {
+    val now = System.currentTimeMillis()
+    for (event in catchableEventList) {
+      if (now in event.startsAt..event.endsAt) {
+        return event
+      }
+    }
+    return null
   }
 
 //  fun getCurrentRedeemableEvents(): List<RedeemExclusivePokemon> {
