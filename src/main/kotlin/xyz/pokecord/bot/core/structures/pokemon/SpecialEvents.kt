@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 object SpecialEvents {
   private val catchableEventList by lazy {
     listOf(
-      /*EventPokemon( //pride 2023
+      EventPokemon( //pride 2023
         "Pride 2023",
         parseDateTime("2023-06-30 00:00:00"),
         parseDateTime("2023-07-31 00:00:00"),
@@ -153,7 +153,7 @@ object SpecialEvents {
             Pokemon.getByName("Pride Arctovish V2")!!
           ),
         )
-      ),*/
+      ),
       EventPokemon( //mayflowers 2024 week 1 - awareness
         "Mayflowers 2024",
         parseDateTime("2024-05-06 07:00:00"),
