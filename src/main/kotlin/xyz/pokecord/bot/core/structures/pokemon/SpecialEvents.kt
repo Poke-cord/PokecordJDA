@@ -251,7 +251,7 @@ object SpecialEvents {
       ),
 
       EventPokemon( //mayflowers 2024 week 2 - mother's day
-        "Mayflowers 2024",
+        "Mayflowers 2024 - Phase 2",
         parseDateTime("2024-05-13 07:00:00"),
         parseDateTime("2024-05-20 06:59:59"),
         mapOf(
