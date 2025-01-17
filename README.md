@@ -1,13 +1,16 @@
-# Pokecord - Open Source is HERE!
 
-| Notice ❗ | Pokecord is currently cleaning up and optimizing the project for development and we're looking for help!|
+# Pokecord#4908 — A Pokémon Discord Bot
+| Notice ❗ | Pokecord has ended its service. The organisation and this repository has been preserved.|
 | :--------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 [![Discord](https://img.shields.io/discord/718872125490069534?logo=discord&style=for-the-badge)](https://discord.gg/EUYgq3Jub3)
 
 Bringing you the magic of Pokémon, on Discord, right in the comfort of your home. 
 
-The source code provided is purely for developmental purpose. We kindly ask you to use `@Pokecord invite` in a server with Pokecord to invite the bot to your own.
+The source code is provided exclusively for purposes as described in the [LICENSE](https://github.com/Poke-cord/PokecordJDA/blob/main/LICENSE). 
+
+## Historical README Below (preserved)
+We ask you to use `@Pokecord invite` in a server with Pokecord to invite the bot to your own.
 
 ## Contributions
 
